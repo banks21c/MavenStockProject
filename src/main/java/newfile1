@@ -1,0 +1,264 @@
+
+	public StockVO getStockInfo(int cnt, String strStockCode, String strStockName) {
+		Document doc;
+		StockVO stock = new StockVO();
+		stock.setStockCode(strStockCode);
+		stock.setStockName(strStockName);
+		try {
+			// 종합정보
+			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + strStockCode).get();
+			// logger1.debug("doc:"+doc);
+
+			Elements dates = doc.select(".date");
+			if (dates != null) {
+				if (dates.size() > 0) {
+					Element date = dates.get(0);
+					strYmdDash = date.ownText();
+					strYmdDash = date.childNode(0).toString().trim();
+
+					String strYmd4Int = strYmdDash.replaceAll("\\.", "");
+					if (strYmd4Int.length() > 8) {
+						strYmd4Int = strYmd4Int.substring(0, 8);
+					}
+					iYmd = Integer.parseInt(strYmd4Int);
+
+					strYmdDash = strYmdDash.replaceAll("\\.", "-");
+					strYmdDash = strYmdDash.replaceAll(":", "-");
+					strYmdDashBracket = "[" + strYmdDash + "]";
+				}
+			}
+			logger1.debug("iYmd:[" + iYmd + "]");
+			logger1.debug("strYmdDash:[" + strYmdDash + "]");
+
+			// Element tradeVolumeText =
+			// doc.select(".sp_txt9").get(0);
+			String tradeVolumeText = doc.select(".sp_txt9").get(0).parent().child(1).select("span").get(0).text();
+			if (tradeVolumeText.equals("0")) {
+				return null;
+			}
+			logger1.debug("tradeVolumeText:" + tradeVolumeText);
+
+			Element new_totalinfo = doc.select(".new_totalinfo").get(0);
+			Document new_totalinfo_doc = Jsoup.parse(new_totalinfo.html());
+			Element blind = new_totalinfo_doc.select(".blind").get(0);
+			Elements edds = blind.select("dd");
+
+			String specialLetter = "";
+			String sign = "";
+			String curPrice = "";
+			String varyPrice = "";
+			String varyRatio = "";
+
+			int iCurPrice = 0;
+			int iVaryPrice = 0;
+
+			for (int i = 0; i < edds.size(); i++) {
+				Element dd = edds.get(i);
+				String text = dd.text();
+				// logger1.debug("text:" + text);
+				if (text.startsWith("종목명")) {
+					String stockName = text.substring(4);
+					// logger1.debug("stockName:" + stockName);
+					stock.setStockName(stockName);
+				}
+
+				if (text.startsWith("현재가")) {
+					// logger1.debug("data1:" + dd.text());
+					text = text.replaceAll("플러스", "+");
+					text = text.replaceAll("마이너스", "-");
+					text = text.replaceAll("상승", "▲");
+					text = text.replaceAll("하락", "▼");
+					text = text.replaceAll("퍼센트", "%");
+
+					String txts[] = text.split(" ");
+					curPrice = txts[1];
+					stock.setCurPrice(curPrice);
+					stock.setiCurPrice(
+						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+					iCurPrice = stock.getiCurPrice();
+
+					// 특수문자
+					specialLetter = txts[3].replaceAll("보합", "");
+					stock.setSpecialLetter(specialLetter);
+
+					varyPrice = txts[4];
+					stock.setVaryPrice(varyPrice);
+					stock.setiVaryPrice(Integer
+						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+					iVaryPrice = stock.getiVaryPrice();
+
+					// +- 부호
+					sign = txts[5];
+					stock.setSign(sign);
+					// logger1.debug("txts.length:" + txts.length);
+					if (txts.length == 7) {
+						stock.setVaryRatio(txts[5] + txts[6]);
+					} else if (txts.length == 8) {
+						stock.setVaryRatio(txts[5] + txts[6] + txts[7]);
+					}
+					varyRatio = stock.getVaryRatio();
+					stock.setiVaryRatio(Float.parseFloat(varyRatio.replaceAll("%", "")));
+					// logger1.debug("상승률:" + stock.getVaryRatio());
+				}
+				logger1.debug("text:" + text + " / " + text.split(" ")[0] + " " + text.split(" ")[1]);
+				if (text.startsWith("전일가")) {
+					stock.setBeforePrice(text.split(" ")[1]);
+					stock.setiBeforePrice(Integer.parseInt(stock.getBeforePrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("시가")) {
+					stock.setStartPrice(text.split(" ")[1]);
+					stock.setiStartPrice(Integer.parseInt(stock.getStartPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("고가")) {
+					stock.setHighPrice(text.split(" ")[1]);
+					stock.setiHighPrice(Integer.parseInt(stock.getHighPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("상한가")) {
+					stock.setMaxPrice(text.split(" ")[1]);
+					stock.setiMaxPrice(Integer.parseInt(stock.getMaxPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("저가")) {
+					stock.setLowPrice(text.split(" ")[1]);
+					stock.setiLowPrice(Integer.parseInt(stock.getLowPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("하한가")) {
+					stock.setMinPrice(text.split(" ")[1]);
+					stock.setiMinPrice(Integer.parseInt(stock.getMinPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("거래량")) {
+					stock.setTradingVolume(text.split(" ")[1]);
+					stock.setlTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
+				}
+				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
+					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
+					stock.setlTradingAmount(Integer.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+				}
+			}
+
+			String upDown = doc.select(".no_exday").get(0).select("em span").get(0).text();
+			if (upDown.equals("상한가")) {
+				specialLetter = "↑";
+			} else if (upDown.equals("하한가")) {
+				specialLetter = "↓";
+			}
+			stock.setSpecialLetter(specialLetter);
+
+			if (specialLetter.equals("↑")) {
+				topCount++;
+			} else if (specialLetter.equals("▲")) {
+				upCount++;
+			} else if (specialLetter.equals("↓")) {
+				bottomCount++;
+			} else if (specialLetter.equals("▼")) {
+				downCount++;
+			} else {
+				if (stock.getiTradingVolume() > 0) {
+					steadyCount++;
+				}
+			}
+
+			if (specialLetter.equals("↑")) {
+				stock.setStockGubun("상한가↑");
+				stock.setLineUp(11);
+
+				topStockList.add(stock);
+				return stock;
+			}
+			if (specialLetter.equals("↓")) {
+				stock.setStockGubun("하한가↓");
+				stock.setLineUp(21);
+				bottomStockList.add(stock);
+				return stock;
+			}
+
+			String highPrice = stock.getHighPrice();
+			String lowPrice = stock.getLowPrice();
+			String maxPrice = stock.getMaxPrice();
+			logger1.debug("highPrice:" + highPrice);
+			logger1.debug("lowPrice:" + lowPrice);
+			logger1.debug("maxPrice:" + maxPrice);
+			// 고가가 0이 아니고 고가가 상한가인가?
+			logger1.debug("고가가 0이 아니고 고가가 상한가인가? :"+(!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())));
+			// 현재가가 상한가가 아닌가?
+			logger1.debug("현재가가 상한가가 아닌가? :"+!curPrice.equals(stock.getMaxPrice()));
+			// 고가가 상한가인가?
+			logger1.debug("고가가 상한가인가?:"+highPrice.equals(stock.getMaxPrice()));
+			// 고가가 0이 아니고 고가가 상한가인가?
+			if (!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())
+				&& !curPrice.equals(stock.getMaxPrice())) {
+				logger1.debug("고가가 0이 아니고 고가가 상한가인가?:"+(!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())
+				&& !curPrice.equals(stock.getMaxPrice())));
+				stock.setStockGubun("상터치↑↘");
+				stock.setLineUp(12);
+				topTouchStockList.add(stock);
+				return stock;
+			}
+			if (!lowPrice.equals("0") && lowPrice.equals(stock.getMinPrice())
+				&& !curPrice.equals(stock.getMinPrice())) {
+				logger1.debug("고가가 0이 아니고 저가 하한가인가?:"+(!lowPrice.equals("0") && lowPrice.equals(stock.getMinPrice())
+				&& !curPrice.equals(stock.getMinPrice())));
+				stock.setStockGubun("하터치↓↗");
+				stock.setLineUp(22);
+				bottomTouchStockList.add(stock);
+				return stock;
+			}
+
+			// 현재가에 비한 ↗폭이나 ↘폭이 컸던 종목을 찾는다.
+			float higher = 0;
+			String flag = "";
+			int icur = stock.getiCurPrice();
+			int ihigh = stock.getiHighPrice();
+			int ilow = stock.getiLowPrice();
+
+			long lTradingVolume = stock.getlTradingVolume();
+			if (Math.abs(icur - ihigh) > Math.abs(icur - ilow)) {
+				higher = Math.abs(icur - ihigh);
+				flag = "↗↘";
+				logger1.debug("higher:" + higher + "\t" + (higher / icur * 100));
+				float upDownRatio = higher / icur * 100;
+				// upDownRatio = ((int)(upDownRatio * 100))/100f;
+				String strUpDownRatio = df.format(upDownRatio);
+				if (higher / icur * 100 > 10 && lTradingVolume > 0) {
+					stock.setStockGubun(strUpDownRatio + "%" + flag);
+					stock.setLineUp(16);
+					upDownStockList.add(stock);
+					return stock;
+				}
+			} else {
+				higher = Math.abs(icur - ilow);
+				flag = "↘↗";
+				logger1.debug("higher:" + higher + "\t" + (higher / icur * 100));
+				float upDownRatio = higher / icur * 100;
+				// upDownRatio = ((int)(upDownRatio * 100))/100f;
+				String strUpDownRatio = df.format(upDownRatio);
+				if (upDownRatio > 10 && lTradingVolume > 0) {
+					stock.setStockGubun(strUpDownRatio + "%" + flag);
+					stock.setLineUp(16);
+					downUpStockList.add(stock);
+					return stock;
+				}
+			}
+
+			float fRatio = 0f;
+			if (varyRatio.indexOf("%") != -1) {
+				fRatio = Float.parseFloat(varyRatio.substring(1, varyRatio.indexOf("%")));
+				if (fRatio >= 5) {
+					if (specialLetter.equals("+") || specialLetter.equals("▲")) {
+						stock.setStockGubun("+5%이상↗");
+						stock.setLineUp(13);
+						over5PerUpStockList.add(stock);
+					} else if (specialLetter.equals("-") || specialLetter.equals("▼")) {
+						stock.setStockGubun("-5%이상↘");
+						stock.setLineUp(23);
+						over5PerDownStockList.add(stock);
+					}
+					return stock;
+				}
+			}
+		} catch (IOException e) {
+			logger1.debug(e.getMessage());
+		} catch (Exception e) {
+			logger1.debug(e.getMessage());
+		}
+		return stock;
+	}

@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.01 transitional//en" "http://www.w3.org/tr/html4/loose.dtd">
+<html lang="ko">
+    <head> 
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
+        <meta http-equiv="X-UA-Compatible" content="IE=10"> 
+        <title>Daum 금융</title> 
+        <meta name="verify-v1" content="iXgHW7UooMcyeiV/Zb0Tk/yK2yB+IuA5/5GgIzGBEns="> 
+        <meta property="og:image" content="http://i1.daumcdn.net/img-media/mobile/meta/finance.png"> 
+        <link rel="stylesheet" href="http://s1.daumcdn.net/stock/css/common.css?ver=20170307191223" type="text/css"> 
+        <link rel="stylesheet" href="http://s1.daumcdn.net/stock/css/newHeader.css?ver=20170307191223" type="text/css"> 
+        <link rel="stylesheet" href="http://s1.daumcdn.net/stock/css/column.css?ver=20170307191223" type="text/css"> 
+        <link rel="stylesheet" href="http://s1.daumcdn.net/stock/css/allpanel.css?ver=20170307191223" type="text/css"> 
+        <script type="text/javascript" src="http://s1.daumcdn.net/stock/js/common.js?ver=20170307191223"></script> 
+        <script type="text/javascript" src="http://s1.daumcdn.net/fn/js/stock/2008/jigu.min.js?ver=20170307191223" charset="utf-8"></script> 
+        <script type="text/javascript" src="http://s1.daumcdn.net/fn/js/stock/2008/suggest.min.js?ver=20170307191223" charset="utf-8"></script> 
+        <script type="text/javascript" src="http://s1.daumcdn.net/stock/js/allpanel.js?ver=20170307191223"></script> 
+        <script type="text/javascript">
+            var isUpjong = true;
+            var stype = "P";
+        </script> 
+        <script type="text/javascript" src="http://finance.daum.net/xml/xmlallpanel.daum?stype=P&amp;type=U"></script> 
+        <script type="text/javascript" src="http://s1.daumcdn.net/img.search/front/js/searchContents.js?ver=20170307191223" charset="utf-8"></script> 
+        <link rel="shortcut icon" href="http://finance.daum.net/favicon.ico" type="image/x-icon"> 
+        <link rel="icon" href="http://finance.daum.net/favicon.ico" type="image/x-icon"> 
+    </head> 
+    <body> 
+        <div id="kosInfoBg"> 
+            <h1 id="logo"> <a id="logo1" href="http://www.daum.net/?nil_profile=daum&amp;nil_src=stock" target="_blank" title="Daum 메인페이지로 가기">Daum</a> <a id="logo2" href="http://finance.daum.net/index.daum" target="_blank" title="증권">증권</a> </h1> 
+            <div id="kosInfo"> 
+                <dl id="kospi"> 
+                    <dt>
+                        <a onclick="GoPage('http://stock.daum.net/quote/kospi.daum')" href="javascript:;">kospi</a>
+                    </dt> 
+                    <dd class="hyenCost"></dd> 
+                    <dd class="hyenUpdn"></dd> 
+                    <dd class="hyenRate"></dd> 
+                </dl> 
+                <dl id="kosdaq"> 
+                    <dt>
+                        <a onclick="GoPage('http://stock.daum.net/quote/kosdaq.daum')" href="javascript:;">kosdaq</a>
+                    </dt> 
+                    <dd class="hyenCost"></dd> 
+                    <dd class="hyenUpdn"></dd> 
+                    <dd class="hyenRate"></dd> 
+                </dl> 
+            </div> 
+        </div> 
+        <div id="headInfoBg"> 
+            <div id="kosLink" class="kospiOn"> 
+                <a id="kospiLink" href="http://finance.daum.net/quote/allpanel.daum?stype=P&amp;type=U">코스피전종목시세</a> 
+                <a id="kosdaqLink" href="http://finance.daum.net/quote/allpanel.daum?stype=Q&amp;type=U">코스닥전종목시세</a> 
+                <div id="underLine"></div> 
+            </div> 
+            <div id="headInfo"> 
+                <div id="typeLink"> 
+                    <a id="type1" class="on" href="http://finance.daum.net/quote/allpanel.daum?stype=P&amp;type=U"><span>업종순</span></a> 
+                    <a id="type2" href="http://finance.daum.net/quote/allpanel.daum?stype=P&amp;type=S"><span>가나다순</span></a> 
+                </div> 
+                <div id="timeInfo"></div> 
+            </div> 
+        </div> 
+        <div id="wrap" class="clearfix"></div> 
+        <!-- Footer : STR --> 
+        <style>.btn_refresh {display:none !important;}</style> 
+        <div id="daumFoot"> 
+            <h2 class="screen_out">푸터</h2> 
+            <ul id="corp"> 
+                <li><a href="http://www.daum.net/doc/info.html" target="_blank" title="서비스 약관/정책">서비스 약관/정책</a></li> 
+                <li><a href="http://cs.daum.net/faq/19.html" target="_blank" title="금융 고객센터">금융 고객센터</a></li> 
+                <li><a href="https://cs.daum.net/question/19.html" target="_blank" title="금융 문의하기 ">금융 문의하기</a></li> 
+                <li class="none"><a href="http://blog.daum.net/daumfinance/" target="_blank" title="공지사항">공지사항</a></li> 
+            </ul> 
+            <p id="copyr"> 카카오가 제공하는 증권정보는 단순히 정보의 제공을 목적으로 하고 있으며, 사이트에서 제공되는 정보는 오류 및 지연이 발생될 수 있습니다.<br> 제공된 정보이용에 따르는 책임은 이용자 본인에게 있으며, 카카오는 이용자의 투자결과에 따른 법적책임을 지지 않습니다.<br><br> Copyright (c) <a href="http://www.kakaocorp.com/" target="_blank" style="font-weight:bold;">Kakao Corp.</a> All rights reserved.<br> 위 내용에 대한 저작권 및 법적 책임은 자료제공사 또는 글쓴이에 있으며 카카오의 입장과 다를 수 있습니다. </p> 
+        </div> 
+        <!--// daumFoot  --> 
+        <script type="text/javascript" src="http://fn.daum-img.net/js/atom/finance/promotion.js?ver=20170307191223" charset="utf-8"></script> 
+        <script type="text/javascript" id="hennessyScript" data-service="stock" src="http://s1.daumcdn.net/photo-media/static/media/3.12.51.3/dist/lib/Hennessy.min.js">
+        </script> 
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-46808903-7', {'sampleRate': 5});
+            ga('send', 'pageview', {
+                'dimension1': 'false'
+            });
+
+        </script> 
+        <script type="text/javascript">
+            function resizeLeftHeight() {
+                var B = document.body,
+                        H = document.documentElement,
+                        height;
+
+                if (typeof document.height !== 'undefined') {
+                    height = document.height // For webkit browsers
+                } else {
+                    height = Math.max(B.scrollHeight, B.offsetHeight, H.clientHeight, H.scrollHeight, H.offsetHeight);
+                }
+                lw = document.getElementById("leftWrap");
+                if (lw) {
+                    // GNB: 237px
+                    lw.style.height = (height - 237 - 142) + "px";
+                } else {
+                    rw = document.getElementById("rightWrap");
+                    if (rw) {
+                        rw.style.height = (height - 237 - 500) + "px";
+                        //console.log(height);
+                    }
+                }
+
+
+            }
+            resizeLeftHeight();
+            setTimeout(resizeLeftHeight, 2000);
+            if (window.location.pathname.lastIndexOf("http://finance.daum.net/item/", 0) == 0)
+                setTimeout(resizeLeftHeight, 3000);
+
+            if (window.location.pathname.lastIndexOf("http://finance.daum.net/news/", 0) == 0)
+                setTimeout(resizeLeftHeight, 6000);
+
+        </script> 
+        <script type="text/javascript">
+
+            try {
+                setKosInfo(dataset);
+
+                if (gItemArr.length == 0) {
+                    if (isUpjong) {
+                        for (var i = 0, icnt = dataset.list.length; i < icnt; ++i) {
+                            var itemCnt = dataset.list[i].item.length
+                            dataset.list[i].upjong.total = itemCnt;
+                            gUpjongArr.push(dataset.list[i].upjong);
+                            for (var j = 0; j < itemCnt; ++j) {
+                                gItemArr.push(new stockItem(dataset.list[i].item[j]));
+                            }
+                        }
+                    } else {
+                        for (var i = 0, icnt = dataset.item.length; i < icnt; ++i) {
+                            gItemArr.push(new stockItem(dataset.item[i]));
+                        }
+                    }
+                    makewBox();
+                }
+                if (_browser.ie) {
+                    window.scrollTo(0, 0);
+                }
+            } catch (e) {
+                setTimeout(reload, 60000);
+            }
+            function reload() {
+                alert(_browser.ie);
+                if (_browser.ie) {
+                    document.location.href = "http://finance.daum.net/quote/allpanel.daum?stype=P&type=U&pos=" + document.documentElement.scrollTop;
+                } else {
+                    //			document.location.reload();
+                    document.location.href = document.location.href.replace(/[&?](nil_profile|nil_menu)=[_a-zA-Z0-9]+/gi, "");
+                }
+            }
+            console.log("dataset.timeinfo.message:" + dataset.timeinfo.message);
+            if (dataset.timeinfo.message.indexOf(":") > 0) {
+                setTimeout(reload, 60000);
+            }
+        </script> 
+        <script charset="utf-8" type="text/javascript" src="http://static.daum-img.net/tiara/tracker/tiara.js"></script> 
+        <script type="text/javascript">
+            var __pageTracker = {};
+
+            if (typeof __Tiara != 'undefined' && typeof __Tiara.__getTracker != 'undefined') {
+                __pageTracker = __Tiara.__getTracker();
+            } else {
+                __pageTracker.__trackPageview = function () {};
+            }
+            window.setTimeout('try { __pageTracker.__trackPageview(); } catch(e) {}', 1);
+        </script>   
+    </body>
+</html>
