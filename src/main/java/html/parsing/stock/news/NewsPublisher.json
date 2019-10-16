@@ -1,0 +1,223 @@
+
+[
+    {
+        "name": "인터웍스미디어",
+        "domain": "interworksmedia.co.kr",
+        "key": "$191376035636899"
+    },
+    {
+        "name": "경향신문",
+        "domain": "khan.co.kr",
+        "key": "$838774415619153"
+    },
+    {
+        "name": "서울신문",
+        "domain": "seoul.co.kr",
+        "key": "$958217317843347"
+    },
+    {
+        "name": "한국아이닷컴",
+        "domain": "hankooki.com",
+        "key": "$108479120200329"
+    },
+    {
+        "name": "한경닷컴",
+        "domain": "hankyung.com",
+        "key": "$109994420482503"
+    },
+    {
+        "name": "파이낸셜뉴스",
+        "domain": "fnnews.com",
+        "key": "$910975016963628"
+    },
+    {
+        "name": "오센",
+        "domain": "mt.co.kr",
+        "key": "$666741012415650"
+    },
+    {
+        "name": "머니S",
+        "domain": "moneys.news",
+        "key": "$103220019221019"
+    },
+    {
+        "name": "조선닷컴",
+        "domain": "chosun.com",
+        "key": "$910083616947030"
+    },
+    {
+        "name": "이투데이",
+        "domain": "etoday.co.kr",
+        "key": "$104200519403602"
+    },
+    {
+        "name": "아시아투데이",
+        "domain": "asiatoday.co.kr",
+        "key": "$132100224598921"
+    },
+    {
+        "name": "더팩트",
+        "domain": "tf.co.kr",
+        "key": "$660501412299460"
+    },
+    {
+        "name": "시사인",
+        "domain": "sisainlive.com",
+        "key": "$128713123968180"
+    },
+    {
+        "name": "쿠키뉴스",
+        "domain": "kukinews.com",
+        "key": "$111064020681684"
+    },
+    {
+        "name": "이데일리",
+        "domain": "edaily.co.kr",
+        "key": "$102952619171224"
+    },
+    {
+        "name": "뉴시스",
+        "domain": "newsis.com",
+        "key": "$918105917096416"
+    },
+    {
+        "name": "엑스포츠뉴스",
+        "domain": "xportsnews.com",
+        "key": "$133526424864497"
+    },
+    {
+        "name": "한경TV",
+        "domain": "wowtv.co.kr",
+        "key": "$985849718357899"
+    },
+    {
+        "name": "디스패치",
+        "domain": "dispatch.co.kr",
+        "key": "$122206122756492"
+    },
+    {
+        "name": "지디넷",
+        "domain": "zdnet.co.kr",
+        "key": "$955543217793552"
+    },
+    {
+        "name": "서울경제",
+        "domain": "sedaily.com",
+        "key": "$991197818457490"
+    },
+    {
+        "name": "TV리포트",
+        "domain": "tvreport.co.kr",
+        "key": "$127019523652809"
+    },    
+    {
+        "name": "미디어투데이",
+        "domain": "mediatoday.co.kr",
+        "key": "$140835626225571"
+    },    
+    {
+        "name": "국민일보",
+        "domain": "kmib.co.kr",
+        "key": "$839665815635751"
+    },
+    {
+        "name": "스포티비",
+        "domain": "spotvnews.co.kr",
+        "key": "$137270225561632"
+    },
+    {
+        "name": "스포츠서울",
+        "domain": "sportsseoul.com",
+        "key": "$142618426557540"
+    },
+    {
+        "name": "중도일보",
+        "domain": "joongdoilbo.co.kr",
+        "key": "$151264628167591"
+    },
+    {
+        "name": "중도일보",
+        "domain": "joongdo.co.kr",
+        "key": "$113649021163040"
+    },
+    {
+        "name": "경기일보",
+        "domain": "kyeonggi.com",
+        "key": "$109281320349715"
+    },
+    {
+        "name": "뉴스1",
+        "domain": "news1.kr",
+        "key": "$678328712631430"
+    },
+    {
+        "name": "강원도민일보",
+        "domain": "kado.net",
+        "key": "$702395613079588"
+    },
+    {
+        "name": "브릿지경제",
+        "domain": "viva100.com",
+        "key": "$845014015735342"
+    },
+    {
+        "name": "이코노믹리뷰",
+        "domain": "econovill.com",
+        "key": "$119086322175546"
+    },
+    {
+        "name": "비즈니스포스트",
+        "domain": "businesspost.co.kr",
+        "key": "$165169930756951"
+    },
+    {
+        "name": "스포츠월드",
+        "domain": "sportsworldi.com",
+        "key": "$151977728300378"
+    },
+    {
+        "name": "아시아경제",
+        "domain": "asiae.co.kr",
+        "key": "$925236817229204"
+    },
+    {
+        "name": "스포츠큐",
+        "domain": "sportsq.co.kr",
+        "key": "$117571021893372"
+    },
+    {
+        "name": "동아닷컴",
+        "domain": "donga.com",
+        "key": "$789749414706237"
+    },
+    {
+        "name": "조인스닷컴",
+        "domain": "joins.com",
+        "key": "$812924815137798"
+    },
+    {
+        "name": "글로벌이코노믹",
+        "domain": "g-enews.com",
+        "key": "$943955517577772"
+    },
+    {
+        "name": "시선뉴스",
+        "domain": "sisunnews.co.kr",
+        "key": "$136378825395648"
+    },
+    {
+        "name": "스포탈코리아",
+        "domain": "sportalkorea.com",
+        "key": "$148679627686235"
+    },
+    {
+        "name": "일요서울",
+        "domain": "ilyoseoul.co.kr",
+        "key": "$135487425229663"
+    },
+    {
+        "name": "한국정책신문",
+        "domain": "kpinews.co.kr",
+        "key": "$115164321445213"
+    }
+]
