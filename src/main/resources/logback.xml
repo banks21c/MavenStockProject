@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  DEBUG < INFO < WARN < ERROR < FATAL -->
+<configuration scan="true" scanPeriod="30 seconds">
+    <property name="LOGS_ABSOLUTE_PATH" value="/home/banks/stock/logs" />
+     <property name="log.max.history" value="14" />
+ 
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}][%-5level][%thread][%logger{36}] - %msg%n</pattern>
+<!--             <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n</pattern> -->
+<!--             <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger.%M - %msg%n</pattern> -->
+<!--             <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n</pattern> -->
+<!--             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern> -->
+        </encoder>
+    </appender>
+ 
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS_ABSOLUTE_PATH}/openpop_web.log</file>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	        <maxHistory>${log.max.history}</maxHistory>
+            <fileNamePattern>${LOGS_ABSOLUTE_PATH}/openpop_web.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 100MB -->
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+<!--     
+    <logger name="omc"  level="debug" additivity="true">
+        <appender-ref ref="ROLLING" />
+    </logger>
+ -->
+
+	<logger name="org.springframework.boot" level="FATAL">
+	    <appender-ref ref="STDOUT" />
+	</logger>
+     <logger name="org.springframework.jdbc">
+         <level value="debug"> </level>
+     </logger>
+ 
+     <logger name="org.springframework.transaction">
+         <level value="debug"> </level>
+     </logger>
+
+<!-- 	<logger name="org.springframework.boot.SpringApplication" level="debug"> -->
+<!-- 	    <appender-ref ref="STDOUT" /> -->
+<!-- 	</logger> -->
+ 
+  
+<!-- 	<logger name="java.sql.Connection"> -->
+<!--   		<level value="FATAL"/> -->
+<!-- 	</logger> -->
+
+<!--  	<logger name="java.sql.Statement"> -->
+<!--   		<level value="FATAL"/> -->
+<!--  	</logger> -->
+
+<!--  	<logger name="java.sql.PreparedStatement"> -->
+<!--   		<level value="FATAL"/> -->
+<!--  	</logger> -->
+
+<!--  	<logger name="java.sql.ResultSet"> -->
+<!--   		<level value="FATAL"/> -->
+<!--  	</logger> -->
+
+	<logger name="jdbc.audit" additivity="false">
+		<level value="ERROR" />
+	</logger>
+
+	<logger name="jdbc.resultset" additivity="false">
+		<level value="ERROR" />
+	</logger>
+
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="ROLLING" />
+	</root>
+ 
+</configuration>
