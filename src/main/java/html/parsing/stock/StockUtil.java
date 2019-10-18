@@ -735,7 +735,7 @@ public class StockUtil {
 		return svoList;
 	}
 
-	public List<StockVO> getAllStockList(String fileName) {
+	public static List<StockVO> getAllStockList(String fileName) {
 		List<StockVO> svoList = new ArrayList<>();
 		try {
 			// Creating a Workbook from an Excel file (.xls or .xlsx)
