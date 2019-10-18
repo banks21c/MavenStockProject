@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class News{
+public class News {
 
 	private static String kospiFileName = GlobalVariables.kospiFileName;
 	private static String kosdaqFileName = GlobalVariables.kosdaqFileName;
@@ -102,7 +102,7 @@ public class News{
 			System.out.println("authority :" + url.getAuthority());
 			System.out.println("getContent :" + url.getContent());
 
-			//System.out.println("URI ASCIIString :" + url.toURI().toASCIIString());
+			// System.out.println("URI ASCIIString :" + url.toURI().toASCIIString());
 			System.out.println("ExternalForm :" + url.toExternalForm());
 			System.out.println("DefaultPort :" + url.getDefaultPort());
 			System.out.println("Query :" + url.getQuery());
@@ -149,16 +149,13 @@ public class News{
 			System.out.println("getUserInfo :" + uri.getUserInfo());
 
 		} catch (MalformedURLException ex) {
-			Logger.getLogger(News.class
-				.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(News.class.getName()).log(Level.SEVERE, null, ex);
 
 		} catch (URISyntaxException ex) {
-			Logger.getLogger(News.class
-				.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(News.class.getName()).log(Level.SEVERE, null, ex);
 
 		} catch (IOException ex) {
-			Logger.getLogger(News.class
-				.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(News.class.getName()).log(Level.SEVERE, null, ex);
 		} finally {
 		}
 		return url;
