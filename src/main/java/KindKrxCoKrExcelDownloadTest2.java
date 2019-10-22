@@ -1,7 +1,9 @@
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -21,7 +23,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jsoup.Jsoup;
 import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -745,12 +746,13 @@ public class KindKrxCoKrExcelDownloadTest2 {
 //		Jsoup.connect(url).requestBody(json).header("Content-Type", "application/json").post();
 		Document doc = Jsoup.connect(strUri).requestBody("JSON").header("Content-Type", mime)
 				// .cookies(response.cookies())
-				 .ignoreContentType(true)
-				.post();
+				.ignoreContentType(true).post();
 //		System.out.println("doc:"+doc);
-		convertHtml2Excel(doc);
+//		convertHtml2Excel(doc);
+//		extractStockInfo(doc);
+		extractStockInfo2(doc);
 		String html = doc.html();
-		System.out.println("html:[" + html + "]");
+//		System.out.println("html:[" + html + "]");
 
 //		Files.write(Paths.get(marketType + "_excelDownload.xls"), html.getBytes("EUC-KR"));
 		Files.write(Paths.get(marketType + "_3_excelDownload.xls"), html.getBytes("EUC-KR"));
@@ -770,29 +772,26 @@ public class KindKrxCoKrExcelDownloadTest2 {
 			// Create Row (Row is inside spread sheet)
 			XSSFRow xrow = null;
 
-			int rowid = 0;
-
 			Elements trElements = doc.select("tr");
 			Cell cell;
 			for (int i = 0; i < trElements.size(); i++) {
-				xrow = xsheet.createRow(rowid);
-				Elements thElements = trElements.get(rowid).select("th");
-				for(int j=0;j<thElements.size();j++) {
+				xrow = xsheet.createRow(i);
+				Elements thElements = trElements.get(i).select("th");
+				for (int j = 0; j < thElements.size(); j++) {
 					cell = xrow.createCell(j);
 					cell.setCellValue(thElements.get(j).text());
 				}
-				Elements tdElements = trElements.get(rowid).select("td");
-				for(int j=0;j<tdElements.size();j++) {
+				Elements tdElements = trElements.get(i).select("td");
+				for (int j = 0; j < tdElements.size(); j++) {
 					cell = xrow.createCell(j);
 					cell.setCellValue(tdElements.get(j).text());
 				}
-				rowid++;
 			}
-			
+
 			XSSFRow row = xsheet.getRow(xsheet.getLastRowNum());
-			for(int colNum = 0; colNum<row.getLastCellNum();colNum++)   
+			for (int colNum = 0; colNum < row.getLastCellNum(); colNum++)
 				xwork.getSheetAt(0).autoSizeColumn(colNum);
-			
+
 			// create date for adding this to our workbook name like workbookname_date
 			Date d1 = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -805,6 +804,73 @@ public class KindKrxCoKrExcelDownloadTest2 {
 			xwork.write(fout);
 			fout.close();
 			System.out.println("redaingfromHTMLFile_" + todaysDate + ".xlsx written successfully");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Using OutputStreamWriter
+	 * @param doc
+	 */
+	public void extractStockInfo(Document doc) {
+
+		try {
+			StringBuffer sb = new StringBuffer();
+			Elements trElements = doc.select("tr");
+			for (int i = 0; i < trElements.size(); i++) {
+				Elements tdElements = trElements.get(i).select("td");
+				if (tdElements.size() > 0) {
+					String stockName = tdElements.get(0).text();
+					String stockCode = tdElements.get(1).text();
+					System.out.println(stockCode + "\t" + stockName);
+					sb.append(stockCode + "\t" + stockName + "\n");
+				}
+			}
+			// create date for adding this to our workbook name like workbookname_date
+			Date d1 = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String todaysDate = sdf.format(d1);
+			System.out.println(sdf.format(d1));
+			// Create file system using specific name
+			FileOutputStream fout = new FileOutputStream(new File("C:\\Temp\\extractStockInfo_" + todaysDate + ".txt"));
+			OutputStreamWriter osw = new OutputStreamWriter(fout);
+			osw.write(sb.toString());
+			osw.flush();
+			osw.close();
+			System.out.println("extractStockInfo_" + todaysDate + ".txt written successfully");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * Using FileWriter
+	 * @param doc
+	 */
+	public void extractStockInfo2(Document doc) {
+		
+		try {
+			StringBuffer sb = new StringBuffer();
+			Elements trElements = doc.select("tr");
+			for (int i = 0; i < trElements.size(); i++) {
+				Elements tdElements = trElements.get(i).select("td");
+				if (tdElements.size() > 0) {
+					String stockName = tdElements.get(0).text();
+					String stockCode = tdElements.get(1).text();
+					System.out.println(stockCode + "\t" + stockName);
+					sb.append(stockCode + "\t" + stockName + "\n");
+				}
+			}
+			// create date for adding this to our workbook name like workbookname_date
+			Date d1 = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_hhmmss");
+			String todaysDate = sdf.format(d1);
+			System.out.println(sdf.format(d1));
+			// Create file system using specific name
+			FileWriter fw = new FileWriter(new File("C:\\Temp\\extractStockInfo_" + todaysDate + ".txt"));
+			fw.write(sb.toString());
+			fw.flush();
+			fw.close();
+			System.out.println("extractStockInfo_" + todaysDate + ".txt written successfully");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
