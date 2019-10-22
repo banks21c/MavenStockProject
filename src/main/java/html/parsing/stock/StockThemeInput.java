@@ -63,9 +63,15 @@ public class StockThemeInput extends News {
 
 	/**
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
-		new StockThemeInput(1);
+	public static void main(String[] args){
+		try {
+			new StockThemeInput(1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	StockThemeInput() {
@@ -75,7 +81,7 @@ public class StockThemeInput extends News {
 		writeFile(strThemeName, themeMarketPrice);
 	}
 
-	StockThemeInput(int i) {
+	StockThemeInput(int i) throws Exception {
 		// MakeKospiKosdaqList.makeKospiKosdaqList();
 		strDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDefaultDate);
 		strDate = StringUtils.defaultString(strDate);

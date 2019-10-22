@@ -9,7 +9,7 @@ import html.parsing.stock.ClassForNameExample;
 import html.parsing.stock.DataSort.StockNameAscCompare2;
 import html.parsing.stock.GlobalVariables;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import static html.parsing.stock.StockUtil.readStockCodeNameListFromExcel;
+import html.parsing.stock.StockUtil;
 import html.parsing.stock.StockVO;
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
@@ -57,10 +57,21 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
         List<StockVO> kospiStockList = new ArrayList<StockVO>();
         List<StockVO> kosdaqStockList = new ArrayList<StockVO>();
 
-        readStockCodeNameListFromExcel(kospiStockList, kospiFileName);
-        Collections.sort(kospiStockList, new StockNameAscCompare2());
-        readStockCodeNameListFromExcel(kosdaqStockList, kosdaqFileName);
-        Collections.sort(kosdaqStockList, new StockNameAscCompare2());
+        try {
+	        StockUtil.readStockCodeNameListFromExcel(kospiStockList, kospiFileName);
+	        Collections.sort(kospiStockList, new StockNameAscCompare2());
+	        StockUtil.readStockCodeNameListFromExcel(kosdaqStockList, kosdaqFileName);
+	        Collections.sort(kosdaqStockList, new StockNameAscCompare2());
+        }catch(Exception e) {
+        	try {
+				StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
+				Collections.sort(kospiStockList, new StockNameAscCompare2());
+				StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+				Collections.sort(kosdaqStockList, new StockNameAscCompare2());
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+        }
 
         String kospis[] = new String[kospiStockList.size()];
         String kosdaqs[] = new String[kosdaqStockList.size()];

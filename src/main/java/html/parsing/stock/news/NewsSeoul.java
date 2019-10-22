@@ -240,7 +240,7 @@ public class NewsSeoul extends javax.swing.JFrame {
             Elements contents = doc.select(".v_article");
             String strContent = contents.outerHtml();
             System.out.println("strContent:" + strContent);
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
             String copyright = "";
 

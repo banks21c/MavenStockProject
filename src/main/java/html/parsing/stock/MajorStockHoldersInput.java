@@ -44,7 +44,12 @@ public class MajorStockHoldersInput {
 	 */
 	public static void main(String[] args) {
 		majorStockHolders = JOptionPane.showInputDialog("대주주명을 입력해주세요.");
-		new MajorStockHoldersInput(1);
+		try {
+			new MajorStockHoldersInput(1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	MajorStockHoldersInput() {
@@ -56,7 +61,7 @@ public class MajorStockHoldersInput {
 		writeFile(kospiStockList, "코스피");
 	}
 
-	MajorStockHoldersInput(int i) {
+	MajorStockHoldersInput(int i) throws Exception {
 		kospiStockList = StockUtil.readKospiStockCodeNameListFromExcel();
 		kosdaqStockList = StockUtil.readKosdaqStockCodeNameListFromExcel();
 

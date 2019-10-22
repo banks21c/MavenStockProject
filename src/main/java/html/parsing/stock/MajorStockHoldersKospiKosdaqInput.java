@@ -49,7 +49,12 @@ public class MajorStockHoldersKospiKosdaqInput {
             majorStockHolders = "국민연금";
         }
 //		new MajorStockHoldersKospiKosdaqInput();
-        new MajorStockHoldersKospiKosdaqInput(1);
+        try {
+			new MajorStockHoldersKospiKosdaqInput(1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     MajorStockHoldersKospiKosdaqInput() {
@@ -62,7 +67,7 @@ public class MajorStockHoldersKospiKosdaqInput {
 //		writeFile(kospiKosdaqStockList, majorStockHolders);
     }
 
-    MajorStockHoldersKospiKosdaqInput(int i) {
+    MajorStockHoldersKospiKosdaqInput(int i) throws Exception {
 
         kospiKosdaqStockList = StockUtil.readAllStockCodeNameListFromExcel();
 

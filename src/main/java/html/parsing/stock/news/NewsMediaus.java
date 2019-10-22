@@ -238,7 +238,7 @@ public class NewsMediaus extends javax.swing.JFrame {
             String textBody = contents.outerHtml();
             String strContent = textBody;
             System.out.println("strContent:" + strContent);
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
             String copyright = doc.select(".copyright").outerHtml();
 

@@ -64,12 +64,18 @@ public class StockThemeNoInput extends News {
 
     /**
      * @param args
+     * @throws Exception 
      */
-    public static void main(String[] args) {
-        new StockThemeNoInput(1);
+    public static void main(String[] args){
+        try {
+			new StockThemeNoInput(1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
-    StockThemeNoInput() {
+    StockThemeNoInput() throws Exception {
         // 코스피
         //readFile("코스피", kospiFileName);
         // 코스닥
@@ -83,7 +89,7 @@ public class StockThemeNoInput extends News {
         writeThemeMarketPrice();
     }
 
-    StockThemeNoInput(int i) {
+    StockThemeNoInput(int i) throws Exception {
         // MakeKospiKosdaqList.makeKospiKosdaqList();
         strDate = strDefaultDate;
         String year = strDate.substring(0, 4);

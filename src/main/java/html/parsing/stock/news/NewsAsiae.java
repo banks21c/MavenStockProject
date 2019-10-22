@@ -246,7 +246,7 @@ public class NewsAsiae extends javax.swing.JFrame {
 
             String strContent = doc.select("#bodyContents").html();
             System.out.println("strContent:" + strContent);
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
             String copyright = "";
 
