@@ -749,9 +749,8 @@ public class StockUtil {
 		return svoList;
 	}
 
-	public static List<StockVO> getAllStockList(String fileName) {
+	public static List<StockVO> getAllStockList(String fileName) throws IOException, EncryptedDocumentException, InvalidFormatException {
 		List<StockVO> svoList = new ArrayList<>();
-		try {
 			// Creating a Workbook from an Excel file (.xls or .xlsx)
 			logger.debug("fileName:" + fileName);
 			File file = new File(fileName);
@@ -802,13 +801,6 @@ public class StockUtil {
 			}
 			// Closing the workbook
 			workbook.close();
-		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (InvalidFormatException ex) {
-			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (EncryptedDocumentException ex) {
-			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
-		}
 		return svoList;
 	}
 
