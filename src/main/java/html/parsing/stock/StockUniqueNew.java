@@ -149,11 +149,11 @@ public class StockUniqueNew extends Thread {
             listSortAndAdd();
             writeFile(allStockList, kospiFileName, "코스피 특징종목");
 
-            clearList();
+//            clearList();
 
-            readExcelFile("코스닥", kosdaqFileName);
-            listSortAndAdd();
-            writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");
+//            readExcelFile("코스닥", kosdaqFileName);
+//            listSortAndAdd();
+//            writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(StockUniqueNew.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -170,8 +170,8 @@ public class StockUniqueNew extends Thread {
             clearList();
 
 			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
-			for(int i=0;i<kospiStockList.size();i++) {
-				StockVO svo = kospiStockList.get(i);
+			for(int i=0;i<kosdaqStockList.size();i++) {
+				StockVO svo = kosdaqStockList.get(i);
 				String strStockCode = svo.getStockCode(); 
 				String strStockName = svo.getStockName(); 
 				getStockInfo(i+1, strStockCode, strStockName);
