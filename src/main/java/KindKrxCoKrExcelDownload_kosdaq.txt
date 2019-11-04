@@ -1,0 +1,50 @@
+General
+------------------------------------------------------------
+Request URL: http://kind.krx.co.kr/corpgeneral/corpList.do
+Request Method: POST
+Status Code: 200 OK
+Remote Address: 203.235.1.50:80
+Referrer Policy: no-referrer-when-downgrade
+
+Response Headers
+------------------------------------
+Content-Description: JSP Generated Data
+Content-Disposition: attachment; filename=%EC%83%81%EC%9E%A5%EB%B2%95%EC%9D%B8%EB%AA%A9%EB%A1%9D.xls
+Content-Type: application/vnd.ms-excel; charset=EUC-KR
+Date: Mon, 21 Oct 2019 04:30:06 GMT
+Transfer-Encoding: chunked
+
+Request Headers
+--------------------------------
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9,ko;q=0.8
+Cache-Control: max-age=0
+Connection: keep-alive
+Content-Length: 220
+Content-Type: application/x-www-form-urlencoded
+Cookie: __smVisitorID=mk_hb30YP7r; viewMode=1; JSESSIONID=OZIj1qT1FsJLsuHBajMYJpAL1XlcZwoALVNfEYqSTVVSJJ2UyMS4vWCH7vwUWS9n.amV1c19kb21haW4vMTBfRFNUMg==
+Host: kind.krx.co.kr
+Origin: http://kind.krx.co.kr
+Referer: http://kind.krx.co.kr/corpgeneral/corpList.do?method=loadInitPage
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36 NetHelper70
+
+Form Data
+----------------------
+method: download
+pageIndex: 1
+currentPageSize: 5000
+comAbbrv: 
+beginIndex: 
+orderMode: 3
+orderStat: D
+isurCd: 
+repIsuSrtCd: 
+searchCodeType: 
+marketType: kosdaqMkt
+searchType: 13
+industry: 
+fiscalYearEnd: all
+comAbbrvTmp: 
+location: all

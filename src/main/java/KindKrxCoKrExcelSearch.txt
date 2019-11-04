@@ -1,0 +1,47 @@
+General
+------------------------------------------------------------
+Request URL: http://kind.krx.co.kr/corpgeneral/corpList.do
+Request Method: POST
+Status Code: 200 OK
+Remote Address: 203.235.1.50:80
+Referrer Policy: no-referrer-when-downgrade
+
+Response Headers
+------------------------------------
+Content-Type: text/html; charset=UTF-8
+Date: Mon, 21 Oct 2019 02:38:13 GMT
+Transfer-Encoding: chunked
+
+Request Headers
+--------------------------------
+Accept: text/html, */*; q=0.01
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9,ko;q=0.8
+Connection: keep-alive
+Content-Length: 223
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Cookie: __smVisitorID=mk_hb30YP7r; viewMode=1; JSESSIONID=fmdg1s82aGs3kQVm9Qab2ktEb5aAu0aSLHenOsEsBpJIpwpAyt27mHAcmYBcPlwN.amV1c19kb21haW4vMTBfRFNUMg==
+Host: kind.krx.co.kr
+Origin: http://kind.krx.co.kr
+Referer: http://kind.krx.co.kr/corpgeneral/corpList.do?method=loadInitPage
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36 NetHelper70
+X-Requested-With: XMLHttpRequest
+
+Form Data
+----------------------
+method: searchCorpList
+pageIndex: 1
+currentPageSize: 15
+comAbbrv: 
+beginIndex: 
+orderMode: 3
+orderStat: D
+isurCd: 
+repIsuSrtCd: 
+searchCodeType: 
+marketType: stockMkt
+searchType: 13
+industry: 
+fiscalYearEnd: all
+comAbbrvTmp: 
+location: all
