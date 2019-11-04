@@ -70,6 +70,9 @@ public class StockUniqueNew extends Thread {
     static int bottomCount = 0;
     static int downCount = 0;
     static int steadyCount = 0;
+    
+	List<StockVO> kospiStockList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqStockList = new ArrayList<StockVO>();
 
     List<StockVO> allStockList = new ArrayList<StockVO>();
     List<StockVO> topStockList = new ArrayList<StockVO>();
@@ -139,25 +142,42 @@ public class StockUniqueNew extends Thread {
 
     public void execute() {
         try {
-            // MakeKospiKosdaqList.makeKospiKosdaqList();
             Class thisClass = this.getClass();
             logger1 = LoggerFactory.getLogger(thisClass);
 
-//        readFile("코스피", kospiFileName);
             readExcelFile("코스피", kospiFileName);
+            listSortAndAdd();
+            writeFile(allStockList, kospiFileName, "코스피 특징종목");
+
+//            clearList();
+
+//            readExcelFile("코스닥", kosdaqFileName);
+//            listSortAndAdd();
+//            writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(StockUniqueNew.class.getName()).log(Level.SEVERE, null, ex);
+            
+			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
+			for(int i=0;i<kospiStockList.size();i++) {
+				StockVO svo = kospiStockList.get(i);
+				String strStockCode = svo.getStockCode(); 
+				String strStockName = svo.getStockName(); 
+				getStockInfo(i+1, strStockCode, strStockName);
+			}
             listSortAndAdd();
             writeFile(allStockList, kospiFileName, "코스피 특징종목");
 
             clearList();
 
-//        readFile("코스닥", kosdaqFileName);
-            readExcelFile("코스닥", kosdaqFileName);
+			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+			for(int i=0;i<kosdaqStockList.size();i++) {
+				StockVO svo = kosdaqStockList.get(i);
+				String strStockCode = svo.getStockCode(); 
+				String strStockName = svo.getStockName(); 
+				getStockInfo(i+1, strStockCode, strStockName);
+			}			
             listSortAndAdd();
-            writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(StockUniqueNew.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidFormatException ex) {
-            java.util.logging.Logger.getLogger(StockUniqueNew.class.getName()).log(Level.SEVERE, null, ex);
+            writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");            
         }
     }
 

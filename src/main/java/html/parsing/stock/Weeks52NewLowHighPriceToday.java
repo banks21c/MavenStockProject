@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.PropertyConfigurator;
@@ -42,7 +43,8 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREAN);
 	String strDefaultDate = sdf.format(new Date());
-	// String strYyyyMmDd = new SimpleDateFormat("yyyy년 M월 d일 E",Locale.KOREAN).format(new Date());
+	// String strYyyyMmDd = new SimpleDateFormat("yyyy년 M월 d일
+	// E",Locale.KOREAN).format(new Date());
 	int iYmd = Integer.parseInt(strDefaultDate.replaceAll("\\.", ""));
 	String strYmdDash = strDefaultDate.replaceAll("\\.", "-");
 	String strYmdDashBracket = "[" + strDefaultDate.replaceAll("\\.", "-") + "]";
@@ -115,8 +117,14 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 //        readFile("코스피", kospiFileName);
 		// 코스피 신저가
 //		newLowPriceList = StockUtil.getAllStockInfo(kospiFileName);
-		kospiStockList = StockUtil.getAllStockList(kospiFileName);
-		logger.debug("kospiStockList.size :" + kospiStockList.size());
+		try {
+			kospiStockList = StockUtil.getAllStockList(kospiFileName);
+			logger.debug("kospiStockList.size1 :" + kospiStockList.size());
+		} catch (Exception ex) {
+            java.util.logging.Logger.getLogger(Weeks52NewLowHighPriceToday.class.getName()).log(Level.SEVERE, null, ex);
+			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
+			logger.debug("kospiStockList.size2 :" + kospiStockList.size());
+		}
 		for (int i = 0; i < kospiStockList.size(); i++) {
 			StockVO svo = kospiStockList.get(i);
 			String stockCode = svo.getStockCode();
@@ -138,8 +146,14 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 		// 코스닥
 //        readFile("코스닥", kosdaqFileName);
 		// 코스닥 신저가
-		kosdaqStockList = StockUtil.getAllStockList(kosdaqFileName);
-		logger.debug("kosdaqStockList :" + kosdaqStockList);
+		try {
+			kosdaqStockList = StockUtil.getAllStockList(kosdaqFileName);
+			logger.debug("kosdaqStockList1 :" + kosdaqStockList);
+		} catch (Exception ex) {
+			java.util.logging.Logger.getLogger(Weeks52NewLowHighPriceToday.class.getName()).log(Level.SEVERE, null, ex);
+			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+			logger.debug("kosdaqStockList2 :" + kosdaqStockList);
+		}
 		logger.debug("kosdaqStockList.size :" + kosdaqStockList.size());
 		for (int i = 0; i < kosdaqStockList.size(); i++) {
 			StockVO svo = kosdaqStockList.get(i);
@@ -268,7 +282,7 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -278,7 +292,7 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 					varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
@@ -325,7 +339,8 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 				}
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
-					stock.setlTradingAmount(Integer.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+					stock.setlTradingAmount(Integer
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -338,7 +353,8 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 			stock.setSpecialLetter(specialLetter);
 
 			// 종목분석-기업현황
-			doc = Jsoup.connect("http://companyinfo.stock.naver.com/company/c1010001.aspx?cmp_cd=" + strStockCode).get();
+			doc = Jsoup.connect("http://companyinfo.stock.naver.com/company/c1010001.aspx?cmp_cd=" + strStockCode)
+					.get();
 
 			Element edd = doc.getElementById("cTB11");
 			Element td0 = edd.select("td").first();
@@ -366,15 +382,19 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 			int iWeeks52MaxPrice = Integer.parseInt(weeks52MaxPrice);
 			int iWeeks52MinPrice = Integer.parseInt(weeks52MinPrice);
 
-			logger.debug("stock.getiHighPrice():" + stock.getiHighPrice() + " iWeeks52MaxPrice:" + iWeeks52MaxPrice + "================:" + (stock.getiHighPrice() >= iWeeks52MaxPrice));
-			logger.debug("stock.getiLowPrice():" + stock.getiLowPrice() + " iWeeks52MaxPrice:" + iWeeks52MinPrice + "================:" + (stock.getiLowPrice() >= iWeeks52MinPrice));
+			logger.debug("stock.getiHighPrice():" + stock.getiHighPrice() + " iWeeks52MaxPrice:" + iWeeks52MaxPrice
+					+ "================:" + (stock.getiHighPrice() >= iWeeks52MaxPrice));
+			logger.debug("stock.getiLowPrice():" + stock.getiLowPrice() + " iWeeks52MaxPrice:" + iWeeks52MinPrice
+					+ "================:" + (stock.getiLowPrice() >= iWeeks52MinPrice));
 
 			if (stock.getiHighPrice() >= iWeeks52MaxPrice) {
 				newHighPriceList.add(stock);
-				logger.debug("newHighPriceList :" + newHighPriceList + " newHighPriceList.size :" + newHighPriceList.size());
+				logger.debug(
+						"newHighPriceList :" + newHighPriceList + " newHighPriceList.size :" + newHighPriceList.size());
 			} else if (stock.getiLowPrice() <= iWeeks52MinPrice) {
 				newLowPriceList.add(stock);
-				logger.debug("newLowPriceList :" + newLowPriceList + " newLowPriceList.size :" + newLowPriceList.size());
+				logger.debug(
+						"newLowPriceList :" + newLowPriceList + " newLowPriceList.size :" + newLowPriceList.size());
 			}
 		} catch (IOException e) {
 			logger.debug(e.getMessage());
@@ -420,7 +440,8 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 					sb1.append("<tr>\r\n");
 					String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
 					sb1.append("<td>").append(cnt++).append("</td>\r\n");
-					sb1.append("<td><a href='").append(url).append("' target='_sub'>").append(s.getStockName()).append("</a></td>\r\n");
+					sb1.append("<td><a href='").append(url).append("' target='_sub'>").append(s.getStockName())
+							.append("</a></td>\r\n");
 
 					String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
 					String varyPrice = s.getVaryPrice();
@@ -429,25 +450,33 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 					logger.debug("varyPrice+++>" + varyPrice);
 
 					if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
-						|| specialLetter.startsWith("+")) {
-						sb1.append("<td style='text-align:right;color:red'>").append(StringUtils.defaultIfEmpty(s.getCurPrice(), "")).append("</td>\r\n");
-						sb1.append("<td style='text-align:right'><font color='red'>").append(specialLetter).append(" ").append(varyPrice).append("</font></td>\r\n");
+							|| specialLetter.startsWith("+")) {
+						sb1.append("<td style='text-align:right;color:red'>")
+								.append(StringUtils.defaultIfEmpty(s.getCurPrice(), "")).append("</td>\r\n");
+						sb1.append("<td style='text-align:right'><font color='red'>").append(specialLetter).append(" ")
+								.append(varyPrice).append("</font></td>\r\n");
 					} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
-						|| specialLetter.startsWith("-")) {
-						sb1.append("<td style='text-align:right;color:blue'>").append(StringUtils.defaultIfEmpty(s.getCurPrice(), "")).append("</td>\r\n");
-						sb1.append("<td style='text-align:right'><font color='blue'>").append(specialLetter).append(" ").append(varyPrice).append("</font></td>\r\n");
+							|| specialLetter.startsWith("-")) {
+						sb1.append("<td style='text-align:right;color:blue'>")
+								.append(StringUtils.defaultIfEmpty(s.getCurPrice(), "")).append("</td>\r\n");
+						sb1.append("<td style='text-align:right'><font color='blue'>").append(specialLetter).append(" ")
+								.append(varyPrice).append("</font></td>\r\n");
 					} else {
-						sb1.append("<td style='text-align:right;color:metal'>").append(StringUtils.defaultIfEmpty(s.getCurPrice(), "")).append("</td>\r\n");
+						sb1.append("<td style='text-align:right;color:metal'>")
+								.append(StringUtils.defaultIfEmpty(s.getCurPrice(), "")).append("</td>\r\n");
 						sb1.append("<td style='text-align:right'>0</td>\r\n");
 					}
 
 					String varyRatio = StringUtils.defaultIfEmpty(s.getVaryRatio(), "");
 					if (varyRatio.startsWith("+")) {
-						sb1.append("<td style='text-align:right'><font color='red'>").append(varyRatio).append("</font></td>\r\n");
+						sb1.append("<td style='text-align:right'><font color='red'>").append(varyRatio)
+								.append("</font></td>\r\n");
 					} else if (varyRatio.startsWith("-")) {
-						sb1.append("<td style='text-align:right'><font color='blue'>").append(varyRatio).append("</font></td>\r\n");
+						sb1.append("<td style='text-align:right'><font color='blue'>").append(varyRatio)
+								.append("</font></td>\r\n");
 					} else {
-						sb1.append("<td style='text-align:right'><font color='black'>").append(varyRatio).append("</font></td>\r\n");
+						sb1.append("<td style='text-align:right'><font color='black'>").append(varyRatio)
+								.append("</font></td>\r\n");
 					}
 
 					if (gubun.equals("LOW")) {
@@ -466,12 +495,14 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 			for (StockVO s : list) {
 				if (s != null) {
 					Document classAnalysisDoc = Jsoup.connect(
-						"http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + s.getStockCode())
-						.get();
+							"http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + s.getStockCode())
+							.get();
 					// logger.debug("classAnalysisDoc:"+classAnalysisDoc);
 					Elements comment = classAnalysisDoc.select(".cmp_comment");
 					sb1.append("<div>\n");
-					sb1.append("<h4><a href='http://finance.naver.com/item/main.nhn?code=").append(s.getStockCode()).append("'>").append(s.getStockName()).append("(").append(s.getStockCode()).append(")</a></h4>\n");
+					sb1.append("<h4><a href='http://finance.naver.com/item/main.nhn?code=").append(s.getStockCode())
+							.append("'>").append(s.getStockName()).append("(").append(s.getStockCode())
+							.append(")</a></h4>\n");
 					sb1.append("<p>\n");
 					sb1.append(comment).append("\n");
 					sb1.append("</p>");
@@ -485,7 +516,8 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 			logger.debug(sb1.toString());
-			fileName = userHome + "\\documents\\" + strYmdDashBracket + " " + strHms + "_" + title.replaceAll(" ", "_") + ".html";
+			fileName = userHome + "\\documents\\" + strYmdDashBracket + " " + strHms + "_" + title.replaceAll(" ", "_")
+					+ ".html";
 			logger.debug("fileName==>" + fileName);
 			FileUtil.fileWrite(fileName, sb1.toString());
 		} catch (FileNotFoundException e) {
@@ -510,7 +542,7 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 			try {
 				// http://finance.naver.com/item/news_news.nhn?code=110570
 				doc = Jsoup.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=")
-					.get();
+						.get();
 				// http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
 				// logger.debug(doc.html());
 				Elements types = doc.select(".type5");
@@ -559,7 +591,9 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 					// sb1.append("<div>"+ strSource+" | "+ strDayTime
 					// +"</div>\n");
 					if (iYmd <= iYmd2) {
-						sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=").append(strStockCode).append("'>").append(strStockName).append("(").append(strStockCode).append(")</a></h3>");
+						sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=").append(strStockCode)
+								.append("'>").append(strStockName).append("(").append(strStockCode)
+								.append(")</a></h3>");
 						// sb1.append("<h3>"+ strTitle +"</h3>\n");
 						// sb1.append("<div>"+ strSource+" | "+ strDayTime
 						// +"</div>\n");
@@ -581,8 +615,8 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 
 						String strView = view.toString();
 						strView = strView.replaceAll(strStockName,
-							"<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-							+ strStockName + "</a>");
+								"<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
+										+ strStockName + "</a>");
 
 						sb1.append(strView);
 						sb1.append("\n");
@@ -618,8 +652,8 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 				logger.debug("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=");
 
 				Document doc = Jsoup
-					.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=")
-					.get();
+						.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=")
+						.get();
 				// http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
 				doc.select("script").remove();
 				Element e1 = doc.select(".type5").get(0);
@@ -657,7 +691,9 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 						// sb1.append("<h3>"+ strTitle +"</h3>\n");
 						// sb1.append("<div>"+ strSource+" | "+ strDayTime
 						// +"</div>\n");
-						sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=").append(strStockCode).append("'>").append(strStockName).append("(").append(strStockCode).append(")</a></h3>\n");
+						sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=").append(strStockCode)
+								.append("'>").append(strStockName).append("(").append(strStockCode)
+								.append(")</a></h3>\n");
 
 						doc = Jsoup.connect("http://finance.naver.com" + strLink).get();
 						Elements link_news_elements = doc.select(".link_news");
@@ -673,8 +709,8 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 
 						String strView = view.toString();
 						strView = strView.replaceAll(strStockName,
-							"<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-							+ strStockName + "</a>");
+								"<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
+										+ strStockName + "</a>");
 
 						sb1.append(strView);
 						sb1.append("<br><br>\n");

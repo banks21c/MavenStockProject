@@ -45,13 +45,14 @@ public class NewsReaderTest extends javax.swing.JFrame {
 
     /**
      * Creates new form NewJFrame1
+     * @throws Exception 
      */
-    public NewsReaderTest() {
+    public NewsReaderTest() throws Exception {
         initComponents();
         initList();
     }
 
-    void initList() {
+    void initList() throws Exception {
         String kospiFileName = GlobalVariables.kospiFileName;
         String kosdaqFileName = GlobalVariables.kosdaqFileName;
         List<StockVO> kospiStockList = new ArrayList<StockVO>();
@@ -889,7 +890,12 @@ public class NewsReaderTest extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new NewsReaderTest().setVisible(true);
+                try {
+					new NewsReaderTest().setVisible(true);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
     }

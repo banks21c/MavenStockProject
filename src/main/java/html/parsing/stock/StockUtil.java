@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
@@ -17,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -33,11 +35,13 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 
 /**
  *
@@ -51,7 +55,8 @@ public class StockUtil {
 
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREAN);
 	String strDefaultDate = sdf.format(new Date());
-	// String strYyyyMmDd = new SimpleDateFormat("yyyy년 M월 d일 E",Locale.KOREAN).format(new Date());
+	// String strYyyyMmDd = new SimpleDateFormat("yyyy년 M월 d일
+	// E",Locale.KOREAN).format(new Date());
 	int iYmd = Integer.parseInt(strDefaultDate.replaceAll("\\.", ""));
 	String strYmdDash = strDefaultDate.replaceAll("\\.", "-");
 	String strYmdDashBracket = "[" + strDefaultDate.replaceAll("\\.", "-") + "]";
@@ -168,7 +173,7 @@ public class StockUtil {
 		return sb.toString();
 	}
 
-	public static List<StockVO> readKospiStockCodeNameListFromExcel() {
+	public static List<StockVO> readKospiStockCodeNameListFromExcel() throws Exception {
 		String kospiFileName = GlobalVariables.kospiFileName;
 
 		readStockCodeNameListFromExcel(kospiStockList, kospiFileName);
@@ -176,7 +181,7 @@ public class StockUtil {
 		return kospiStockList;
 	}
 
-	public static List<StockVO> readKosdaqStockCodeNameListFromExcel() {
+	public static List<StockVO> readKosdaqStockCodeNameListFromExcel() throws Exception {
 		String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
 		readStockCodeNameListFromExcel(kosdaqStockList, kosdaqFileName);
@@ -184,7 +189,7 @@ public class StockUtil {
 		return kosdaqStockList;
 	}
 
-	public static List<StockVO> readAllStockCodeNameListFromExcel() {
+	public static List<StockVO> readAllStockCodeNameListFromExcel() throws Exception {
 		String kospiFileName = GlobalVariables.kospiFileName;
 		String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
@@ -194,7 +199,7 @@ public class StockUtil {
 		return stockList;
 	}
 
-	public static StringBuilder makeStockLinkString(StringBuilder sb1) {
+	public static StringBuilder makeStockLinkString(StringBuilder sb1) throws Exception {
 		readAllStockCodeNameListFromExcel();
 		for (int i = 0; i < stockList.size(); i++) {
 			StockVO vo = stockList.get(i);
@@ -207,7 +212,7 @@ public class StockUtil {
 		return StockUtil.stockLinkString(sb1, stockList);
 	}
 
-	public static String makeStockLinkString(String textBodyHtml) {
+	public static String makeStockLinkString(String textBodyHtml) throws Exception {
 
 		readAllStockCodeNameListFromExcel();
 		for (int i = 0; i < stockList.size(); i++) {
@@ -221,14 +226,20 @@ public class StockUtil {
 		return stockLinkString(textBodyHtml, stockList);
 	}
 
-	public static String makeStockLinkStringByExcel(String textBodyHtml) {
+	public static String makeStockLinkStringByExcel(String textBodyHtml){
 
 		String kospiFileName = GlobalVariables.kospiFileName;
 		String kosdaqFileName = GlobalVariables.kosdaqFileName;
 		List<StockVO> stockList = new ArrayList<>();
 
-		readStockCodeNameListFromExcel(stockList, kospiFileName);
-		readStockCodeNameListFromExcel(stockList, kosdaqFileName);
+		try {
+			readStockCodeNameListFromExcel(stockList, kospiFileName);
+			readStockCodeNameListFromExcel(stockList, kosdaqFileName);
+		} catch (Exception e) {
+			e.printStackTrace();
+			getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
+			getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+		}
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		for (int i = 0; i < stockList.size(); i++) {
 			StockVO vo = stockList.get(i);
@@ -251,233 +262,232 @@ public class StockUtil {
 	}
 
 	public static boolean dupCheck(String stockName, String strNews) {
-		if (stockName.equals("3S") && strNews.contains("3STEP")
-			|| stockName.equals("CS") && strNews.contains("CSA")
-			|| stockName.equals("CS") && strNews.contains("크레디트스위스(CS)")
-			|| stockName.equals("CS") && strNews.contains("CSSC")
-			|| stockName.equals("CS") && strNews.contains("CSIS")
-			|| stockName.equals("CS") && strNews.contains("CSR")
-			|| stockName.equals("CS") && strNews.contains("CSV")
-			|| stockName.equals("DB") && strNews.contains("KDB")
-			|| stockName.equals("DB") && strNews.contains("ADB")
-			|| stockName.equals("DB") && strNews.contains("이데일리DB")
-			|| stockName.equals("DB") && strNews.contains("머니투데이DB")
-			|| stockName.equals("DB") && strNews.contains("한경DB")
-			|| stockName.equals("DB") && strNews.contains("경제DB")
-			|| stockName.equals("DB") && strNews.contains("뉴시스 DB")
-			|| stockName.equals("DB") && strNews.contains("머니투데이 DB")
-			|| stockName.equals("EG") && strNews.contains("EGFR")
-			|| stockName.equals("EG") && strNews.contains("EGR")
-			|| stockName.equals("GS") && strNews.contains("KCGS")
-			|| stockName.equals("GS") && strNews.contains("GSIA")
-			|| stockName.equals("GS") && strNews.contains("ADOPIMGS")
-			|| stockName.equals("GS") && strNews.contains("GS네오텍")
-			|| stockName.equals("GS") && strNews.contains("GSOMIA")
-			|| stockName.equals("KT") && strNews.contains("KTX")
-			|| stockName.equals("KT") && strNews.contains("KTown")
-			|| stockName.equals("LS") && strNews.contains("CLSA")
-			|| stockName.equals("LS") && strNews.contains("ELS")
-			|| stockName.equals("NEW") && strNews.contains("NEWSIS")
-			|| stockName.equals("NEW") && strNews.contains("NEWYORK")
-			|| stockName.equals("NEW") && strNews.contains("NEW YORK")
-			|| stockName.equals("SG") && strNews.contains("MSG")
-			|| stockName.equals("SG") && strNews.contains("SGI")
-			|| stockName.equals("SG") && strNews.contains("SSG")
-			|| stockName.equals("SK") && strNews.contains("ASK")
-			|| stockName.equals("SK") && strNews.contains("SKY")
-			|| stockName.equals("SK") && strNews.contains("MMSK")
-			|| stockName.equals("고영") && strNews.contains("최고영도자")
-			|| stockName.equals("고영") && strNews.contains("광고영역")
-			|| stockName.equals("국보") && strNews.contains("중국보다")
-			|| stockName.equals("국보") && strNews.contains("한국보다")
-			|| stockName.equals("국보") && strNews.contains("미국보다")
-			|| stockName.equals("국동") && strNews.contains("전국동")
-			|| stockName.equals("광림") && strNews.contains("김광림")
-			|| stockName.equals("디오") && strNews.contains("비디오")
-			|| stockName.equals("디오") && strNews.contains("라디오")
-			|| stockName.equals("디오") && strNews.contains("오디오")
-			|| stockName.equals("디오") && strNews.contains("디오스")
-			|| stockName.equals("나무가") && strNews.contains("느릅나무가")
-			|| stockName.equals("나무가") && strNews.contains("소나무가")
-			|| stockName.equals("남성") && strNews.contains("남성이")
-			|| stockName.equals("남성") && strNews.contains("남성들")
-			|| stockName.equals("남성") && strNews.contains("남성과")
-			|| stockName.equals("남성") && strNews.contains("남성을")
-			|| stockName.equals("남성") && strNews.contains("남성 평균")
-			|| stockName.equals("남성") && strNews.contains("중년 남성")
-			|| stockName.equals("남성") && strNews.contains("한국 남성")
-			|| stockName.equals("덕성") && strNews.contains("도덕성")
-			|| stockName.equals("동원") && strNews.contains("운동원")
-			|| stockName.equals("동원") && strNews.contains("동원됐다")
-			|| stockName.equals("동원") && strNews.contains("동원해")
-			|| stockName.equals("동원") && strNews.contains("동원했")
-			|| stockName.equals("동원") && strNews.contains("동원될")
-			|| stockName.equals("동원") && strNews.contains("총동원")
-			|| stockName.equals("대상") && strNews.contains("대상에")
-			|| stockName.equals("대상") && strNews.contains("조사대상")
-			|| stockName.equals("대상") && strNews.contains("지원 대상")
-			|| stockName.equals("대상") && strNews.contains("금지 대상")
-			|| stockName.equals("대상") && strNews.contains("대상으로")
-			|| stockName.equals("대상") && strNews.contains("대상 사건")
-			|| stockName.equals("대상") && strNews.contains("추징 대상")
-			|| stockName.equals("대상") && strNews.contains("투자대상")
-			|| stockName.equals("대상") && strNews.contains("매각 대상")
-			|| stockName.equals("대상") && strNews.contains("환원 대상")
-			|| stockName.equals("대상") && strNews.contains("비교 대상")
-			|| stockName.equals("대상") && strNews.contains("상속대상")
-			|| stockName.equals("대상") && strNews.contains("상속 대상")
-			|| stockName.equals("대상") && strNews.contains("출고대상")
-			|| stockName.equals("대상") && strNews.contains("출고 대상")
-			|| stockName.equals("대상") && strNews.contains("시대상")
-			|| stockName.equals("대상") && strNews.contains("대상자")
-			|| stockName.equals("대상") && strNews.contains("처벌 대상")
-			|| stockName.equals("대상") && strNews.contains("대상인데")
-			|| stockName.equals("대상") && strNews.contains("연결대상")
-			|| stockName.equals("대상") && strNews.contains("어떤 대상")
-			|| stockName.equals("대상") && strNews.contains("배제 대상")
-			|| stockName.equals("대상") && strNews.contains("대상차량")
-			|| stockName.equals("대상") && strNews.contains("대상 차량")
-			|| stockName.equals("대상") && strNews.contains("리콜대상")
-			|| stockName.equals("대상") && strNews.contains("대상 가맹점")
-			|| stockName.equals("대상") && strNews.contains("대상은")
-			|| stockName.equals("대상") && strNews.contains("검토 대상")
-			|| stockName.equals("대상") && strNews.contains("대상지역")
-			|| stockName.equals("대상") && strNews.contains("교체대상")
-			|| stockName.equals("대상") && strNews.contains("과세대상")
-			|| stockName.equals("대상") && strNews.contains("대상화")
-			|| stockName.equals("대유") && strNews.contains("김대유")
-			|| stockName.equals("대원") && strNews.contains("부대원")
-			|| stockName.equals("대원") && strNews.contains("구급대원")
-			|| stockName.equals("동양") && strNews.contains("김동양")
-			|| stockName.equals("동양") && strNews.contains("행동양식")
-			|| stockName.equals("동양") && strNews.contains("동양철학")
-			|| stockName.equals("동양") && strNews.contains("동양 쪽")
-			|| stockName.equals("대교") && strNews.contains("세대교체")
-			|| stockName.equals("디아이") && strNews.contains("삼성에스디아이")
-			|| stockName.equals("디오") && strNews.contains("디오르")
-			|| stockName.equals("디오") && strNews.contains("스튜디오")
-			|| stockName.equals("동방") && strNews.contains("신동방")
-			|| stockName.equals("동방") && strNews.contains("공동방")
-			|| stockName.equals("동서") && strNews.contains("동서냉전")
-			|| stockName.equals("동서") && strNews.contains("동서울")
-			|| stockName.equals("두산") && strNews.contains("백두산")
-			|| stockName.equals("딜리") && strNews.contains("딜리버리")
-			|| stockName.equals("레이") && strNews.contains("말레이시아")
-			|| stockName.equals("레이") && strNews.contains("레이어")
-			|| stockName.equals("레이") && strNews.contains("디스플레이")
-			|| stockName.equals("레이") && strNews.contains("엑스레이")
-			|| stockName.equals("레이") && strNews.contains("레이저")
-			|| stockName.equals("레이") && strNews.contains("스프레이")
-			|| stockName.equals("만도") && strNews.contains("왕만도")
-			|| stockName.equals("만도") && strNews.contains("데만도")
-			|| stockName.equals("만도") && strNews.contains("비만도")
-			|| stockName.equals("만도") && strNews.contains("불만도")
-			|| stockName.equals("만도") && strNews.contains("잔량만도")
-			|| stockName.equals("머큐리") && strNews.contains("머큐리오")
-			|| stockName.equals("모다") && strNews.contains("규모다")
-			|| stockName.equals("무학") && strNews.contains("무학으로")
-			|| stockName.equals("무학") && strNews.contains("재무학")
-			|| stockName.equals("백산") && strNews.contains("혼비 백산")
-			|| stockName.equals("백산") && strNews.contains("혼비백산")
-			|| stockName.equals("배럴") && strNews.contains("억배럴")
-			|| stockName.equals("배럴") && strNews.contains("배럴당")
-			|| stockName.equals("리드") && strNews.contains("그리드")
-			|| stockName.equals("리드") && strNews.contains("솔리드")
-			|| stockName.equals("리드") && strNews.contains("하이브리드")
-			|| stockName.equals("리드") && strNews.contains("솔리드")
-			|| stockName.equals("리드") && strNews.contains("칼리드")
-			|| stockName.equals("상보") && strNews.contains("예상보다")
-			|| stockName.equals("상보") && strNews.contains("정상보")
-			|| stockName.equals("상보") && strNews.contains("영상보기")
-			|| stockName.equals("서한") && strNews.contains("연례 서한")
-			|| stockName.equals("서한") && strNews.contains("공개 서한")
-			|| stockName.equals("서한") && strNews.contains("결정 서한")
-			|| stockName.equals("서한") && strNews.contains("서한기")
-			|| stockName.equals("서한") && strNews.contains("서한만")
-			|| stockName.equals("서한") && strNews.contains("공개서한")
-			|| stockName.equals("서한") && strNews.contains("결정서한")
-			|| stockName.equals("서원") && strNews.contains("최서원")
-			|| stockName.equals("선진") && strNews.contains("선진화")
-			|| stockName.equals("선진") && strNews.contains("선진국")
-			|| stockName.equals("성안") && strNews.contains("성안 곳곳")
-			|| stockName.equals("세방") && strNews.contains("월세방")
-			|| stockName.equals("세하") && strNews.contains("자세하")
-			|| stockName.equals("세하") && strNews.contains("우세하")
-			|| stockName.equals("세하") && strNews.contains("상세하")
-			|| stockName.equals("세하") && strNews.contains("맹세하")
-			|| stockName.equals("세하") && strNews.contains("과세하")
-			|| stockName.equals("세하") && strNews.contains("가세하")
-			|| stockName.equals("세하") && strNews.contains("별세하")
-			|| stockName.equals("신흥") && strNews.contains("신흥국")
-			|| stockName.equals("신흥") && strNews.contains("신흥부자")
-			|| stockName.equals("신흥") && strNews.contains("신흥 부자")
-			|| stockName.equals("수성") && strNews.contains("특수성")
-			|| stockName.equals("수성") && strNews.contains("자수성가")
-			|| stockName.equals("수성") && strNews.contains("수성갑")
-			|| stockName.equals("수성") && strNews.contains("보수성향")
-			|| stockName.equals("수성") && strNews.contains("감수성")
-			|| stockName.equals("신원") && strNews.contains("신원철")
-			|| stockName.equals("신원") && strNews.contains("신원이")
-			|| stockName.equals("신원") && strNews.contains("신원 등을")
-			|| stockName.equals("신원") && strNews.contains("신원증명")
-			|| stockName.equals("신원") && strNews.contains("신원 증명")
-			|| stockName.equals("신원") && strNews.contains("신원정보")
-			|| stockName.equals("신원") && strNews.contains("신원 정보")
-			|| stockName.equals("신한") && strNews.contains("대신한")
-			|| stockName.equals("신한") && strNews.contains("변신한")
-			|| stockName.equals("신한") && strNews.contains("확신한")
-			|| stockName.equals("신한") && strNews.contains("경신한")
-			|| stockName.equals("신한") && strNews.contains("참신한")
-			|| stockName.equals("신한") && strNews.contains("출신한테")
-			|| stockName.equals("신한") && strNews.contains("임신한")
-			|| stockName.equals("신한") && strNews.contains("신한카드")
-			|| stockName.equals("아스트") && strNews.contains("아스트라제네카")
-			|| stockName.equals("아이엠") && strNews.contains("아이엠에프")
-			|| stockName.equals("야스") && strNews.contains("야스쿠니")
-			|| stockName.equals("에이치케이") && strNews.contains("엔에이치케이")
-			|| stockName.equals("엔에스") && strNews.contains("엘지씨엔에스")
-			|| stockName.equals("오공") && strNews.contains("오공장")
-			|| stockName.equals("오텍") && strNews.contains("GS네오텍")
-			|| stockName.equals("우진") && strNews.contains("피우진")
-			|| stockName.equals("에스엠") && strNews.contains("한국에스엠티")
-			|| stockName.equals("아티스") && strNews.contains("아티스트")
-			|| stockName.equals("아스타") && strNews.contains("아스타잔틴")
-			|| stockName.equals("이디") && strNews.contains("아이디어")
-			|| stockName.equals("이디") && strNews.contains("아이디")
-			|| stockName.equals("이디") && strNews.contains("레이디")
-			|| stockName.equals("이디") && strNews.contains("이디야")
-			|| stockName.equals("우진") && strNews.contains("정우진")
-			|| stockName.equals("전방") && strNews.contains("전방위")
-			|| stockName.equals("전방") && strNews.contains("전방추돌")
-			|| stockName.equals("전방") && strNews.contains("전방 추돌")
-			|| stockName.equals("진도") && strNews.contains("청사진도")
-			|| stockName.equals("진도") && strNews.contains("취재진도")
-			|| stockName.equals("진도") && strNews.contains("티슈진도")
-			|| stockName.equals("진도") && strNews.contains("이사진도")
-			|| stockName.equals("진도") && strNews.contains("경영진도")
-			|| stockName.equals("코센") && strNews.contains("포스코센터")
-			|| stockName.equals("카스") && strNews.contains("카스피")
-			|| stockName.equals("카스") && strNews.contains("카스먼")
-			|| stockName.equals("카스") && strNews.contains("박카스")
-			|| stockName.equals("코오롱") && strNews.contains("코오롱 성산")
-			|| stockName.equals("한창") && strNews.contains("한창인")
-			|| stockName.equals("한창") && strNews.contains("한창일")
-			|| stockName.equals("한창") && strNews.contains("한창이다")
-			|| stockName.equals("한창") && strNews.contains("한창수")
-			|| stockName.equals("한진") && strNews.contains("한진공인")
-			|| stockName.equals("혜인") && strNews.contains("특혜인")
-			|| stockName.equals("효성") && strNews.contains("실효성")
-			|| stockName.equals("효성") && strNews.contains("유효성")
-			|| stockName.equals("효성") && strNews.contains("이효성")
-			|| stockName.equals("화신") && strNews.contains("전화신청")
-			|| stockName.equals("화신") && strNews.contains("배반의 화신")
-			|| stockName.equals("흥국") && strNews.contains("신흥국")
-			|| stockName.equals("테스") && strNews.contains("테스트")
-			|| stockName.equals("테스") && strNews.contains("테스크")
-			|| stockName.equals("테스") && strNews.contains("필라테스")
-			|| stockName.equals("태양") && strNews.contains("태양석재")
-			|| stockName.equals("태양") && strNews.contains("태양광")
-			|| stockName.equals("힘스") && strNews.contains("현대힘스")) {
+		if (stockName.equals("3S") && strNews.contains("3STEP") || stockName.equals("CS") && strNews.contains("CSA")
+				|| stockName.equals("CS") && strNews.contains("크레디트스위스(CS)")
+				|| stockName.equals("CS") && strNews.contains("CSSC")
+				|| stockName.equals("CS") && strNews.contains("CSIS")
+				|| stockName.equals("CS") && strNews.contains("CSR")
+				|| stockName.equals("CS") && strNews.contains("CSV")
+				|| stockName.equals("DB") && strNews.contains("KDB")
+				|| stockName.equals("DB") && strNews.contains("ADB")
+				|| stockName.equals("DB") && strNews.contains("이데일리DB")
+				|| stockName.equals("DB") && strNews.contains("머니투데이DB")
+				|| stockName.equals("DB") && strNews.contains("한경DB")
+				|| stockName.equals("DB") && strNews.contains("경제DB")
+				|| stockName.equals("DB") && strNews.contains("뉴시스 DB")
+				|| stockName.equals("DB") && strNews.contains("머니투데이 DB")
+				|| stockName.equals("EG") && strNews.contains("EGFR")
+				|| stockName.equals("EG") && strNews.contains("EGR")
+				|| stockName.equals("GS") && strNews.contains("KCGS")
+				|| stockName.equals("GS") && strNews.contains("GSIA")
+				|| stockName.equals("GS") && strNews.contains("ADOPIMGS")
+				|| stockName.equals("GS") && strNews.contains("GS네오텍")
+				|| stockName.equals("GS") && strNews.contains("GSOMIA")
+				|| stockName.equals("KT") && strNews.contains("KTX")
+				|| stockName.equals("KT") && strNews.contains("KTown")
+				|| stockName.equals("LS") && strNews.contains("CLSA")
+				|| stockName.equals("LS") && strNews.contains("ELS")
+				|| stockName.equals("NEW") && strNews.contains("NEWSIS")
+				|| stockName.equals("NEW") && strNews.contains("NEWYORK")
+				|| stockName.equals("NEW") && strNews.contains("NEW YORK")
+				|| stockName.equals("SG") && strNews.contains("MSG")
+				|| stockName.equals("SG") && strNews.contains("SGI")
+				|| stockName.equals("SG") && strNews.contains("SSG")
+				|| stockName.equals("SK") && strNews.contains("ASK")
+				|| stockName.equals("SK") && strNews.contains("SKY")
+				|| stockName.equals("SK") && strNews.contains("MMSK")
+				|| stockName.equals("고영") && strNews.contains("최고영도자")
+				|| stockName.equals("고영") && strNews.contains("광고영역")
+				|| stockName.equals("국보") && strNews.contains("중국보다")
+				|| stockName.equals("국보") && strNews.contains("한국보다")
+				|| stockName.equals("국보") && strNews.contains("미국보다")
+				|| stockName.equals("국동") && strNews.contains("전국동")
+				|| stockName.equals("광림") && strNews.contains("김광림")
+				|| stockName.equals("디오") && strNews.contains("비디오")
+				|| stockName.equals("디오") && strNews.contains("라디오")
+				|| stockName.equals("디오") && strNews.contains("오디오")
+				|| stockName.equals("디오") && strNews.contains("디오스")
+				|| stockName.equals("나무가") && strNews.contains("느릅나무가")
+				|| stockName.equals("나무가") && strNews.contains("소나무가")
+				|| stockName.equals("남성") && strNews.contains("남성이")
+				|| stockName.equals("남성") && strNews.contains("남성들")
+				|| stockName.equals("남성") && strNews.contains("남성과")
+				|| stockName.equals("남성") && strNews.contains("남성을")
+				|| stockName.equals("남성") && strNews.contains("남성 평균")
+				|| stockName.equals("남성") && strNews.contains("중년 남성")
+				|| stockName.equals("남성") && strNews.contains("한국 남성")
+				|| stockName.equals("덕성") && strNews.contains("도덕성")
+				|| stockName.equals("동원") && strNews.contains("운동원")
+				|| stockName.equals("동원") && strNews.contains("동원됐다")
+				|| stockName.equals("동원") && strNews.contains("동원해")
+				|| stockName.equals("동원") && strNews.contains("동원했")
+				|| stockName.equals("동원") && strNews.contains("동원될")
+				|| stockName.equals("동원") && strNews.contains("총동원")
+				|| stockName.equals("대상") && strNews.contains("대상에")
+				|| stockName.equals("대상") && strNews.contains("조사대상")
+				|| stockName.equals("대상") && strNews.contains("지원 대상")
+				|| stockName.equals("대상") && strNews.contains("금지 대상")
+				|| stockName.equals("대상") && strNews.contains("대상으로")
+				|| stockName.equals("대상") && strNews.contains("대상 사건")
+				|| stockName.equals("대상") && strNews.contains("추징 대상")
+				|| stockName.equals("대상") && strNews.contains("투자대상")
+				|| stockName.equals("대상") && strNews.contains("매각 대상")
+				|| stockName.equals("대상") && strNews.contains("환원 대상")
+				|| stockName.equals("대상") && strNews.contains("비교 대상")
+				|| stockName.equals("대상") && strNews.contains("상속대상")
+				|| stockName.equals("대상") && strNews.contains("상속 대상")
+				|| stockName.equals("대상") && strNews.contains("출고대상")
+				|| stockName.equals("대상") && strNews.contains("출고 대상")
+				|| stockName.equals("대상") && strNews.contains("시대상")
+				|| stockName.equals("대상") && strNews.contains("대상자")
+				|| stockName.equals("대상") && strNews.contains("처벌 대상")
+				|| stockName.equals("대상") && strNews.contains("대상인데")
+				|| stockName.equals("대상") && strNews.contains("연결대상")
+				|| stockName.equals("대상") && strNews.contains("어떤 대상")
+				|| stockName.equals("대상") && strNews.contains("배제 대상")
+				|| stockName.equals("대상") && strNews.contains("대상차량")
+				|| stockName.equals("대상") && strNews.contains("대상 차량")
+				|| stockName.equals("대상") && strNews.contains("리콜대상")
+				|| stockName.equals("대상") && strNews.contains("대상 가맹점")
+				|| stockName.equals("대상") && strNews.contains("대상은")
+				|| stockName.equals("대상") && strNews.contains("검토 대상")
+				|| stockName.equals("대상") && strNews.contains("대상지역")
+				|| stockName.equals("대상") && strNews.contains("교체대상")
+				|| stockName.equals("대상") && strNews.contains("과세대상")
+				|| stockName.equals("대상") && strNews.contains("대상화")
+				|| stockName.equals("대유") && strNews.contains("김대유")
+				|| stockName.equals("대원") && strNews.contains("부대원")
+				|| stockName.equals("대원") && strNews.contains("구급대원")
+				|| stockName.equals("동양") && strNews.contains("김동양")
+				|| stockName.equals("동양") && strNews.contains("행동양식")
+				|| stockName.equals("동양") && strNews.contains("동양철학")
+				|| stockName.equals("동양") && strNews.contains("동양 쪽")
+				|| stockName.equals("대교") && strNews.contains("세대교체")
+				|| stockName.equals("디아이") && strNews.contains("삼성에스디아이")
+				|| stockName.equals("디오") && strNews.contains("디오르")
+				|| stockName.equals("디오") && strNews.contains("스튜디오")
+				|| stockName.equals("동방") && strNews.contains("신동방")
+				|| stockName.equals("동방") && strNews.contains("공동방")
+				|| stockName.equals("동서") && strNews.contains("동서냉전")
+				|| stockName.equals("동서") && strNews.contains("동서울")
+				|| stockName.equals("두산") && strNews.contains("백두산")
+				|| stockName.equals("딜리") && strNews.contains("딜리버리")
+				|| stockName.equals("레이") && strNews.contains("말레이시아")
+				|| stockName.equals("레이") && strNews.contains("레이어")
+				|| stockName.equals("레이") && strNews.contains("디스플레이")
+				|| stockName.equals("레이") && strNews.contains("엑스레이")
+				|| stockName.equals("레이") && strNews.contains("레이저")
+				|| stockName.equals("레이") && strNews.contains("스프레이")
+				|| stockName.equals("만도") && strNews.contains("왕만도")
+				|| stockName.equals("만도") && strNews.contains("데만도")
+				|| stockName.equals("만도") && strNews.contains("비만도")
+				|| stockName.equals("만도") && strNews.contains("불만도")
+				|| stockName.equals("만도") && strNews.contains("잔량만도")
+				|| stockName.equals("머큐리") && strNews.contains("머큐리오")
+				|| stockName.equals("모다") && strNews.contains("규모다")
+				|| stockName.equals("무학") && strNews.contains("무학으로")
+				|| stockName.equals("무학") && strNews.contains("재무학")
+				|| stockName.equals("백산") && strNews.contains("혼비 백산")
+				|| stockName.equals("백산") && strNews.contains("혼비백산")
+				|| stockName.equals("배럴") && strNews.contains("억배럴")
+				|| stockName.equals("배럴") && strNews.contains("배럴당")
+				|| stockName.equals("리드") && strNews.contains("그리드")
+				|| stockName.equals("리드") && strNews.contains("솔리드")
+				|| stockName.equals("리드") && strNews.contains("하이브리드")
+				|| stockName.equals("리드") && strNews.contains("솔리드")
+				|| stockName.equals("리드") && strNews.contains("칼리드")
+				|| stockName.equals("상보") && strNews.contains("예상보다")
+				|| stockName.equals("상보") && strNews.contains("정상보")
+				|| stockName.equals("상보") && strNews.contains("영상보기")
+				|| stockName.equals("서한") && strNews.contains("연례 서한")
+				|| stockName.equals("서한") && strNews.contains("공개 서한")
+				|| stockName.equals("서한") && strNews.contains("결정 서한")
+				|| stockName.equals("서한") && strNews.contains("서한기")
+				|| stockName.equals("서한") && strNews.contains("서한만")
+				|| stockName.equals("서한") && strNews.contains("공개서한")
+				|| stockName.equals("서한") && strNews.contains("결정서한")
+				|| stockName.equals("서원") && strNews.contains("최서원")
+				|| stockName.equals("선진") && strNews.contains("선진화")
+				|| stockName.equals("선진") && strNews.contains("선진국")
+				|| stockName.equals("성안") && strNews.contains("성안 곳곳")
+				|| stockName.equals("세방") && strNews.contains("월세방")
+				|| stockName.equals("세하") && strNews.contains("자세하")
+				|| stockName.equals("세하") && strNews.contains("우세하")
+				|| stockName.equals("세하") && strNews.contains("상세하")
+				|| stockName.equals("세하") && strNews.contains("맹세하")
+				|| stockName.equals("세하") && strNews.contains("과세하")
+				|| stockName.equals("세하") && strNews.contains("가세하")
+				|| stockName.equals("세하") && strNews.contains("별세하")
+				|| stockName.equals("신흥") && strNews.contains("신흥국")
+				|| stockName.equals("신흥") && strNews.contains("신흥부자")
+				|| stockName.equals("신흥") && strNews.contains("신흥 부자")
+				|| stockName.equals("수성") && strNews.contains("특수성")
+				|| stockName.equals("수성") && strNews.contains("자수성가")
+				|| stockName.equals("수성") && strNews.contains("수성갑")
+				|| stockName.equals("수성") && strNews.contains("보수성향")
+				|| stockName.equals("수성") && strNews.contains("감수성")
+				|| stockName.equals("신원") && strNews.contains("신원철")
+				|| stockName.equals("신원") && strNews.contains("신원이")
+				|| stockName.equals("신원") && strNews.contains("신원 등을")
+				|| stockName.equals("신원") && strNews.contains("신원증명")
+				|| stockName.equals("신원") && strNews.contains("신원 증명")
+				|| stockName.equals("신원") && strNews.contains("신원정보")
+				|| stockName.equals("신원") && strNews.contains("신원 정보")
+				|| stockName.equals("신한") && strNews.contains("대신한")
+				|| stockName.equals("신한") && strNews.contains("변신한")
+				|| stockName.equals("신한") && strNews.contains("확신한")
+				|| stockName.equals("신한") && strNews.contains("경신한")
+				|| stockName.equals("신한") && strNews.contains("참신한")
+				|| stockName.equals("신한") && strNews.contains("출신한테")
+				|| stockName.equals("신한") && strNews.contains("임신한")
+				|| stockName.equals("신한") && strNews.contains("신한카드")
+				|| stockName.equals("아스트") && strNews.contains("아스트라제네카")
+				|| stockName.equals("아이엠") && strNews.contains("아이엠에프")
+				|| stockName.equals("야스") && strNews.contains("야스쿠니")
+				|| stockName.equals("에이치케이") && strNews.contains("엔에이치케이")
+				|| stockName.equals("엔에스") && strNews.contains("엘지씨엔에스")
+				|| stockName.equals("오공") && strNews.contains("오공장")
+				|| stockName.equals("오텍") && strNews.contains("GS네오텍")
+				|| stockName.equals("우진") && strNews.contains("피우진")
+				|| stockName.equals("에스엠") && strNews.contains("한국에스엠티")
+				|| stockName.equals("아티스") && strNews.contains("아티스트")
+				|| stockName.equals("아스타") && strNews.contains("아스타잔틴")
+				|| stockName.equals("이디") && strNews.contains("아이디어")
+				|| stockName.equals("이디") && strNews.contains("아이디")
+				|| stockName.equals("이디") && strNews.contains("레이디")
+				|| stockName.equals("이디") && strNews.contains("이디야")
+				|| stockName.equals("우진") && strNews.contains("정우진")
+				|| stockName.equals("전방") && strNews.contains("전방위")
+				|| stockName.equals("전방") && strNews.contains("전방추돌")
+				|| stockName.equals("전방") && strNews.contains("전방 추돌")
+				|| stockName.equals("진도") && strNews.contains("청사진도")
+				|| stockName.equals("진도") && strNews.contains("취재진도")
+				|| stockName.equals("진도") && strNews.contains("티슈진도")
+				|| stockName.equals("진도") && strNews.contains("이사진도")
+				|| stockName.equals("진도") && strNews.contains("경영진도")
+				|| stockName.equals("코센") && strNews.contains("포스코센터")
+				|| stockName.equals("카스") && strNews.contains("카스피")
+				|| stockName.equals("카스") && strNews.contains("카스먼")
+				|| stockName.equals("카스") && strNews.contains("박카스")
+				|| stockName.equals("코오롱") && strNews.contains("코오롱 성산")
+				|| stockName.equals("한창") && strNews.contains("한창인")
+				|| stockName.equals("한창") && strNews.contains("한창일")
+				|| stockName.equals("한창") && strNews.contains("한창이다")
+				|| stockName.equals("한창") && strNews.contains("한창수")
+				|| stockName.equals("한진") && strNews.contains("한진공인")
+				|| stockName.equals("혜인") && strNews.contains("특혜인")
+				|| stockName.equals("효성") && strNews.contains("실효성")
+				|| stockName.equals("효성") && strNews.contains("유효성")
+				|| stockName.equals("효성") && strNews.contains("이효성")
+				|| stockName.equals("화신") && strNews.contains("전화신청")
+				|| stockName.equals("화신") && strNews.contains("배반의 화신")
+				|| stockName.equals("흥국") && strNews.contains("신흥국")
+				|| stockName.equals("테스") && strNews.contains("테스트")
+				|| stockName.equals("테스") && strNews.contains("테스크")
+				|| stockName.equals("테스") && strNews.contains("필라테스")
+				|| stockName.equals("태양") && strNews.contains("태양석재")
+				|| stockName.equals("태양") && strNews.contains("태양광")
+				|| stockName.equals("힘스") && strNews.contains("현대힘스")) {
 			return true;
 		}
 		return false;
@@ -499,11 +509,13 @@ public class StockUtil {
 			doc = Jsoup.parse(strNews);
 			if (strNews.contains("현대차") && stockName.equals("현대자동차")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대차", "<strong><a href='http://finance.naver.com/item/main.nhn?code=" + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
+				strNews = strNews.replaceAll("현대차", "<strong><a href='http://finance.naver.com/item/main.nhn?code="
+						+ stockCode + "'>" + nbspString("현대차") + "</a></strong>");
 			}
 			if (strNews.contains("POSCO") && stockName.equals("포스코")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("POSCO", "<strong><a href='http://finance.naver.com/item/main.nhn?code=" + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+				strNews = strNews.replaceAll("POSCO", "<strong><a href='http://finance.naver.com/item/main.nhn?code="
+						+ stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
 			}
 			if (strNews.contains(stockName)) {
 				int count = StringUtils.countMatches(strNews, stockName);
@@ -518,11 +530,10 @@ public class StockUtil {
 				if (dupCheck(stockName, strNews)) {
 					break;
 				}
-				newsStockList
-					.add(stock);
+				newsStockList.add(stock);
 				// logger.debug("stock link : " + stockCode + ":" + stockName);
 				strNews = strNews.replaceAll(stockName, "<strong><a href='http://finance.naver.com/item/main.nhn?code="
-					+ stockCode + "'>" + nbspString(stockName) + "</a></strong>");
+						+ stockCode + "'>" + nbspString(stockName) + "</a></strong>");
 
 			}
 
@@ -548,11 +559,13 @@ public class StockUtil {
 			doc = Jsoup.parse(strNews);
 			if (strNews.contains("현대차") && stockName.equals("현대자동차")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대차", "<strong><a href='http://finance.naver.com/item/main.nhn?code=" + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
+				strNews = strNews.replaceAll("현대차", "<strong><a href='http://finance.naver.com/item/main.nhn?code="
+						+ stockCode + "'>" + nbspString("현대차") + "</a></strong>");
 			}
 			if (strNews.contains("POSCO") && stockName.equals("포스코")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("POSCO", "<strong><a href='http://finance.naver.com/item/main.nhn?code=" + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+				strNews = strNews.replaceAll("POSCO", "<strong><a href='http://finance.naver.com/item/main.nhn?code="
+						+ stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
 			}
 			if (strNews.contains(stockName)) {
 				int count = StringUtils.countMatches(strNews, stockName);
@@ -571,7 +584,7 @@ public class StockUtil {
 				newsStockList.add(stock);
 				// logger.debug("stock link : " + stockCode + ":" + stockName);
 				strNews = strNews.replaceAll(stockName, "<strong><a href='http://finance.naver.com/item/main.nhn?code="
-					+ stockCode + "'>" + nbspString(stockName) + "</a></strong>");
+						+ stockCode + "'>" + nbspString(stockName) + "</a></strong>");
 
 			}
 
@@ -587,7 +600,7 @@ public class StockUtil {
 		return strNews + "<br>" + newsStockTable.toString();
 	}
 
-	public static List<StockVO> readStockCodeNameListFromExcel(List<StockVO> stockList, String fileName) {
+	public static List<StockVO> readStockCodeNameListFromExcel(List<StockVO> stockList, String fileName) throws Exception{
 		List<StockVO> svoList = new ArrayList<>();
 		try {
 			// Creating a Workbook from an Excel file (.xls or .xlsx)
@@ -641,7 +654,8 @@ public class StockUtil {
 			// Closing the workbook
 			workbook.close();
 		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
+			throw new Exception("test");
+//			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (InvalidFormatException ex) {
 			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (EncryptedDocumentException ex) {
@@ -735,9 +749,8 @@ public class StockUtil {
 		return svoList;
 	}
 
-	public static List<StockVO> getAllStockList(String fileName) {
+	public static List<StockVO> getAllStockList(String fileName) throws IOException, EncryptedDocumentException, InvalidFormatException {
 		List<StockVO> svoList = new ArrayList<>();
-		try {
 			// Creating a Workbook from an Excel file (.xls or .xlsx)
 			logger.debug("fileName:" + fileName);
 			File file = new File(fileName);
@@ -788,13 +801,6 @@ public class StockUtil {
 			}
 			// Closing the workbook
 			workbook.close();
-		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (InvalidFormatException ex) {
-			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (EncryptedDocumentException ex) {
-			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
-		}
 		return svoList;
 	}
 
@@ -864,6 +870,97 @@ public class StockUtil {
 		return svoList;
 	}
 
+	/**
+	 * extract stockcode, stockname from kind.krx.co.kr
+	 * gubun = stockMkt, kosdaqMkt
+	 * @param stockList
+	 * @param fileName
+	 * @return
+	 */
+	public static final String SERVER_URI = "http://kind.krx.co.kr/corpgeneral/corpList.do";
+
+	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(List<StockVO> stockList, String gubun) {
+		List<StockVO> svoList = new ArrayList<>();
+		try {
+			String param = "method=download&pageIndex=1&currentPageSize=5000&comAbbrv=&beginIndex=&orderMode=3&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=&marketType="+gubun+"&searchType=13&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
+
+			String strUri = SERVER_URI + "?" + param;
+//			Document doc = Jsoup.parse(new URL(strUri).openStream(), "EUC-KR", strUri);
+
+//			Connection conn = Jsoup.connect(strUri).cookie("cookiereference", "cookievalue").method(Method.POST);
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("Accept", MediaType.APPLICATION_JSON
+					+ ",text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+			headers.put("Accept-Encoding", "Accept-Encoding: gzip, deflate");
+//			headers.put("Accept-Language", "en-US,en;q=0.9,ko;q=0.8");
+			headers.put("Accept-Language", "ko");
+			headers.put("Cache-Control", "max-age=0");
+			headers.put("Connection", "keep-alive");
+			headers.put("Content-Length", "215");
+//			headers.put("Content-Type", "application/x-www-form-urlencoded");
+//			headers.put("Content-Type", "application/x-www-form-urlencoded; charset=EUC-KR");
+//			headers.put("Content-Type", "text/*; charset=EUC-KR");
+//			headers.put("Content-Type", "application/xml; charset=EUC-KR");
+//			headers.put("Content-Type", "application/xhtml+xml; charset=EUC-KR");
+			headers.put("Content-Type", "application/vnd.ms-excel; charset=EUC-KR");
+			headers.put("Cookie",
+					"__smVisitorID=QxeY65c5t3z; JSESSIONID=NyCFzfuTJuLCu1YTU5tAy2RDQUIha813iVKfZ9cnDZKOG81CUOKWwLcMsKQsK6JP.amV1c19kb21haW4vMTBfRFNUMg==; viewMode=1; krxMenu=ULDDST00000%2C%uC624%uB298%uC758%uACF5%uC2DC/ULDDST00100%2C%uD68C%uC0AC%uBCC4%uAC80%uC0C9/ULDDST00300%2C%uC0C1%uC138%uAC80%uC0C9/ULDDST00200%2C%uD1B5%uD569%uAC80%uC0C9/ULDDST71000%2C%uC608%uBE44%uC2EC%uC0AC%uAE30%uC5C5/");
+			// headers.put("Host", "kind.krx.co.kr");
+			// headers.put("Origin", "http://kind.krx.co.kr");
+			// headers.put("Referer",
+			// "http://kind.krx.co.kr/corpgeneral/corpList.do?method=loadInitPage");
+			headers.put("Host", "203.235.1.50");
+			headers.put("Origin", "http://203.235.1.50");
+			headers.put("Referer", "http://203.235.1.50/corpgeneral/corpList.do?method=loadInitPage");
+			headers.put("Upgrade-Insecure-Requests", "1");
+//			headers.put("User-Agent", "mozilla");
+			headers.put("User-Agent",
+					"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36");
+			headers.put("User-Agent",
+					"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36 NetHelper70");
+
+			headers.put("X-Requested-With", "XMLHttpRequest");
+
+//			Connection conn = Jsoup.connect(strUri).headers(headers).cookie("cookiereference", "cookievalue").method(Method.POST);
+//			Document doc = Jsoup.parse(new String(conn.execute().bodyAsBytes(), "EUC-KR"));
+			// Initialize UnSupportedMimeTypeExeception class
+			UnsupportedMimeTypeException mimeType = new UnsupportedMimeTypeException("Hey this is Mime",
+					"application/vnd.ms-excel", strUri);
+			String mime = mimeType.getMimeType();
+			System.out.println("mime :" + mime);
+//			Jsoup.connect(url).requestBody(json).header("Content-Type", "application/json").post();
+			Document doc = Jsoup.connect(strUri).requestBody("JSON").headers(headers)
+					// .cookies(response.cookies())
+					.ignoreContentType(true).post();
+			
+			Elements trElements = doc.select("tr");
+			for (int i = 0; i < trElements.size(); i++) {
+				Elements tdElements = trElements.get(i).select("td");
+				if (tdElements.size() > 0) {
+					StockVO svo = new StockVO();
+					
+					String strStockName = tdElements.get(0).text();
+					String strStockCode = tdElements.get(1).text();
+					System.out.println(strStockCode + "\t" + strStockName);
+					svo.setStockName(strStockName);
+					svo.setStockCode(strStockCode);
+					svo.setStockNameLength(strStockName.length());
+					if (strStockCode.length() != 6) {
+						System.out.println(strStockCode+"\t"+strStockName+" 종목은 체크바랍니다.");
+					}
+					svoList.add(svo);
+				}
+			}
+
+		} catch (IOException ex) {
+			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (EncryptedDocumentException ex) {
+			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		stockList.addAll(svoList);
+		return stockList;
+	}
+
 	public StockVO getStockInfo(int cnt, String strStockCode, String strStockName) {
 		Document doc;
 		StockVO stock = new StockVO();
@@ -876,7 +973,8 @@ public class StockUtil {
 
 			// Element tradeVolumeText =
 			// doc.select(".sp_txt9").get(0);
-			String tradeVolumeText = doc.select(".spot .rate_info .sp_txt9").get(0).parent().child(1).select("span").get(0).text();
+			String tradeVolumeText = doc.select(".spot .rate_info .sp_txt9").get(0).parent().child(1).select("span")
+					.get(0).text();
 			if (tradeVolumeText.equals("0")) {
 				return stock;
 			}
@@ -899,15 +997,15 @@ public class StockUtil {
 			for (int i = 0; i < edds.size(); i++) {
 				Element dd = edds.get(i);
 				String text = dd.text();
-				//logger.debug("text:" + text);
+				// logger.debug("text:" + text);
 				if (text.startsWith("종목명")) {
 					String stockName = text.substring(4);
-					//logger.debug("stockName:" + stockName);
+					// logger.debug("stockName:" + stockName);
 					stock.setStockName(stockName);
 				}
 
 				if (text.startsWith("현재가")) {
-					//logger.debug("data1:" + dd.text());
+					// logger.debug("data1:" + dd.text());
 					text = text.replaceAll("플러스", "+");
 					text = text.replaceAll("마이너스", "-");
 					text = text.replaceAll("상승", "▲");
@@ -918,7 +1016,7 @@ public class StockUtil {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -928,13 +1026,13 @@ public class StockUtil {
 					varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
 					sign = txts[5];
 					stock.setSign(sign);
-					//logger.debug("txts.length:" + txts.length);
+					// logger.debug("txts.length:" + txts.length);
 					if (txts.length == 7) {
 						stock.setVaryRatio(txts[5] + txts[6]);
 					} else if (txts.length == 8) {
@@ -943,7 +1041,7 @@ public class StockUtil {
 					varyRatio = stock.getVaryRatio();
 					logger.debug("varyRatio :" + varyRatio);
 					stock.setfVaryRatio(Float.parseFloat(varyRatio.replaceAll("%", "")));
-					//logger.debug("상승률:" + stock.getVaryRatio());
+					// logger.debug("상승률:" + stock.getVaryRatio());
 				}
 
 				if (text.startsWith("전일가")) {
@@ -978,7 +1076,7 @@ public class StockUtil {
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -1032,18 +1130,18 @@ public class StockUtil {
 			logger.debug("고가가 상한가인가?:" + highPrice.equals(stock.getMaxPrice()));
 			// 고가가 0이 아니고 고가가 상한가인가?
 			if (!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())
-				&& !curPrice.equals(stock.getMaxPrice())) {
+					&& !curPrice.equals(stock.getMaxPrice())) {
 				logger.debug("고가가 0이 아니고 고가가 상한가인가?:" + (!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())
-					&& !curPrice.equals(stock.getMaxPrice())));
+						&& !curPrice.equals(stock.getMaxPrice())));
 				stock.setStockGubun("상터치↑↘");
 				stock.setLineUp(12);
 				topTouchStockList.add(stock);
 				return stock;
 			}
 			if (!lowPrice.equals("0") && lowPrice.equals(stock.getMinPrice())
-				&& !curPrice.equals(stock.getMinPrice())) {
+					&& !curPrice.equals(stock.getMinPrice())) {
 				logger.debug("고가가 0이 아니고 저가 하한가인가?:" + (!lowPrice.equals("0") && lowPrice.equals(stock.getMinPrice())
-					&& !curPrice.equals(stock.getMinPrice())));
+						&& !curPrice.equals(stock.getMinPrice())));
 				stock.setStockGubun("하터치↓↗");
 				stock.setLineUp(22);
 				bottomTouchStockList.add(stock);
@@ -1304,7 +1402,7 @@ public class StockUtil {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -1314,7 +1412,7 @@ public class StockUtil {
 					varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
@@ -1362,7 +1460,7 @@ public class StockUtil {
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -1448,7 +1546,7 @@ public class StockUtil {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -1458,7 +1556,7 @@ public class StockUtil {
 					varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
@@ -1506,7 +1604,7 @@ public class StockUtil {
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -1567,21 +1665,20 @@ public class StockUtil {
 
 				logger.debug("varyPrice+++>" + varyPrice);
 
-				if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
-					|| specialLetter.startsWith("+")) {
+				if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲") || specialLetter.startsWith("+")) {
 					sb1.append("<td style='text-align:right;color:red'>"
-						+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
+							+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
 					sb1.append("<td style='text-align:right'><font color='red'>" + specialLetter + " " + varyPrice
-						+ "</font></td>\r\n");
+							+ "</font></td>\r\n");
 				} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
-					|| specialLetter.startsWith("-")) {
+						|| specialLetter.startsWith("-")) {
 					sb1.append("<td style='text-align:right;color:blue'>"
-						+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
+							+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
 					sb1.append("<td style='text-align:right'><font color='blue'>" + specialLetter + " " + varyPrice
-						+ "</font></td>\r\n");
+							+ "</font></td>\r\n");
 				} else {
 					sb1.append("<td style='text-align:right;color:metal'>"
-						+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
+							+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>0</td>\r\n");
 				}
 
@@ -1591,13 +1688,12 @@ public class StockUtil {
 				} else if (varyRatio.startsWith("-")) {
 					sb1.append("<td style='text-align:right'><font color='blue'>" + varyRatio + "</font></td>\r\n");
 				} else {
-					sb1.append(
-						"<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
+					sb1.append("<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
 				}
 				sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingVolume(), "")
-					+ "</td>\r\n");
+						+ "</td>\r\n");
 				sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingAmount(), "")
-					+ "</td>\r\n");
+						+ "</td>\r\n");
 
 				sb1.append("</tr>\r\n");
 			}
@@ -1611,7 +1707,8 @@ public class StockUtil {
 		try {
 			String userAgent = "Mozilla";
 			// This will get you the response.
-			Connection.Response res = Jsoup.connect(url).method(Connection.Method.POST).followRedirects(false).userAgent(userAgent).execute();
+			Connection.Response res = Jsoup.connect(url).method(Connection.Method.POST).followRedirects(false)
+					.userAgent(userAgent).execute();
 			// This will get you cookies
 			Map<String, String> loginCookies = res.cookies();
 			// And this is the easiest way I've found to remain in session
@@ -1635,7 +1732,7 @@ public class StockUtil {
 		return sb1.toString();
 	}
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws Exception {
 		String kospiFileName = GlobalVariables.kospiFileName;
 		String kosdaqFileName = GlobalVariables.kosdaqFileName;
 		List<StockVO> stockList = new ArrayList<>();

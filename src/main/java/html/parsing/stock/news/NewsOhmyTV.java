@@ -238,7 +238,7 @@ public class NewsOhmyTV extends javax.swing.JFrame {
             String textBody = content.outerHtml();
             String strContent = sb.toString() + textBody;
             System.out.println("strContent:" + strContent);
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
             String copyright = content.select(".copyright").outerHtml();
 

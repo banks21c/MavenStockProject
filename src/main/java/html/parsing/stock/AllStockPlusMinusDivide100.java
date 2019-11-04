@@ -148,7 +148,13 @@ public class AllStockPlusMinusDivide100 extends Thread {
 		// 코스피
 		List<StockVO> kospiAllStockList = new ArrayList<StockVO>();
 		StockUtil sUtil = new StockUtil();
-		kospiAllStockList = sUtil.getAllStockList(kospiFileName);
+		try {
+			kospiAllStockList = StockUtil.getAllStockList(kospiFileName);
+			logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());
+		}catch(Exception e) {
+			kospiAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiAllStockList, "stockMkt");			
+			logger.debug("kospiAllStockList.size2 :" + kospiAllStockList.size());
+		}		
 		StockVO svo4Date = kospiAllStockList.get(0);
 		getDateInfo(svo4Date.getStockCode());
 
@@ -194,7 +200,13 @@ public class AllStockPlusMinusDivide100 extends Thread {
 
 		// 코스닥
 		List<StockVO> kosdaqAllStockList = new ArrayList<StockVO>();
-		kosdaqAllStockList = sUtil.getAllStockList(kosdaqFileName);
+		try {
+			kosdaqAllStockList = sUtil.getAllStockList(kosdaqFileName);
+			logger.debug("kosdaqAllStockList :" + kosdaqAllStockList);
+		}catch(Exception e) {
+			kosdaqAllStockList = sUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqAllStockList, "kosdaqMkt");			
+			logger.debug("kosdaqAllStockList :" + kosdaqAllStockList);
+		}		
 		kosdaqAllStockList = sUtil.getAllStockInfo(kosdaqAllStockList);
 		if(iExtractCount == -1) iExtractCount = kosdaqAllStockList.size();
 		System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());

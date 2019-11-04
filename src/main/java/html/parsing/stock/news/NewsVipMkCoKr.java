@@ -245,7 +245,7 @@ public class NewsVipMkCoKr extends javax.swing.JFrame {
 	    strConts.select(".con_txt_new").remove();
             String strContent = strConts.outerHtml();
             System.out.println("strContent:" + strContent);
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
             String copyright = "";
 

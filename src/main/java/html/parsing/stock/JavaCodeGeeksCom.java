@@ -234,7 +234,12 @@ public class JavaCodeGeeksCom extends javax.swing.JFrame {
             textBodyDoc.select(".lmbox1").attr("style", "font-size:10pt;color:gray;");
             String strContent = textBodyDoc.html();
             System.out.println("textBodyHtml:" + strContent);
-            strContent = StockUtil.makeStockLinkString(strContent);
+            try {
+				strContent = StockUtil.makeStockLinkString(strContent);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
             String copyright = content.select(".copyright").outerHtml();
 
