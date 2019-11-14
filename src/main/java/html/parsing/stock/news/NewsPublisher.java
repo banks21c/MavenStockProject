@@ -81,10 +81,12 @@ enum NewsPublisher {
 	wwwpaxnetcokr("www.paxnet.co.kr"),
 	financedaumnet("finance.daum.net"),
 	news1kr("news1.kr"),
+	wwwdongacom("www.donga.com"),
 	newsdongacom("news.donga.com"),
 	wwwsegyecom("www.segye.com"),
 	wwwnewsencom("www.newsen.com"),
-	wwwkinewsnet("www.kinews.net")
+	wwwkinewsnet("www.kinews.net"),
+	newswowtvcokr("news.wowtv.co.kr")
 	;
 
 	final private String name;
@@ -164,10 +166,12 @@ enum NewsPublisher {
 		"WwwPaxnetCoKr",
 		"FinanceDaumNet",
 		"News1Kr",
+		"WwwDongaCom",
 		"NewsDongaCom",
 		"NewsWwwSegyeCom",
 		"NewsenCom",
-		"NewsWwwKinewsNet"
+		"NewsWwwKinewsNet",
+		"NewsWowtvCoKr"
 	};
 
 	private NewsPublisher(String name) { //enum에서 생성자 같은 역할
