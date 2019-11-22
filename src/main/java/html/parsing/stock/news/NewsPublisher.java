@@ -168,7 +168,7 @@ enum NewsPublisher {
 		"News1Kr",
 		"WwwDongaCom",
 		"NewsDongaCom",
-		"NewsWwwSegyeCom",
+		"WwwSegyeCom",
 		"NewsenCom",
 		"NewsWwwKinewsNet",
 		"NewsWowtvCoKr"

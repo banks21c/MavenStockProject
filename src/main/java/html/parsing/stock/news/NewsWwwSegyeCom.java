@@ -78,14 +78,14 @@ public class NewsWwwSegyeCom extends News {
 //            JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
 //            JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
 //            JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
-            strTitle = doc.select(".subject h1.headline").text();
+            strTitle = doc.select("#contTitle h3").text();
             System.out.println("title:" + strTitle);
 
             strTitleForFileName = strTitle;
             strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
             System.out.println("strTitleForFileName:" + strTitleForFileName);
 
-            String strDateString = doc.select(".clearfx .data").text();
+            String strDateString = doc.select(".viewInfo").text();
             System.out.println("strDateString:" + strDateString);
             String strDate = strDateString.split("수정")[0];
             strDate = strDate.replaceAll("[ ]*송고[ ]*", "");
