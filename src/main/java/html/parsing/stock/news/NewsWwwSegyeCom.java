@@ -1,7 +1,5 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.FileUtil;
-import html.parsing.stock.StockUtil;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -13,8 +11,10 @@ import javax.swing.JOptionPane;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import html.parsing.stock.FileUtil;
+import html.parsing.stock.StockUtil;
 
 public class NewsWwwSegyeCom extends News {
 
@@ -120,10 +120,11 @@ public class NewsWwwSegyeCom extends News {
             System.out.println("articleHtml:[" + articleHtml + "]");
             String strContent = articleHtml.replaceAll("640px", "548px");
             strContent = strContent.replaceAll("<img src=\"//", "<img src=\"" + protocol + "://");
+            strContent = strContent.replaceAll("src=\"//", "src=\"" + protocol + "://");
             strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
             strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
-            strContent = strContent.replaceAll("<figure>", "<div>");
-            strContent = strContent.replaceAll("</figure>", "</div>");
+//            strContent = strContent.replaceAll("<figure>", "<div>");
+//            strContent = strContent.replaceAll("</figure>", "</div>");
             strContent = strContent.replaceAll("<figcaption>", "<div>");
             strContent = strContent.replaceAll("</figcaption>", "</div>");
             strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
