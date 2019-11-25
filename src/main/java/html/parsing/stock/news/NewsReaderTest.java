@@ -5,12 +5,8 @@
  */
 package html.parsing.stock.news;
 
-import html.parsing.stock.ClassForNameExample;
-import html.parsing.stock.DataSort.StockNameAscCompare2;
-import html.parsing.stock.GlobalVariables;
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import static html.parsing.stock.StockUtil.readStockCodeNameListFromExcel;
-import html.parsing.stock.StockVO;
+
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -34,6 +30,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.ClassForNameExample;
+import html.parsing.stock.DataSort.StockNameAscCompare2;
+import html.parsing.stock.GlobalVariables;
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import html.parsing.stock.StockVO;
+
 /**
  *
  * @author banks
@@ -45,7 +47,7 @@ public class NewsReaderTest extends javax.swing.JFrame {
 
     /**
      * Creates new form NewJFrame1
-     * @throws Exception 
+     * @throws Exception
      */
     public NewsReaderTest() throws Exception {
         initComponents();
@@ -78,20 +80,24 @@ public class NewsReaderTest extends javax.swing.JFrame {
         }
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            public int getSize() {
+            @Override
+			public int getSize() {
                 return kospis.length;
             }
 
-            public String getElementAt(int i) {
+            @Override
+			public String getElementAt(int i) {
                 return kospis[i];
             }
         });
         jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            public int getSize() {
+            @Override
+			public int getSize() {
                 return kosdaqs.length;
             }
 
-            public String getElementAt(int i) {
+            @Override
+			public String getElementAt(int i) {
                 return kosdaqs[i];
             }
         });
@@ -180,12 +186,14 @@ public class NewsReaderTest extends javax.swing.JFrame {
         jPanel4.add(urlLbl, java.awt.BorderLayout.WEST);
 
         textFieldPopupMenuPanel1.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            @Override
+			public void focusLost(java.awt.event.FocusEvent evt) {
                 textFieldPopupMenuPanel1FocusLost(evt);
             }
         });
         textFieldPopupMenuPanel1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+            @Override
+			public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 textFieldPopupMenuPanel1PropertyChange(evt);
             }
         });
@@ -193,7 +201,8 @@ public class NewsReaderTest extends javax.swing.JFrame {
 
         executeBtn.setText("페이지 추출");
         executeBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 executeBtnActionPerformed(evt);
             }
         });
@@ -201,7 +210,8 @@ public class NewsReaderTest extends javax.swing.JFrame {
 
         extractImgBtn.setText("이미지추출");
         extractImgBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 extractImgBtnActionPerformed(evt);
             }
         });
@@ -209,7 +219,8 @@ public class NewsReaderTest extends javax.swing.JFrame {
 
         jButton3.setText("초기화");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
@@ -238,112 +249,128 @@ public class NewsReaderTest extends javax.swing.JFrame {
         jPanel2.setLayout(new java.awt.GridLayout(15, 2));
 
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel1);
 
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel2MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel2);
 
         jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel14MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel14);
 
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel3MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel3);
 
         jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel4MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel4);
 
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel5MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel5);
 
         jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel11MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel11);
 
         jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel12MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel12);
 
         jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel13MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel13);
 
         jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel8MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel8);
 
         jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel9MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel9);
 
         jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel10MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel10);
 
         jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel6MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel6);
 
         jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel7MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel7);
 
         jLabel16.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel16MouseClicked(evt);
             }
         });
         jPanel2.add(jLabel16);
 
         jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel15MouseClicked(evt);
             }
         });
@@ -407,7 +434,8 @@ public class NewsReaderTest extends javax.swing.JFrame {
 
         jButton1.setText("HTML View");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
@@ -424,16 +452,20 @@ public class NewsReaderTest extends javax.swing.JFrame {
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "item 1" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+            @Override
+			public int getSize() { return strings.length; }
+            @Override
+			public String getElementAt(int i) { return strings[i]; }
         });
         jList1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jList1MouseClicked(evt);
             }
         });
         jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+            @Override
+			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 jList1ValueChanged(evt);
             }
         });
@@ -446,11 +478,14 @@ public class NewsReaderTest extends javax.swing.JFrame {
 
         jList2.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "item 1" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+            @Override
+			public int getSize() { return strings.length; }
+            @Override
+			public String getElementAt(int i) { return strings[i]; }
         });
         jList2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jList2MouseClicked(evt);
             }
         });
@@ -601,12 +636,14 @@ public class NewsReaderTest extends javax.swing.JFrame {
 
     private void textFieldPopupMenuPanel1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_textFieldPopupMenuPanel1PropertyChange
         textFieldPopupMenuPanel1.getTextField().addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
+            @Override
+			public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextField1FocusLost(evt);
             }
         });
         textFieldPopupMenuPanel1.getTextField().addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
             }
         });
@@ -686,12 +723,12 @@ public class NewsReaderTest extends javax.swing.JFrame {
             }
         }
         System.out.println("newsCompany3:" + newsCompany);
-        
+
         StringBuilder sb = new StringBuilder();
         if (newsCompany.equals("BUSAN")) {
             sb = NewsBusan.createHTMLFile(url);
-        } else if (newsCompany.equals("NewsWwwHanitvCom")) {
-            sb = NewsWwwHanitvCom.createHTMLFile(url);
+        } else if (newsCompany.equals("WwwHanitvCom")) {
+            sb = WwwHanitvCom.createHTMLFile(url);
         }
         if (newsCompany.equals("")) {
             textFieldPopupMenuPanel1.getTextField().setText("");

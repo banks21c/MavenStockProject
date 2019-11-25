@@ -125,7 +125,7 @@ enum NewsPublisher {
 		"NewsHankyung",
 		"NewsYTN",
 		"NewsYTN",
-		"NewsWwwYnaCoKr",
+		"WwwYnaCoKr",
 		"NewsEdaily",
 		"NewsWikitree",
 		"NewsJTBC",
@@ -145,7 +145,7 @@ enum NewsPublisher {
 		"NewsMediaus",
 		"NewsSeoul",
 		"NewsMunhwa",
-		"NewsWwwAsiaeCoKr",
+		"WwwAsiaeCoKr",
 		"NewsStockAsiaeCoKr",
 		"NewViewAsiaeCoKr",
 		"NewsMkCoKr",
@@ -155,7 +155,7 @@ enum NewsPublisher {
 		"NewsKbsCoKr",
 		"NewsBizHeraldcorpCom",
 		"NewsHeraldcorpCom",
-		"NewsWwwHanitvCom",
+		"WwwHanitvCom",
 		"NewsTomatoCom",
 		"NewsBizKhanCoKr",
 		"NewsKhanCoKr",
@@ -170,7 +170,7 @@ enum NewsPublisher {
 		"NewsDongaCom",
 		"WwwSegyeCom",
 		"NewsenCom",
-		"NewsWwwKinewsNet",
+		"WwwKinewsNet",
 		"NewsWowtvCoKr"
 	};
 
