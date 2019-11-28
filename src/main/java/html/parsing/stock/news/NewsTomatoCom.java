@@ -1,21 +1,19 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.FileUtil;
-import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
-import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.StockUtil;
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
@@ -25,6 +23,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
+
+import html.parsing.stock.FileUtil;
+import html.parsing.stock.StockUtil;
 
 public class NewsTomatoCom extends javax.swing.JFrame {
 
@@ -86,7 +87,8 @@ public class NewsTomatoCom extends javax.swing.JFrame {
         }
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 new NewsTomatoCom().setVisible(true);
             }
         });
@@ -128,12 +130,14 @@ public class NewsTomatoCom extends javax.swing.JFrame {
         urlTf.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         urlTf.setToolTipText("");
         urlTf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 urlTfActionPerformed(evt);
             }
         });
         urlTf.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
+            @Override
+			public void keyReleased(java.awt.event.KeyEvent evt) {
                 urlTfKeyReleased(evt);
             }
         });
@@ -145,7 +149,8 @@ public class NewsTomatoCom extends javax.swing.JFrame {
 
         eraseBtn.setText("지우기");
         eraseBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 eraseBtnActionPerformed(evt);
             }
         });
@@ -153,7 +158,8 @@ public class NewsTomatoCom extends javax.swing.JFrame {
 
         executeBtn.setText("페이지 추출");
         executeBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 executeBtnActionPerformed(evt);
             }
         });
@@ -222,10 +228,11 @@ public class NewsTomatoCom extends javax.swing.JFrame {
             doc.select("#ctl00_ContentPlaceHolder1_WebNewsView_hyHTS").remove();
             doc.select("#ctl00_ContentPlaceHolder1_WebNewsView_NewsReporterSns").remove();
 
-            System.out.println("fileName2:" + userHome + File.separator + "documents" + File.separator + strYMD + ".html");
-            fw = new FileWriter(userHome + File.separator + "documents" + File.separator + strYMD + ".html");
-            fw.write(doc.html());
-            fw.close();
+            String fileName2 = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
+            System.out.println("fileName2:" + fileName2);
+            Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
+            bw.write(doc.html());
+            bw.close();
 
             Elements title = doc.select("div.rn_stitle");
             System.out.println("title:" + strTitle);
