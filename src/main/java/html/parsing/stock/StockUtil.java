@@ -5,12 +5,10 @@
  */
 package html.parsing.stock;
 
-import html.parsing.stock.DataSort.StockNameLengthDescCompare;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
@@ -24,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -42,6 +41,8 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+
+import html.parsing.stock.DataSort.StockNameLengthDescCompare;
 
 /**
  *
@@ -373,6 +374,7 @@ public class StockUtil {
 				|| stockName.equals("두산") && strNews.contains("백두산")
 				|| stockName.equals("딜리") && strNews.contains("딜리버리")
 				|| stockName.equals("레이") && strNews.contains("말레이시아")
+				|| stockName.equals("레이") && strNews.contains("플레이스")
 				|| stockName.equals("레이") && strNews.contains("레이어")
 				|| stockName.equals("레이") && strNews.contains("디스플레이")
 				|| stockName.equals("레이") && strNews.contains("엑스레이")
@@ -936,13 +938,13 @@ public class StockUtil {
 			Document doc = Jsoup.connect(strUri).requestBody("JSON").headers(headers)
 					// .cookies(response.cookies())
 					.ignoreContentType(true).post();
-			
+
 			Elements trElements = doc.select("tr");
 			for (int i = 0; i < trElements.size(); i++) {
 				Elements tdElements = trElements.get(i).select("td");
 				if (tdElements.size() > 0) {
 					StockVO svo = new StockVO();
-					
+
 					String strStockName = tdElements.get(0).text();
 					String strStockCode = tdElements.get(1).text();
 					System.out.println(strStockCode + "\t" + strStockName);
