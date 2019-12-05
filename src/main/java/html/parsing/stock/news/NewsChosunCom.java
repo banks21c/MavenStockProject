@@ -10,21 +10,17 @@ import javax.swing.JOptionPane;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.FileUtil;
-import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
-import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 
-public class NewsHeraldcorpCom extends News {
+public class NewsChosunCom extends News {
 
-	private static Logger logger = LoggerFactory.getLogger(NewsHeraldcorpCom.class);
+	private static Logger logger = LoggerFactory.getLogger(NewsChosunCom.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -41,19 +37,18 @@ public class NewsHeraldcorpCom extends News {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new NewsHeraldcorpCom(1);
+		new NewsChosunCom(1);
 	}
 
-	NewsHeraldcorpCom() {
-		logger = LoggerFactory.getLogger(NewsHeraldcorpCom.class);
+	NewsChosunCom() {
+		logger = LoggerFactory.getLogger(NewsChosunCom.class);
 	}
 
-	NewsHeraldcorpCom(int i) {
-		logger = LoggerFactory.getLogger(NewsHeraldcorpCom.class);
-		String url = JOptionPane.showInputDialog("헤럴드경제 URL을 입력하여 주세요.");
+	NewsChosunCom(int i) {
+		String url = JOptionPane.showInputDialog("조선일보 URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
-		if (url.equals("")) {
-			url = "http://news.heraldcorp.com/view.php?ud=20190226000403";
+		if (url == null || url.equals("")) {
+			url = "http://news.chosun.com/site/data/html_dir/2017/02/24/2017022401428.html";
 		}
 		createHTMLFile(url);
 	}
@@ -71,63 +66,49 @@ public class NewsHeraldcorpCom extends News {
 			doc.select("iframe").remove();
 			doc.select("script").remove();
 
-			doc = Jsoup.parse(doc.html().replaceAll("data-src", "dataSrc"));
-
-			doc.select("body").removeAttr("onload");
-			doc.select("div.pop_prt_btns").remove();
-			doc.select(".w_mug_emotion").remove();
-
-			JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
-			JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
-			JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
-			JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
-
-			strTitle = doc.select(".view_top_t2 ul li h1").text();
-			logger.debug("title2:" + strTitle);
+			strTitle = doc.select("#news_title_text_id").html();
+			logger.debug("title:" + strTitle);
 			strTitleForFileName = strTitle;
-//			strTitle = StockUtil.makeStockLinkString(strTitle);
-//			strTitle = StockUtil.makeStockLinkStringByExcel(strTitle);
-			logger.debug("strTitle :" + strTitle);
 			strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
 			logger.debug("strTitleForFileName:" + strTitleForFileName);
 
-			String strAuthor = "";
-			Elements aElements = doc.select("a");
-			for (int i = 0; i < aElements.size(); i++) {
-				Element aElement = aElements.get(i);
-				String aHref = aElement.attr("href");
-				if (aHref.startsWith("mailto:")) {
-					strAuthor = aHref.substring("mailto:".length());
-				}
-			}
+			JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
 
-			String strEmail = strAuthor;
-			logger.debug("strEmail:[" + strEmail + "]");
+			strDate = doc.select(".news_body .news_date").text();
+			logger.debug("strDate:" + strDate);
+			String[] strDates = strDate.split("\\|");
+			strDate = strDates[0].trim();
+			strDate = strDate.replaceAll("입력 ", "");
+			strDate = strDate.replaceAll("  ", "");
 
-			String strDates = "";
-			Elements ellipsis = doc.select(".ellipsis");
-			for (Element e : ellipsis) {
-				if (e.text().startsWith("기사입력")) {
-					strDates = e.text();
-				}
-			}
-			strDate = strDates.split("\\|")[0];
-			strDate = strDate.replaceAll("기사입력", "").trim();
-			strDate = strDate.replaceAll("입력", "").trim();
-			strDate = strDate.replaceAll("기사", "").trim();
+			doc.select(".news_date").remove();
+
 			logger.debug("strDate:" + strDate);
 			strFileNameDate = strDate;
+
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
 			logger.debug("strFileNameDate:" + strFileNameDate);
 
-			String img = "";
-			logger.debug("img:" + img);
-			String strContent = doc.select("#articleText").outerHtml();
-			//strContent = StockUtil.makeStockLinkString(strContent);
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
-			logger.debug("strContent:" + strContent);
+			String strAuthor = doc.select(".news_title_author a").text();
+			logger.debug("author:" + strAuthor);
 
-			String copyright = "";
+			Elements article = doc.select("#news_body_id");
+			article.select(".news_like").remove();
+			// logger.debug("article:" + article);
+
+			article.attr("style", "width:548px");
+			String articleHtml = article.outerHtml();
+			logger.debug("articleHtml:[" + articleHtml + "]articleHtml");
+
+			String strContent = articleHtml.replaceAll("640px", "548px");
+			strContent = strContent.replaceAll("<figure>", "");
+			strContent = strContent.replaceAll("</figure>", "<br>");
+			strContent = strContent.replaceAll("<figcaption>", "");
+			strContent = strContent.replaceAll("</figcaption>", "<br>");
+			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
+			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+
+			String copyright = doc.select(".csource").outerHtml();
 			logger.debug("copyright:" + copyright);
 
 			sb1.append("<html lang='ko'>\r\n");

@@ -194,14 +194,26 @@ public class StockUtil {
 		String kospiFileName = GlobalVariables.kospiFileName;
 		String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
-		readStockCodeNameListFromExcel(stockList, kospiFileName);
-		readStockCodeNameListFromExcel(stockList, kosdaqFileName);
+		try {
+			readStockCodeNameListFromExcel(stockList, kospiFileName);
+			readStockCodeNameListFromExcel(stockList, kosdaqFileName);
+		} catch (Exception e) {
+			e.printStackTrace();
+			getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
+			getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+		}
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		return stockList;
 	}
 
 	public static StringBuilder makeStockLinkString(StringBuilder sb1) throws Exception {
-		readAllStockCodeNameListFromExcel();
+		try {
+			readAllStockCodeNameListFromExcel();
+		} catch (Exception e) {
+			e.printStackTrace();
+			getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
+			getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+		}
 		for (int i = 0; i < stockList.size(); i++) {
 			StockVO vo = stockList.get(i);
 //			logger.debug("증권코드:" + vo.getStockCode() + " 증권명:" + vo.getStockName());
@@ -214,8 +226,13 @@ public class StockUtil {
 	}
 
 	public static String makeStockLinkString(String textBodyHtml) throws Exception {
-
-		readAllStockCodeNameListFromExcel();
+		try {
+			readAllStockCodeNameListFromExcel();
+		} catch (Exception e) {
+			e.printStackTrace();
+			getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
+			getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+		}
 		for (int i = 0; i < stockList.size(); i++) {
 			StockVO vo = stockList.get(i);
 //			logger.debug("증권코드:" + vo.getStockCode() + " 증권명:" + vo.getStockName());
@@ -227,7 +244,7 @@ public class StockUtil {
 		return stockLinkString(textBodyHtml, stockList);
 	}
 
-	public static String makeStockLinkStringByExcel(String textBodyHtml){
+	public static String makeStockLinkStringByExcel(String textBodyHtml) {
 
 		String kospiFileName = GlobalVariables.kospiFileName;
 		String kosdaqFileName = GlobalVariables.kosdaqFileName;
@@ -236,7 +253,10 @@ public class StockUtil {
 		try {
 			readStockCodeNameListFromExcel(stockList, kospiFileName);
 			readStockCodeNameListFromExcel(stockList, kosdaqFileName);
+
+
 		} catch (Exception e) {
+			logger.debug("Exception e:" + e.getMessage());
 			e.printStackTrace();
 			getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
 			getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
@@ -244,7 +264,7 @@ public class StockUtil {
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		for (int i = 0; i < stockList.size(); i++) {
 			StockVO vo = stockList.get(i);
-//			logger.debug("증권코드:" + vo.getStockCode() + " 증권명:" + vo.getStockName());
+//		logger.debug("증권코드:" + vo.getStockCode() + " 증권명:" + vo.getStockName());
 		}
 		if (stockList.size() <= 0) {
 			logger.debug("추출한 종목이 없습니다.");
@@ -374,7 +394,10 @@ public class StockUtil {
 				|| stockName.equals("두산") && strNews.contains("백두산")
 				|| stockName.equals("딜리") && strNews.contains("딜리버리")
 				|| stockName.equals("레이") && strNews.contains("말레이시아")
+				|| stockName.equals("레이") && strNews.contains("플레이트")
 				|| stockName.equals("레이") && strNews.contains("플레이스")
+				|| stockName.equals("레이") && strNews.contains("콜라보레이션")
+				|| stockName.equals("레이") && strNews.contains("브레이크")
 				|| stockName.equals("레이") && strNews.contains("레이어")
 				|| stockName.equals("레이") && strNews.contains("디스플레이")
 				|| stockName.equals("레이") && strNews.contains("엑스레이")
@@ -606,67 +629,59 @@ public class StockUtil {
 		return strNews + "<br>" + newsStockTable.toString();
 	}
 
-	public static List<StockVO> readStockCodeNameListFromExcel(List<StockVO> stockList, String fileName) throws Exception{
+	public static List<StockVO> readStockCodeNameListFromExcel(List<StockVO> stockList, String fileName)
+			throws Exception {
 		List<StockVO> svoList = new ArrayList<>();
-		try {
-			// Creating a Workbook from an Excel file (.xls or .xlsx)
-			logger.debug("fileName:" + fileName);
-			File file = new File(fileName);
-			Workbook workbook = WorkbookFactory.create(file);
-			// Getting the Sheet at index zero
-			Sheet sheet = workbook.getSheetAt(0);
+		// Creating a Workbook from an Excel file (.xls or .xlsx)
+		logger.debug("fileName:" + fileName);
+		File file = new File(fileName);
+		Workbook workbook = WorkbookFactory.create(file);
+		// Getting the Sheet at index zero
+		Sheet sheet = workbook.getSheetAt(0);
 
-			// Create a DataFormatter to format and get each cell's value as String
-			DataFormatter dataFormatter = new DataFormatter();
+		// Create a DataFormatter to format and get each cell's value as String
+		DataFormatter dataFormatter = new DataFormatter();
 
-			// 1. You can obtain a rowIterator and columnIterator and iterate over them
-			Iterator<Row> rowIterator = sheet.rowIterator();
-			int cnt = 0;
-			while (rowIterator.hasNext()) {
-				StockVO svo = new StockVO();
-				Row row = rowIterator.next();
+		// 1. You can obtain a rowIterator and columnIterator and iterate over them
+		Iterator<Row> rowIterator = sheet.rowIterator();
+		int cnt = 0;
+		while (rowIterator.hasNext()) {
+			StockVO svo = new StockVO();
+			Row row = rowIterator.next();
 
-				// Now let's iterate over the columns of the current row
-				Iterator<Cell> cellIterator = row.cellIterator();
-				String strStockName = null;
-				String strStockCode = null;
-				if (row.getLastCellNum() > 1) {
-					int i = 0;
-					while (cellIterator.hasNext()) {
-						if (i == 2) {
-							break;
-						}
-						Cell cell = cellIterator.next();
-						String cellValue = dataFormatter.formatCellValue(cell);
-						if (i == 0) {
-							strStockName = cellValue;
-						}
-						if (i == 1) {
-							strStockCode = cellValue;
-						}
-						i++;
+			// Now let's iterate over the columns of the current row
+			Iterator<Cell> cellIterator = row.cellIterator();
+			String strStockName = null;
+			String strStockCode = null;
+			if (row.getLastCellNum() > 1) {
+				int i = 0;
+				while (cellIterator.hasNext()) {
+					if (i == 2) {
+						break;
 					}
-					if (strStockCode.length() != 6) {
-						continue;
+					Cell cell = cellIterator.next();
+					String cellValue = dataFormatter.formatCellValue(cell);
+					if (i == 0) {
+						strStockName = cellValue;
 					}
-//					logger.debug(strStockCode + "\t" + strStockName);
+					if (i == 1) {
+						strStockCode = cellValue;
+					}
+					i++;
 				}
-				svo.setStockCode(strStockCode);
-				svo.setStockName(strStockName);
-				svo.setStockNameLength(strStockName.length());
-				svoList.add(svo);
-				cnt++;
+				if (strStockCode.length() != 6) {
+					continue;
+				}
+//					logger.debug(strStockCode + "\t" + strStockName);
 			}
-			// Closing the workbook
-			workbook.close();
-		} catch (IOException ex) {
-			throw new Exception("test");
-//			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (InvalidFormatException ex) {
-			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (EncryptedDocumentException ex) {
-			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
+			svo.setStockCode(strStockCode);
+			svo.setStockName(strStockName);
+			svo.setStockNameLength(strStockName.length());
+			svoList.add(svo);
+			cnt++;
 		}
+		// Closing the workbook
+		workbook.close();
 		stockList.addAll(svoList);
 		return stockList;
 	}
@@ -755,58 +770,59 @@ public class StockUtil {
 		return svoList;
 	}
 
-	public static List<StockVO> getAllStockList(String fileName) throws IOException, EncryptedDocumentException, InvalidFormatException {
+	public static List<StockVO> getAllStockList(String fileName)
+			throws IOException, EncryptedDocumentException, InvalidFormatException {
 		List<StockVO> svoList = new ArrayList<>();
-			// Creating a Workbook from an Excel file (.xls or .xlsx)
-			logger.debug("fileName:" + fileName);
-			File file = new File(fileName);
-			Workbook workbook = WorkbookFactory.create(file);
-			// Getting the Sheet at index zero
-			Sheet sheet = workbook.getSheetAt(0);
+		// Creating a Workbook from an Excel file (.xls or .xlsx)
+		logger.debug("fileName:" + fileName);
+		File file = new File(fileName);
+		Workbook workbook = WorkbookFactory.create(file);
+		// Getting the Sheet at index zero
+		Sheet sheet = workbook.getSheetAt(0);
 
-			// Create a DataFormatter to format and get each cell's value as String
-			DataFormatter dataFormatter = new DataFormatter();
+		// Create a DataFormatter to format and get each cell's value as String
+		DataFormatter dataFormatter = new DataFormatter();
 
-			// 1. You can obtain a rowIterator and columnIterator and iterate over them
-			logger.debug("\n\n getAllStockList \n");
-			logger.debug("\n\nIterating over Rows and Columns using Iterator3\n");
-			Iterator<Row> rowIterator = sheet.rowIterator();
-			int cnt = 0;
-			while (rowIterator.hasNext()) {
-				StockVO svo = new StockVO();
-				Row row = rowIterator.next();
+		// 1. You can obtain a rowIterator and columnIterator and iterate over them
+		logger.debug("\n\n getAllStockList \n");
+		logger.debug("\n\nIterating over Rows and Columns using Iterator3\n");
+		Iterator<Row> rowIterator = sheet.rowIterator();
+		int cnt = 0;
+		while (rowIterator.hasNext()) {
+			StockVO svo = new StockVO();
+			Row row = rowIterator.next();
 
-				// Now let's iterate over the columns of the current row
-				Iterator<Cell> cellIterator = row.cellIterator();
-				String strStockName = null;
-				String strStockCode = null;
-				if (row.getLastCellNum() > 1) {
-					int i = 0;
-					while (cellIterator.hasNext()) {
-						if (i == 2) {
-							break;
-						}
-						Cell cell = cellIterator.next();
-						String cellValue = dataFormatter.formatCellValue(cell);
-						if (i == 0) {
-							strStockName = cellValue;
-							svo.setStockName(strStockName);
-						}
-						if (i == 1) {
-							strStockCode = cellValue;
-							svo.setStockCode(strStockCode);
-						}
-						i++;
+			// Now let's iterate over the columns of the current row
+			Iterator<Cell> cellIterator = row.cellIterator();
+			String strStockName = null;
+			String strStockCode = null;
+			if (row.getLastCellNum() > 1) {
+				int i = 0;
+				while (cellIterator.hasNext()) {
+					if (i == 2) {
+						break;
 					}
-					if (strStockCode.length() != 6) {
-						continue;
+					Cell cell = cellIterator.next();
+					String cellValue = dataFormatter.formatCellValue(cell);
+					if (i == 0) {
+						strStockName = cellValue;
+						svo.setStockName(strStockName);
 					}
-					svoList.add(svo);
+					if (i == 1) {
+						strStockCode = cellValue;
+						svo.setStockCode(strStockCode);
+					}
+					i++;
 				}
-				cnt++;
+				if (strStockCode.length() != 6) {
+					continue;
+				}
+				svoList.add(svo);
 			}
-			// Closing the workbook
-			workbook.close();
+			cnt++;
+		}
+		// Closing the workbook
+		workbook.close();
 		return svoList;
 	}
 
@@ -877,8 +893,8 @@ public class StockUtil {
 	}
 
 	/**
-	 * extract stockcode, stockname from kind.krx.co.kr
-	 * gubun = stockMkt, kosdaqMkt
+	 * extract stockcode, stockname from kind.krx.co.kr gubun = stockMkt, kosdaqMkt
+	 *
 	 * @param stockList
 	 * @param fileName
 	 * @return
@@ -888,7 +904,8 @@ public class StockUtil {
 	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(List<StockVO> stockList, String gubun) {
 		List<StockVO> svoList = new ArrayList<>();
 		try {
-			String param = "method=download&pageIndex=1&currentPageSize=5000&comAbbrv=&beginIndex=&orderMode=3&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=&marketType="+gubun+"&searchType=13&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
+			String param = "method=download&pageIndex=1&currentPageSize=5000&comAbbrv=&beginIndex=&orderMode=3&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=&marketType="
+					+ gubun + "&searchType=13&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
 
 			String strUri = SERVER_URI + "?" + param;
 //			Document doc = Jsoup.parse(new URL(strUri).openStream(), "EUC-KR", strUri);
@@ -952,7 +969,7 @@ public class StockUtil {
 					svo.setStockCode(strStockCode);
 					svo.setStockNameLength(strStockName.length());
 					if (strStockCode.length() != 6) {
-						System.out.println(strStockCode+"\t"+strStockName+" 종목은 체크바랍니다.");
+						System.out.println(strStockCode + "\t" + strStockName + " 종목은 체크바랍니다.");
 					}
 					svoList.add(svo);
 				}
