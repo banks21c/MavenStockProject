@@ -15,9 +15,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import html.parsing.stock.FileUtil;
+import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
+import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 
-public class NewsEtodayCoKr extends News {
+public class WwwEtodayCoKr extends News {
 
     java.util.logging.Logger logger = null;
 
@@ -36,14 +40,14 @@ public class NewsEtodayCoKr extends News {
      * @param args
      */
     public static void main(String[] args) {
-        new NewsEtodayCoKr(1);
+        new WwwEtodayCoKr(1);
     }
 
-    NewsEtodayCoKr() {
+    WwwEtodayCoKr() {
         logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
     }
 
-    NewsEtodayCoKr(int i) {
+    WwwEtodayCoKr(int i) {
         logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
         logger.log(Level.INFO, "이투데이뉴스");
         String url = JOptionPane.showInputDialog("이투데이뉴스 URL을 입력하여 주세요.");
@@ -75,10 +79,10 @@ public class NewsEtodayCoKr extends News {
             strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
             System.out.println("strTitleForFileName:" + strTitleForFileName);
 
-//            JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
-//            JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
-//            JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
-//            JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
+            JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
+            JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
+            JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
+            JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 
 //            String writer = doc.select(".cont_left_article .reporter_copy_w_1 strong").html();
             String writer = doc.select(".vw_byline .vw_by_reporter li dl dd.reporter_name").text();

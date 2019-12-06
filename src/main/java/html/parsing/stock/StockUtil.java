@@ -964,7 +964,7 @@ public class StockUtil {
 
 					String strStockName = tdElements.get(0).text();
 					String strStockCode = tdElements.get(1).text();
-					System.out.println(strStockCode + "\t" + strStockName);
+//					System.out.println(strStockCode + "\t" + strStockName);
 					svo.setStockName(strStockName);
 					svo.setStockCode(strStockCode);
 					svo.setStockNameLength(strStockName.length());
