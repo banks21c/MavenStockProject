@@ -86,7 +86,8 @@ enum NewsPublisher {
 	wwwsegyecom("www.segye.com"),
 	wwwnewsencom("www.newsen.com"),
 	wwwkinewsnet("www.kinews.net"),
-	newswowtvcokr("news.wowtv.co.kr")
+	newswowtvcokr("news.wowtv.co.kr"),
+	wwwdailiancokr("www.dailian.co.kr/")
 	;
 
 	final private String name;
@@ -171,7 +172,8 @@ enum NewsPublisher {
 		"WwwSegyeCom",
 		"NewsenCom",
 		"WwwKinewsNet",
-		"NewsWowtvCoKr"
+		"NewsWowtvCoKr",
+		"WwwDailianCoKr"
 	};
 
 	private NewsPublisher(String name) { //enum에서 생성자 같은 역할
