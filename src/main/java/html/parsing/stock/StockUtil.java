@@ -189,6 +189,36 @@ public class StockUtil {
 		Collections.sort(kosdaqStockList, new StockNameLengthDescCompare());
 		return kosdaqStockList;
 	}
+	/**
+	 * marketGubun = stockMkt, kosdaqMkt
+	 * @param marketGubun
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<StockVO> readStockCodeNameListFromKrx(String marketGubun) throws Exception {
+		getStockCodeNameListFromKindKrxCoKr(stockList, marketGubun);
+		Collections.sort(stockList, new StockNameLengthDescCompare());
+		return stockList;
+	}
+
+	public static List<StockVO> readKospiStockCodeNameListFromKrx() throws Exception {
+		getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
+		Collections.sort(stockList, new StockNameLengthDescCompare());
+		return stockList;
+	}
+
+	public static List<StockVO> readKosdaqStockCodeNameListFromKrx() throws Exception {
+		getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+		Collections.sort(stockList, new StockNameLengthDescCompare());
+		return stockList;
+	}
+
+	public static List<StockVO> readAllStockCodeNameListFromKrx() throws Exception {
+		getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
+		getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+		Collections.sort(stockList, new StockNameLengthDescCompare());
+		return stockList;
+	}
 
 	public static List<StockVO> readAllStockCodeNameListFromExcel() throws Exception {
 		String kospiFileName = GlobalVariables.kospiFileName;
@@ -253,8 +283,6 @@ public class StockUtil {
 		try {
 			readStockCodeNameListFromExcel(stockList, kospiFileName);
 			readStockCodeNameListFromExcel(stockList, kosdaqFileName);
-
-
 		} catch (Exception e) {
 			logger.debug("Exception e:" + e.getMessage());
 			e.printStackTrace();
