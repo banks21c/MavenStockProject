@@ -38,6 +38,9 @@ public class AllStockForeignOrgan {
     // Locale.KOREAN).format(new Date());
     static String strYMD = "";
 
+    String kospiFileName = GlobalVariables.kospiFileName;
+    String kosdaqFileName = GlobalVariables.kosdaqFileName;
+
     /**
      * @param args
      */
@@ -47,8 +50,6 @@ public class AllStockForeignOrgan {
 
     AllStockForeignOrgan() {
         logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-        String kospiFileName = GlobalVariables.kospiFileName;
-        String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
         List<StockVO> kospiStockList = readOne("049180");
         writeFile(kospiStockList, kospiFileName, "코스피", true, "거래량");
@@ -58,45 +59,51 @@ public class AllStockForeignOrgan {
         logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
         // MakeKospiKosdaqList.makeKospiKosdaqList();
 
-        String kospiFileName = GlobalVariables.kospiFileName;
-        String kosdaqFileName = GlobalVariables.kosdaqFileName;
-
         // 모든 주식 정보를 조회한다.
-        // 코스피
-        List<StockVO> kospiAllStockList = getAllStockInfo("코스피", kospiFileName);
-        System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
+        //StockUtil.readStockCodeNameListFromKrx(stockMkt or kosdaqMkt)
+        List<StockVO> kospiAllStockList;
+		List<StockVO> kosdaqAllStockList;
+		try {
+			// 코스피
+			kospiAllStockList = StockUtil.readStockCodeNameListFromKrx("stockMkt");
+			System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
+			kospiAllStockList = getAllStockInfo(kospiAllStockList);
 
-        // 코스닥
-        List<StockVO> kosdaqAllStockList = getAllStockInfo("코스닥", kosdaqFileName);
-        System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
+			// 코스닥
+			kosdaqAllStockList = StockUtil.readStockCodeNameListFromKrx("kosdaqMkt");
+			System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
+			kosdaqAllStockList = getAllStockInfo(kosdaqAllStockList);
 
-        // 1.외국인 거래량순 정렬
-        Collections.sort(kospiAllStockList, new ForeignTradingVolumeDescCompare());
-        Collections.sort(kosdaqAllStockList, new ForeignTradingVolumeDescCompare());
+			// 1.외국인 거래량순 정렬
+			Collections.sort(kospiAllStockList, new ForeignTradingVolumeDescCompare());
+			Collections.sort(kosdaqAllStockList, new ForeignTradingVolumeDescCompare());
 
-        writeFile(kospiAllStockList, kospiFileName, "코스피 외국인 거래량", true, "거래량");
-        writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 외국인 거래량", true, "거래량");
+			writeFile(kospiAllStockList, kospiFileName, "코스피 외국인 거래량", true, "거래량");
+			writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 외국인 거래량", true, "거래량");
 
-        // 2.외국인 거래대금순 정렬
-        Collections.sort(kospiAllStockList, new ForeignTradingAmountDescCompare());
-        Collections.sort(kosdaqAllStockList, new ForeignTradingAmountDescCompare());
+			// 2.외국인 거래대금순 정렬
+			Collections.sort(kospiAllStockList, new ForeignTradingAmountDescCompare());
+			Collections.sort(kosdaqAllStockList, new ForeignTradingAmountDescCompare());
 
-        writeFile(kospiAllStockList, kospiFileName, "코스피 외국인 거래대금", true, "거래대금");
-        writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 외국인 거래대금", true, "거래대금");
+			writeFile(kospiAllStockList, kospiFileName, "코스피 외국인 거래대금", true, "거래대금");
+			writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 외국인 거래대금", true, "거래대금");
 
-        // 3.기관 거래량순 정렬
-        Collections.sort(kospiAllStockList, new OrganTradingVolumeDescCompare());
-        Collections.sort(kosdaqAllStockList, new OrganTradingVolumeDescCompare());
+			// 3.기관 거래량순 정렬
+			Collections.sort(kospiAllStockList, new OrganTradingVolumeDescCompare());
+			Collections.sort(kosdaqAllStockList, new OrganTradingVolumeDescCompare());
 
-        writeFile(kospiAllStockList, kospiFileName, "코스피 기관 거래량", false, "거래량");
-        writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 기관 거래량", false, "거래량");
+			writeFile(kospiAllStockList, kospiFileName, "코스피 기관 거래량", false, "거래량");
+			writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 기관 거래량", false, "거래량");
 
-        // 4.기관 거래대금순 정렬
-        Collections.sort(kospiAllStockList, new OrganTradingAmountDescCompare());
-        Collections.sort(kosdaqAllStockList, new OrganTradingAmountDescCompare());
+			// 4.기관 거래대금순 정렬
+			Collections.sort(kospiAllStockList, new OrganTradingAmountDescCompare());
+			Collections.sort(kosdaqAllStockList, new OrganTradingAmountDescCompare());
 
-        writeFile(kospiAllStockList, kospiFileName, "코스피 기관 거래대금", false, "거래대금");
-        writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 기관 거래대금", false, "거래대금");
+			writeFile(kospiAllStockList, kospiFileName, "코스피 기관 거래대금", false, "거래대금");
+			writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 기관 거래대금", false, "거래대금");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
     }
 
@@ -109,6 +116,27 @@ public class AllStockForeignOrgan {
             stocks.add(stock);
         }
         return stocks;
+    }
+
+    public List<StockVO> getAllStockInfo(List<StockVO> stockList) {
+    	List<StockVO> stocks = new ArrayList<StockVO>();
+
+    		String stockCode = null;
+    		String stockName = null;
+    		int cnt = 1;
+    		for (StockVO svo : stockList) {
+    			stockCode = svo.getStockCode();
+    			stockName = svo.getStockName();
+    			System.out.println(stockCode + "\t" + stockName);
+
+    			StockVO stock = getStockInfo(cnt, stockCode, stockName);
+    			if (stock != null) {
+    				stock.setStockName(stockName);
+    				stocks.add(stock);
+    			}
+    			cnt++;
+    		}
+    	return stocks;
     }
 
     public static List<StockVO> getAllStockInfo(String kospidaq, String fileName) {
