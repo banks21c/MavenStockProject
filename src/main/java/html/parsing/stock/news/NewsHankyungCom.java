@@ -1,15 +1,8 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.FileUtil;
-import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
-import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.StockUtil;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -27,7 +20,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class NewsHankyung extends News {
+import html.parsing.stock.FileUtil;
+import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
+import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
+import html.parsing.stock.StockUtil;
+
+public class NewsHankyungCom extends News {
 
     java.util.logging.Logger logger = null;
 
@@ -46,14 +46,14 @@ public class NewsHankyung extends News {
      * @param args
      */
     public static void main(String[] args) {
-        new NewsHankyung(1);
+        new NewsHankyungCom(1);
     }
 
-    NewsHankyung() {
+    NewsHankyungCom() {
         logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
     }
 
-    NewsHankyung(int i) {
+    NewsHankyungCom(int i) {
         logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
         logger.log(Level.INFO, this.getClass().getSimpleName());
         String url = JOptionPane.showInputDialog("한국경제뉴스 URL을 입력하여 주세요.");
@@ -161,7 +161,7 @@ public class NewsHankyung extends News {
             strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
             strContent = strContent.replaceAll("figure", "div");
             strContent = strContent.replaceAll("figcaption", "div");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByKrx(strContent);
 
             Elements copyRightElements = doc.select(".news_copyright");
             Element copyRightElement = null;

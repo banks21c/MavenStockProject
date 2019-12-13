@@ -27,9 +27,12 @@ public class JsoupChangeLinkHrefElementsAttribute {
             String downloadLink = "";
             System.out.println("strLinkHref ===> " + strLinkHref);
             if(strLinkHref.equals("")) continue;
-            if (strLinkHref.startsWith("/")) {
-                link.attr("href", protocolHost + strLinkHref);
-                downloadLink = protocolHost + strLinkHref;
+            if (strLinkHref.startsWith("//")) {
+                link.attr("href", protocol+":"+ strLinkHref);
+                downloadLink = protocol+":" + strLinkHref;
+            } else if (!strLinkHref.startsWith("//") && strLinkHref.startsWith("/")) {
+            	link.attr("href", protocolHost + strLinkHref);
+            	downloadLink = protocolHost + strLinkHref;
             } else if (strLinkHref.startsWith("../../")) {
                 tempPath = tempPath.substring(0, tempPath.lastIndexOf("/"));
                 tempPath = tempPath.substring(0, tempPath.lastIndexOf("/"));

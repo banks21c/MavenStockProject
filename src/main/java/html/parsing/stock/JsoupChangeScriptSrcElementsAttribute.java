@@ -27,14 +27,12 @@ public class JsoupChangeScriptSrcElementsAttribute {
             System.out.println("strScriptSrc ===> " + strScriptSrc);
             if (strScriptType != null && (strScriptType.equals("text/javascript") && !strScriptSrc.equals(""))) {
                 String downloadLink = "";
-                if (strScriptSrc.startsWith("/")) {
-                    if (strScriptSrc.startsWith("//")) {
-                        script.attr("src", "http:" + strScriptSrc);
-                        downloadLink = "http:" + strScriptSrc;
-                    } else {
-                        script.attr("src", protocolHost + strScriptSrc);
-                        downloadLink = protocolHost + strScriptSrc;
-                    }
+                if (strScriptSrc.startsWith("//")) {
+                	script.attr("src", protocol+":"+ strScriptSrc);
+                	downloadLink = protocol+":" + strScriptSrc;
+                } else if (!strScriptSrc.startsWith("//") && strScriptSrc.startsWith("/")) {
+                    script.attr("src", protocolHost + strScriptSrc);
+                    downloadLink = protocolHost + strScriptSrc;
                 } else if (strScriptSrc.startsWith("../../")) {
                     path = path.substring(0, path.lastIndexOf("/") - 1);
                     path = path.substring(0, path.lastIndexOf("/") - 1);

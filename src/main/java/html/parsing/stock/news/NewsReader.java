@@ -5,8 +5,6 @@
  */
 package html.parsing.stock.news;
 
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.StockUtil;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -21,6 +19,8 @@ import javax.swing.text.html.StyleSheet;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
 
 /**
  *
@@ -110,7 +110,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton1.setText("머니 투데이");
         jRadioButton1.setActionCommand("MT");
         jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton1ActionPerformed(evt);
             }
         });
@@ -120,7 +121,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton2.setText("시사인");
         jRadioButton2.setActionCommand("SSI");
         jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton2ActionPerformed(evt);
             }
         });
@@ -130,7 +132,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton3.setText("국민일보");
         jRadioButton3.setActionCommand("KMIB");
         jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton3ActionPerformed(evt);
             }
         });
@@ -140,7 +143,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton4.setText("경향신문");
         jRadioButton4.setActionCommand("KHSM");
         jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton4ActionPerformed(evt);
             }
         });
@@ -150,7 +154,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton5.setText("한겨레");
         jRadioButton5.setActionCommand("HKR");
         jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton5ActionPerformed(evt);
             }
         });
@@ -160,7 +165,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton6.setText("중앙일보");
         jRadioButton6.setActionCommand("JAIB");
         jRadioButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton6ActionPerformed(evt);
             }
         });
@@ -170,7 +176,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton21.setText("Chosun Biz");
         jRadioButton21.setActionCommand("CHOSUNBIZ");
         jRadioButton21.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton21ActionPerformed(evt);
             }
         });
@@ -180,7 +187,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton7.setText("조선일보");
         jRadioButton7.setActionCommand("CSIB");
         jRadioButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton7ActionPerformed(evt);
             }
         });
@@ -190,7 +198,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton8.setText("한국일보");
         jRadioButton8.setActionCommand("HKIB");
         jRadioButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton8ActionPerformed(evt);
             }
         });
@@ -200,7 +209,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton9.setText("허핑턴포스트");
         jRadioButton9.setActionCommand("HPTP");
         jRadioButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton9ActionPerformed(evt);
             }
         });
@@ -210,7 +220,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton10.setText("다음");
         jRadioButton10.setActionCommand("DAUM");
         jRadioButton10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton10ActionPerformed(evt);
             }
         });
@@ -220,7 +231,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton11.setText("네이버");
         jRadioButton11.setActionCommand("NAVER");
         jRadioButton11.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton11ActionPerformed(evt);
             }
         });
@@ -230,7 +242,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton12.setText("연합뉴스");
         jRadioButton12.setActionCommand("YHN");
         jRadioButton12.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton12ActionPerformed(evt);
             }
         });
@@ -240,7 +253,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton13.setText("노컷뉴스");
         jRadioButton13.setActionCommand("NCN");
         jRadioButton13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton13ActionPerformed(evt);
             }
         });
@@ -250,7 +264,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton14.setText("한국경제");
         jRadioButton14.setActionCommand("HKE");
         jRadioButton14.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton14ActionPerformed(evt);
             }
         });
@@ -260,7 +275,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton15.setText("스타한국");
         jRadioButton15.setActionCommand("SHK");
         jRadioButton15.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton15ActionPerformed(evt);
             }
         });
@@ -269,7 +285,8 @@ public class NewsReader extends javax.swing.JFrame {
         buttonGroup1.add(jRadioButton16);
         jRadioButton16.setText("YTN");
         jRadioButton16.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton16ActionPerformed(evt);
             }
         });
@@ -279,7 +296,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton17.setText("이데일리");
         jRadioButton17.setActionCommand("EDAILY");
         jRadioButton17.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton17ActionPerformed(evt);
             }
         });
@@ -289,7 +307,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton18.setText("WIKITREE");
         jRadioButton18.setToolTipText("");
         jRadioButton18.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton18ActionPerformed(evt);
             }
         });
@@ -299,7 +318,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton19.setText("JTBC");
         jRadioButton19.setToolTipText("");
         jRadioButton19.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton19ActionPerformed(evt);
             }
         });
@@ -309,7 +329,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton20.setText("서울경제");
         jRadioButton20.setActionCommand("SEDAILY");
         jRadioButton20.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton20ActionPerformed(evt);
             }
         });
@@ -320,7 +341,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton22.setToolTipText("");
         jRadioButton22.setActionCommand("ETODAY");
         jRadioButton22.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton22ActionPerformed(evt);
             }
         });
@@ -329,7 +351,8 @@ public class NewsReader extends javax.swing.JFrame {
         buttonGroup1.add(jRadioButton23);
         jRadioButton23.setText("NEWSIS");
         jRadioButton23.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton23ActionPerformed(evt);
             }
         });
@@ -339,7 +362,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton24.setText("프레시안");
         jRadioButton24.setActionCommand("PRESSIAN");
         jRadioButton24.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton24ActionPerformed(evt);
             }
         });
@@ -349,7 +373,8 @@ public class NewsReader extends javax.swing.JFrame {
         jRadioButton25.setText("SBS");
         jRadioButton25.setToolTipText("");
         jRadioButton25.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton25ActionPerformed(evt);
             }
         });
@@ -377,12 +402,14 @@ public class NewsReader extends javax.swing.JFrame {
 
         executeBtn.setText("페이지 추출");
         executeBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 executeBtnMouseClicked(evt);
             }
         });
         executeBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 executeBtnActionPerformed(evt);
             }
         });
@@ -390,7 +417,8 @@ public class NewsReader extends javax.swing.JFrame {
 
         extractImgBtn.setText("이미지추출");
         extractImgBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 extractImgBtnActionPerformed(evt);
             }
         });
@@ -398,7 +426,8 @@ public class NewsReader extends javax.swing.JFrame {
 
         jButton2.setText("초기화");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
@@ -459,7 +488,8 @@ public class NewsReader extends javax.swing.JFrame {
 
         jButton1.setText("HTML View");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
@@ -700,7 +730,7 @@ public class NewsReader extends javax.swing.JFrame {
         } else if (newsCompany.equals("NCN")) {
             sb = NewsNocutNews.createHTMLFile(url);
         } else if (newsCompany.equals("HKE")) {
-            sb = NewsHankyung.createHTMLFile(url);
+            sb = WwwHankyungCom.createHTMLFile(url);
         } else if (newsCompany.equals("SHK")) {
             sb = NewsStarHankook.createHTMLFile(url);
         } else if (newsCompany.equals("YTN")) {

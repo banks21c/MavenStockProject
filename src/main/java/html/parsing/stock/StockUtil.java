@@ -68,16 +68,8 @@ public class StockUtil {
 	int downCount = 0;
 	int steadyCount = 0;
 
-	static List<StockVO> stockList = new ArrayList<>();
-	static List<StockVO> kospiStockList = new ArrayList<>();
-	static List<StockVO> kosdaqStockList = new ArrayList<>();
-
 	public int getTopCount() {
 		return topCount;
-	}
-
-	public List<StockVO> getStockList() {
-		return stockList;
 	}
 
 	public void setTopCount(int topCount) {
@@ -176,6 +168,7 @@ public class StockUtil {
 
 	public static List<StockVO> readKospiStockCodeNameListFromExcel() throws Exception {
 		String kospiFileName = GlobalVariables.kospiFileName;
+		List<StockVO> kospiStockList = new ArrayList<>();
 
 		readStockCodeNameListFromExcel(kospiStockList, kospiFileName);
 		Collections.sort(kospiStockList, new StockNameLengthDescCompare());
@@ -184,36 +177,67 @@ public class StockUtil {
 
 	public static List<StockVO> readKosdaqStockCodeNameListFromExcel() throws Exception {
 		String kosdaqFileName = GlobalVariables.kosdaqFileName;
+		List<StockVO> kosdaqStockList = new ArrayList<>();
 
 		readStockCodeNameListFromExcel(kosdaqStockList, kosdaqFileName);
 		Collections.sort(kosdaqStockList, new StockNameLengthDescCompare());
 		return kosdaqStockList;
 	}
 	/**
-	 * marketGubun = stockMkt, kosdaqMkt
-	 * @param marketGubun
+	 * marketType = stockMkt, kosdaqMkt
+	 * @param marketType
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<StockVO> readStockCodeNameListFromKrx(String marketGubun) throws Exception {
-		getStockCodeNameListFromKindKrxCoKr(stockList, marketGubun);
+	public static List<StockVO> readStockCodeNameListFromKrx(String marketType) throws Exception {
+		List<StockVO> stockList = new ArrayList<StockVO>();
+		getStockCodeNameListFromKindKrxCoKr(stockList, marketType);
+		Collections.sort(stockList, new StockNameLengthDescCompare());
+		return stockList;
+	}
+	/**
+	 *
+	 * @param marketType
+	 * @param searchType
+			13:상장법인
+			01:관리종목
+			05:불성실공시법인
+			07:자산2조법인
+			99:외국법인
+			181:(코스닥) 우량기업부
+			182:(코스닥) 벤처기업부
+			183:(코스닥) 중견기업부
+			184:(코스닥) 기술성장기업부
+			11:KRX100
+			06:KOSPI200
+			09:STAR30
+			10:PREMIER
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<StockVO> readStockCodeNameListFromKrx(String marketType, String searchType) throws Exception {
+		List<StockVO> stockList = new ArrayList<StockVO>();
+		getStockCodeNameListFromKindKrxCoKr(stockList, marketType, searchType);
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		return stockList;
 	}
 
 	public static List<StockVO> readKospiStockCodeNameListFromKrx() throws Exception {
+		List<StockVO> stockList = new ArrayList<StockVO>();
 		getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		return stockList;
 	}
 
 	public static List<StockVO> readKosdaqStockCodeNameListFromKrx() throws Exception {
+		List<StockVO> stockList = new ArrayList<StockVO>();
 		getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		return stockList;
 	}
 
 	public static List<StockVO> readAllStockCodeNameListFromKrx() throws Exception {
+		List<StockVO> stockList = new ArrayList<StockVO>();
 		getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
 		getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
 		Collections.sort(stockList, new StockNameLengthDescCompare());
@@ -224,6 +248,7 @@ public class StockUtil {
 		String kospiFileName = GlobalVariables.kospiFileName;
 		String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
+		List<StockVO> stockList = new ArrayList<StockVO>();
 		try {
 			readStockCodeNameListFromExcel(stockList, kospiFileName);
 			readStockCodeNameListFromExcel(stockList, kosdaqFileName);
@@ -237,6 +262,7 @@ public class StockUtil {
 	}
 
 	public static StringBuilder makeStockLinkString(StringBuilder sb1) throws Exception {
+		List<StockVO> stockList = new ArrayList<StockVO>();
 		try {
 			readAllStockCodeNameListFromExcel();
 		} catch (Exception e) {
@@ -256,6 +282,7 @@ public class StockUtil {
 	}
 
 	public static String makeStockLinkString(String textBodyHtml) throws Exception {
+		List<StockVO> stockList = new ArrayList<StockVO>();
 		try {
 			readAllStockCodeNameListFromExcel();
 		} catch (Exception e) {
@@ -272,6 +299,24 @@ public class StockUtil {
 			return textBodyHtml;
 		}
 		return stockLinkString(textBodyHtml, stockList);
+	}
+
+	public static String makeStockLinkStringByKrx(String textBodyHtml) {
+
+		List<StockVO> stockList = new ArrayList<>();
+
+		getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
+		getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+		Collections.sort(stockList, new StockNameLengthDescCompare());
+		for (int i = 0; i < stockList.size(); i++) {
+			StockVO vo = stockList.get(i);
+//		logger.debug("증권코드:" + vo.getStockCode() + " 증권명:" + vo.getStockName());
+		}
+		if (stockList.size() <= 0) {
+			logger.debug("추출한 종목이 없습니다.");
+			return textBodyHtml;
+		}
+		return StockUtil.stockLinkString(textBodyHtml, stockList);
 	}
 
 	public static String makeStockLinkStringByExcel(String textBodyHtml) {
@@ -436,6 +481,7 @@ public class StockUtil {
 				|| stockName.equals("레이") && strNews.contains("스프레이")
 				|| stockName.equals("레이") && strNews.contains("시뮬레이션")
 				|| stockName.equals("레이") && strNews.contains("디플레이션")
+				|| stockName.equals("레이") && strNews.contains("인플레이션")
 				|| stockName.equals("레이") && strNews.contains("트레이더스")
 				|| stockName.equals("레이") && strNews.contains("업그레이드")
 				|| stockName.equals("만도") && strNews.contains("왕만도")
@@ -933,11 +979,19 @@ public class StockUtil {
 	 */
 	public static final String SERVER_URI = "http://kind.krx.co.kr/corpgeneral/corpList.do";
 
-	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(List<StockVO> stockList, String gubun) {
+
+	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(List<StockVO> stockList, String marketType) {
+		//searchType 13 = 상장법인
+		return getStockCodeNameListFromKindKrxCoKr(stockList, marketType, "13");
+	}
+
+	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(List<StockVO> stockList, String marketType, String searchType) {
 		List<StockVO> svoList = new ArrayList<>();
 		try {
-			String param = "method=download&pageIndex=1&currentPageSize=5000&comAbbrv=&beginIndex=&orderMode=3&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=&marketType="
-					+ gubun + "&searchType=13&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
+			String param = "method=download&pageIndex=1&currentPageSize=5000&comAbbrv=&beginIndex=&orderMode=3"
+					+"&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType="
+					+"&marketType="	+ marketType + "&searchType="+searchType
+					+"&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
 
 			String strUri = SERVER_URI + "?" + param;
 //			Document doc = Jsoup.parse(new URL(strUri).openStream(), "EUC-KR", strUri);
@@ -987,23 +1041,26 @@ public class StockUtil {
 			Document doc = Jsoup.connect(strUri).requestBody("JSON").headers(headers)
 					// .cookies(response.cookies())
 					.ignoreContentType(true).post();
-
+			/* 총 라인수는 종목수 + 1, 첫째 줄은 header */
 			Elements trElements = doc.select("tr");
 			for (int i = 0; i < trElements.size(); i++) {
 				Elements tdElements = trElements.get(i).select("td");
 				if (tdElements.size() > 0) {
 					StockVO svo = new StockVO();
 
-					String strStockName = tdElements.get(0).text();
-					String strStockCode = tdElements.get(1).text();
-//					System.out.println(strStockCode + "\t" + strStockName);
-					svo.setStockName(strStockName);
-					svo.setStockCode(strStockCode);
-					svo.setStockNameLength(strStockName.length());
-					if (strStockCode.length() != 6) {
-						System.out.println(strStockCode + "\t" + strStockName + " 종목은 체크바랍니다.");
+					if(tdElements.size() > 1) {
+						String strStockName = tdElements.get(0).text();
+						String strStockCode = tdElements.get(1).text();
+						System.out.print((i)+"."+strStockName+"(");
+						System.out.println(strStockCode + ")");
+						svo.setStockName(strStockName);
+						svo.setStockCode(strStockCode);
+						svo.setStockNameLength(strStockName.length());
+						if (strStockCode.length() != 6) {
+							System.out.println(strStockCode + "\t" + strStockName + " 종목은 체크바랍니다.");
+						}
+						svoList.add(svo);
 					}
-					svoList.add(svo);
 				}
 			}
 
@@ -1382,12 +1439,12 @@ public class StockUtil {
 		}
 	}
 
-	public static List<StockVO> getNewsStockInfo(List<StockVO> stocks) {
+	public static List<StockVO> getNewsStockInfo(List<StockVO> stockList) {
 
-		for (StockVO stock : stocks) {
+		for (StockVO stock : stockList) {
 			getNewsStockInfo(stock);
 		}
-		return stocks;
+		return stockList;
 	}
 
 	public static StockVO getNewsStockInfo(StockVO stock) {
