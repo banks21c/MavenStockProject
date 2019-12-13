@@ -12,8 +12,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -63,6 +65,18 @@ public class AllStockForeignOrgan {
         //StockUtil.readStockCodeNameListFromKrx(stockMkt or kosdaqMkt)
         List<StockVO> kospiAllStockList;
 		List<StockVO> kosdaqAllStockList;
+
+		Map<String,List<StockVO>> top50KospiStockMapByAmount = new HashMap<String,List<StockVO>>();
+		Map<String,List<StockVO>> top50KosdaqStockMapByAmount = new HashMap<String,List<StockVO>>();
+		Map<String,List<StockVO>> top50KospiStockMapByVolume = new HashMap<String,List<StockVO>>();
+		Map<String,List<StockVO>> top50KosdaqStockMapByVolume = new HashMap<String,List<StockVO>>();
+
+		List<StockVO> top50KospiStockListByAmount = new ArrayList<StockVO>();
+		List<StockVO> top50KosdaqStockListByAmount = new ArrayList<StockVO>();
+
+		List<StockVO> top50KospiStockListByVolume = new ArrayList<StockVO>();
+		List<StockVO> top50KosdaqStockListByVolume = new ArrayList<StockVO>();
+
 		try {
 			// 코스피
 			kospiAllStockList = StockUtil.readStockCodeNameListFromKrx("stockMkt");
@@ -77,6 +91,22 @@ public class AllStockForeignOrgan {
 			// 1.외국인 거래량순 정렬
 			Collections.sort(kospiAllStockList, new ForeignTradingVolumeDescCompare());
 			Collections.sort(kosdaqAllStockList, new ForeignTradingVolumeDescCompare());
+			int ii = 0;
+			for(StockVO svo:kospiAllStockList) {
+				if(ii<50) {
+					top50KospiStockListByVolume.add(svo);
+				}
+				ii++;
+			}
+			ii = 0;
+			for(StockVO svo:kosdaqAllStockList) {
+				if(ii<50) {
+					top50KosdaqStockListByVolume.add(svo);
+				}
+				ii++;
+			}
+			top50KospiStockMapByVolume.put("코스피 외국인 거래량", top50KospiStockListByVolume);
+			top50KosdaqStockMapByVolume.put("코스닥 외국인 거래량", top50KosdaqStockListByVolume);
 
 			writeFile(kospiAllStockList, kospiFileName, "코스피 외국인 거래량", true, "거래량");
 			writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 외국인 거래량", true, "거래량");
@@ -85,12 +115,46 @@ public class AllStockForeignOrgan {
 			Collections.sort(kospiAllStockList, new ForeignTradingAmountDescCompare());
 			Collections.sort(kosdaqAllStockList, new ForeignTradingAmountDescCompare());
 
+			ii = 0;
+			for(StockVO svo:kospiAllStockList) {
+				if(ii<50) {
+					top50KospiStockListByAmount.add(svo);
+				}
+				ii++;
+			}
+			ii = 0;
+			for(StockVO svo:kosdaqAllStockList) {
+				if(ii<50) {
+					top50KosdaqStockListByAmount.add(svo);
+				}
+				ii++;
+			}
+			top50KospiStockMapByAmount.put("코스피 외국인 거래대금", top50KospiStockListByAmount);
+			top50KosdaqStockMapByAmount.put("코스닥 외국인 거래대금", top50KosdaqStockListByAmount);
+
 			writeFile(kospiAllStockList, kospiFileName, "코스피 외국인 거래대금", true, "거래대금");
 			writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 외국인 거래대금", true, "거래대금");
 
 			// 3.기관 거래량순 정렬
 			Collections.sort(kospiAllStockList, new OrganTradingVolumeDescCompare());
 			Collections.sort(kosdaqAllStockList, new OrganTradingVolumeDescCompare());
+
+			ii = 0;
+			for(StockVO svo:kospiAllStockList) {
+				if(ii<50) {
+					top50KospiStockListByVolume.add(svo);
+				}
+				ii++;
+			}
+			ii = 0;
+			for(StockVO svo:kosdaqAllStockList) {
+				if(ii<50) {
+					top50KosdaqStockListByVolume.add(svo);
+				}
+				ii++;
+			}
+			top50KospiStockMapByVolume.put("코스피 기관 거래량", top50KospiStockListByVolume);
+			top50KosdaqStockMapByVolume.put("코스닥 기관 거래량", top50KosdaqStockListByVolume);
 
 			writeFile(kospiAllStockList, kospiFileName, "코스피 기관 거래량", false, "거래량");
 			writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 기관 거래량", false, "거래량");
@@ -99,8 +163,28 @@ public class AllStockForeignOrgan {
 			Collections.sort(kospiAllStockList, new OrganTradingAmountDescCompare());
 			Collections.sort(kosdaqAllStockList, new OrganTradingAmountDescCompare());
 
+			ii = 0;
+			for(StockVO svo:kospiAllStockList) {
+				if(ii<50) {
+					top50KospiStockListByAmount.add(svo);
+				}
+				ii++;
+			}
+			ii = 0;
+			for(StockVO svo:kosdaqAllStockList) {
+				if(ii<50) {
+					top50KosdaqStockListByAmount.add(svo);
+				}
+				ii++;
+			}
+			top50KospiStockMapByAmount.put("코스피 기관 거래대금", top50KospiStockListByAmount);
+			top50KosdaqStockMapByAmount.put("코스닥 기관 거래대금", top50KosdaqStockListByAmount);
+
 			writeFile(kospiAllStockList, kospiFileName, "코스피 기관 거래대금", false, "거래대금");
 			writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 기관 거래대금", false, "거래대금");
+
+//			writeFile(top50KospiStockMapByAmount, kospiFileName, "코스피 기관 거래대금", false, "거래대금");
+//			writeFile(top50KosdaqStockMapByAmount, kosdaqFileName, "코스닥 기관 거래대금", false, "거래대금");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
