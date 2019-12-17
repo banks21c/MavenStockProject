@@ -14,7 +14,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import html.parsing.stock.FileUtil;
+import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.StockUtil;
 
 public class WwwDailianCoKr extends News {

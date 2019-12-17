@@ -11,6 +11,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.VaryRatioDescCompare;
-import java.util.Calendar;
+import html.parsing.stock.util.FileUtil;
 
 public class StockUniqueByDate {
 
@@ -176,7 +177,7 @@ public class StockUniqueByDate {
             strDate = strDate.replaceAll(":", "-");
             strYmdDashBracket = "[" + strDate.replaceAll("\\.", "-") + "] ";
         }
-        ((java.util.logging.Logger) logger2).log(java.util.logging.Level.INFO, "strYMD2:[" + strYmdDash + "]");
+        logger2.log(java.util.logging.Level.INFO, "strYMD2:[" + strYmdDash + "]");
 
         Properties props = new Properties();
         try {
@@ -253,7 +254,7 @@ public class StockUniqueByDate {
         StockVO stock = new StockVO();
         stock.setStockCode(strStockCode);
         stock.setStockName(strStockName);
-        
+
         try {
             for (int page = 1; page <= 1; page++) {
                 // 일별시세

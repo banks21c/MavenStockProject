@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.NameAscCompare;
+import html.parsing.stock.util.FileUtil;
 
 public class Weeks52NewLowHighPriceToday extends Thread {
 
@@ -71,6 +72,7 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 	Weeks52NewLowHighPriceToday() {
 	}
 
+	@Override
 	public void run() {
 		execute();
 	}

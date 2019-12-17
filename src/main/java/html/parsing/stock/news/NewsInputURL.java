@@ -1,6 +1,6 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.FileUtil;
+import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.StockUtil;
 import java.io.File;

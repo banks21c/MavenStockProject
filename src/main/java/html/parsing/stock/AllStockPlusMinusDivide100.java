@@ -27,6 +27,7 @@ import html.parsing.stock.DataSort.TradingAmountDescCompare;
 import html.parsing.stock.DataSort.TradingVolumeDescCompare;
 import html.parsing.stock.DataSort.VaryRatioAscCompare;
 import html.parsing.stock.DataSort.VaryRatioDescCompare;
+import html.parsing.stock.util.FileUtil;
 
 public class AllStockPlusMinusDivide100 extends Thread {
 

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
@@ -30,6 +29,7 @@ import html.parsing.stock.DataSort.TradingAmountDescCompare;
 import html.parsing.stock.DataSort.TradingVolumeDescCompare;
 import html.parsing.stock.DataSort.VaryRatioAscCompare;
 import html.parsing.stock.DataSort.VaryRatioDescCompare;
+import html.parsing.stock.util.FileUtil;
 
 public class AllStockPriceByDate extends Thread {
 
@@ -160,7 +160,8 @@ public class AllStockPriceByDate extends Thread {
 
     }
 
-    public void run() {
+    @Override
+	public void run() {
 
     }
 

@@ -1,6 +1,5 @@
 package html.parsing.stock;
 
-import html.parsing.stock.news.News;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -14,6 +13,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import html.parsing.stock.news.News;
+import html.parsing.stock.util.FileUtil;
 
 public class FinanceDaumNet extends News {
 
@@ -60,7 +62,7 @@ public class FinanceDaumNet extends News {
         String host = gurl.getHost();
         String path = gurl.getPath();
         String protocolHost = gurl.getProtocolHost();
-	
+
         StringBuilder sb1 = new StringBuilder();
         Document doc;
         String strTitleForFileName = "";

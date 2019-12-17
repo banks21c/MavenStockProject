@@ -1,11 +1,9 @@
 package html.parsing.stock;
 
-import html.parsing.stock.news.News;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
@@ -17,15 +15,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.StockNameLengthDescCompare;
-import java.util.logging.Logger;
-import org.slf4j.LoggerFactory;
+import html.parsing.stock.news.News;
+import html.parsing.stock.util.FileUtil;
 
 public class StockThemeNoInput extends News {
 
@@ -64,7 +64,7 @@ public class StockThemeNoInput extends News {
 
     /**
      * @param args
-     * @throws Exception 
+     * @throws Exception
      */
     public static void main(String[] args){
         try {
@@ -80,10 +80,10 @@ public class StockThemeNoInput extends News {
         //readFile("코스피", kospiFileName);
         // 코스닥
         //readFile("코스닥", kosdaqFileName);
-	
+
 	StockUtil.readStockCodeNameListFromExcel(allStockList,kospiFileName);
 	StockUtil.readStockCodeNameListFromExcel(allStockList,kosdaqFileName);
-	
+
         Collections.sort(allStockList, new StockNameLengthDescCompare());
 
         writeThemeMarketPrice();
@@ -106,10 +106,10 @@ public class StockThemeNoInput extends News {
         //readFile("코스피", kospiFileName);
         // 코스닥
         //readFile("코스닥", kosdaqFileName);
-	
+
 	StockUtil.readStockCodeNameListFromExcel(allStockList,kospiFileName);
 	StockUtil.readStockCodeNameListFromExcel(allStockList,kosdaqFileName);
-	
+
         Collections.sort(allStockList, new StockNameLengthDescCompare());
 
         writeThemeMarketPrice();

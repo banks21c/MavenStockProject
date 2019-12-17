@@ -12,10 +12,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,15 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.VaryRatioDescCompare;
-import java.util.Iterator;
-import java.util.logging.Level;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import html.parsing.stock.util.FileUtil;
 
 public class StockUniqueNew extends Thread {
 
@@ -70,7 +71,7 @@ public class StockUniqueNew extends Thread {
     static int bottomCount = 0;
     static int downCount = 0;
     static int steadyCount = 0;
-    
+
 	List<StockVO> kospiStockList = new ArrayList<StockVO>();
 	List<StockVO> kosdaqStockList = new ArrayList<StockVO>();
 
@@ -136,7 +137,8 @@ public class StockUniqueNew extends Thread {
         allStockList.addAll(over5PerDownStockList);
     }
 
-    public void run() {
+    @Override
+	public void run() {
         execute();
     }
 
@@ -156,12 +158,12 @@ public class StockUniqueNew extends Thread {
             writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(StockUniqueNew.class.getName()).log(Level.SEVERE, null, ex);
-            
+
 			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
 			for(int i=0;i<kospiStockList.size();i++) {
 				StockVO svo = kospiStockList.get(i);
-				String strStockCode = svo.getStockCode(); 
-				String strStockName = svo.getStockName(); 
+				String strStockCode = svo.getStockCode();
+				String strStockName = svo.getStockName();
 				getStockInfo(i+1, strStockCode, strStockName);
 			}
             listSortAndAdd();
@@ -172,12 +174,12 @@ public class StockUniqueNew extends Thread {
 			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
 			for(int i=0;i<kosdaqStockList.size();i++) {
 				StockVO svo = kosdaqStockList.get(i);
-				String strStockCode = svo.getStockCode(); 
-				String strStockName = svo.getStockName(); 
+				String strStockCode = svo.getStockCode();
+				String strStockName = svo.getStockName();
 				getStockInfo(i+1, strStockCode, strStockName);
-			}			
+			}
             listSortAndAdd();
-            writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");            
+            writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");
         }
     }
 

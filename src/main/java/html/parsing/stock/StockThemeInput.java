@@ -1,6 +1,5 @@
 package html.parsing.stock;
 
-import html.parsing.stock.news.News;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,18 +15,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.StockNameLengthDescCompare;
-import java.util.logging.Logger;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.LoggerFactory;
+import html.parsing.stock.news.News;
+import html.parsing.stock.util.FileUtil;
 
 public class StockThemeInput extends News {
 
@@ -63,7 +64,7 @@ public class StockThemeInput extends News {
 
 	/**
 	 * @param args
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static void main(String[] args){
 		try {

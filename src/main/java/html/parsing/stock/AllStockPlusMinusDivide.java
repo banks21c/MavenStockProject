@@ -1,6 +1,11 @@
 package html.parsing.stock;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,6 +13,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -21,13 +27,7 @@ import html.parsing.stock.DataSort.TradingAmountDescCompare;
 import html.parsing.stock.DataSort.TradingVolumeDescCompare;
 import html.parsing.stock.DataSort.VaryRatioAscCompare;
 import html.parsing.stock.DataSort.VaryRatioDescCompare;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.util.logging.Level;
-import javax.swing.JOptionPane;
+import html.parsing.stock.util.FileUtil;
 
 public class AllStockPlusMinusDivide extends Thread {
 
@@ -152,9 +152,9 @@ public class AllStockPlusMinusDivide extends Thread {
 			kospiAllStockList = StockUtil.getAllStockList(kospiFileName);
 			logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());
 		}catch(Exception e) {
-			kospiAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiAllStockList, "stockMkt");			
+			kospiAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiAllStockList, "stockMkt");
 			logger.debug("kospiAllStockList.size2 :" + kospiAllStockList.size());
-		}		
+		}
 		StockVO svo4Date = kospiAllStockList.get(0);
 		getDateInfo(svo4Date.getStockCode());
 
@@ -201,9 +201,9 @@ public class AllStockPlusMinusDivide extends Thread {
 			kosdaqAllStockList = sUtil.getAllStockList(kosdaqFileName);
 			logger.debug("kosdaqAllStockList :" + kosdaqAllStockList);
 		}catch(Exception e) {
-			kosdaqAllStockList = sUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqAllStockList, "kosdaqMkt");			
+			kosdaqAllStockList = sUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqAllStockList, "kosdaqMkt");
 			logger.debug("kosdaqAllStockList :" + kosdaqAllStockList);
-		}		
+		}
 		kosdaqAllStockList = sUtil.getAllStockInfo(kosdaqAllStockList);
 			iExtractCount = kosdaqAllStockList.size();
 		System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
@@ -432,7 +432,7 @@ public class AllStockPlusMinusDivide extends Thread {
 //            System.out.println("highPrice:" + highPrice);
 //            System.out.println("lowPrice:" + lowPrice);
 //            System.out.println("TradingVolume:" + tradingVolume);
-//            System.out.println("tradingAmount:" + tradingAmount);            
+//            System.out.println("tradingAmount:" + tradingAmount);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e) {

@@ -1,10 +1,7 @@
 package html.parsing.stock;
 
-import html.parsing.stock.news.NewsReader;
-import html.parsing.stock.news.News;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -18,6 +15,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import html.parsing.stock.news.News;
+import html.parsing.stock.news.NewsReader;
+import html.parsing.stock.util.FileUtil;
 
 public class JavaCodeGeeksCom extends javax.swing.JFrame {
 
@@ -74,7 +75,8 @@ public class JavaCodeGeeksCom extends javax.swing.JFrame {
         }
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 new JavaCodeGeeksCom().setVisible(true);
             }
         });
@@ -115,12 +117,14 @@ public class JavaCodeGeeksCom extends javax.swing.JFrame {
         urlTf.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         urlTf.setToolTipText("");
         urlTf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 urlTfActionPerformed(evt);
             }
         });
         urlTf.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
+            @Override
+			public void keyReleased(java.awt.event.KeyEvent evt) {
                 urlTfKeyReleased(evt);
             }
         });
@@ -132,7 +136,8 @@ public class JavaCodeGeeksCom extends javax.swing.JFrame {
 
         eraseBtn.setText("지우기");
         eraseBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 eraseBtnActionPerformed(evt);
             }
         });
@@ -140,7 +145,8 @@ public class JavaCodeGeeksCom extends javax.swing.JFrame {
 
         executeBtn.setText("페이지 추출");
         executeBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 executeBtnActionPerformed(evt);
             }
         });
