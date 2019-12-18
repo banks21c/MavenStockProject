@@ -272,6 +272,23 @@ public class DataSort {
                     : arg0.getiForeignTradingVolume() < arg1.getiForeignTradingVolume() ? 1 : 0;
         }
     }
+    /**
+     * 외국인 거래량 오름차순
+     *
+     * @author banks
+     *
+     */
+    public static class ForeignTradingVolumeAscCompare implements Comparator<StockVO> {
+
+    	/**
+    	 * 오름차순(ASC)
+    	 */
+    	@Override
+    	public int compare(StockVO arg0, StockVO arg1) {
+    		return arg0.getiForeignTradingVolume() < arg1.getiForeignTradingVolume() ? -1
+    				: arg0.getiForeignTradingVolume() > arg1.getiForeignTradingVolume() ? 1 : 0;
+    	}
+    }
 
     /**
      * 기관 거래금액 내림차순
@@ -307,6 +324,23 @@ public class DataSort {
             return arg0.getiOrganTradingVolume() > arg1.getiOrganTradingVolume() ? -1
                     : arg0.getiOrganTradingVolume() < arg1.getiOrganTradingVolume() ? 1 : 0;
         }
+    }
+    /**
+     * 기관 거래량 오름차순
+     *
+     * @author banks
+     *
+     */
+    public static class OrganTradingVolumeAscCompare implements Comparator<StockVO> {
+
+    	/**
+    	 * 오름차순(ASC)
+    	 */
+    	@Override
+    	public int compare(StockVO arg0, StockVO arg1) {
+    		return arg0.getiOrganTradingVolume() < arg1.getiOrganTradingVolume() ? -1
+    				: arg0.getiOrganTradingVolume() > arg1.getiOrganTradingVolume() ? 1 : 0;
+    	}
     }
 
     /**
