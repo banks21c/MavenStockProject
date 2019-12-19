@@ -22,6 +22,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.ForeignTradingVolumeAscCompare;
 import html.parsing.stock.DataSort.ForeignTradingVolumeDescCompare;
@@ -32,7 +34,7 @@ import html.parsing.stock.util.FileUtil;
 public class AllStockForeignOrganNew {
 
 	final static String userHome = System.getProperty("user.home");
-	java.util.logging.Logger logger = null;
+	private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrganNew.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -54,65 +56,78 @@ public class AllStockForeignOrganNew {
 	}
 
 	AllStockForeignOrganNew() {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-
 		List<StockVO> kospiStockList = readOne("049180");
 		writeFile(kospiStockList, "코스피", true, "거래량");
 	}
 
 	AllStockForeignOrganNew(int i) {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
 //		MakeKospiKosdaqList.makeKospiKosdaqList();
 
 		// 모든 주식 정보를 조회한다.
 		// StockUtil.readStockCodeNameListFromKrx(stockMkt or kosdaqMkt)
 		List<StockVO> kospiAllStockList;
-		List<StockVO> kospiAllStockForeignBuyList=new ArrayList<StockVO>();
-		List<StockVO> kospiAllStockForeignSellList=new ArrayList<StockVO>();
-		List<StockVO> kospiAllStockOrganBuyList=new ArrayList<StockVO>();
-		List<StockVO> kospiAllStockOrganSellList=new ArrayList<StockVO>();
-		List<StockVO> kospiTopSomeStockForeignBuyList=new ArrayList<StockVO>();
-		List<StockVO> kospiTopSomeStockForeignSellList=new ArrayList<StockVO>();
-		List<StockVO> kospiTopSomeStockOrganBuyList=new ArrayList<StockVO>();
-		List<StockVO> kospiTopSomeStockOrganSellList=new ArrayList<StockVO>();
+		List<StockVO> kospiAllStockForeignBuyList = new ArrayList<StockVO>();
+		List<StockVO> kospiAllStockForeignSellList = new ArrayList<StockVO>();
+		List<StockVO> kospiAllStockOrganBuyList = new ArrayList<StockVO>();
+		List<StockVO> kospiAllStockOrganSellList = new ArrayList<StockVO>();
+		List<StockVO> kospiForeignTopSomeStockBuyList = new ArrayList<StockVO>();
+		List<StockVO> kospiForeignTopSomeStockSellList = new ArrayList<StockVO>();
+		List<StockVO> kospiOrganTopSomeStockBuyList = new ArrayList<StockVO>();
+		List<StockVO> kospiOrganTopSomeStockSellList = new ArrayList<StockVO>();
 
 		List<StockVO> kosdaqAllStockList;
-		List<StockVO> kosdaqAllStockOrganBuyList=new ArrayList<StockVO>();
-		List<StockVO> kosdaqAllStockOrganSellList=new ArrayList<StockVO>();
-		List<StockVO> kosdaqAllStockForeignBuyList=new ArrayList<StockVO>();
-		List<StockVO> kosdaqAllStockForeignSellList=new ArrayList<StockVO>();
-		List<StockVO> kosdaqTopSomeStockOrganBuyList=new ArrayList<StockVO>();
-		List<StockVO> kosdaqTopSomeStockOrganSellList=new ArrayList<StockVO>();
-		List<StockVO> kosdaqTopSomeStockForeignBuyList=new ArrayList<StockVO>();
-		List<StockVO> kosdaqTopSomeStockForeignSellList=new ArrayList<StockVO>();
+		List<StockVO> kosdaqOrganAllStockBuyList = new ArrayList<StockVO>();
+		List<StockVO> kosdaqOrganAllStockSellList = new ArrayList<StockVO>();
+		List<StockVO> kosdaqForeignAllStockBuyList = new ArrayList<StockVO>();
+		List<StockVO> kosdaqForeignAllStockSellList = new ArrayList<StockVO>();
+		List<StockVO> kosdaqOrganTopSomeStockBuyList = new ArrayList<StockVO>();
+		List<StockVO> kosdaqOrganTopSomeStockSellList = new ArrayList<StockVO>();
+		List<StockVO> kosdaqForeignTopSomeStockBuyList = new ArrayList<StockVO>();
+		List<StockVO> kosdaqForeignTopSomeStockSellList = new ArrayList<StockVO>();
 
-		//기관 코스피 순매수, 순매도
-		Map<String, List<StockVO>> foreignTopSomeKospiStockMap = new HashMap<String, List<StockVO>>();
-		//기관 코스닥 순매수, 순매도
-		Map<String, List<StockVO>> foreignTopSomeKosdaqStockMap = new HashMap<String, List<StockVO>>();
-		//외국인 코스피 순매수, 순매도
-		Map<String, List<StockVO>> organTopSomeKospiStockMap = new HashMap<String, List<StockVO>>();
-		//외국인 코스닥 순매수, 순매도
-		Map<String, List<StockVO>> organTopSomeKosdaqStockMap = new HashMap<String, List<StockVO>>();
+		// 기관 코스피 순매수, 순매도
+		Map<String, List<StockVO>> kospiForeignTopSomeStockMap = new HashMap<String, List<StockVO>>();
+		// 기관 코스닥 순매수, 순매도
+		Map<String, List<StockVO>> kosdaqForeignTopSomeStockMap = new HashMap<String, List<StockVO>>();
+		// 외국인 코스피 순매수, 순매도
+		Map<String, List<StockVO>> kospiOrganTopSomeStockMap = new HashMap<String, List<StockVO>>();
+		// 외국인 코스닥 순매수, 순매도
+		Map<String, List<StockVO>> kosdaqOrganTopSomeStockMap = new HashMap<String, List<StockVO>>();
+
+		// 기관 코스피,코스닥 순매수, 순매도
+		Map<String, List<StockVO>> organTopSomeStockMap = new HashMap<String, List<StockVO>>();
+		// 외국인 코스피,코스닥 순매수, 순매도
+		Map<String, List<StockVO>> foreignTopSomeStockMap = new HashMap<String, List<StockVO>>();
+
+		// 기관,외국인 코스피,코스닥 순매수,순매도
+		Map<String, List<StockVO>> topSomeStockMap = new HashMap<String, List<StockVO>>();
 
 		try {
 			// 코스피
 			kospiAllStockList = StockUtil.readStockCodeNameListFromKrx("stockMkt");
-			System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
+			logger.debug("kospiAllStockList.size :" + kospiAllStockList.size());
 			kospiAllStockList = getAllStockInfo(kospiAllStockList);
 			kospiAllStockForeignBuyList.addAll(kospiAllStockList);
 			kospiAllStockForeignSellList.addAll(kospiAllStockList);
 			kospiAllStockOrganBuyList.addAll(kospiAllStockList);
 			kospiAllStockOrganSellList.addAll(kospiAllStockList);
+			logger.debug("kospiAllStockForeignBuyList.size :" + kospiAllStockForeignBuyList.size());
+			logger.debug("kospiAllStockForeignSellList.size :" + kospiAllStockForeignSellList.size());
+			logger.debug("kospiAllStockOrganBuyList.size :" + kospiAllStockOrganBuyList.size());
+			logger.debug("kospiAllStockOrganSellList.size :" + kospiAllStockOrganSellList.size());
 
 			// 코스닥
 			kosdaqAllStockList = StockUtil.readStockCodeNameListFromKrx("kosdaqMkt");
-			System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
+			logger.debug("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
 			kosdaqAllStockList = getAllStockInfo(kosdaqAllStockList);
-			kosdaqAllStockForeignBuyList.addAll(kosdaqAllStockList);
-			kosdaqAllStockForeignSellList.addAll(kosdaqAllStockList);
-			kosdaqAllStockOrganBuyList.addAll(kosdaqAllStockList);
-			kosdaqAllStockOrganSellList.addAll(kosdaqAllStockList);
+			kosdaqForeignAllStockBuyList.addAll(kosdaqAllStockList);
+			kosdaqForeignAllStockSellList.addAll(kosdaqAllStockList);
+			kosdaqOrganAllStockBuyList.addAll(kosdaqAllStockList);
+			kosdaqOrganAllStockSellList.addAll(kosdaqAllStockList);
+			logger.debug("kosdaqAllStockForeignBuyList.size :" + kosdaqForeignAllStockBuyList.size());
+			logger.debug("kosdaqAllStockForeignSellList.size :" + kosdaqForeignAllStockSellList.size());
+			logger.debug("kosdaqAllStockOrganBuyList.size :" + kosdaqOrganAllStockBuyList.size());
+			logger.debug("kosdaqAllStockOrganSellList.size :" + kosdaqOrganAllStockSellList.size());
 
 			// 1.외국인 코스피 순매수 순위
 			Collections.sort(kospiAllStockForeignBuyList, new ForeignTradingVolumeDescCompare());
@@ -124,51 +139,84 @@ public class AllStockForeignOrganNew {
 			Collections.sort(kospiAllStockOrganSellList, new OrganTradingVolumeAscCompare());
 
 			// 5.외국인 코스닥 순매수 순위
-			Collections.sort(kosdaqAllStockForeignBuyList, new ForeignTradingVolumeDescCompare());
+			Collections.sort(kosdaqForeignAllStockBuyList, new ForeignTradingVolumeDescCompare());
 			// 6.외국인 코스닥 순매도 순위
-			Collections.sort(kosdaqAllStockForeignSellList, new ForeignTradingVolumeAscCompare());
+			Collections.sort(kosdaqForeignAllStockSellList, new ForeignTradingVolumeAscCompare());
 			// 7.기관 코스닥 순매수 순위
-			Collections.sort(kosdaqAllStockOrganBuyList, new OrganTradingVolumeDescCompare());
+			Collections.sort(kosdaqOrganAllStockBuyList, new OrganTradingVolumeDescCompare());
 			// 8.기관 코스닥 순매도 순위
-			Collections.sort(kosdaqAllStockOrganSellList, new OrganTradingVolumeAscCompare());
+			Collections.sort(kosdaqOrganAllStockSellList, new OrganTradingVolumeAscCompare());
 
 			// 1.외국인 코스피 순매수 TopSome
-			kospiTopSomeStockForeignBuyList=kospiAllStockForeignBuyList.subList(0, EXTRACT_COUNT);
+			kospiForeignTopSomeStockBuyList = kospiAllStockForeignBuyList.subList(0, EXTRACT_COUNT);
 			// 2.외국인 코스피 순매도 TopSome
-			kospiTopSomeStockForeignSellList=kospiAllStockForeignSellList.subList(0, EXTRACT_COUNT);
+			kospiForeignTopSomeStockSellList = kospiAllStockForeignSellList.subList(0, EXTRACT_COUNT);
 			// 3.기관 코스피 순매수 TopSome
-			kospiTopSomeStockOrganBuyList=kospiAllStockOrganBuyList.subList(0, EXTRACT_COUNT);
+			kospiOrganTopSomeStockBuyList = kospiAllStockOrganBuyList.subList(0, EXTRACT_COUNT);
 			// 4.기관 코스피 순매도 TopSome
-			kospiTopSomeStockOrganSellList=kospiAllStockOrganSellList.subList(0, EXTRACT_COUNT);
+			kospiOrganTopSomeStockSellList = kospiAllStockOrganSellList.subList(0, EXTRACT_COUNT);
 
 			// 5.외국인 코스닥 순매수 TopSome
-			kosdaqTopSomeStockForeignBuyList=kosdaqAllStockForeignBuyList.subList(0, EXTRACT_COUNT);
+			kosdaqForeignTopSomeStockBuyList = kosdaqForeignAllStockBuyList.subList(0, EXTRACT_COUNT);
 			// 6.외국인 코스닥 순매도 TopSome
-			kosdaqTopSomeStockForeignBuyList=kosdaqAllStockForeignBuyList.subList(0, EXTRACT_COUNT);
+			kosdaqForeignTopSomeStockSellList = kosdaqForeignAllStockSellList.subList(0, EXTRACT_COUNT);
 			// 7.기관 코스닥 순매수 TopSome
-			kosdaqTopSomeStockForeignBuyList=kosdaqAllStockForeignBuyList.subList(0, EXTRACT_COUNT);
+			kosdaqOrganTopSomeStockBuyList = kosdaqOrganAllStockBuyList.subList(0, EXTRACT_COUNT);
 			// 8.기관 코스닥 순매도 TopSome
-			kosdaqTopSomeStockForeignBuyList=kosdaqAllStockForeignBuyList.subList(0, EXTRACT_COUNT);
+			kosdaqOrganTopSomeStockSellList = kosdaqOrganAllStockSellList.subList(0, EXTRACT_COUNT);
+
+			logger.debug("2.kospiForeignTopSomeStockBuyList.size :" + kospiForeignTopSomeStockBuyList.size());
+			logger.debug("2.kospiForeignTopSomeStockSellList.size :" + kospiForeignTopSomeStockSellList.size());
+			logger.debug("2.kospiOrganTopSomeStockBuyList.size :" + kospiOrganTopSomeStockBuyList.size());
+			logger.debug("2.kospiOrganTopSomeStockSellList.size :" + kospiOrganTopSomeStockSellList.size());
+
+			logger.debug("2.kosdaqForeignTopSomeStockBuyList.size :" + kosdaqForeignTopSomeStockBuyList.size());
+			logger.debug("2.kosdaqForeignTopSomeStockSellList.size :" + kosdaqForeignTopSomeStockSellList.size());
+			logger.debug("2.kosdaqOrganTopSomeStockBuyList.size :" + kosdaqOrganTopSomeStockBuyList.size());
+			logger.debug("2.kosdaqOrganTopSomeStockSellList.size :" + kosdaqOrganTopSomeStockSellList.size());
 
 			// 1.외국인 코스피 순매수,순매도 TopSome
-			foreignTopSomeKospiStockMap.put("코스피 외국인 순매수", kospiTopSomeStockForeignBuyList);
-			foreignTopSomeKospiStockMap.put("코스피 외국인 순매도", kospiTopSomeStockForeignSellList);
-			writeFile(foreignTopSomeKospiStockMap, "코스피 외국인");
+			kospiForeignTopSomeStockMap.put("코스피 외국인 순매수 종목", kospiForeignTopSomeStockBuyList);
+			kospiForeignTopSomeStockMap.put("코스피 외국인 순매도 종목", kospiForeignTopSomeStockSellList);
+			writeFile(kospiForeignTopSomeStockMap, "코스피 외국인 매매 종목", 1);
 
 			// 2.외국인 코스닥 순매수,순매도 TopSome
-			foreignTopSomeKosdaqStockMap.put("코스닥 외국인 순매수", kosdaqTopSomeStockForeignBuyList);
-			foreignTopSomeKosdaqStockMap.put("코스닥 외국인 순매도", kosdaqTopSomeStockForeignSellList);
-			writeFile(foreignTopSomeKosdaqStockMap, "코스피 외국인");
+			kosdaqForeignTopSomeStockMap.put("코스닥 외국인 순매수 종목", kosdaqForeignTopSomeStockBuyList);
+			kosdaqForeignTopSomeStockMap.put("코스닥 외국인 순매도 종목", kosdaqForeignTopSomeStockSellList);
+			writeFile(kosdaqForeignTopSomeStockMap, "코스닥 외국인 매매 종목", 1);
+
+			foreignTopSomeStockMap.put("코스피 외국인 순매수 종목", kospiForeignTopSomeStockBuyList);
+			foreignTopSomeStockMap.put("코스피 외국인 순매도 종목", kospiForeignTopSomeStockSellList);
+			foreignTopSomeStockMap.put("코스닥 외국인 순매수 종목", kosdaqForeignTopSomeStockBuyList);
+			foreignTopSomeStockMap.put("코스닥 외국인 순매도 종목", kosdaqForeignTopSomeStockSellList);
+			writeFile(foreignTopSomeStockMap, "코스피, 코스닥 외국인 매매 종목", 2);
 
 			// 3.기관 코스피 순매수,순매도 TopSome
-			organTopSomeKospiStockMap.put("코스피 기관 순매수", kospiTopSomeStockOrganBuyList);
-			organTopSomeKospiStockMap.put("코스피 기관 순매도", kospiTopSomeStockOrganSellList);
-			writeFile(organTopSomeKospiStockMap, "코스피 기관");
+			kospiOrganTopSomeStockMap.put("코스피 기관 순매수 종목", kospiOrganTopSomeStockBuyList);
+			kospiOrganTopSomeStockMap.put("코스피 기관 순매도 종목", kospiOrganTopSomeStockSellList);
+			writeFile(kospiOrganTopSomeStockMap, "코스피 기관 매매 종목", 1);
 
 			// 4.기관 코스닥 순매수,순매도 TopSome
-			organTopSomeKosdaqStockMap.put("코스닥 기관 순매수", kosdaqTopSomeStockOrganBuyList);
-			organTopSomeKosdaqStockMap.put("코스닥 기관 순매도", kosdaqTopSomeStockOrganSellList);
-			writeFile(organTopSomeKosdaqStockMap, "코스닥 기관");
+			kosdaqOrganTopSomeStockMap.put("코스닥 기관 순매수 종목", kosdaqOrganTopSomeStockBuyList);
+			kosdaqOrganTopSomeStockMap.put("코스닥 기관 순매도 종목", kosdaqOrganTopSomeStockSellList);
+			writeFile(kosdaqOrganTopSomeStockMap, "코스닥 기관 매매 종목", 1);
+
+			organTopSomeStockMap.put("코스피 기관 순매수 종목", kospiOrganTopSomeStockBuyList);
+			organTopSomeStockMap.put("코스피 기관 순매도 종목", kospiOrganTopSomeStockSellList);
+			organTopSomeStockMap.put("코스닥 기관 순매수 종목", kosdaqOrganTopSomeStockBuyList);
+			organTopSomeStockMap.put("코스닥 기관 순매도 종목", kosdaqOrganTopSomeStockSellList);
+			writeFile(organTopSomeStockMap, "코스피, 코스닥 기관 매매 종목", 2);
+
+			topSomeStockMap.put("코스피 외국인 순매수 종목", kospiForeignTopSomeStockBuyList);
+			topSomeStockMap.put("코스피 외국인 순매도 종목", kospiForeignTopSomeStockSellList);
+			topSomeStockMap.put("코스닥 외국인 순매수 종목", kosdaqForeignTopSomeStockBuyList);
+			topSomeStockMap.put("코스닥 외국인 순매도 종목", kosdaqForeignTopSomeStockSellList);
+			topSomeStockMap.put("코스피 기관 순매수 종목", kospiOrganTopSomeStockBuyList);
+			topSomeStockMap.put("코스피 기관 순매도 종목", kospiOrganTopSomeStockSellList);
+			topSomeStockMap.put("코스닥 기관 순매수 종목", kosdaqOrganTopSomeStockBuyList);
+			topSomeStockMap.put("코스닥 기관 순매도 종목", kosdaqOrganTopSomeStockSellList);
+			writeFile(topSomeStockMap, "코스피,코스닥 기관,외국인 매매 종목", 3);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -195,7 +243,7 @@ public class AllStockForeignOrganNew {
 		for (StockVO svo : stockList) {
 			stockCode = svo.getStockCode();
 			stockName = svo.getStockName();
-			System.out.println(stockCode + "\t" + stockName);
+			logger.debug(stockCode + "\t" + stockName);
 
 			StockVO stock = getStockInfo(cnt, stockCode, stockName);
 			if (stock != null) {
@@ -210,7 +258,7 @@ public class AllStockForeignOrganNew {
 	public static List<StockVO> getAllStockInfo(String kospidaq, String fileName) {
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(userHome + "\\Downloads\\" + fileName);
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
@@ -219,10 +267,10 @@ public class AllStockForeignOrganNew {
 			String stockName = null;
 			int cnt = 1;
 			while ((read = reader.readLine()) != null) {
-				System.out.println(cnt + "." + read);
+				logger.debug(cnt + "." + read);
 				stockCode = read.split("\t")[0];
 				stockName = read.split("\t")[1];
-				System.out.println(stockCode + "\t" + stockName);
+				logger.debug(stockCode + "\t" + stockName);
 
 				if (stockCode.length() != 6) {
 					continue;
@@ -252,8 +300,8 @@ public class AllStockForeignOrganNew {
 			// 종합정보
 			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + code).get();
 			if (cnt == 1) {
-				// System.out.println(doc.title());
-				// System.out.println(doc.html());
+				// logger.debug(doc.title());
+				// logger.debug(doc.html());
 			}
 			stock.setStockCode(code);
 
@@ -282,10 +330,10 @@ public class AllStockForeignOrganNew {
 			for (int i = 0; i < edds.size(); i++) {
 				Element dd = edds.get(i);
 				String text = dd.text();
-				System.out.println("data:" + text);
+				logger.debug("data:" + text);
 
 				if (text.startsWith("현재가")) {
-					System.out.println("data1:" + dd.text());
+					logger.debug("data1:" + dd.text());
 					text = text.replaceAll("플러스", "+");
 					text = text.replaceAll("마이너스", "-");
 					text = text.replaceAll("상승", "▲");
@@ -312,7 +360,7 @@ public class AllStockForeignOrganNew {
 					// +- 부호
 					sign = txts[5];
 					stock.setSign(sign);
-					System.out.println("txts.length:" + txts.length);
+					logger.debug("txts.length:" + txts.length);
 					if (txts.length == 7) {
 						stock.setVaryRatio(txts[5] + txts[6]);
 					} else if (txts.length == 8) {
@@ -320,7 +368,7 @@ public class AllStockForeignOrganNew {
 					}
 					varyRatio = stock.getVaryRatio();
 					stock.setfVaryRatio(Float.parseFloat(varyRatio.replaceAll("%", "")));
-					System.out.println("상승률:" + stock.getVaryRatio());
+					logger.debug("상승률:" + stock.getVaryRatio());
 				}
 
 				if (text.startsWith("전일가")) {
@@ -395,15 +443,15 @@ public class AllStockForeignOrganNew {
 			// organTradingVolume = StringUtils.defaultIfEmpty(organTradingVolume,
 			// "0").replaceAll("\\+", "");
 
-			System.out.println("foreignTradingVolume:" + foreignTradingVolume);
-			System.out.println("organTradingVolume:" + organTradingVolume);
+			logger.debug("foreignTradingVolume:" + foreignTradingVolume);
+			logger.debug("organTradingVolume:" + organTradingVolume);
 
 			int iForeignTradingVolume = Integer.parseInt(foreignTradingVolume.replaceAll(",", ""));
 			int iOrganTradingVolume = Integer.parseInt(organTradingVolume.replaceAll(",", ""));
 			int iForOrgTradingVolume = iForeignTradingVolume + iOrganTradingVolume;
 
-			System.out.println("iForeignTradingVolume:" + iForeignTradingVolume);
-			System.out.println("iOrganTradingVolume:" + iOrganTradingVolume);
+			logger.debug("iForeignTradingVolume:" + iForeignTradingVolume);
+			logger.debug("iOrganTradingVolume:" + iOrganTradingVolume);
 
 			long standardPrice = 0;
 			if (sign.equals("+")) {
@@ -416,7 +464,7 @@ public class AllStockForeignOrganNew {
 				standardPrice = iCurPrice;
 			}
 
-			System.out.println("standardPrice :" + standardPrice);
+			logger.debug("standardPrice :" + standardPrice);
 
 			long iForeignTradeAmount = iForeignTradingVolume * standardPrice;
 			long iOrganTradeAmount = iOrganTradingVolume * standardPrice;
@@ -424,8 +472,8 @@ public class AllStockForeignOrganNew {
 			iForeignTradeAmount = iForeignTradeAmount / 10000;
 			iOrganTradeAmount = iOrganTradeAmount / 10000;
 
-			System.out.println("외인거래금액 :" + iForeignTradeAmount);
-			System.out.println("기관거래금액 :" + iOrganTradeAmount);
+			logger.debug("외인거래금액 :" + iForeignTradeAmount);
+			logger.debug("기관거래금액 :" + iOrganTradeAmount);
 
 			stock.setlForeignTradingAmount(iForeignTradeAmount);
 			stock.setlOrganTradingAmount(iOrganTradeAmount);
@@ -456,25 +504,33 @@ public class AllStockForeignOrganNew {
 
 	Map<String, List<StockVO>> TopSomeKospiStockMapByAmount = new HashMap<String, List<StockVO>>();
 
-	public void writeFile(Map<String, List<StockVO>> topSomeStockMapByAmount, String gubun) {
-		Set<String> keys = topSomeStockMapByAmount.keySet();
-		for (String key : keys) {
-			System.out.println("key :" + key);
-			List<StockVO> list = topSomeStockMapByAmount.get(key);
-			SimpleDateFormat sdf = new SimpleDateFormat("[yyyy-MM-dd] HHmmss", Locale.KOREAN);
-			String strDate = sdf.format(new Date());
+	public void writeFile(Map<String, List<StockVO>> topSomeStockMapByAmount, String title, int type) {
 
-			StringBuilder sb1 = new StringBuilder();
-			sb1.append("<html lang='ko'>\r\n");
-			sb1.append("<head>\r\n");
-			sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
-			sb1.append("<style>\r\n");
-			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
-			sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
-			sb1.append("</style>\r\n");
-			sb1.append("</head>\r\n");
-			sb1.append("<body>\r\n");
-			sb1.append("\t<font size=5>" + strYMD + key + "</font>");
+		StringBuilder sb1 = new StringBuilder();
+		sb1.append("<html lang='ko'>\r\n");
+		sb1.append("<head>\r\n");
+		sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+		sb1.append("<style>\r\n");
+		sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
+		sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
+		sb1.append("</style>\r\n");
+		sb1.append("</head>\r\n");
+		sb1.append("<body>\r\n");
+
+		String ymd = new SimpleDateFormat("yyyy년 MM월 dd일").format(new Date());
+		sb1.append("<h2>" + strYMD + title + "(단위:만원,주)</h2>");
+
+		SimpleDateFormat sdf = new SimpleDateFormat("[yyyy-MM-dd] HHmmss", Locale.KOREAN);
+		String strDate = sdf.format(new Date());
+
+		Set<String> keys = topSomeStockMapByAmount.keySet();
+		int rowCnt = 1;
+		for (String key : keys) {
+			logger.debug("key :" + key);
+			List<StockVO> list = topSomeStockMapByAmount.get(key);
+
+			sb1.append("<div style='display:inline-block'>\r\n");
+			sb1.append("<h3>" +  key + " 종목 TOP " + EXTRACT_COUNT + "</h3>\r\n");
 			sb1.append("<table>\r\n");
 			sb1.append("<tr>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
@@ -482,12 +538,8 @@ public class AllStockForeignOrganNew {
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>등락률</td>\r\n");
-			if (gubun.equals("등락률")) {
-			} else if (gubun.equals("거래량")) {
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래량</td>\r\n");
-			} else if (gubun.equals("거래대금")) {
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래대금(만원)</td>\r\n");
-			}
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래량</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래대금(만원)</td>\r\n");
 			sb1.append("</tr>\r\n");
 
 			int cnt = 1;
@@ -533,29 +585,28 @@ public class AllStockForeignOrganNew {
 						sb1.append(
 								"<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
 					}
-					if (gubun.equals("등락률")) {
-					} else if (gubun.equals("거래량")) {
-						if (key.contains("외국인")) {
-							sb1.append("<td style='text-align:right'>" + s.getForeignTradingVolume() + "</td>\r\n");
-						} else {
-							sb1.append("<td style='text-align:right'>" + s.getOrganTradingVolume() + "</td>\r\n");
-						}
-					} else if (gubun.equals("거래대금")) {
-						if (key.contains("외국인")) {
-							sb1.append("<td style='text-align:right'>" + s.getForeignTradingAmount() + "</td>\r\n");
-						} else {
-							sb1.append("<td style='text-align:right'>" + s.getOrganTradingAmount() + "</td>\r\n");
-						}
+					if (key.contains("외국인")) {
+						sb1.append("<td style='text-align:right'>" + s.getForeignTradingVolume() + "</td>\r\n");
+						sb1.append("<td style='text-align:right'>" + s.getForeignTradingAmount() + "</td>\r\n");
+					} else {
+						sb1.append("<td style='text-align:right'>" + s.getOrganTradingVolume() + "</td>\r\n");
+						sb1.append("<td style='text-align:right'>" + s.getOrganTradingAmount() + "</td>\r\n");
 					}
 					sb1.append("</tr>\r\n");
 				}
 			}
-			sb1.append("</body>\r\n");
-			sb1.append("</html>\r\n");
-			String fileName = userHome + "\\documents\\" + strDate + "_" + key + ".html";
-			System.out.println("fileName :" + fileName);
-			FileUtil.fileWrite(fileName, sb1.toString());
+			sb1.append("</table>\r\n");
+			sb1.append("</div>\r\n");
+			if (rowCnt % 2 == 0) {
+				sb1.append("<br/>\r\n");
+			}
+			rowCnt++;
 		}
+		sb1.append("</body>\r\n");
+		sb1.append("</html>\r\n");
+		String fileName = userHome + "\\Downloads\\" + strDate + "_" + title + ".html";
+		logger.debug("fileName :" + fileName);
+		FileUtil.fileWrite(fileName, sb1.toString());
 	}
 
 	public void writeFile(List<StockVO> list, String title, boolean isForeign, String gubun) {
@@ -638,8 +689,8 @@ public class AllStockForeignOrganNew {
 		}
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
-		String fileName = userHome + "\\documents\\" + strDate + "_" + title + ".html";
-		System.out.println("fileName :" + fileName);
+		String fileName = userHome + "\\Downloads\\" + strDate + "_" + title + ".html";
+		logger.debug("fileName :" + fileName);
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}
 
