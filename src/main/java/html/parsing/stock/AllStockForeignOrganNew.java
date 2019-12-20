@@ -39,6 +39,8 @@ public class AllStockForeignOrganNew {
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
 
+	static String strYmd4Compare = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREAN).format(new Date());
+
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
 	static String strYMD = "";
@@ -52,11 +54,12 @@ public class AllStockForeignOrganNew {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new AllStockForeignOrganNew(1);
+		new AllStockForeignOrganNew();
 	}
 
 	AllStockForeignOrganNew() {
-		List<StockVO> kospiStockList = readOne("049180");
+		//에이치엘비
+		List<StockVO> kospiStockList = readOne("028300");
 		writeFile(kospiStockList, "코스피", true, "거래량");
 	}
 
@@ -298,12 +301,14 @@ public class AllStockForeignOrganNew {
 		StockVO stock = new StockVO();
 		try {
 			// 종합정보
-			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + code).get();
+			String url = "http://finance.naver.com/item/main.nhn?code=" + code;
+			doc = Jsoup.connect(url).get();
 			if (cnt == 1) {
 				// logger.debug(doc.title());
 				// logger.debug(doc.html());
 			}
 			stock.setStockCode(code);
+			stock.setStockName(name);
 
 			Elements dates = doc.select(".date");
 			if (dates != null) {
@@ -414,8 +419,10 @@ public class AllStockForeignOrganNew {
 			}
 			stock.setSpecialLetter(specialLetter);
 
-			doc = Jsoup.connect("http://finance.naver.com/item/frgn.nhn?code=" + code).get();
+			url = "http://finance.naver.com/item/frgn.nhn?code=" + code;
+			doc = Jsoup.connect(url).get();
 
+			String tradingDate = "";
 			String foreignTradingVolume = "";
 			String organTradingVolume = "";
 
@@ -424,16 +431,25 @@ public class AllStockForeignOrganNew {
 			// 외국인 기관 순매매 거래량에 관한표이며 날짜별로 정보를 제공합니다.
 			// tr
 			Elements trElements = element2.select("tr");
+			boolean find = false;
 			for (Element trElement : trElements) {
-				// td
 				Elements tdElements = trElement.select("td");
 				if (tdElements.size() == 9) {
-					// 기관순매매량
-					organTradingVolume = tdElements.get(5).text();
-					// 외인순매매량
-					foreignTradingVolume = tdElements.get(6).text();
-					break;
+					// 날짜
+					tradingDate = tdElements.get(0).text();
+					if(strYmd4Compare.equals(tradingDate)) {
+						// 기관순매매량
+						organTradingVolume = tdElements.get(5).text();
+						// 외인순매매량
+						foreignTradingVolume = tdElements.get(6).text();
+						find = true;
+						break;
+					}
 				}
+			}
+			if(!find) {
+				logger.debug("당일 집계가 되지 않았거나 입력하신 일자 데이터가 존재하지 않습니다.");
+				return stock;
 			}
 
 			foreignTradingVolume = StringUtils.defaultIfEmpty(foreignTradingVolume, "0");
@@ -448,7 +464,7 @@ public class AllStockForeignOrganNew {
 
 			int iForeignTradingVolume = Integer.parseInt(foreignTradingVolume.replaceAll(",", ""));
 			int iOrganTradingVolume = Integer.parseInt(organTradingVolume.replaceAll(",", ""));
-			int iForOrgTradingVolume = iForeignTradingVolume + iOrganTradingVolume;
+			int iForeignOrganTradingVolume = iForeignTradingVolume + iOrganTradingVolume;
 
 			logger.debug("iForeignTradingVolume:" + iForeignTradingVolume);
 			logger.debug("iOrganTradingVolume:" + iOrganTradingVolume);
@@ -477,25 +493,25 @@ public class AllStockForeignOrganNew {
 
 			stock.setlForeignTradingAmount(iForeignTradeAmount);
 			stock.setlOrganTradingAmount(iOrganTradeAmount);
-			stock.setlForOrgTradingAmount((iForeignTradeAmount + iOrganTradeAmount));
+			stock.setlForeignOrganTradingAmount((iForeignTradeAmount + iOrganTradeAmount));
 
 			DecimalFormat df = new DecimalFormat("#,##0");
 			String foreignTradeAmount = df.format(iForeignTradeAmount);
 			String organTradeAmount = df.format(iOrganTradeAmount);
-			String forOrgTradingVolume = df.format(iForOrgTradingVolume);
-			String forOrgTradingAmount = df.format((iForeignTradeAmount + iOrganTradeAmount));
+			String foreignOrganTradingVolume = df.format(iForeignOrganTradingVolume);
+			String foreignOrganTradingAmount = df.format((iForeignTradeAmount + iOrganTradeAmount));
 
 			stock.setForeignTradingAmount(foreignTradeAmount);
 			stock.setOrganTradingAmount(organTradeAmount);
-			stock.setForOrgTradingAmount(forOrgTradingAmount);
+			stock.setForeignOrganTradingAmount(foreignOrganTradingAmount);
 
 			stock.setForeignTradingVolume(foreignTradingVolume);
 			stock.setOrganTradingVolume(organTradingVolume);
-			stock.setForOrgTradingVolume(forOrgTradingVolume);
+			stock.setForeignOrganTradingVolume(foreignOrganTradingVolume);
 
 			stock.setiForeignTradingVolume(iForeignTradingVolume);
 			stock.setiOrganTradingVolume(iOrganTradingVolume);
-			stock.setiForOrgTradingVolume(iForOrgTradingVolume);
+			stock.setiForeignOrganTradingVolume(iForeignOrganTradingVolume);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

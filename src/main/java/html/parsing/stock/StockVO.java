@@ -36,11 +36,11 @@ public class StockVO {
 
 	private String foreignTradingVolume;
 	private String organTradingVolume;
-	private String forOrgTradingVolume;
+	private String foreignOrganTradingVolume;
 
 	private String foreignTradingAmount;
 	private String organTradingAmount;
-	private String forOrgTradingAmount;
+	private String foreignOrganTradingAmount;
 
 	private String foreignHaveVolume;
 	private String foreignHaveAmount;
@@ -59,13 +59,13 @@ public class StockVO {
 	private int iTradingVolume;
 	private int iForeignTradingVolume;
 	private int iOrganTradingVolume;
-	private int iForOrgTradingVolume;
+	private int iForeignOrganTradingVolume;
 
 	private long lTradingVolume;
 	private long lForeignTradingAmount;
 	private long lTradingAmount;
 	private long lOrganTradingAmount;
-	private long lForOrgTradingAmount;
+	private long lForeignOrganTradingAmount;
 
 	private long lForeignHaveVolume;
 	private long lForeignHaveAmount;
@@ -304,12 +304,12 @@ public class StockVO {
 		this.organTradingVolume = organTradingVolume;
 	}
 
-	public String getForOrgTradingVolume() {
-		return forOrgTradingVolume;
+	public String getForeignOrganTradingVolume() {
+		return foreignOrganTradingVolume;
 	}
 
-	public void setForOrgTradingVolume(String forOrgTradingVolume) {
-		this.forOrgTradingVolume = forOrgTradingVolume;
+	public void setForeignOrganTradingVolume(String foreignOrganTradingVolume) {
+		this.foreignOrganTradingVolume = foreignOrganTradingVolume;
 	}
 
 	public String getForeignTradingAmount() {
@@ -328,12 +328,12 @@ public class StockVO {
 		this.organTradingAmount = organTradingAmount;
 	}
 
-	public String getForOrgTradingAmount() {
-		return forOrgTradingAmount;
+	public String getForeignOrganTradingAmount() {
+		return foreignOrganTradingAmount;
 	}
 
-	public void setForOrgTradingAmount(String forOrgTradingAmount) {
-		this.forOrgTradingAmount = forOrgTradingAmount;
+	public void setForeignOrganTradingAmount(String foreignOrganTradingAmount) {
+		this.foreignOrganTradingAmount = foreignOrganTradingAmount;
 	}
 
 	public String getForeignHaveVolume() {
@@ -456,12 +456,12 @@ public class StockVO {
 		this.iOrganTradingVolume = iOrganTradingVolume;
 	}
 
-	public int getiForOrgTradingVolume() {
-		return iForOrgTradingVolume;
+	public int getiForeignOrganTradingVolume() {
+		return iForeignOrganTradingVolume;
 	}
 
-	public void setiForOrgTradingVolume(int iForOrgTradingVolume) {
-		this.iForOrgTradingVolume = iForOrgTradingVolume;
+	public void setiForeignOrganTradingVolume(int iForeignOrganTradingVolume) {
+		this.iForeignOrganTradingVolume = iForeignOrganTradingVolume;
 	}
 
 	public long getlForeignTradingAmount() {
@@ -488,12 +488,12 @@ public class StockVO {
 		this.lOrganTradingAmount = lOrganTradingAmount;
 	}
 
-	public long getlForOrgTradingAmount() {
-		return lForOrgTradingAmount;
+	public long getlForeignOrganTradingAmount() {
+		return lForeignOrganTradingAmount;
 	}
 
-	public void setlForOrgTradingAmount(long lForOrgTradingAmount) {
-		this.lForOrgTradingAmount = lForOrgTradingAmount;
+	public void setlForeignOrganTradingAmount(long lForeignOrganTradingAmount) {
+		this.lForeignOrganTradingAmount = lForeignOrganTradingAmount;
 	}
 
 	public long getlForeignHaveVolume() {

@@ -304,7 +304,7 @@ public class AllStockForeignOrgan {
 
             int iForeignTradingVolume = Integer.parseInt(foreignTradingVolume.replaceAll(",", ""));
             int iOrganTradingVolume = Integer.parseInt(organTradingVolume.replaceAll(",", ""));
-            int iForOrgTradingVolume = iForeignTradingVolume + iOrganTradingVolume;
+            int iForeignOrganTradingVolume = iForeignTradingVolume + iOrganTradingVolume;
 
             System.out.println("iForeignTradingVolume:" + iForeignTradingVolume);
             System.out.println("iOrganTradingVolume:" + iOrganTradingVolume);
@@ -333,25 +333,25 @@ public class AllStockForeignOrgan {
 
             stock.setlForeignTradingAmount(iForeignTradeAmount);
             stock.setlOrganTradingAmount(iOrganTradeAmount);
-            stock.setlForOrgTradingAmount((iForeignTradeAmount + iOrganTradeAmount));
+            stock.setlForeignOrganTradingAmount((iForeignTradeAmount + iOrganTradeAmount));
 
             DecimalFormat df = new DecimalFormat("#,##0");
             String foreignTradeAmount = df.format(iForeignTradeAmount);
             String organTradeAmount = df.format(iOrganTradeAmount);
-            String forOrgTradingVolume = df.format(iForOrgTradingVolume);
-            String forOrgTradingAmount = df.format((iForeignTradeAmount + iOrganTradeAmount));
+            String foreignOrganTradingVolume = df.format(iForeignOrganTradingVolume);
+            String foreignOrganTradingAmount = df.format((iForeignTradeAmount + iOrganTradeAmount));
 
             stock.setForeignTradingAmount(foreignTradeAmount);
             stock.setOrganTradingAmount(organTradeAmount);
-            stock.setForOrgTradingAmount(forOrgTradingAmount);
+            stock.setForeignOrganTradingAmount(foreignOrganTradingAmount);
 
             stock.setForeignTradingVolume(foreignTradingVolume);
             stock.setOrganTradingVolume(organTradingVolume);
-            stock.setForOrgTradingVolume(forOrgTradingVolume);
+            stock.setForeignOrganTradingVolume(foreignOrganTradingVolume);
 
             stock.setiForeignTradingVolume(iForeignTradingVolume);
             stock.setiOrganTradingVolume(iOrganTradingVolume);
-            stock.setiForOrgTradingVolume(iForOrgTradingVolume);
+            stock.setiForeignOrganTradingVolume(iForeignOrganTradingVolume);
         } catch (IOException e) {
             e.printStackTrace();
         }

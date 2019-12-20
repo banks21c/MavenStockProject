@@ -349,15 +349,15 @@ public class DataSort {
      * @author banks
      *
      */
-    public static class ForOrgTradingVolumeDescCompare implements Comparator<StockVO> {
+    public static class ForeignOrganTradingVolumeDescCompare implements Comparator<StockVO> {
 
         /**
          * 내림차순(DESC)
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getiForOrgTradingVolume() > arg1.getiForOrgTradingVolume() ? -1
-                    : arg0.getiForOrgTradingVolume() < arg1.getiForOrgTradingVolume() ? 1 : 0;
+            return arg0.getiForeignOrganTradingVolume() > arg1.getiForeignOrganTradingVolume() ? -1
+                    : arg0.getiForeignOrganTradingVolume() < arg1.getiForeignOrganTradingVolume() ? 1 : 0;
         }
 
     }
@@ -368,15 +368,15 @@ public class DataSort {
      * @author banks
      *
      */
-    public static class ForOrgTradingVolumeAscCompare implements Comparator<StockVO> {
+    public static class ForeignOrganTradingVolumeAscCompare implements Comparator<StockVO> {
 
         /**
          * 오름차순(ASC)
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getiForOrgTradingVolume() < arg1.getiForOrgTradingVolume() ? -1
-                    : arg0.getiForOrgTradingVolume() > arg1.getiForOrgTradingVolume() ? 1 : 0;
+            return arg0.getiForeignOrganTradingVolume() < arg1.getiForeignOrganTradingVolume() ? -1
+                    : arg0.getiForeignOrganTradingVolume() > arg1.getiForeignOrganTradingVolume() ? 1 : 0;
         }
     }
 
@@ -386,15 +386,15 @@ public class DataSort {
      * @author banks
      *
      */
-    public static class ForOrgTradingAmountDescCompare implements Comparator<StockVO> {
+    public static class ForeignOrganTradingAmountDescCompare implements Comparator<StockVO> {
 
         /**
          * 내림차순(DESC)
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getlForOrgTradingAmount() > arg1.getlForOrgTradingAmount() ? -1
-                    : arg0.getlForOrgTradingAmount() < arg1.getlForOrgTradingAmount() ? 1 : 0;
+            return arg0.getlForeignOrganTradingAmount() > arg1.getlForeignOrganTradingAmount() ? -1
+                    : arg0.getlForeignOrganTradingAmount() < arg1.getlForeignOrganTradingAmount() ? 1 : 0;
         }
     }
 
@@ -404,15 +404,15 @@ public class DataSort {
      * @author banks
      *
      */
-    public static class ForOrgTradingAmountAscCompare implements Comparator<StockVO> {
+    public static class ForeignOrganTradingAmountAscCompare implements Comparator<StockVO> {
 
         /**
          * 오름차순(ASC)
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getlForOrgTradingAmount() < arg1.getlForOrgTradingAmount() ? -1
-                    : arg0.getlForOrgTradingAmount() > arg1.getlForOrgTradingAmount() ? 1 : 0;
+            return arg0.getlForeignOrganTradingAmount() < arg1.getlForeignOrganTradingAmount() ? -1
+                    : arg0.getlForeignOrganTradingAmount() > arg1.getlForeignOrganTradingAmount() ? 1 : 0;
         }
     }
 

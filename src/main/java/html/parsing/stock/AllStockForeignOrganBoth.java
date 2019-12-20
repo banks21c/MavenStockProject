@@ -21,10 +21,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import html.parsing.stock.DataSort.ForOrgTradingAmountAscCompare;
-import html.parsing.stock.DataSort.ForOrgTradingAmountDescCompare;
-import html.parsing.stock.DataSort.ForOrgTradingVolumeAscCompare;
-import html.parsing.stock.DataSort.ForOrgTradingVolumeDescCompare;
+import html.parsing.stock.DataSort.ForeignOrganTradingAmountAscCompare;
+import html.parsing.stock.DataSort.ForeignOrganTradingAmountDescCompare;
+import html.parsing.stock.DataSort.ForeignOrganTradingVolumeAscCompare;
+import html.parsing.stock.DataSort.ForeignOrganTradingVolumeDescCompare;
 
 public class AllStockForeignOrganBoth {
 
@@ -72,24 +72,24 @@ public class AllStockForeignOrganBoth {
         System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
 
         // 외인,기관 양매수 거래량순 정렬
-        Collections.sort(kospiAllStockList, new ForOrgTradingVolumeDescCompare());
-        Collections.sort(kosdaqAllStockList, new ForOrgTradingVolumeDescCompare());
+        Collections.sort(kospiAllStockList, new ForeignOrganTradingVolumeDescCompare());
+        Collections.sort(kosdaqAllStockList, new ForeignOrganTradingVolumeDescCompare());
         writeFile(kospiAllStockList, kospiFileName, "코스피 외인,기관 양매수 거래량", true, true);
         writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 외인,기관 양매수 거래량", true, true);
         // 외인,기관 양매수 거래대금순 정렬
-        Collections.sort(kospiAllStockList, new ForOrgTradingAmountDescCompare());
-        Collections.sort(kosdaqAllStockList, new ForOrgTradingAmountDescCompare());
+        Collections.sort(kospiAllStockList, new ForeignOrganTradingAmountDescCompare());
+        Collections.sort(kosdaqAllStockList, new ForeignOrganTradingAmountDescCompare());
         writeFile(kospiAllStockList, kospiFileName, "코스피 외인,기관 양매수 거래대금", false, true);
         writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 외인,기관 양매수 거래대금", false, true);
 
         // 외인,기관 양매도 거래량순 정렬
-        Collections.sort(kospiAllStockList, new ForOrgTradingVolumeAscCompare());
-        Collections.sort(kosdaqAllStockList, new ForOrgTradingVolumeAscCompare());
+        Collections.sort(kospiAllStockList, new ForeignOrganTradingVolumeAscCompare());
+        Collections.sort(kosdaqAllStockList, new ForeignOrganTradingVolumeAscCompare());
         writeFile(kospiAllStockList, kospiFileName, "코스피 외인,기관 양매도 거래량", true, false);
         writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 외인,기관 양매도 거래량", true, false);
         // 외인,기관 양매도 거래대금순 정렬
-        Collections.sort(kospiAllStockList, new ForOrgTradingAmountAscCompare());
-        Collections.sort(kosdaqAllStockList, new ForOrgTradingAmountAscCompare());
+        Collections.sort(kospiAllStockList, new ForeignOrganTradingAmountAscCompare());
+        Collections.sort(kosdaqAllStockList, new ForeignOrganTradingAmountAscCompare());
         writeFile(kospiAllStockList, kospiFileName, "코스피 외인,기관 양매도 거래대금", false, false);
         writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 외인,기관 양매도 거래대금", false, false);
 
@@ -300,7 +300,7 @@ public class AllStockForeignOrganBoth {
 
             int iForeignTradingVolume = 0;
             int iOrganTradingVolume = 0;
-            int iForOrgTradingVolume = 0;
+            int iForeignOrganTradingVolume = 0;
 
             if (foreignTradingVolume.matches(".*[0-9]+.*")) {
                 iForeignTradingVolume = Integer.parseInt(foreignTradingVolume.replaceAll(",", ""));
@@ -308,11 +308,11 @@ public class AllStockForeignOrganBoth {
             if (organTradingVolume.matches(".*[0-9]+.*")) {
                 iOrganTradingVolume = Integer.parseInt(organTradingVolume.replaceAll(",", ""));
             }
-            iForOrgTradingVolume = iForeignTradingVolume + iOrganTradingVolume;
+            iForeignOrganTradingVolume = iForeignTradingVolume + iOrganTradingVolume;
 
             System.out.println("iForeignTradingVolume:" + iForeignTradingVolume);
             System.out.println("iOrganTradingVolume:" + iOrganTradingVolume);
-            System.out.println("iForOrgTradingVolume:" + iForOrgTradingVolume);
+            System.out.println("iForeignOrganTradingVolume:" + iForeignOrganTradingVolume);
 
             long standardPrice = 0;
             if (sign.equals("+")) {
@@ -338,25 +338,25 @@ public class AllStockForeignOrganBoth {
 
             stock.setlForeignTradingAmount(iForeignTradeAmount);
             stock.setlOrganTradingAmount(iOrganTradeAmount);
-            stock.setlForOrgTradingAmount((iForeignTradeAmount + iOrganTradeAmount));
+            stock.setlForeignOrganTradingAmount((iForeignTradeAmount + iOrganTradeAmount));
 
             DecimalFormat df = new DecimalFormat("#,##0");
             String foreignTradeAmount = df.format(iForeignTradeAmount);
             String organTradeAmount = df.format(iOrganTradeAmount);
-            String forOrgTradingVolume = df.format(iForOrgTradingVolume);
-            String forOrgTradingAmount = df.format((iForeignTradeAmount + iOrganTradeAmount));
+            String foreignOrganTradingVolume = df.format(iForeignOrganTradingVolume);
+            String foreignOrganTradingAmount = df.format((iForeignTradeAmount + iOrganTradeAmount));
 
             stock.setForeignTradingAmount(foreignTradeAmount);
             stock.setOrganTradingAmount(organTradeAmount);
-            stock.setForOrgTradingAmount(forOrgTradingAmount);
+            stock.setForeignOrganTradingAmount(foreignOrganTradingAmount);
 
             stock.setForeignTradingVolume(foreignTradingVolume);
             stock.setOrganTradingVolume(organTradingVolume);
-            stock.setForOrgTradingVolume(forOrgTradingVolume);
+            stock.setForeignOrganTradingVolume(foreignOrganTradingVolume);
 
             stock.setiForeignTradingVolume(iForeignTradingVolume);
             stock.setiOrganTradingVolume(iOrganTradingVolume);
-            stock.setiForOrgTradingVolume(iForOrgTradingVolume);
+            stock.setiForeignOrganTradingVolume(iForeignOrganTradingVolume);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -455,11 +455,11 @@ public class AllStockForeignOrganBoth {
                     if (isVolume) {
                         sb1.append("<td style='text-align:right'>" + s.getForeignTradingVolume() + "</td>\r\n");
                         sb1.append("<td style='text-align:right'>" + s.getOrganTradingVolume() + "</td>\r\n");
-                        sb1.append("<td style='text-align:right'>" + s.getForOrgTradingVolume() + "</td>\r\n");
+                        sb1.append("<td style='text-align:right'>" + s.getForeignOrganTradingVolume() + "</td>\r\n");
                     } else {
                         sb1.append("<td style='text-align:right'>" + s.getForeignTradingAmount() + "</td>\r\n");
                         sb1.append("<td style='text-align:right'>" + s.getOrganTradingAmount() + "</td>\r\n");
-                        sb1.append("<td style='text-align:right'>" + s.getForOrgTradingAmount() + "</td>\r\n");
+                        sb1.append("<td style='text-align:right'>" + s.getForeignOrganTradingAmount() + "</td>\r\n");
                     }
                     sb1.append("</tr>\r\n");
                 }
