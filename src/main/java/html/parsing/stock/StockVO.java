@@ -1,14 +1,16 @@
 package html.parsing.stock;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import java.util.Map;
 import java.util.Vector;
+
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class StockVO {
 
@@ -127,6 +129,10 @@ public class StockVO {
 	private float fGapRatio;
 
 	private float upDownRatio;
+
+	private String resultCode;
+	private String resultMessage;
+	private String resultDetailMessage;
 
 	public String getDate() {
 		return date;
@@ -943,6 +949,31 @@ public class StockVO {
 //		return result.toString();
 //	}
 
+	public String getResultCode() {
+		return resultCode;
+	}
+
+	public void setResultCode(String resultCode) {
+		this.resultCode = resultCode;
+	}
+
+	public String getResultMessage() {
+		return resultMessage;
+	}
+
+	public void setResultMessage(String resultMessage) {
+		this.resultMessage = resultMessage;
+	}
+
+	public String getResultDetailMessage() {
+		return resultDetailMessage;
+	}
+
+	public void setResultDetailMessage(String resultDetailMessage) {
+		this.resultDetailMessage = resultDetailMessage;
+	}
+
+	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this);
 	}

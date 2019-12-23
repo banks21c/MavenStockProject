@@ -17,6 +17,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,6 +31,7 @@ import html.parsing.stock.DataSort.ForeignTradingVolumeAscCompare;
 import html.parsing.stock.DataSort.ForeignTradingVolumeDescCompare;
 import html.parsing.stock.DataSort.OrganTradingVolumeAscCompare;
 import html.parsing.stock.DataSort.OrganTradingVolumeDescCompare;
+import html.parsing.stock.model.ResultVO;
 import html.parsing.stock.util.FileUtil;
 
 public class AllStockForeignOrganNew {
@@ -54,16 +57,21 @@ public class AllStockForeignOrganNew {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new AllStockForeignOrganNew();
+		new AllStockForeignOrganNew(1);
 	}
 
 	AllStockForeignOrganNew() {
-		//에이치엘비
-		List<StockVO> kospiStockList = readOne("028300");
-		writeFile(kospiStockList, "코스피", true, "거래량");
+		strYmd4Compare = JOptionPane.showInputDialog("추출일자를 입력해 주세요(yyyy-mm-dd)", strYmd4Compare);
+
+		// 에이치엘비
+		ResultVO result = readOne("028300");
+		if (result.getResultMessage().equals("SUCCESS")) {
+			writeFile(result.getStockList(), "코스피", true, "거래량");
+		}
 	}
 
 	AllStockForeignOrganNew(int i) {
+		strYmd4Compare = JOptionPane.showInputDialog("추출일자를 입력해 주세요(yyyy-mm-dd)", strYmd4Compare);
 //		MakeKospiKosdaqList.makeKospiKosdaqList();
 
 		// 모든 주식 정보를 조회한다.
@@ -109,29 +117,37 @@ public class AllStockForeignOrganNew {
 			// 코스피
 			kospiAllStockList = StockUtil.readStockCodeNameListFromKrx("stockMkt");
 			logger.debug("kospiAllStockList.size :" + kospiAllStockList.size());
-			kospiAllStockList = getAllStockInfo(kospiAllStockList);
-			kospiAllStockForeignBuyList.addAll(kospiAllStockList);
-			kospiAllStockForeignSellList.addAll(kospiAllStockList);
-			kospiAllStockOrganBuyList.addAll(kospiAllStockList);
-			kospiAllStockOrganSellList.addAll(kospiAllStockList);
-			logger.debug("kospiAllStockForeignBuyList.size :" + kospiAllStockForeignBuyList.size());
-			logger.debug("kospiAllStockForeignSellList.size :" + kospiAllStockForeignSellList.size());
-			logger.debug("kospiAllStockOrganBuyList.size :" + kospiAllStockOrganBuyList.size());
-			logger.debug("kospiAllStockOrganSellList.size :" + kospiAllStockOrganSellList.size());
+			kospiAllStockList = getAllStockInfo(kospiAllStockList).getStockList();
+			if (kospiAllStockList.size() > 0) {
+				kospiAllStockForeignBuyList.addAll(kospiAllStockList);
+				kospiAllStockForeignSellList.addAll(kospiAllStockList);
+				kospiAllStockOrganBuyList.addAll(kospiAllStockList);
+				kospiAllStockOrganSellList.addAll(kospiAllStockList);
+				logger.debug("kospiAllStockForeignBuyList.size :" + kospiAllStockForeignBuyList.size());
+				logger.debug("kospiAllStockForeignSellList.size :" + kospiAllStockForeignSellList.size());
+				logger.debug("kospiAllStockOrganBuyList.size :" + kospiAllStockOrganBuyList.size());
+				logger.debug("kospiAllStockOrganSellList.size :" + kospiAllStockOrganSellList.size());
+			} else {
+				return;
+			}
 
 			// 코스닥
 			kosdaqAllStockList = StockUtil.readStockCodeNameListFromKrx("kosdaqMkt");
-			logger.debug("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
-			kosdaqAllStockList = getAllStockInfo(kosdaqAllStockList);
-			kosdaqForeignAllStockBuyList.addAll(kosdaqAllStockList);
-			kosdaqForeignAllStockSellList.addAll(kosdaqAllStockList);
-			kosdaqOrganAllStockBuyList.addAll(kosdaqAllStockList);
-			kosdaqOrganAllStockSellList.addAll(kosdaqAllStockList);
-			logger.debug("kosdaqAllStockForeignBuyList.size :" + kosdaqForeignAllStockBuyList.size());
-			logger.debug("kosdaqAllStockForeignSellList.size :" + kosdaqForeignAllStockSellList.size());
-			logger.debug("kosdaqAllStockOrganBuyList.size :" + kosdaqOrganAllStockBuyList.size());
-			logger.debug("kosdaqAllStockOrganSellList.size :" + kosdaqOrganAllStockSellList.size());
+			if (kosdaqAllStockList.size() > 0) {
 
+				logger.debug("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
+				kosdaqAllStockList = getAllStockInfo(kosdaqAllStockList).getStockList();
+				kosdaqForeignAllStockBuyList.addAll(kosdaqAllStockList);
+				kosdaqForeignAllStockSellList.addAll(kosdaqAllStockList);
+				kosdaqOrganAllStockBuyList.addAll(kosdaqAllStockList);
+				kosdaqOrganAllStockSellList.addAll(kosdaqAllStockList);
+				logger.debug("kosdaqAllStockForeignBuyList.size :" + kosdaqForeignAllStockBuyList.size());
+				logger.debug("kosdaqAllStockForeignSellList.size :" + kosdaqForeignAllStockSellList.size());
+				logger.debug("kosdaqAllStockOrganBuyList.size :" + kosdaqOrganAllStockBuyList.size());
+				logger.debug("kosdaqAllStockOrganSellList.size :" + kosdaqOrganAllStockSellList.size());
+			} else {
+				return;
+			}
 			// 1.외국인 코스피 순매수 순위
 			Collections.sort(kospiAllStockForeignBuyList, new ForeignTradingVolumeDescCompare());
 			// 2.외국인 코스피 순매도 순위
@@ -226,36 +242,74 @@ public class AllStockForeignOrganNew {
 
 	}
 
-	public static List<StockVO> readOne(String stockCode) {
+	public static ResultVO readOne(String stockCode) {
+		ResultVO result = new ResultVO();
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
 		int cnt = 1;
 		StockVO stock = getStockInfo(cnt, stockCode, "");
-		if (stock != null) {
-			stocks.add(stock);
-		}
-		return stocks;
+		stocks.add(stock);
+		String resultCode = stock.getResultCode();
+		String resultMessage = stock.getResultMessage();
+		String resultDetailMessage = stock.getResultDetailMessage();
+		logger.debug("resultCode :" + resultCode);
+		logger.debug("resultMessage :" + resultMessage);
+		logger.debug("resultDetailMessage :" + resultDetailMessage);
+		result.setResultCode(resultCode);
+		result.setResultMessage(resultMessage);
+		result.setResultDetailMessage(resultDetailMessage);
+		result.setStockList(stocks);
+		return result;
 	}
 
-	public List<StockVO> getAllStockInfo(List<StockVO> stockList) {
+	public ResultVO getAllStockInfo(List<StockVO> stockList) {
+		ResultVO result = new ResultVO();
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
+		StockVO stock = null;
 		String stockCode = null;
 		String stockName = null;
 		int cnt = 1;
-		for (StockVO svo : stockList) {
+		boolean isClosed = true;
+		if (stockList != null && stockList.size() > 0) {
+			StockVO svo = stockList.get(0);
 			stockCode = svo.getStockCode();
 			stockName = svo.getStockName();
 			logger.debug(stockCode + "\t" + stockName);
 
-			StockVO stock = getStockInfo(cnt, stockCode, stockName);
-			if (stock != null) {
-				stock.setStockName(stockName);
-				stocks.add(stock);
+			stock = getStockInfo(cnt, stockCode, stockName);
+			if (stock.getResultMessage().equals("FAIL")) {
+				isClosed = false;
 			}
-			cnt++;
 		}
-		return stocks;
+
+		if (isClosed) {
+			String resultCode = stock.getResultCode();
+			String resultMessage = stock.getResultMessage();
+			String resultDetailMessage = stock.getResultDetailMessage();
+			logger.debug("resultCode :" + resultCode);
+			logger.debug("resultMessage :" + resultMessage);
+			logger.debug("resultDetailMessage :" + resultDetailMessage);
+			result.setResultCode(resultCode);
+			result.setResultMessage(resultMessage);
+			result.setResultDetailMessage(resultDetailMessage);
+			result.setStockList(stocks);
+
+			for (StockVO svo : stockList) {
+				stockCode = svo.getStockCode();
+				stockName = svo.getStockName();
+				logger.debug(stockCode + "\t" + stockName);
+
+				stock = getStockInfo(cnt, stockCode, stockName);
+				if (stock != null) {
+					stock.setStockName(stockName);
+					stocks.add(stock);
+				}
+				cnt++;
+			}
+		}
+		result.setStockList(stocks);
+		return result;
 	}
 
 	public static List<StockVO> getAllStockInfo(String kospidaq, String fileName) {
@@ -420,6 +474,7 @@ public class AllStockForeignOrganNew {
 			stock.setSpecialLetter(specialLetter);
 
 			url = "http://finance.naver.com/item/frgn.nhn?code=" + code;
+			logger.debug("url :"+url);
 			doc = Jsoup.connect(url).get();
 
 			String tradingDate = "";
@@ -437,7 +492,9 @@ public class AllStockForeignOrganNew {
 				if (tdElements.size() == 9) {
 					// 날짜
 					tradingDate = tdElements.get(0).text();
-					if(strYmd4Compare.equals(tradingDate)) {
+					logger.debug("strYmd4Compare :"+strYmd4Compare);
+					logger.debug("tradingDate :"+tradingDate);
+					if (strYmd4Compare.equals(tradingDate)) {
 						// 기관순매매량
 						organTradingVolume = tdElements.get(5).text();
 						// 외인순매매량
@@ -447,9 +504,16 @@ public class AllStockForeignOrganNew {
 					}
 				}
 			}
-			if(!find) {
+			if (!find) {
 				logger.debug("당일 집계가 되지 않았거나 입력하신 일자 데이터가 존재하지 않습니다.");
+				stock.setResultCode("F00001");
+				stock.setResultMessage("FAIL");
+//				JOptionPane.showMessageDialog(null, "당일 집계가 되지 않았거나 입력하신 일자 데이터가 존재하지 않습니다.");
 				return stock;
+			}else {
+				stock.setResultCode("S00001");
+				stock.setResultMessage("SUCCESS");
+
 			}
 
 			foreignTradingVolume = StringUtils.defaultIfEmpty(foreignTradingVolume, "0");
@@ -546,7 +610,7 @@ public class AllStockForeignOrganNew {
 			List<StockVO> list = topSomeStockMapByAmount.get(key);
 
 			sb1.append("<div style='display:inline-block'>\r\n");
-			sb1.append("<h3>" +  key + " 종목 TOP " + EXTRACT_COUNT + "</h3>\r\n");
+			sb1.append("<h3>" + key + " 종목 TOP " + EXTRACT_COUNT + "</h3>\r\n");
 			sb1.append("<table>\r\n");
 			sb1.append("<tr>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
