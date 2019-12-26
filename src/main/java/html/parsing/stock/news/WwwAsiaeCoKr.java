@@ -1,14 +1,9 @@
 package html.parsing.stock.news;
 
 import java.awt.event.KeyEvent;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,12 +19,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
-import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 public class WwwAsiaeCoKr extends javax.swing.JFrame {
 
@@ -220,12 +215,13 @@ public class WwwAsiaeCoKr extends javax.swing.JFrame {
             doc.select(".news_twobox").remove();
             doc.select(".art_btm").remove();
             doc.select(".article_ad").remove();
+            doc.select(".you_section01").remove();
 
             String fileName2 = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
             System.out.println("fileName2:" + fileName2);
-            Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
-            bw.write(doc.html());
-            bw.close();
+//            Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
+//            bw.write(doc.html());
+//            bw.close();
 
             Elements title = doc.select(".cont_sub .area_title h3");
             System.out.println("title:" + strTitle);

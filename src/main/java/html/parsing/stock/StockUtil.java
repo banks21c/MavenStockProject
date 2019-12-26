@@ -372,6 +372,7 @@ public class StockUtil {
 				|| stockName.equals("DB") && strNews.contains("머니투데이 DB")
 				|| stockName.equals("EG") && strNews.contains("EGFR")
 				|| stockName.equals("EG") && strNews.contains("EGR")
+				|| stockName.equals("E1") && strNews.contains("FTSE100")
 				|| stockName.equals("GS") && strNews.contains("KCGS")
 				|| stockName.equals("GS") && strNews.contains("GSIA")
 				|| stockName.equals("GS") && strNews.contains("ADOPIMGS")
