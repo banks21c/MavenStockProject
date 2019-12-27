@@ -1,7 +1,5 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.StockUtil;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -15,6 +13,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 public class WwwDongaCom extends News {
 
@@ -93,7 +94,19 @@ public class WwwDongaCom extends News {
             strFileNameDate = StockUtil.getDateForFileName(strDate);
             System.out.println("strFileNameDate:" + strFileNameDate);
 
-            Element authorElement = doc.select(".article_title .title_foot .report a").get(0);
+            Elements authorElements = doc.select(".article_title .title_foot .report a");
+            Element authorElement = null;
+            if(authorElements != null && !authorElements.isEmpty() && authorElements.size() > 0) {
+            	authorElement = authorElements.get(0);
+            }
+            if(authorElements == null) {
+                authorElements = doc.select(".article_title .title_foot .report");
+
+                if(authorElements != null && !authorElements.isEmpty() && authorElements.size() > 0) {
+                	authorElement = authorElements.get(0);
+                }
+            }
+
             String author = "";
             if (authorElement != null) {
                 author = authorElement.text();
