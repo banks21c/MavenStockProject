@@ -1,11 +1,5 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
-import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.StockUtil;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -23,9 +17,16 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
+import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
+import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
+
 public class NewsMkCoKr extends javax.swing.JFrame {
 
-	private static Logger logger1 = LoggerFactory.getLogger(NewsMkCoKr.class);
+	private static Logger logger = LoggerFactory.getLogger(NewsMkCoKr.class);
 	final static String userHome = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -48,10 +49,10 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 	private static javax.swing.JLabel executeResultLbl;
 
 	NewsMkCoKr(int i) {
-		logger1 = LoggerFactory.getLogger(this.getClass());
-		logger1.debug(this.getClass().getSimpleName());
+		logger = LoggerFactory.getLogger(this.getClass());
+		logger.debug(this.getClass().getSimpleName());
 		String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
-		System.out.println("url:[" + url + "]");
+		logger.debug("url:[" + url + "]");
 		if (url.equals("")) {
 			url = "http://news.mk.co.kr/newsRead.php?sc=30000001&year=2018&no=251460";
 		}
@@ -70,12 +71,14 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 					break;
 				}
 			}
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| javax.swing.UnsupportedLookAndFeelException ex) {
 			java.util.logging.Logger.getLogger(NewsReader.class.getName()).log(java.util.logging.Level.SEVERE, null,
-				ex);
+					ex);
 		}
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				new NewsMkCoKr().setVisible(true);
 			}
@@ -83,7 +86,7 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 	}
 
 	public NewsMkCoKr() {
-		logger1 = LoggerFactory.getLogger(this.getClass());
+		logger = LoggerFactory.getLogger(this.getClass());
 		initComponents();
 	}
 
@@ -117,11 +120,13 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 		urlTf.setHorizontalAlignment(javax.swing.JTextField.LEFT);
 		urlTf.setToolTipText("");
 		urlTf.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				urlTfActionPerformed(evt);
 			}
 		});
 		urlTf.addKeyListener(new java.awt.event.KeyAdapter() {
+			@Override
 			public void keyReleased(java.awt.event.KeyEvent evt) {
 				urlTfKeyReleased(evt);
 			}
@@ -134,6 +139,7 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 
 		eraseBtn.setText("지우기");
 		eraseBtn.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				eraseBtnActionPerformed(evt);
 			}
@@ -142,6 +148,7 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 
 		executeBtn.setText("페이지 추출");
 		executeBtn.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				executeBtnActionPerformed(evt);
 			}
@@ -191,31 +198,33 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 		Document doc = null;
 		String strTitleForFileName;
 		try {
-			System.out.println("url:" + url);
+			logger.debug("url:" + url);
 			doc = Jsoup.connect(url)
-				.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0")
-				.header("Accept-Language", "en")
-				.header("Accept-Encoding", "gzip,deflate,sdch").get();
-			System.out.println("doc:[" + doc + "]");
+					.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0")
+					.header("Accept-Language", "en").header("Accept-Encoding", "gzip,deflate,sdch").get();
+//			logger.debug("doc:[" + doc + "]");
 
-            JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
-            JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
-            JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
-            JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
-	    
+			JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
+			JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
+			JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
+			JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
+
 			doc.select("iframe").remove();
 			doc.select("script").remove();
 			doc.select("div").attr("style", "width:548px");
 
 			Elements title = doc.select("h1.top_title");
-			System.out.println("title1:" + strTitle);
+			logger.debug("title1:" + strTitle);
 			if (title != null && title.size() > 0) {
 				strTitle = title.get(0).text();
+			} else {
+				title = doc.select("div.view_title h3");
+				strTitle = title.get(0).text();
 			}
-			System.out.println("title2:" + strTitle);
+			logger.debug("title2:" + strTitle);
 			strTitleForFileName = strTitle;
 			strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
-			System.out.println("strTitleForFileName:" + strTitleForFileName);
+			logger.debug("strTitleForFileName:" + strTitleForFileName);
 
 			Elements subTitle = doc.select("h2.sub_title1");
 			String strSubTitle = "";
@@ -224,7 +233,8 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 			}
 
 			String strAuthor = doc.select(".author").html();
-			System.out.println("strAuthor:[" + strAuthor + "]");
+			logger.debug("strAuthor:[" + strAuthor + "]");
+			strAuthor = strAuthor.replace("&nbsp;", " ");
 
 			Elements dateElements = doc.select(".news_title_author .lasttime");
 			Element dateElement = null;
@@ -236,20 +246,24 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 			String strFileNameDate = "";
 			if (dateElement != null) {
 				strDate = dateElement.html();
-				logger1.debug("strDate :" + strDate);
+				logger.debug("strDate :" + strDate);
 				strDate = strDate.replace("입력 :", "").trim();
 				if (strDate.contains("수정")) {
 					strDate = strDate.substring(0, strDate.indexOf("수정"));
 				}
+				strDate = strDate.replace("&nbsp;", "");
 
 				strFileNameDate = strDate;
 				strFileNameDate = StockUtil.getDateForFileName(strDate);
-				System.out.println("strFileNameDate:" + strFileNameDate);
+				logger.debug("strFileNameDate:" + strFileNameDate);
 			}
-			System.out.println("strDate:[" + strDate + "]");
+			logger.debug("strDate:[" + strDate + "]");
 
 			String strContent = doc.select("#article_body").html();
-			System.out.println("strContent:" + strContent);
+			if (strContent == null || strContent.trim().equals("")) {
+				strContent = doc.select(".view_txt").html();
+			}
+			logger.debug("strContent:" + strContent);
 			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
 			String copyright = "";
@@ -275,28 +289,30 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			System.out.println("fileDir:" + userHome + File.separator + "documents" + File.separator + host);
+			logger.debug("fileDir:" + userHome + File.separator + "documents" + File.separator + host);
 			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
-			
-//			System.out.println("fileName2:" + userHome + File.separator + "documents" + File.separator + strYMD + ".html");
+
+//			logger.debug("fileName2:" + userHome + File.separator + "documents" + File.separator + strYMD + ".html");
 //			String fileName = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
 //			FileUtil.fileWrite(fileName, doc.html());
 
-			System.out.println("fileName1:" + userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html");
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			logger.debug("fileName1:" + userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html");
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-//			System.out.println("fileName2:" + userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html");
+//			logger.debug("fileName2:" + userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html");
 //			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
 //			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			System.out.println("추출완료");
+			logger.debug("추출완료");
 			if (executeResultLbl != null) {
 				executeResultLbl.setText("추출완료");
 			}
