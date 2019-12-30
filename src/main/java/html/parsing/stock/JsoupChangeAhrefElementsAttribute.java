@@ -5,8 +5,6 @@
  */
 package html.parsing.stock;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -30,13 +28,16 @@ public class JsoupChangeAhrefElementsAttribute {
 		System.out.println("protocolHost===>" + protocolHost);
 		System.out.println("path===>" + path);
 
-		if (path.length() == path.lastIndexOf("/") + 1) {
-			path = path + "index.html";
-		}
-		System.out.println("path===>" + path);
+		String filePath = "";
+		if (path != null) {
+			if (path.length() == path.lastIndexOf("/") + 1) {
+				path = path + "index.html";
+			}
+			System.out.println("path===>" + path);
 
-		String filePath = path.substring(0, path.lastIndexOf("/") + 1);
-		System.out.println("filePath:[" + filePath + "]");
+			filePath = path.substring(0, path.lastIndexOf("/") + 1);
+			System.out.println("filePath:[" + filePath + "]");
+		}
 
 		for (Element ahref : ahrefs) {
 			String strAhref = ahref.attr("href");
@@ -71,7 +72,7 @@ public class JsoupChangeAhrefElementsAttribute {
 				}
 				logger.debug("ahref.attr href7===>" + ahref.attr("href"));
 				if (!ahref.attr("href").equals("") && !ahref.attr("href").startsWith("mailto")) {
-					//FileDownloader.downloadFile2(ahref.attr("href"));
+					// FileDownloader.downloadFile2(ahref.attr("href"));
 				}
 			}
 		}

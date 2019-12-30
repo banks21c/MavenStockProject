@@ -12,21 +12,15 @@ import javax.swing.JOptionPane;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
-import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
-public class NewsMkCoKr extends javax.swing.JFrame {
+public class WebCrawler20191230 extends javax.swing.JFrame {
 
-	private static Logger logger = LoggerFactory.getLogger(NewsMkCoKr.class);
+	private static Logger logger = LoggerFactory.getLogger(WebCrawler20191230.class);
 	final static String userHome = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -35,6 +29,7 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.ss.SSS", Locale.KOREAN).format(new Date());
 	static String strDate = null;
 	static String strTitle = null;
+	static String strFileNameDate = null;
 	static String strSubTitle = null;
 
 	DecimalFormat df = new DecimalFormat("###.##");
@@ -47,16 +42,18 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 	private javax.swing.JTextField urlTf;
 	private javax.swing.JPanel executeResultPnl;
 	private static javax.swing.JLabel executeResultLbl;
+	String inputUrl = "";
+	String defaultUrl = "https://bibimbang.com/four-friends-same-photos-40-years/?utm_source=tb&utm_medium=referral&utm_campaign=BBBl0004KRD1&utm_term=snaptime&ct=2855320060";
 
-	NewsMkCoKr(int i) {
+	WebCrawler20191230(int i) {
 		logger = LoggerFactory.getLogger(this.getClass());
 		logger.debug(this.getClass().getSimpleName());
-		String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
-		logger.debug("url:[" + url + "]");
-		if (url.equals("")) {
-			url = "http://news.mk.co.kr/newsRead.php?sc=30000001&year=2018&no=251460";
+		inputUrl = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
+		logger.debug("url:[" + inputUrl + "]");
+		if (inputUrl.equals("")) {
+			inputUrl = defaultUrl;
 		}
-		createHTMLFile(url);
+		createHTMLFile(inputUrl);
 	}
 
 	/**
@@ -80,12 +77,12 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new NewsMkCoKr().setVisible(true);
+				new WebCrawler20191230().setVisible(true);
 			}
 		});
 	}
 
-	public NewsMkCoKr() {
+	public WebCrawler20191230() {
 		logger = LoggerFactory.getLogger(this.getClass());
 		initComponents();
 	}
@@ -164,6 +161,9 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 		String url = urlTf.getText();
 		if (url != null && !url.equals("")) {
 			createHTMLFile(url);
+		}else {
+			logger.debug("기본 url 추출");
+			createHTMLFile(defaultUrl);
 		}
 	}
 
@@ -195,143 +195,50 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 		String protocolHost = gurl.getProtocolHost();
 
 		StringBuilder sb1 = new StringBuilder();
+		StringBuilder temp = new StringBuilder();
+
+		sb1.append("<html lang='ko'>\r\n");
+		sb1.append("<head>\r\n");
+		sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+		sb1.append("</head>\r\n");
+		sb1.append("<body>\r\n");
 		Document doc = null;
-		String strTitleForFileName;
 		try {
 			logger.debug("url:" + url);
 			doc = Jsoup.connect(url)
 					.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0")
 					.header("Accept-Language", "en").header("Accept-Encoding", "gzip,deflate,sdch").get();
-//			logger.debug("doc:[" + doc + "]");
+			sb1.append("<h3>" + doc.select("title") + "</h3>\r\n");
+			sb1.append(doc.select("#tps_slideContainer_622").html());
 
-			JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
-			JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
-			JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
-			JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
-
-			doc.select("iframe").remove();
-			doc.select("script").remove();
-			doc.select("div").attr("style", "width:548px");
-
-			Elements title = doc.select("h1.top_title");
-			logger.debug("title1:" + strTitle);
-			if (title != null && title.size() > 0) {
-				strTitle = title.get(0).text();
-			}
-			if (strTitle == null || strTitle.trim().equals("")) {
-				title = doc.select("div.view_title h3");
-				if (title != null && title.size() > 0) {
-					strTitle = title.get(0).text();
-				}
-			}
-			if (strTitle == null || strTitle.trim().equals("")) {
-				title = doc.select("#view_tit .head_tit");
-				if (title != null && title.size() > 0) {
-					strTitle = title.get(0).text();
-				}
+			String url1 = "https://bibimbang.com/four-friends-same-photos-40-years/";
+			String url2 = "/?utm_source=tb&utm_medium=referral&utm_campaign=BBBl0004KRD1&utm_term=snaptime&ct=2855320060";
+			String strContent = "";
+			for (int i = 2; i < 40; i++) {
+				url = url1 + i + url2;
+				logger.debug("url:" + url);
+				doc = Jsoup.connect(url)
+						.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0")
+						.header("Accept-Language", "en").header("Accept-Encoding", "gzip,deflate,sdch").get();
+				strTitle = doc.select("title").text();
+//				strContent = doc.select(".td-post-content p").html();
+				strContent = doc.select("#tps_slideContainer_622").html();
+				logger.debug("strContent:[" + strContent + "]");
+				temp.append(strContent);
 			}
 
-			logger.debug("title2:" + strTitle);
-			strTitleForFileName = strTitle;
-			strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
-			logger.debug("strTitleForFileName:" + strTitleForFileName);
-
-			Elements subTitle = doc.select("h2.sub_title1");
-			String strSubTitle = "";
-			if (subTitle != null && subTitle.size() > 0) {
-				strSubTitle = subTitle.outerHtml();
-			}
-
-			String strAuthor = doc.select(".author").html();
-			logger.debug("strAuthor:[" + strAuthor + "]");
-			strAuthor = strAuthor.replace("&nbsp;", " ");
-
-			Elements dateElements = doc.select(".news_title_author .lasttime");
-			Element dateElement = null;
-			if (dateElements != null && !dateElements.isEmpty() && dateElements.size() > 0) {
-				dateElement = dateElements.get(0);
-			} else {
-				dateElements = doc.select(".news_title_author .lasttime1");
-				if(dateElements != null && dateElements.size() > 0) {
-					dateElement = doc.select(".news_title_author .lasttime1").get(0);
-				}
-			}
-			logger.debug("dateElements :"+dateElements);
-			if (dateElements == null ||dateElements.isEmpty() || dateElements.size() <= 0) {
-				dateElements = doc.select("#view_tit .sm_num");
-				if (dateElements != null && !dateElements.isEmpty() && dateElements.size() > 0) {
-					dateElement = dateElements.get(0);
-				}
-			}
-			String strFileNameDate = "";
-			if (dateElement != null) {
-				strDate = dateElement.html();
-				logger.debug("strDate :" + strDate);
-				strDate = strDate.replace("입력 :", "").trim();
-				if (strDate.contains("수정")) {
-					strDate = strDate.substring(0, strDate.indexOf("수정"));
-				}
-				strDate = strDate.replace("&nbsp;", "").trim();
-				logger.debug("strDate :[" + strDate+"]");
-
-				strFileNameDate = strDate;
-				strFileNameDate = StockUtil.getDateForFileName(strDate);
-				logger.debug("strFileNameDate:" + strFileNameDate);
-			}
-			logger.debug("strDate:[" + strDate + "]");
-
-			String strContent = doc.select("#article_body").html();
-			if (strContent == null || strContent.trim().equals("")) {
-				strContent = doc.select(".view_txt").html();
-			}
-			logger.debug("strContent:" + strContent);
-			if(strContent == null || strContent.trim().equals("")) {
-				strContent = doc.select(".read_txt").html();
-			}
+			strContent = temp.toString();
 			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
-			String copyright = "";
-
-			sb1.append("<html lang='ko'>\r\n");
-			sb1.append("<head>\r\n");
-			sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
-			sb1.append("</head>\r\n");
-			sb1.append("<body>\r\n");
-
-			sb1.append(StockUtil.getMyCommentBox());
-
-			sb1.append("<div style='width:548px'>\r\n");
-
-			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-			sb1.append("<h1>[" + strDate + "]" + strTitle + "</h1><br>\r\n");
-			sb1.append(strSubTitle + "<br>\r\n");
-			sb1.append(strAuthor + "<br>\r\n");
-			sb1.append(strContent + "<br>\r\n");
-			sb1.append(copyright + "<br>\r\n");
-
+			sb1.append(strContent);
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			logger.debug("fileDir:" + userHome + File.separator + "documents" + File.separator + host);
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
-			if (!dir.exists()) {
-				dir.mkdirs();
-			}
-
-//			logger.debug("fileName2:" + userHome + File.separator + "documents" + File.separator + strYMD + ".html");
-//			String fileName = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
-//			FileUtil.fileWrite(fileName, doc.html());
-
-			logger.debug("fileName1:" + userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
-					+ strTitleForFileName + ".html");
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
-					+ strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strTitle + "_" + strYMD
+					+ ".html";
+			logger.debug("fileName2:" + fileName);
 			FileUtil.fileWrite(fileName, sb1.toString());
-
-//			logger.debug("fileName2:" + userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html");
-//			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
-//			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (IOException e) {
 			e.printStackTrace();

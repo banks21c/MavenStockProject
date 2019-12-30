@@ -24,9 +24,9 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
-public class NewsMkCoKr extends javax.swing.JFrame {
+public class WwwMkCoKr extends javax.swing.JFrame {
 
-	private static Logger logger = LoggerFactory.getLogger(NewsMkCoKr.class);
+	private static Logger logger = LoggerFactory.getLogger(WwwMkCoKr.class);
 	final static String userHome = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -48,13 +48,13 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 	private javax.swing.JPanel executeResultPnl;
 	private static javax.swing.JLabel executeResultLbl;
 
-	NewsMkCoKr(int i) {
+	WwwMkCoKr(int i) {
 		logger = LoggerFactory.getLogger(this.getClass());
 		logger.debug(this.getClass().getSimpleName());
 		String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
 		if (url.equals("")) {
-			url = "http://news.mk.co.kr/newsRead.php?sc=30000001&year=2018&no=251460";
+			url = "https://www.mk.co.kr/news/society/view/2019/12/1091653/";
 		}
 		createHTMLFile(url);
 	}
@@ -80,12 +80,12 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new NewsMkCoKr().setVisible(true);
+				new WwwMkCoKr().setVisible(true);
 			}
 		});
 	}
 
-	public NewsMkCoKr() {
+	public WwwMkCoKr() {
 		logger = LoggerFactory.getLogger(this.getClass());
 		initComponents();
 	}

@@ -150,7 +150,7 @@ enum NewsPublisher {
 		"WwwAsiaeCoKr",
 		"NewsStockAsiaeCoKr",
 		"NewViewAsiaeCoKr",
-		"NewsMkCoKr",
+		"WwwMkCoKr",
 		"NewsMkCoKrPremium",
 		"NewsMkCoKr",
 		"NewsVipMkCoKr",

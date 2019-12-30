@@ -5,8 +5,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import javax.imageio.IIOException;
 
+import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
 
 /*
@@ -57,7 +57,9 @@ public class GetUrlBufferedImage {
             System.out.println("width2:" + width);
             System.out.println("height2:" + height);
 
-        } catch (MalformedURLException | IIOException e) {
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IIOException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();

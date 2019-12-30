@@ -5,8 +5,6 @@
  */
 package html.parsing.stock.news;
 
-import html.parsing.stock.GlobalVariables;
-import html.parsing.stock.StockVO;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -14,10 +12,15 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.GlobalVariables;
+import html.parsing.stock.StockVO;
 
 public class News {
+	private static Logger logger = LoggerFactory.getLogger(News.class);
 
 	private static String kospiFileName = GlobalVariables.kospiFileName;
 	private static String kosdaqFileName = GlobalVariables.kosdaqFileName;
@@ -92,70 +95,70 @@ public class News {
 	}
 
 	public static URL getURL(String strUrl) {
-		System.out.println("getUrl(String " + strUrl + ")");
+		logger.debug("getUrl(String " + strUrl + ")");
 		URL url = null;
 
 		try {
 			url = new URL(strUrl);
 			String strUrlToString = url.toString();
-			System.out.println(strUrlToString);
-			System.out.println("authority :" + url.getAuthority());
-			System.out.println("getContent :" + url.getContent());
+			logger.debug(strUrlToString);
+			logger.debug("authority :" + url.getAuthority());
+			logger.debug("getContent :" + url.getContent());
 
-			// System.out.println("URI ASCIIString :" + url.toURI().toASCIIString());
-			System.out.println("ExternalForm :" + url.toExternalForm());
-			System.out.println("DefaultPort :" + url.getDefaultPort());
-			System.out.println("Query :" + url.getQuery());
-			System.out.println("Ref :" + url.getRef());
-			System.out.println("UserInfo :" + url.getUserInfo());
-			System.out.println("Port :" + url.getPort());
-			System.out.println("DefaultPort :" + url.getDefaultPort());
+			// logger.debug("URI ASCIIString :" + url.toURI().toASCIIString());
+			logger.debug("ExternalForm :" + url.toExternalForm());
+			logger.debug("DefaultPort :" + url.getDefaultPort());
+			logger.debug("Query :" + url.getQuery());
+			logger.debug("Ref :" + url.getRef());
+			logger.debug("UserInfo :" + url.getUserInfo());
+			logger.debug("Port :" + url.getPort());
+			logger.debug("DefaultPort :" + url.getDefaultPort());
 			protocol = url.getProtocol();
-			System.out.println("protocol :" + protocol);
+			logger.debug("protocol :" + protocol);
 			host = url.getHost();
-			System.out.println("host1 :" + host);
+			logger.debug("host1 :" + host);
 			path = url.getPath();
-			System.out.println("path :" + path);
-			System.out.println("path1 :" + path + " strUrl.indexOf(path)  :" + strUrl.indexOf(path));
+			logger.debug("path :" + path);
+			logger.debug("path1 :" + path + " strUrl.indexOf(path)  :" + strUrl.indexOf(path));
 			file = url.getFile();
-			System.out.println("file :" + file);
+			logger.debug("file :" + file);
 			filePath = file.substring(0, file.lastIndexOf("/") + 1);
-			System.out.println("filePath :" + filePath);
+			logger.debug("filePath :" + filePath);
 			String ref = url.getRef();
-			System.out.println("ref :" + ref);
+			logger.debug("ref :" + ref);
 
 			if (strUrl.indexOf(path) > 0) {
 				protocolHost = strUrl.substring(0, strUrl.indexOf(path));
 			} else {
 				protocolHost = protocol + "://" + host;
 			}
-			System.out.println("protocolHost1 :" + protocolHost);
+			logger.debug("protocolHost1 :" + protocolHost);
 
 			URI uri = null;
 			uri = url.toURI();
 			String scheme = uri.getScheme();
-			System.out.println("scheme :" + scheme);
-			System.out.println("ASCIIString :" + uri.toASCIIString());
-			System.out.println("Authority :" + uri.getAuthority());
-			System.out.println("RawAuthority :" + uri.getRawAuthority());
-			System.out.println("getPath :" + uri.getPath());
-			System.out.println("getRawPath :" + uri.getRawPath());
-			System.out.println("getRawSchemeSpecificPart :" + uri.getRawSchemeSpecificPart());
-			System.out.println("getSchemeSpecificPart :" + uri.getSchemeSpecificPart());
-			System.out.println("Fragment :" + uri.getFragment());
-			System.out.println("getRawFragment :" + uri.getRawFragment());
-			System.out.println("getRawQuery :" + uri.getRawQuery());
-			System.out.println("getRawUserInfo :" + uri.getRawUserInfo());
-			System.out.println("getUserInfo :" + uri.getUserInfo());
+			logger.debug("scheme :" + scheme);
+			logger.debug("ASCIIString :" + uri.toASCIIString());
+			logger.debug("Authority :" + uri.getAuthority());
+			logger.debug("RawAuthority :" + uri.getRawAuthority());
+			logger.debug("getPath :" + uri.getPath());
+			logger.debug("getRawPath :" + uri.getRawPath());
+			logger.debug("getRawSchemeSpecificPart :" + uri.getRawSchemeSpecificPart());
+			logger.debug("getSchemeSpecificPart :" + uri.getSchemeSpecificPart());
+			logger.debug("Fragment :" + uri.getFragment());
+			logger.debug("getRawFragment :" + uri.getRawFragment());
+			logger.debug("getRawQuery :" + uri.getRawQuery());
+			logger.debug("getRawUserInfo :" + uri.getRawUserInfo());
+			logger.debug("getUserInfo :" + uri.getUserInfo());
 
 		} catch (MalformedURLException ex) {
-			Logger.getLogger(News.class.getName()).log(Level.SEVERE, null, ex);
 
+			logger.debug(ex.getMessage());
 		} catch (URISyntaxException ex) {
-			Logger.getLogger(News.class.getName()).log(Level.SEVERE, null, ex);
 
+			logger.debug(ex.getMessage());
 		} catch (IOException ex) {
-			Logger.getLogger(News.class.getName()).log(Level.SEVERE, null, ex);
+			logger.debug(ex.getMessage());
 		} finally {
 		}
 		return url;
