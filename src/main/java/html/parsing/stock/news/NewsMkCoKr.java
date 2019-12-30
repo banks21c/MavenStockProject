@@ -217,10 +217,20 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 			logger.debug("title1:" + strTitle);
 			if (title != null && title.size() > 0) {
 				strTitle = title.get(0).text();
-			} else {
-				title = doc.select("div.view_title h3");
-				strTitle = title.get(0).text();
 			}
+			if (strTitle == null || strTitle.trim().equals("")) {
+				title = doc.select("div.view_title h3");
+				if (title != null && title.size() > 0) {
+					strTitle = title.get(0).text();
+				}
+			}
+			if (strTitle == null || strTitle.trim().equals("")) {
+				title = doc.select("#view_tit .head_tit");
+				if (title != null && title.size() > 0) {
+					strTitle = title.get(0).text();
+				}
+			}
+
 			logger.debug("title2:" + strTitle);
 			strTitleForFileName = strTitle;
 			strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
@@ -238,10 +248,20 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 
 			Elements dateElements = doc.select(".news_title_author .lasttime");
 			Element dateElement = null;
-			if (dateElements.isEmpty()) {
-				dateElement = doc.select(".news_title_author .lasttime1").get(0);
-			} else {
+			if (dateElements != null && !dateElements.isEmpty() && dateElements.size() > 0) {
 				dateElement = dateElements.get(0);
+			} else {
+				dateElements = doc.select(".news_title_author .lasttime1");
+				if(dateElements != null && dateElements.size() > 0) {
+					dateElement = doc.select(".news_title_author .lasttime1").get(0);
+				}
+			}
+			logger.debug("dateElements :"+dateElements);
+			if (dateElements == null ||dateElements.isEmpty() || dateElements.size() <= 0) {
+				dateElements = doc.select("#view_tit .sm_num");
+				if (dateElements != null && !dateElements.isEmpty() && dateElements.size() > 0) {
+					dateElement = dateElements.get(0);
+				}
 			}
 			String strFileNameDate = "";
 			if (dateElement != null) {
@@ -264,6 +284,9 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 				strContent = doc.select(".view_txt").html();
 			}
 			logger.debug("strContent:" + strContent);
+			if(strContent == null || strContent.trim().equals("")) {
+				strContent = doc.select(".read_txt").html();
+			}
 			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
 			String copyright = "";
