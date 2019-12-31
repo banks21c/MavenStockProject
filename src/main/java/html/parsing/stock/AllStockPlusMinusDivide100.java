@@ -451,7 +451,7 @@ public class AllStockPlusMinusDivide100 extends Thread {
 		sb1.append("<!doctype html>\r\n");
 		sb1.append("<html lang='ko'>\r\n");
 		sb1.append("<head>\r\n");
-		sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+		//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
 		sb1.append("<style>\r\n");
 		sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 		sb1.append("    td {border:1px solid #aaaaaa;font-size:12px;}\r\n");

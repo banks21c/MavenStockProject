@@ -224,7 +224,7 @@ public class NewsYonhapnews extends javax.swing.JFrame {
             //content.select("p").last().remove();
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
-            sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+            //sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
             sb1.append("</head>\r\n");
             sb1.append("<body>\r\n");
 

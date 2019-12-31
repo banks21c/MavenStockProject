@@ -145,7 +145,7 @@ public class NewsEdailyCoKr extends News {
             //String copyRight = copyRightElement.text();
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
-            sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+            //sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
             sb1.append("</head>\r\n");
             sb1.append("<body>\r\n");
 

@@ -20,12 +20,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 public class WwwHankyungCom extends News {
 
@@ -178,7 +178,7 @@ public class WwwHankyungCom extends News {
 			sb1.append("<!doctype html>\r\n");
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
-            sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+//            //sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
             sb1.append("</head>\r\n");
             sb1.append("<body>\r\n");
 

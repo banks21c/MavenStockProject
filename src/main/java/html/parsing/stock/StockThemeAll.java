@@ -304,7 +304,7 @@ public class StockThemeAll {
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("<style>\r\n");
 			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 			sb1.append("    th {border:1px solid #aaaaaa;background:#00c73c;}\r\n");

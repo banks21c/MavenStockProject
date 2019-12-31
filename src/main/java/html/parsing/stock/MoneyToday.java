@@ -143,7 +143,7 @@ public class MoneyToday extends javax.swing.JFrame {
             StringBuilder sb1 = new StringBuilder();
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
-            sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+            //sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
             sb1.append("<style>\r\n");
             sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
             sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
