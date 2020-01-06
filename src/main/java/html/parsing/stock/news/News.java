@@ -114,10 +114,10 @@ public class News {
 			logger.debug("Port :" + url.getPort());
 			logger.debug("DefaultPort :" + url.getDefaultPort());
 			protocol = url.getProtocol();
-			logger.debug("protocol :" + protocol);
 			host = url.getHost();
-			logger.debug("host1 :" + host);
 			path = url.getPath();
+			logger.debug("protocol :" + protocol);
+			logger.debug("host1 :" + host);
 			logger.debug("path :" + path);
 			logger.debug("path1 :" + path + " strUrl.indexOf(path)  :" + strUrl.indexOf(path));
 			file = url.getFile();
