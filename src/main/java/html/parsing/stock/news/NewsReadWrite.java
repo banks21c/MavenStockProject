@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -28,7 +30,7 @@ import javafx.scene.web.WebView;
  */
 public class NewsReadWrite extends javax.swing.JFrame {
 
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(NewsReadWrite.class);
     private WebEngine webEngine;
     private WebView view;
 

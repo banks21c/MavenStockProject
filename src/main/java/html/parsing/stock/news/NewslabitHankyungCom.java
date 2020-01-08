@@ -1,11 +1,5 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
-import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.StockUtil;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -16,7 +10,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -25,10 +18,19 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
+import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
+import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 public class NewslabitHankyungCom extends News {
 
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(NewslabitHankyungCom.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -49,12 +51,12 @@ public class NewslabitHankyungCom extends News {
     }
 
     NewslabitHankyungCom() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
     }
 
     NewslabitHankyungCom(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-        logger.log(Level.INFO, this.getClass().getSimpleName());
+
+
         String url = JOptionPane.showInputDialog("뉴스래빗 URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url == null || url.equals("")) {

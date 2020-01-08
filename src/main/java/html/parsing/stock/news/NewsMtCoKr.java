@@ -1,30 +1,31 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
-import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.StockUtil;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
+import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
+import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 public class NewsMtCoKr extends javax.swing.JFrame {
 
     private static final long serialVersionUID = 1L;
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(NewsMtCoKr.class);
     final static String userHome = System.getProperty("user.home");
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -66,14 +67,15 @@ public class NewsMtCoKr extends javax.swing.JFrame {
         }
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 new NewsMtCoKr().setVisible(true);
             }
         });
     }
 
     public NewsMtCoKr() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getName());
+
         initComponents();
     }
 
@@ -108,12 +110,14 @@ public class NewsMtCoKr extends javax.swing.JFrame {
         urlTf.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         urlTf.setToolTipText("");
         urlTf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 urlTfActionPerformed(evt);
             }
         });
         urlTf.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
+            @Override
+			public void keyReleased(java.awt.event.KeyEvent evt) {
                 urlTfKeyReleased(evt);
             }
         });
@@ -125,7 +129,8 @@ public class NewsMtCoKr extends javax.swing.JFrame {
 
         eraseBtn.setText("지우기");
         eraseBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 eraseBtnActionPerformed(evt);
             }
         });
@@ -133,7 +138,8 @@ public class NewsMtCoKr extends javax.swing.JFrame {
 
         executeBtn.setText(executeBtnTxt + " 페이지 추출");
         executeBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 executeBtnActionPerformed(evt);
             }
         });
@@ -171,8 +177,8 @@ public class NewsMtCoKr extends javax.swing.JFrame {
     }
 
     NewsMtCoKr(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-        logger.log(Level.INFO, this.getClass().getSimpleName());
+
+
         String url = JOptionPane.showInputDialog("Money Today URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url.equals("")) {
@@ -198,7 +204,7 @@ public class NewsMtCoKr extends javax.swing.JFrame {
             doc.select(".util_box").remove();
             doc.select(".articleRelnewsFrame").remove();
             doc.select("iframe").remove();
-	    
+
             Elements article = doc.select("#article");
             System.out.println("article :[" + article + "]");
 

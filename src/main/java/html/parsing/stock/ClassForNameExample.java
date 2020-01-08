@@ -8,8 +8,8 @@ package html.parsing.stock;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+
 
 /**
  *
@@ -33,19 +33,19 @@ public class ClassForNameExample {
             Object object = ctor.newInstance(new Object[]{url});
             //c.getDeclaredMethods()[0].invoke(object, Object... MethodArgs  );
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchMethodException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SecurityException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -58,19 +58,19 @@ public class ClassForNameExample {
             Method method = c.getDeclaredMethod("createHTMLFile", String.class);
             StringBuilder sb = (StringBuilder) method.invoke(String.class, new Object[]{
                 url});
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.INFO, sb.toString());
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.INFO, sb.toString());
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchMethodException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SecurityException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -86,19 +86,19 @@ public class ClassForNameExample {
             // Create new object. 
             Object obj = ctor.newInstance();
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalArgumentException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchMethodException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SecurityException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

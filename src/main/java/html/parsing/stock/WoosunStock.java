@@ -12,10 +12,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class WoosunStock {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(WoosunStock.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -32,11 +35,11 @@ public class WoosunStock {
     }
 
     WoosunStock() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
     }
 
     WoosunStock(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         // MakeKospiKosdaqList.makeKospiKosdaqList();
 
         String kospiFileName = GlobalVariables.kospiFileName;

@@ -18,6 +18,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.MaxCurAscCompare;
 import html.parsing.stock.DataSort.MinCurDescCompare;
@@ -27,7 +29,7 @@ import html.parsing.stock.DataSort.YearStartCurDescCompare;
 public class Weeks52MinMax50P100P {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(Weeks52MinMax50P100P.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -44,7 +46,7 @@ public class Weeks52MinMax50P100P {
     }
 
     Weeks52MinMax50P100P() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         String kospiFileName = "new_kospi_우선주제외.html";
         String kosdaqFileName = "new_kosdaq_우선주제외.html";
 
@@ -56,7 +58,7 @@ public class Weeks52MinMax50P100P {
     }
 
     Weeks52MinMax50P100P(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         // MakeKospiKosdaqList.makeKospiKosdaqList();
 
         String kospiFileName = "new_kospi_우선주제외.html";

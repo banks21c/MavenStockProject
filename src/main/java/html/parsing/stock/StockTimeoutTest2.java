@@ -6,15 +6,16 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StockTimeoutTest2 {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(StockTimeoutTest2.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -33,23 +34,23 @@ public class StockTimeoutTest2 {
     }
 
     StockTimeoutTest2() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-        logger.log(Level.INFO, this.getClass().getSimpleName());
+
+
         String url1 = "http://finance.daum.net/domestic/after_hours?market=KOSPI";
         createHTMLFile(url1, "시간외단일가 코스피 상승");
-	
+
         String url2 = "http://finance.daum.net/domestic/after_hours?market=KOSPI";
 //        createHTMLFile(url2, "시간외단일가 코스피 하락");
-	
+
         String url3 = "http://finance.daum.net/domestic/after_hours?market=KOSPI";
 //        createHTMLFile(url3, "시간외단일가 코스피 체결량상위");
-	
+
         String url4 = "http://finance.daum.net/domestic/after_hours?market=KOSDAQ";
         createHTMLFile(url4, "시간외단일가 코스닥 상승");
-	
+
         String url5 = "http://finance.daum.net/domestic/after_hours?market=KOSDAQ";
 //        createHTMLFile(url5, "시간외단일가 코스닥 하락");
-	
+
         String url6 = "http://finance.daum.net/domestic/after_hours?market=KOSDAQ";
 //        createHTMLFile(url6, "시간외단일가 코스닥 체결량상위");
     }
@@ -67,7 +68,7 @@ public class StockTimeoutTest2 {
             String strDate = doc.select(".targetDate b").text();
 
             strDate = strYear + "." + strDate;
-            logger.log(Level.INFO, "date:" + strDate);
+            logger.debug("date:" + strDate);
 
             try (FileWriter fw = new FileWriter(userHome + "\\documents\\" + strDate + "_" + title + ".html")) {
                 StringBuilder sb1 = new StringBuilder();

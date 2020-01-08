@@ -17,10 +17,13 @@ import java.util.TreeMap;
 
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CreateLinkByStockName {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(CreateLinkByStockName.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -44,11 +47,11 @@ public class CreateLinkByStockName {
     }
 
     CreateLinkByStockName() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
     }
 
     CreateLinkByStockName(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         // MakeKospiKosdaqList.makeKospiKosdaqList();
 
         String kospiFileName = GlobalVariables.kospiFileName;

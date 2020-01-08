@@ -1,11 +1,5 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
-import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.StockUtil;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -14,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
@@ -22,6 +15,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+
+import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
+import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
+import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 public class SnaptimeEdailyCoKr extends News {
 
@@ -42,12 +43,12 @@ public class SnaptimeEdailyCoKr extends News {
 	}
 
 	public SnaptimeEdailyCoKr() {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
 	}
 
 	public SnaptimeEdailyCoKr(int i) {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-		logger.log(Level.INFO, "이데일리 스냅타임뉴스");
+
+
 		String url = JOptionPane.showInputDialog("이데일리 스냅타임뉴스 URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url.equals("")) {
@@ -61,7 +62,7 @@ public class SnaptimeEdailyCoKr extends News {
 			url = URLDecoder.decode(url, "UTF-8");
 			System.out.println("url:" + url);
 		} catch (UnsupportedEncodingException ex) {
-			Logger.getLogger(SnaptimeEdailyCoKr.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(SnaptimeEdailyCoKr.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		new News().getURL(url);
 		System.out.println("url:" + url);

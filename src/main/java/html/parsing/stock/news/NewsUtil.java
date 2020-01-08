@@ -12,8 +12,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+
 
 /**
  *

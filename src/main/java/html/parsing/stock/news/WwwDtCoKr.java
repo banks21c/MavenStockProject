@@ -16,7 +16,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;
+import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;

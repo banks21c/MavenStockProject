@@ -19,6 +19,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.TradingAmountDescCompare;
 import html.parsing.stock.DataSort.TradingVolumeDescCompare;
@@ -27,7 +29,7 @@ import html.parsing.stock.DataSort.VaryRatioDescCompare;
 public class StockSpac {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(StockSpac.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -44,7 +46,7 @@ public class StockSpac {
     }
 
     StockSpac() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
         List<StockVO> kospiStockList = readOne("071970");
@@ -52,7 +54,7 @@ public class StockSpac {
     }
 
     StockSpac(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         // MakeKospiKosdaqList.makeKospiKosdaqList();
 
         String kosdaqFileName = GlobalVariables.kosdaqFileName;

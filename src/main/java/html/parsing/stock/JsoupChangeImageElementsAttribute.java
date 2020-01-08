@@ -6,8 +6,8 @@
 package html.parsing.stock;
 
 import java.awt.image.BufferedImage;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -88,7 +88,7 @@ public class JsoupChangeImageElementsAttribute {
 
 	public static void setImgAttr(String attrType, String protocol, String protocolHost, String filePath,
 			String tempPath, Element img, boolean resizeYn) {
-		Logger.getLogger(JsoupChangeImageElementsAttribute.class.getName()).log(Level.SEVERE, "attrType:" + attrType);
+		java.util.logging.Logger.getLogger(JsoupChangeImageElementsAttribute.class.getName()).log(Level.SEVERE, "attrType:" + attrType);
 		String src = img.attr(attrType);
 		System.out.println("src====>" + src);
 		String dataSrc = img.attr("datasrc");

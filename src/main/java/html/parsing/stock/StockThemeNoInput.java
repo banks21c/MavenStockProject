@@ -14,8 +14,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -204,7 +204,7 @@ public class StockThemeNoInput extends News {
             try {
                 doc = Jsoup.connect(url).get();
             } catch (IOException ex) {
-                Logger.getLogger(StockThemeInput.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(StockThemeInput.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             Elements themeStockTables = doc.select(".type_5");

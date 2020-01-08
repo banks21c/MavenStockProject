@@ -5,8 +5,8 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+
 
 import javax.swing.JOptionPane;
 
@@ -37,12 +37,12 @@ public class WwwDailianCoKr extends News {
 	}
 
 	WwwDailianCoKr() {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+		
 	}
 
 	WwwDailianCoKr(int i) {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-		logger.log(Level.INFO, "뉴스");
+		
+		
 		String url = JOptionPane.showInputDialog("뉴스 URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {

@@ -175,6 +175,7 @@ public class StockExtractExceptWord {
 				|| stockName.equals("상보") && strNews.contains("정상보")
 				|| stockName.equals("상보") && strNews.contains("영상보기")
 				|| stockName.equals("서한") && strNews.contains("연례 서한")
+				|| stockName.equals("서연") && strNews.contains("바이오센서연구소")
 				|| stockName.equals("서한") && strNews.contains("공개 서한")
 				|| stockName.equals("서한") && strNews.contains("결정 서한")
 				|| stockName.equals("서한") && strNews.contains("서한기")

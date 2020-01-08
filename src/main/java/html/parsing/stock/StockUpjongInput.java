@@ -1,6 +1,5 @@
 package html.parsing.stock;
 
-import html.parsing.stock.news.News;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,19 +19,21 @@ import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.StockNameLengthDescCompare;
-import java.util.logging.Logger;
-import org.apache.commons.lang3.StringUtils;
+import html.parsing.stock.news.News;
 
 public class StockUpjongInput extends News {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(StockUpjongInput.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -72,8 +73,8 @@ public class StockUpjongInput extends News {
     }
 
     StockUpjongInput() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-        logger.log(Level.INFO, this.getClass().getSimpleName());
+
+
         strThemeName = JOptionPane.showInputDialog("업종명을 입력해 주세요", strThemeName);
         System.out.println("strThemeName:" + strThemeName);
         String themeMarketPrice = getThemeMarketPrice(strThemeName);
@@ -81,7 +82,7 @@ public class StockUpjongInput extends News {
     }
 
     StockUpjongInput(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         // MakeKospiKosdaqList.makeKospiKosdaqList();
         strDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDefaultDate);
         strDate = StringUtils.defaultString(strDate);
@@ -108,10 +109,10 @@ public class StockUpjongInput extends News {
         // 코스닥
         readFile("코스닥", kosdaqFileName);
 
-        logger.log(Level.INFO, "정렬");
+
         Collections.sort(allStockList, new StockNameLengthDescCompare());
 
-        logger.log(Level.INFO, "파일쓰기");
+
         writeFile(strThemeName, themeMarketPrice);
     }
 
@@ -206,7 +207,7 @@ public class StockUpjongInput extends News {
             try {
                 doc = Jsoup.connect(url).get();
             } catch (IOException ex) {
-                Logger.getLogger(StockUpjongInput.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(StockUpjongInput.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             Elements themeStockTables = doc.select(".type_5");

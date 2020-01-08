@@ -16,7 +16,6 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -49,7 +48,7 @@ public class URLTest {
                 }
             }
         } catch (MalformedURLException ex) {
-            Logger.getLogger(URLTest.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(URLTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

@@ -6,15 +6,16 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StockTimeout {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(StockTimeout.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -33,8 +34,8 @@ public class StockTimeout {
     }
 
     StockTimeout() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-        logger.log(Level.INFO, this.getClass().getSimpleName());
+
+
         String url1 = "http://finance.daum.net/quote/timeout.daum?sign=2&order=desc&stype=P";
         createHTMLFile(url1, "시간외단일가 코스피 상승");
         String url2 = "http://finance.daum.net/quote/timeout.daum?sign=5&order=asc&stype=P";
@@ -62,7 +63,7 @@ public class StockTimeout {
             String strDate = doc.select(".targetDate b").text();
 
             strDate = strYear + "." + strDate;
-            logger.log(Level.INFO, "date:" + strDate);
+            logger.debug("date:" + strDate);
 
             try (FileWriter fw = new FileWriter(userHome + "\\documents\\" + strDate + "_" + title + ".html")) {
                 StringBuilder sb1 = new StringBuilder();

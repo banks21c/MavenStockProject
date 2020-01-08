@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+
 import javax.sound.midi.SysexMessage;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -170,7 +170,7 @@ public class RestTempleteTest01 {
             System.out.println("s :" + s);
             map.add("callbackUrl", s);
         } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(RestTempleteTest01.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestTempleteTest01.class.getName()).log(Level.SEVERE, null, ex);
         }
         map.add("callbackEncoding", "false");
         map.add("callbackType", "image");
@@ -202,7 +202,7 @@ public class RestTempleteTest01 {
             JsonNode root = objectMapper.readTree(Arrays.toString(responseEntityStr.getBody()));
             System.out.println("root:" + root);
         } catch (IOException ex) {
-            Logger.getLogger(RestTempleteTest01.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestTempleteTest01.class.getName()).log(Level.SEVERE, null, ex);
         }
 
 //        ResponseEntity<byte[]> response = restTemplate.exchange(url, HttpMethod.POST, entity, byte[].class, map);

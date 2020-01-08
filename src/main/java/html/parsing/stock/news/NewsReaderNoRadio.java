@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -538,7 +537,7 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
             JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
 
         } catch (IOException ex) {
-            Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             System.out.println("이미지 추출 완료");
         }
@@ -549,7 +548,7 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
         try {
             jEditorPane2.setPage(url);
         } catch (IOException ex) {
-            Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -623,7 +622,7 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
             Thread.sleep(1000);
             createHTMLFile();
         } catch (InterruptedException ex) {
-            Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_executeBtnActionPerformed
 
@@ -645,7 +644,7 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
                 uri = new URI("https://finance.naver.com/item/main.nhn?code=" + stockCode);
                 open(uri);
             } catch (URISyntaxException ex) {
-                Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
             }
         }//GEN-LAST:event_jList1MouseClicked
 
@@ -656,7 +655,7 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
                 uri = new URI("https://finance.naver.com/item/main.nhn?code=" + stockCode);
                 open(uri);
             } catch (URISyntaxException ex) {
-                Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
             }
         }//GEN-LAST:event_jList2MouseClicked
 
@@ -686,7 +685,7 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
             Thread.sleep(1000);
             createHTMLFile();
         } catch (InterruptedException ex) {
-            Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -702,7 +701,7 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
             Thread.sleep(1000);
             createHTMLFile();
         } catch (InterruptedException ex) {
-            Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewsReaderNoRadio.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     private void textFieldPopupMenuPanel1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textFieldPopupMenuPanel1FocusLost
@@ -772,9 +771,9 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
             //c.getDeclaredMethods()[0].invoke(object, Object... MethodArgs  );
             Method method = c.getDeclaredMethod("createHTMLFile", String.class);
             sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.INFO, sb.toString());
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.INFO, sb.toString());
         } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
-            Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         Document htmlDoc = Jsoup.parse(sb.toString());
@@ -864,7 +863,7 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewsReaderNoRadio.class.getName()).log(java.util.logging.Level.SEVERE, null,
+			java.util.logging.Logger.getLogger(NewsReaderNoRadio.class.getName()).log(java.util.logging.Level.SEVERE, null,
                     ex);
         }
         // </editor-fold>

@@ -6,6 +6,8 @@ import java.io.File;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,7 +23,7 @@ import html.parsing.stock.util.FileUtil;
  */
 public class MoneyToday extends javax.swing.JFrame {
 
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(MoneyToday.class);
     final static String userHome = System.getProperty("user.home");
 
     /**
@@ -113,7 +115,7 @@ public class MoneyToday extends javax.swing.JFrame {
     }
 
     private void createHTMLFile(String url) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getName());
+
 
         News gurl = new News();
         gurl.getURL(url);

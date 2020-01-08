@@ -14,6 +14,8 @@ import java.util.Locale;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -21,7 +23,7 @@ import org.jsoup.select.Elements;
  */
 public class Huffingtonpost extends javax.swing.JFrame {
 
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(Huffingtonpost.class);
     final static String userHome = System.getProperty("user.home");
 
     /**
@@ -62,12 +64,14 @@ public class Huffingtonpost extends javax.swing.JFrame {
         urlTf.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         urlTf.setToolTipText("");
         urlTf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 urlTfActionPerformed(evt);
             }
         });
         urlTf.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
+            @Override
+			public void keyReleased(java.awt.event.KeyEvent evt) {
                 urlTfKeyReleased(evt);
             }
         });
@@ -77,7 +81,8 @@ public class Huffingtonpost extends javax.swing.JFrame {
 
         executeBtn.setText("페이지 추출");
         executeBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 executeBtnActionPerformed(evt);
             }
         });
@@ -110,7 +115,7 @@ public class Huffingtonpost extends javax.swing.JFrame {
     }
 
     private void createHTMLFile(String url) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getName());
+
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
@@ -194,7 +199,8 @@ public class Huffingtonpost extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 new Huffingtonpost().setVisible(true);
             }
         });

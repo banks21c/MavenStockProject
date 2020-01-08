@@ -1,29 +1,27 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
-import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.StockUtil;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 public class MoneysMtCoKr extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 1L;
-	java.util.logging.Logger logger = null;
+	private static Logger logger = LoggerFactory.getLogger(MoneysMtCoKr.class);
 	final static String userHome = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -65,6 +63,7 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 		}
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				new MoneysMtCoKr().setVisible(true);
 			}
@@ -72,7 +71,7 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 	}
 
 	public MoneysMtCoKr() {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getName());
+
 		initComponents();
 	}
 
@@ -107,11 +106,13 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 		urlTf.setHorizontalAlignment(javax.swing.JTextField.LEFT);
 		urlTf.setToolTipText("");
 		urlTf.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				urlTfActionPerformed(evt);
 			}
 		});
 		urlTf.addKeyListener(new java.awt.event.KeyAdapter() {
+			@Override
 			public void keyReleased(java.awt.event.KeyEvent evt) {
 				urlTfKeyReleased(evt);
 			}
@@ -124,6 +125,7 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 
 		eraseBtn.setText("지우기");
 		eraseBtn.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				eraseBtnActionPerformed(evt);
 			}
@@ -132,6 +134,7 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 
 		executeBtn.setText(executeBtnTxt + " 페이지 추출");
 		executeBtn.addActionListener(new java.awt.event.ActionListener() {
+			@Override
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				executeBtnActionPerformed(evt);
 			}
@@ -170,8 +173,8 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 	}
 
 	MoneysMtCoKr(int i) {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-		logger.log(Level.INFO, this.getClass().getSimpleName());
+
+
 		String url = JOptionPane.showInputDialog("돈이보이는 스페셜뉴스 MoneyS URL:");
 		System.out.println("url:[" + url + "]");
 		if (url.equals("")) {

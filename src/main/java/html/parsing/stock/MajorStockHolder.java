@@ -19,6 +19,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.RetainAmountDescCompare;
 import html.parsing.stock.DataSort.RetainRatioDescCompare;
@@ -26,7 +28,7 @@ import html.parsing.stock.DataSort.RetainRatioDescCompare;
 public class MajorStockHolder {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(MajorStockHolder.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -41,7 +43,7 @@ public class MajorStockHolder {
     }
 
     MajorStockHolder() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         String kospiFileName = GlobalVariables.kospiFileName;
         String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
@@ -54,7 +56,7 @@ public class MajorStockHolder {
     }
 
     MajorStockHolder(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         MakeKospiKosdaqListThread.makeKospiKosdaqList();
 
         String kospiFileName = GlobalVariables.kospiFileName;

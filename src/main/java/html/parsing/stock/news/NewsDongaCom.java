@@ -1,13 +1,10 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.StockUtil;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
@@ -15,10 +12,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 public class NewsDongaCom extends News {
 
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(NewsDongaCom.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -39,12 +41,12 @@ public class NewsDongaCom extends News {
     }
 
     NewsDongaCom() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
     }
 
     NewsDongaCom(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-        logger.log(Level.INFO, "동아뉴스");
+
+
         String url = JOptionPane.showInputDialog("동아뉴스 URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url == null || url.equals("")) {

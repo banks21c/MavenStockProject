@@ -19,6 +19,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.TotalAmountDescCompare;
 import html.parsing.stock.DataSort.TotalVolumeDescCompare;
@@ -26,7 +28,7 @@ import html.parsing.stock.DataSort.TotalVolumeDescCompare;
 public class StockTotalAmount {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(StockTotalAmount.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -43,7 +45,7 @@ public class StockTotalAmount {
     }
 
     StockTotalAmount() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         String kospiFileName = GlobalVariables.kospiFileName;
         String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
@@ -55,7 +57,7 @@ public class StockTotalAmount {
     }
 
     StockTotalAmount(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         // MakeKospiKosdaqList.makeKospiKosdaqList();
 
         String kospiFileName = "new_kospi_우선주제외.html";

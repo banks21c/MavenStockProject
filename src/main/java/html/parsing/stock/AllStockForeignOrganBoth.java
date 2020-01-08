@@ -20,6 +20,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.ForeignOrganTradingAmountAscCompare;
 import html.parsing.stock.DataSort.ForeignOrganTradingAmountDescCompare;
@@ -29,7 +31,7 @@ import html.parsing.stock.DataSort.ForeignOrganTradingVolumeDescCompare;
 public class AllStockForeignOrganBoth {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrganBoth.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -47,7 +49,7 @@ public class AllStockForeignOrganBoth {
     }
 
     AllStockForeignOrganBoth() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         String kospiFileName = GlobalVariables.kospiFileName;
         String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
@@ -56,7 +58,7 @@ public class AllStockForeignOrganBoth {
     }
 
     AllStockForeignOrganBoth(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         // MakeKospiKosdaqList.makeKospiKosdaqList();
 
         String kospiFileName = GlobalVariables.kospiFileName;

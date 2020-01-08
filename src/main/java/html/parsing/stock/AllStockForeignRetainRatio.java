@@ -20,6 +20,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.ForeignHaveAmountDescCompare;
 import html.parsing.stock.DataSort.ForeignHaveRatioDescCompare;
@@ -27,7 +29,7 @@ import html.parsing.stock.DataSort.ForeignHaveRatioDescCompare;
 public class AllStockForeignRetainRatio {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(AllStockForeignRetainRatio.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -44,7 +46,7 @@ public class AllStockForeignRetainRatio {
     }
 
     AllStockForeignRetainRatio() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         String kospiFileName = GlobalVariables.kospiFileName;
         String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
@@ -57,7 +59,7 @@ public class AllStockForeignRetainRatio {
     }
 
     AllStockForeignRetainRatio(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         // MakeKospiKosdaqList.makeKospiKosdaqList();
 
         String kospiFileName = GlobalVariables.kospiFileName;

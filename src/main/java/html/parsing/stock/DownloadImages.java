@@ -10,8 +10,8 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+
 
 import javax.imageio.ImageIO;
 
@@ -56,7 +56,7 @@ public class DownloadImages {
 
         } catch (IOException ex) {
             System.err.println("There was an error");
-            Logger.getLogger(DownloadImages.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DownloadImages.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

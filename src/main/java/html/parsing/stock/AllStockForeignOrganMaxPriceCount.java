@@ -19,13 +19,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.MaxPriceCountDescCompare;
 
 public class AllStockForeignOrganMaxPriceCount extends Thread {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrganMaxPriceCount.class);
     int flag = 0;
     String kospiFileName = GlobalVariables.kospiFileName;
     String kosdaqFileName = GlobalVariables.kosdaqFileName;
@@ -44,7 +46,8 @@ public class AllStockForeignOrganMaxPriceCount extends Thread {
         t.start();
     }
 
-    public void run() {
+    @Override
+	public void run() {
         if (flag == 1) {
             // MakeKospiKosdaqList.makeKospiKosdaqList();
 
@@ -70,11 +73,11 @@ public class AllStockForeignOrganMaxPriceCount extends Thread {
     }
 
     AllStockForeignOrganMaxPriceCount() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
     }
 
     AllStockForeignOrganMaxPriceCount(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         flag = i;
     }
 

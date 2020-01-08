@@ -5,10 +5,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class AllStockExtract {
 
 	final static String userHome = System.getProperty("user.home");
-	java.util.logging.Logger logger = null;
+	private static Logger logger = LoggerFactory.getLogger(AllStockExtract.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);

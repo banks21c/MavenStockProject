@@ -7,7 +7,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
@@ -15,6 +14,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.news.News;
 import html.parsing.stock.news.NewsReader;
@@ -22,7 +23,7 @@ import html.parsing.stock.util.FileUtil;
 
 public class JavaCodeGeeksCom extends javax.swing.JFrame {
 
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(JavaCodeGeeksCom.class);
     final static String userHome = System.getProperty("user.home");
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -47,8 +48,8 @@ public class JavaCodeGeeksCom extends javax.swing.JFrame {
     private static javax.swing.JLabel executeResultLbl;
 
     JavaCodeGeeksCom(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-        logger.log(Level.INFO, this.getClass().getSimpleName());
+
+
         String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url.equals("")) {
@@ -83,7 +84,7 @@ public class JavaCodeGeeksCom extends javax.swing.JFrame {
     }
 
     public JavaCodeGeeksCom() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getName());
+
         initComponents();
     }
 

@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+
 
 /**
  *
@@ -30,14 +30,14 @@ public class FileUtil {
 			fw.write(strContent);
 			fw.flush();
 		} catch (FileNotFoundException ex) {
-			Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (IOException ex) {
-			Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
 		} finally {
 			try {
 				fw.close();
 			} catch (IOException ex) {
-				Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+				java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 	}
@@ -51,9 +51,9 @@ public class FileUtil {
 			bw.write(strContent);
 			bw.flush();
 		} catch (FileNotFoundException ex) {
-			Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (IOException ex) {
-			Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
 		} finally {
 			try {
 				if (bw != null) {
@@ -63,7 +63,7 @@ public class FileUtil {
 					writer.close();
 				}
 			} catch (IOException ex) {
-				Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+				java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 	}
@@ -77,9 +77,9 @@ public class FileUtil {
 			bw.write(strContent);
 			bw.flush();
 		} catch (FileNotFoundException ex) {
-			Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (IOException ex) {
-			Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
 		} finally {
 			try {
 				if (bw != null) {
@@ -89,7 +89,7 @@ public class FileUtil {
 					writer.close();
 				}
 			} catch (IOException ex) {
-				Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
+				java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
 	}

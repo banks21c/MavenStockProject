@@ -1,23 +1,25 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.StockUtil;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 public class WwwHidocCoKr extends News {
 
-	java.util.logging.Logger logger = null;
+	private static Logger logger = LoggerFactory.getLogger(WwwHidocCoKr.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -38,12 +40,12 @@ public class WwwHidocCoKr extends News {
 	}
 
 	WwwHidocCoKr() {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
 	}
 
 	WwwHidocCoKr(int i) {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-		logger.log(Level.INFO, this.getClass().getSimpleName());
+
+
 		String url = JOptionPane.showInputDialog("HiDoc URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {

@@ -5,7 +5,6 @@
  */
 package html.parsing.stock;
 
-import html.parsing.stock.news.News;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -17,12 +16,13 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.commons.io.FilenameUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+import html.parsing.stock.news.News;
 
 /**
  *
@@ -45,7 +45,7 @@ public class URLFileDownloadTest {
 
 		File currentDirFile = new File(".");
 		String helper = currentDirFile.getAbsolutePath();
-		String currentDir = helper.substring(0, helper.length() - currentDirFile.getCanonicalPath().length());//this line may need a try-catch block        
+		String currentDir = helper.substring(0, helper.length() - currentDirFile.getCanonicalPath().length());//this line may need a try-catch block
 		System.out.println("currentDir:" + currentDir);
 
 		try {
@@ -92,7 +92,7 @@ public class URLFileDownloadTest {
 				os.close();
 			}
 		} catch (MalformedURLException ex) {
-			Logger.getLogger(URLFileDownloadTest.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(URLFileDownloadTest.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 }

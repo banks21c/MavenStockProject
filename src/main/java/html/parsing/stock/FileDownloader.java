@@ -12,8 +12,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -44,8 +44,8 @@ public class FileDownloader {
     }
 
     public static void downloadFile2(String sourceUrl) {
-        Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, "sourceUrl:" + sourceUrl);
-        Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, "sourceUrl.substring(sourceUrl.length()):" + sourceUrl.substring(sourceUrl.length() - 1));
+        java.util.logging.Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, "sourceUrl:" + sourceUrl);
+        java.util.logging.Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, "sourceUrl.substring(sourceUrl.length()):" + sourceUrl.substring(sourceUrl.length() - 1));
         if (sourceUrl != null && sourceUrl.substring(sourceUrl.length() - 1).equals("/")) {
             sourceUrl = sourceUrl.substring(0, sourceUrl.length() - 1);
         }
@@ -59,7 +59,7 @@ public class FileDownloader {
             String host = sourceFileUrl.getHost();
             System.out.println("host:" + host);
             String path = sourceFileUrl.getPath();
-            Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, "path1:" + path);
+            java.util.logging.Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, "path1:" + path);
             if (path != null && !path.equals("") && path.indexOf("/") != -1) {
                 path = path.substring(0, path.lastIndexOf("/"));
                 System.out.println("path==>" + path);
@@ -93,9 +93,9 @@ public class FileDownloader {
             System.out.println("targetDir:" + targetDir);
             fileWrite(sourceFileUrl, targetDir);
         } catch (MalformedURLException ex) {
-            Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -108,7 +108,7 @@ public class FileDownloader {
             InputStream is = new URL("http://search.joins.com?keyword=모바일%20택시").openStream();
             System.out.println("is:" + is);
         } catch (IOException ex) {
-            Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try (InputStream is = new BufferedInputStream(sourceFileUrl.openStream())) {
@@ -120,7 +120,7 @@ public class FileDownloader {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FileDownloader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

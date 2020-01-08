@@ -1,30 +1,25 @@
 package html.parsing.stock;
 
-import html.parsing.stock.news.News;
-import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import org.apache.commons.io.FilenameUtils;
 import org.jsoup.Connection;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-import javax.swing.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.news.News;
 
 /**
  *
@@ -32,7 +27,7 @@ import javax.swing.*;
  */
 public class URLFileDownloadFrame extends javax.swing.JFrame {
 
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(URLFileDownloadFrame.class);
     final static String userHome = System.getProperty("user.home");
 
     /**
@@ -76,7 +71,8 @@ public class URLFileDownloadFrame extends javax.swing.JFrame {
 
         executeBtn.setText("페이지 추출");
         executeBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 executeBtnActionPerformed(evt);
             }
         });
@@ -105,7 +101,7 @@ public class URLFileDownloadFrame extends javax.swing.JFrame {
     }// GEN-LAST:event_urlTfKeyReleased
 
     private void createHTMLFile(String sourceUrl) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getName());
+
         News gurl = new News();
         gurl.getURL(sourceUrl);
         String protocolHost = gurl.getProtocolHost();
@@ -148,9 +144,9 @@ public class URLFileDownloadFrame extends javax.swing.JFrame {
                 }
             }
         } catch (MalformedURLException ex) {
-            Logger.getLogger(URLFileDownloadTest.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(URLFileDownloadTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(URLFileDownloadFrame.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(URLFileDownloadFrame.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             System.out.println("file download finished");
         }
@@ -263,7 +259,8 @@ public class URLFileDownloadFrame extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 new URLFileDownloadFrame().setVisible(true);
             }
         });

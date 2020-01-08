@@ -5,15 +5,8 @@
  */
 package html.parsing.stock.news;
 
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
-import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.StockUtil;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,6 +16,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
+import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
+import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 /**
  *
@@ -30,7 +32,7 @@ import org.jsoup.select.Elements;
  */
 public class NewsHankookilbo2 extends javax.swing.JFrame {
 
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(NewsHankookilbo2.class);
     final static String userHome = System.getProperty("user.home");
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -81,12 +83,14 @@ public class NewsHankookilbo2 extends javax.swing.JFrame {
         urlTf.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         urlTf.setToolTipText("");
         urlTf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 urlTfActionPerformed(evt);
             }
         });
         urlTf.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
+            @Override
+			public void keyReleased(java.awt.event.KeyEvent evt) {
                 urlTfKeyReleased(evt);
             }
         });
@@ -96,7 +100,8 @@ public class NewsHankookilbo2 extends javax.swing.JFrame {
 
         executeBtn.setText("페이지 추출");
         executeBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 executeBtnActionPerformed(evt);
             }
         });
@@ -129,7 +134,7 @@ public class NewsHankookilbo2 extends javax.swing.JFrame {
     }
 
     private StringBuilder createHTMLFile(String url) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getName());
+
 
         News gurl = new News();
         gurl.getURL(url);
@@ -293,7 +298,8 @@ public class NewsHankookilbo2 extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 new NewsHankookilbo2().setVisible(true);
             }
         });

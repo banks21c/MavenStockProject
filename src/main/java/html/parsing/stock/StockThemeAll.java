@@ -15,19 +15,20 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.StockNameLengthDescCompare;
 
 public class StockThemeAll {
 
 	final static String userHome = System.getProperty("user.home");
-	java.util.logging.Logger logger = null;
+	private static Logger logger = LoggerFactory.getLogger(StockThemeAll.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -67,22 +68,22 @@ public class StockThemeAll {
 	}
 
 	StockThemeAll() {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-		logger.log(Level.INFO, this.getClass().getSimpleName());
+
+
 
 		// 코스피
 		readFile("코스피", kospiFileName);
 		// 코스닥
 		readFile("코스닥", kosdaqFileName);
 
-		logger.log(Level.INFO, "정렬");
+
 		Collections.sort(allStockList, new StockNameLengthDescCompare());
 
 		writeThemeMarketPrice();
 	}
 
 	StockThemeAll(int i) {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
 		// MakeKospiKosdaqList.makeKospiKosdaqList();
 		strDate = strDefaultDate;
 		String year = strDate.substring(0, 4);
@@ -100,7 +101,7 @@ public class StockThemeAll {
 		// 코스닥
 		readFile("코스닥", kosdaqFileName);
 
-		logger.log(Level.INFO, "정렬");
+
 		Collections.sort(allStockList, new StockNameLengthDescCompare());
 
 		writeThemeMarketPrice();

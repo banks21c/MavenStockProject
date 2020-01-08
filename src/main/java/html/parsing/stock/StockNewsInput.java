@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
@@ -24,13 +23,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.StockNameLengthDescCompare;
 
 public class StockNewsInput {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(StockNewsInput.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -66,8 +67,8 @@ public class StockNewsInput {
     }
 
     StockNewsInput() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
-        logger.log(Level.INFO, this.getClass().getSimpleName());
+
+
         // List<Stock> kospiStockList = readOne("071970");
         // writeNewsFile(kospiStockList,kospiFileName,"코스피");
 
@@ -77,7 +78,7 @@ public class StockNewsInput {
     }
 
     StockNewsInput(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
         // MakeKospiKosdaqList.makeKospiKosdaqList();
         strDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDefaultDate);
         if (strDate.equals("")) {
@@ -103,10 +104,10 @@ public class StockNewsInput {
         // 코스닥
         readFile("코스닥", kosdaqFileName);
 
-        logger.log(Level.INFO, "정렬");
+
         Collections.sort(searchStockList, new StockNameLengthDescCompare());
         Collections.sort(allStockList, new StockNameLengthDescCompare());
-        logger.log(Level.INFO, "파일쓰기");
+
         writeNewsFile(searchStockList);
     }
 

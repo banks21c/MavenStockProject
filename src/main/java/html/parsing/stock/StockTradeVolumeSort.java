@@ -12,11 +12,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StockTradeVolumeSort {
 
     final static String userHome = System.getProperty("user.home");
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(StockTradeVolumeSort.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -33,11 +35,11 @@ public class StockTradeVolumeSort {
     }
 
     StockTradeVolumeSort() {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
     }
 
     StockTradeVolumeSort(int i) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getSimpleName());
+
 
         String tradeVolumeURL0 = "http://finance.naver.com/sise/sise_quant.nhn?sosok=0";
         String tradeVolumeURL1 = "http://finance.naver.com/sise/sise_quant.nhn?sosok=1";

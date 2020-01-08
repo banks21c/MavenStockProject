@@ -9,7 +9,6 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -19,6 +18,8 @@ import javax.swing.text.html.StyleSheet;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 
@@ -28,7 +29,7 @@ import html.parsing.stock.JsoupChangeImageElementsAttribute;
  */
 public class NewsReader extends javax.swing.JFrame {
 
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(NewsReader.class);
 
     /**
      * Creates new form NewJFrame1
@@ -518,7 +519,7 @@ public class NewsReader extends javax.swing.JFrame {
             JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
 
         } catch (IOException ex) {
-            Logger.getLogger(NewsReader.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewsReader.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             System.out.println("이미지 추출 완료");
         }

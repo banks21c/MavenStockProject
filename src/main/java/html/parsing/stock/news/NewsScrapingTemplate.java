@@ -1,17 +1,16 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.StockUtil;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 /**
  *
@@ -19,7 +18,7 @@ import org.jsoup.select.Elements;
  */
 public class NewsScrapingTemplate extends javax.swing.JFrame {
 
-    java.util.logging.Logger logger = null;
+    private static Logger logger = LoggerFactory.getLogger(NewsScrapingTemplate.class);
     final static String userHome = System.getProperty("user.home");
 
     /**
@@ -61,12 +60,14 @@ public class NewsScrapingTemplate extends javax.swing.JFrame {
         urlTf.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         urlTf.setToolTipText("");
         urlTf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 urlTfActionPerformed(evt);
             }
         });
         urlTf.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
+            @Override
+			public void keyReleased(java.awt.event.KeyEvent evt) {
                 urlTfKeyReleased(evt);
             }
         });
@@ -76,7 +77,8 @@ public class NewsScrapingTemplate extends javax.swing.JFrame {
 
         executeBtn.setText("페이지 추출");
         executeBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 executeBtnActionPerformed(evt);
             }
         });
@@ -109,7 +111,7 @@ public class NewsScrapingTemplate extends javax.swing.JFrame {
     }// GEN-LAST:event_urlTfKeyReleased
 
     private StringBuilder createHTMLFile(String url) {
-        logger = java.util.logging.Logger.getLogger(this.getClass().getName());
+
         News gurl = new News();
         gurl.getURL(url);
         String protocol = gurl.getProtocol();
@@ -233,7 +235,8 @@ public class NewsScrapingTemplate extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 new NewsScrapingTemplate().setVisible(true);
             }
         });
