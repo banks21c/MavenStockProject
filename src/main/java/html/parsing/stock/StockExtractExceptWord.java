@@ -141,6 +141,7 @@ public class StockExtractExceptWord {
 				|| stockName.equals("레이") && strNews.contains("솔레이마니")
 				|| stockName.equals("레이") && strNews.contains("슬레이터")
 				|| stockName.equals("레이") && strNews.contains("시뮬레이션")
+				|| stockName.equals("레이") && strNews.contains("아랍에미레이트")
 				|| stockName.equals("레이") && strNews.contains("엑스레이")
 				|| stockName.equals("레이") && strNews.contains("인플레이션")
 				|| stockName.equals("레이") && strNews.contains("업그레이드")
