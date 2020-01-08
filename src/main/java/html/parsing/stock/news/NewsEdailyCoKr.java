@@ -5,21 +5,12 @@
  */
 package html.parsing.stock.news;
 
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
-import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.StockUtil;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
-
 
 import javax.swing.JOptionPane;
 
@@ -27,6 +18,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
+import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
+import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 /**
  *
@@ -40,6 +40,10 @@ public class NewsEdailyCoKr extends News {
     static String strYMD = "";
     static String strDate = null;
     static String strTitle = null;
+    Logger logger = null;
+    String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
+    int iYear = Integer.parseInt(strYear);
+    DecimalFormat df = new DecimalFormat("###.##");
 
     /**
      * @param args
@@ -182,18 +186,15 @@ public class NewsEdailyCoKr extends News {
         }
         return sb1;
     }
-    Logger logger = null;
-    String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
-    int iYear = Integer.parseInt(strYear);
-    DecimalFormat df = new DecimalFormat("###.##");
 
     public NewsEdailyCoKr() {
-        
+        logger = LoggerFactory.getLogger(this.getClass());
     }
 
     public NewsEdailyCoKr(int i) {
-        
-        
+        logger = LoggerFactory.getLogger(this.getClass());
+
+
         String url = JOptionPane.showInputDialog("이데일리뉴스 URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url.equals("")) {

@@ -13,8 +13,8 @@ public class StockMarketPriceRun {
     public static void main(String args[]){
 //        new StockMarketPrice().extractAll();
         new StockUniqueNew().start();
-        new Weeks52NewLowHighPriceToday().start();
-        new AllStockPlusMinusDivide().start();          
-        new AllStockPlusMinusDivide100().start();          
+        new Weeks52NewLowHighPriceTodayOneFile().start();
+        new AllStockPlusMinusDivide().start();
+        new AllStockPlusMinusDivide100().start();
     }
 }

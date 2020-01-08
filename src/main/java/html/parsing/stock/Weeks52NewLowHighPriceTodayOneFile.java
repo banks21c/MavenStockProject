@@ -12,14 +12,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.PropertyConfigurator;
@@ -62,7 +62,7 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 	List<StockVO> kospiStockList = new ArrayList<StockVO>();
 	List<StockVO> kosdaqStockList = new ArrayList<StockVO>();
 
-	Map<String, List<StockVO>> newLowHighPriceMap = new HashMap<String, List<StockVO>>();
+	LinkedHashMap<String, List<StockVO>> newLowHighPriceMap = new LinkedHashMap<String, List<StockVO>>();
 	List<StockVO> newLowPriceList = new ArrayList<StockVO>();
 	List<StockVO> kospiNewLowPriceList = new ArrayList<StockVO>();
 	List<StockVO> kospiNewHighPriceList = new ArrayList<StockVO>();
@@ -168,20 +168,20 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 			svo = getStockInfo((i + 1), svo.getStockCode(), svo.getStockName(), "D");
 		}
 
-		Collections.sort(kospiNewLowPriceList, new NameAscCompare());
 		Collections.sort(kospiNewHighPriceList, new NameAscCompare());
-		Collections.sort(kosdaqNewLowPriceList, new NameAscCompare());
 		Collections.sort(kosdaqNewHighPriceList, new NameAscCompare());
+		Collections.sort(kospiNewLowPriceList, new NameAscCompare());
+		Collections.sort(kosdaqNewLowPriceList, new NameAscCompare());
 
-		newLowPriceList.addAll(kospiNewLowPriceList);
 		newLowPriceList.addAll(kospiNewHighPriceList);
-		newLowPriceList.addAll(kosdaqNewLowPriceList);
 		newLowPriceList.addAll(kosdaqNewHighPriceList);
+		newLowPriceList.addAll(kospiNewLowPriceList);
+		newLowPriceList.addAll(kosdaqNewLowPriceList);
 
-		newLowHighPriceMap.put("코스피 신저가", kospiNewLowPriceList);
 		newLowHighPriceMap.put("코스피 신고가", kospiNewHighPriceList);
-		newLowHighPriceMap.put("코스닥 신저가", kosdaqNewLowPriceList);
 		newLowHighPriceMap.put("코스닥 신고가", kosdaqNewHighPriceList);
+		newLowHighPriceMap.put("코스피 신저가", kospiNewLowPriceList);
+		newLowHighPriceMap.put("코스닥 신저가", kosdaqNewLowPriceList);
 
 		writeFile(newLowHighPriceMap);
 
@@ -444,6 +444,7 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 		sb1.append("</style>\r\n");
 		sb1.append("</head>\r\n");
 		sb1.append("<body>\r\n");
+		sb1.append("\t<h1>").append(strYmdDashBracket).append(" 코스피,코스닥 신고,신저가").append("</h1>");
 
 		Set keySet = newLowHighPriceMap.keySet();
 		Iterator it = keySet.iterator();
@@ -451,7 +452,7 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 			String key = (String) it.next();
 			List<StockVO> stockList = newLowHighPriceMap.get(key);
 
-			sb1.append("\t<h2>").append(strYmdDashBracket).append(" ").append(key).append("</h2>");
+			sb1.append("\t<h2>").append(key).append("</h2>");
 			sb1.append("<table>\r\n");
 			sb1.append("<tr>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");

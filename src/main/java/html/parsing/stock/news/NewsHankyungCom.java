@@ -30,7 +30,7 @@ import html.parsing.stock.util.FileUtil;
 
 public class NewsHankyungCom extends News {
 
-    private static Logger logger = LoggerFactory.getLogger(NewsHankyungCom.class);
+    private static Logger logger = null;
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -51,11 +51,12 @@ public class NewsHankyungCom extends News {
     }
 
     NewsHankyungCom() {
+        logger = LoggerFactory.getLogger(this.getClass());
 
     }
 
     NewsHankyungCom(int i) {
-
+        logger = LoggerFactory.getLogger(this.getClass());
 
         String url = JOptionPane.showInputDialog("한국경제뉴스 URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");

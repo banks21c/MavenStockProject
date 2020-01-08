@@ -25,7 +25,7 @@ import html.parsing.stock.util.FileUtil;
 
 public class NewsSedailyCom extends javax.swing.JFrame {
 
-    private static Logger logger = LoggerFactory.getLogger(NewsSedailyCom.class);
+    private static Logger logger = null;
     final static String userHome = System.getProperty("user.home");
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -49,6 +49,7 @@ public class NewsSedailyCom extends javax.swing.JFrame {
     private static javax.swing.JLabel executeResultLbl;
 
     NewsSedailyCom(int i) {
+        logger = LoggerFactory.getLogger(this.getClass());
 
 
         String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
@@ -85,6 +86,7 @@ public class NewsSedailyCom extends javax.swing.JFrame {
     }
 
     public NewsSedailyCom() {
+        logger = LoggerFactory.getLogger(this.getClass());
 
         initComponents();
     }
@@ -255,7 +257,7 @@ public class NewsSedailyCom extends javax.swing.JFrame {
             sb1.append("<div style='width:548px'>\r\n");
 
             sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-            sb1.append("[" + strDate + "]" + strTitle + "<br>\r\n");
+            sb1.append("<h2>[" + strDate + "] " + strTitle + "</h2>\n");
             sb1.append(authorAndTime + "<br>\r\n");
             sb1.append(strContent + "<br>\r\n");
             sb1.append(copyright + "<br>\r\n");
