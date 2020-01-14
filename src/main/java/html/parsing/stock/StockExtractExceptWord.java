@@ -218,6 +218,7 @@ public class StockExtractExceptWord {
 				|| stockName.equals("신한") && strNews.contains("출신한테")
 				|| stockName.equals("신한") && strNews.contains("임신한")
 				|| stockName.equals("신한") && strNews.contains("신한카드")
+				|| stockName.equals("신한") && strNews.contains("혁신한")
 				|| stockName.equals("아스트") && strNews.contains("아스트라제네카")
 				|| stockName.equals("아이엠") && strNews.contains("아이엠에프")
 				|| stockName.equals("야스") && strNews.contains("야스쿠니")

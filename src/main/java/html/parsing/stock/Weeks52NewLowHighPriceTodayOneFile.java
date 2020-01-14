@@ -114,6 +114,9 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 			// props.load(new FileInputStream("log4j.properties"));
 			// InputStream is =
 			// getClass().getResourceAsStream("/log4j.properties");
+			System.out.println(getClass());
+			System.out.println(getClass().getResource("."));
+			System.out.println(getClass().getResource("/"));
 			logger.debug(getClass().getResource(".").getPath());
 			logger.debug(getClass().getResource("/").getPath());
 			props.load(getClass().getResourceAsStream("/log4j.properties"));

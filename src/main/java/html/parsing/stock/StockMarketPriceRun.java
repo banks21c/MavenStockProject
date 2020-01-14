@@ -16,5 +16,6 @@ public class StockMarketPriceRun {
         new Weeks52NewLowHighPriceTodayOneFile().start();
         new AllStockPlusMinusDivide().start();
         new AllStockPlusMinusDivide100().start();
+		new Weeks52NewLowHighPriceTodayOneFile().start();
     }
 }

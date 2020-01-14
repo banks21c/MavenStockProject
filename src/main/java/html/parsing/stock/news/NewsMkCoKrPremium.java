@@ -17,12 +17,12 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 public class NewsMkCoKrPremium extends javax.swing.JFrame {
 
@@ -213,7 +213,8 @@ public class NewsMkCoKrPremium extends javax.swing.JFrame {
 			doc.select("script").remove();
 			doc.select("div").attr("style", "width:548px");
 
-			Elements title = doc.select(".view_title h1");
+//			Elements title = doc.select(".view_title h1");
+			Elements title = doc.select(".news_title .news_title_text h1");
 			System.out.println("title1:" + strTitle);
 			if (title != null && title.size() > 0) {
 				strTitle = title.get(0).text();
@@ -232,7 +233,9 @@ public class NewsMkCoKrPremium extends javax.swing.JFrame {
 			String strAuthor = doc.select(".news_title_author .author").html();
 			System.out.println("strAuthor:[" + strAuthor + "]");
 
+//			Elements dateElements = doc.select(".news_title_author .lasttime");
 			Elements dateElements = doc.select(".news_title_author .lasttime");
+			System.out.println("dateElements:[" + dateElements + "]");
 			Element dateElement = null;
 			if (dateElements.isEmpty()) {
 				dateElement = doc.select(".news_title_author .lasttime1").get(0);
@@ -247,6 +250,7 @@ public class NewsMkCoKrPremium extends javax.swing.JFrame {
 				if (strDate.contains("수정")) {
 					strDate = strDate.substring(0, strDate.indexOf("수정"));
 				}
+				strDate = strDate.trim();
 
 				strFileNameDate = strDate;
 				strFileNameDate = StockUtil.getDateForFileName(strDate);
@@ -254,7 +258,8 @@ public class NewsMkCoKrPremium extends javax.swing.JFrame {
 			}
 			System.out.println("strDate:[" + strDate + "]");
 
-			String strContent = doc.select(".view_txt").html();
+//			String strContent = doc.select(".view_txt").html();
+			String strContent = doc.select("#Content .left_content .art_txt").html();
 			System.out.println("strContent:" + strContent);
 			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
