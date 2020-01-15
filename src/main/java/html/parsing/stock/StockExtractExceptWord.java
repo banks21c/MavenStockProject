@@ -44,6 +44,7 @@ public class StockExtractExceptWord {
 				|| stockName.equals("KT") && strNews.contains("KTown")
 				|| stockName.equals("LS") && strNews.contains("CLSA")
 				|| stockName.equals("LS") && strNews.contains("ELS")
+				|| stockName.equals("LS") && strNews.contains("GLS")
 				|| stockName.equals("NEW") && strNews.contains("NEWSIS")
 				|| stockName.equals("NEW") && strNews.contains("NEWYORK")
 				|| stockName.equals("NEW") && strNews.contains("NEW YORK")
