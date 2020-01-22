@@ -55,7 +55,7 @@ public class NewsChosun extends News {
 
 	public static StringBuilder createHTMLFile(String url) {
 		logger.debug("url:" + url);
-		new News().getURL(url);
+		getURL(url);
 
 		StringBuilder sb1 = new StringBuilder();
 		Document doc;

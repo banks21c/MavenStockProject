@@ -59,7 +59,7 @@ public class NewsKbsCoKr extends News {
 
     public static StringBuilder createHTMLFile(String url) {
         System.out.println("url:" + url);
-        new News().getURL(url);
+        getURL(url);
 
         StringBuilder sb1 = new StringBuilder();
         Document doc;

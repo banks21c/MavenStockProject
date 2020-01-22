@@ -53,7 +53,7 @@ public class NewsEdailyCoKr extends News {
     }
 
     public static StringBuilder createHTMLFile(String url) {
-        new News().getURL(url);
+        getURL(url);
         System.out.println("protocol1:" + protocol);
         System.out.println("host1:" + host);
         System.out.println("path1:" + path);

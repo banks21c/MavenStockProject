@@ -64,7 +64,7 @@ public class NewsJtbcJoinsCom extends News {
 //        if (url.contains("?")) {
 //            url = url.substring(0, url.indexOf("?"));
 //        }
-//        new News().getURL(url);
+//        getURL(url);
 
         StringBuilder sb1 = new StringBuilder();
         Document doc;

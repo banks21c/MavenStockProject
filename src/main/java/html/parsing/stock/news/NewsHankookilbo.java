@@ -63,7 +63,7 @@ public class NewsHankookilbo extends News {
 
     public static StringBuilder createHTMLFile(String url) {
         StringBuilder sb1 = new StringBuilder();
-        new News().getURL(url);
+        getURL(url);
 
         Document doc;
         String strTitleForFileName = "";

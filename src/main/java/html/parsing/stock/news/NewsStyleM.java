@@ -57,7 +57,7 @@ public class NewsStyleM extends News {
     }
 
     public static StringBuilder createHTMLFile(String url) {
-        new News().getURL(url);
+        getURL(url);
 
         System.out.println("url:" + url);
         StringBuilder sb1 = new StringBuilder();

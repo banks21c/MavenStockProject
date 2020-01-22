@@ -64,7 +64,7 @@ public class SnaptimeEdailyCoKr extends News {
 		} catch (UnsupportedEncodingException ex) {
 			java.util.logging.Logger.getLogger(SnaptimeEdailyCoKr.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		new News().getURL(url);
+		getURL(url);
 		System.out.println("url:" + url);
 		System.out.println("createHTMLFile protocol:" + protocol);
 		System.out.println("createHTMLFile host:" + host);

@@ -62,7 +62,7 @@ public class MNewsPimCom extends News {
 
     public static StringBuilder createHTMLFile(String url) {
         System.out.println("url:" + url);
-        URL url1 = new News().getURL(url);
+        URL url1 = getURL(url);
 
         StringBuilder sb1 = new StringBuilder();
         Document doc;

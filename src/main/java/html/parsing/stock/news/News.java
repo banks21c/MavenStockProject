@@ -187,6 +187,6 @@ public class News {
 	}
 
 	public static void main(String args[]) {
-		new News().getURL("http://www.yonhapnews.co.kr/economy/2013/04/07/0318000000AKR20130407057100002.HTML");
+		getURL("http://www.yonhapnews.co.kr/economy/2013/04/07/0318000000AKR20130407057100002.HTML");
 	}
 }
