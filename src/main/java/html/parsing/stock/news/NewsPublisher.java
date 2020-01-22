@@ -88,7 +88,9 @@ enum NewsPublisher {
 	wwwnewsencom("www.newsen.com"),
 	wwwkinewsnet("www.kinews.net"),
 	newswowtvcokr("news.wowtv.co.kr"),
-	wwwdailiancokr("www.dailian.co.kr/")
+	hngynacokr("hng.yna.co.kr"),
+	wwwsiksinhotcom("www.siksinhot.com"),
+	wwwdailiancokr("www.dailian.co.kr")
 	;
 
 	final private String name;
@@ -175,6 +177,8 @@ enum NewsPublisher {
 		"NewsenCom",
 		"WwwKinewsNet",
 		"NewsWowtvCoKr",
+		"HngYnaCoKr",
+		"WwwSiksinhotCom",
 		"WwwDailianCoKr"
 	};
 

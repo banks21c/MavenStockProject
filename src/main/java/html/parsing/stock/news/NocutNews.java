@@ -135,14 +135,13 @@ public class NocutNews extends News {
 
             Elements copyRightElements = doc.select(".news_copyright");
             Element copyRightElement = null;
-            String copyright = "";
-            if (copyRightElements.size() > 0) {
-                copyRightElement = copyRightElements.first();
-                copyright = copyRightElement.text();
-            } else {
+            String copyRight = "";
+            if (copyRightElements.size() <= 0) {
                 copyRightElements = doc.select("#newsView .copy");
-                copyRightElement = copyRightElements.first();
-                copyright = copyRightElement.text();
+            }
+            copyRightElement = copyRightElements.first();
+            if (copyRightElement != null) {
+            	copyRight = copyRightElement.text();
             }
 
             sb1.append("<html lang='ko'>\r\n");
@@ -157,7 +156,7 @@ public class NocutNews extends News {
             sb1.append("<span style='font-size:12px'>" + author + "</span><br>\n");
             sb1.append("<span style='font-size:12px'>" + strDate + "</span><br><br>\n");
             sb1.append(content + "<br><br>\n");
-            sb1.append(copyright + "<br><br>\n");
+            sb1.append(copyRight + "<br><br>\n");
             sb1.append("</div>\r\n");
             sb1.append("</body>\r\n");
             sb1.append("</html>\r\n");

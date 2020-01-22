@@ -1,7 +1,5 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.StockUtil;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -22,6 +20,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 public class NewsFinanceNaverCom extends News {
 
@@ -162,7 +163,9 @@ public class NewsFinanceNaverCom extends News {
 			String copyRight = "";
 			if (copyRightElements.size() > 0) {
 				copyRightElement = copyRightElements.first();
-				copyRight = copyRightElement.text();
+	            if (copyRightElement != null) {
+	                copyright = copyRightElement.text();
+	            }
 			} else {
 				copyRightElements = doc.select("#newsView .copy");
 				copyRightElement = copyRightElements.first();

@@ -126,7 +126,10 @@ public class NewsSedaily extends News {
             strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
             Element copyRightElement = doc.select(".txt_copyright").first();
-            String copyright = copyRightElement.text();
+            String copyRight = copyRightElement.text();
+            if (copyRightElement != null) {
+                copyRight = copyRightElement.text();
+            }
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
@@ -143,7 +146,7 @@ public class NewsSedaily extends News {
             sb1.append("<span style='font-size:12px'>" + writer + "</span><br>\r\n");
             sb1.append("<span style='font-size:12px'>" + strDate + "</span><br><br>\r\n");
             sb1.append(strContent + "\r\n");
-            sb1.append(copyright + "<br>\r\n");
+            sb1.append(copyRight + "<br>\r\n");
 
             sb1.append("</div>\r\n");
             sb1.append("</body>\r\n");

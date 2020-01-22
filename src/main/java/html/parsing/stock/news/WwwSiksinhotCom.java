@@ -28,7 +28,7 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
-public class NewsHankyungCom extends News {
+public class WwwSiksinhotCom extends News {
 
     private static Logger logger = null;
 
@@ -47,21 +47,21 @@ public class NewsHankyungCom extends News {
      * @param args
      */
     public static void main(String[] args) {
-        new NewsHankyungCom(1);
+        new WwwSiksinhotCom(1);
     }
 
-    NewsHankyungCom() {
+    WwwSiksinhotCom() {
         logger = LoggerFactory.getLogger(this.getClass());
 
     }
 
-    NewsHankyungCom(int i) {
+    WwwSiksinhotCom(int i) {
         logger = LoggerFactory.getLogger(this.getClass());
 
-        String url = JOptionPane.showInputDialog("한국경제뉴스 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog("스크랩할 URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url == null || url.equals("")) {
-            url = "http://land.hankyung.com/news/app/newsview.php?aid=201802207330H";
+            url = "https://www.siksinhot.com/theme/magazine/2288";
         }
         createHTMLFile(url);
     }
@@ -79,21 +79,20 @@ public class NewsHankyungCom extends News {
         try {
             doc = Jsoup.connect(url).get();
             System.out.println("view:[" + doc.select(".view") + "]");
-            doc.select("iframe").remove();
-            doc.select("script").remove();
-            doc.select("noscript").remove();
-            doc.select("body").removeAttr("onload");
-            doc.select("div.pop_prt_btns").remove();
-            doc.select(".hidden-obj").remove();
-            doc.select("#CSCNT").remove();
-            doc.select(".news_like").remove();
-            doc.select("#spiLayer").remove();
-            doc.select(".sns_share").remove();
+//            doc.select("iframe").remove();
+//            doc.select("script").remove();
+//            doc.select("noscript").remove();
+//            doc.select("body").removeAttr("onload");
+//            doc.select("div.pop_prt_btns").remove();
+//            doc.select(".hidden-obj").remove();
+//            doc.select("#CSCNT").remove();
+//            doc.select(".news_like").remove();
+//            doc.select("#spiLayer").remove();
+//            doc.select(".sns_share").remove();
+            doc.select(".tags_box").remove();
+            doc.select(".sns_box").remove();
 
-            strTitle = doc.select(".news_sbj_h").text();
-            if (strTitle != null && strTitle.equals("")) {
-                strTitle = doc.select(".article_top .title").text();
-            }
+            strTitle = doc.select(".tema_visual .visual09 .tit h3").text();
             System.out.println("title:" + strTitle);
             strTitleForFileName = strTitle;
             strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
@@ -104,47 +103,21 @@ public class NewsHankyungCom extends News {
             JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
             JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 
-            Elements writerElements = doc.select(".colm_ist");
-            Element writerElement = null;
-            String writer = "";
-            if (writerElements.size() > 0) {
-                writerElement = writerElements.get(0);
-                if (writerElement != null) {
-                    writer = writerElement.text();
-                }
-            }
+            String writer = doc.select(".tema_visual .visual09 .postBy .writer strong").text();
+            System.out.println("writer:" + writer);
 
-            Elements timeElements = doc.select(".news_info span");
-            if (timeElements.size() > 0) {
-                Element timeElement = timeElements.get(0);
-                timeElement.select("em").remove();
-                strDate = timeElement.text();
-                if (strDate.startsWith("입력 ")) {
-                    strDate = strDate.substring("입력 ".length());
-                }
-                System.out.println("strDate:" + strDate);
-                strFileNameDate = strDate;
-            } else {
-                timeElements = doc.select(".date-published .num");
-                Element timeElement = timeElements.get(0);
-                timeElement.select("em").remove();
-                strDate = timeElement.text();
-                if (strDate.startsWith("입력 ")) {
-                    strDate = strDate.substring("입력 ".length());
-                }
-                System.out.println("strDate:" + strDate);
-                strFileNameDate = strDate;
+            String strDate = doc.select(".tema_visual .visual09 ul li:first-child").text();
+            System.out.println("strDate:" + strDate);
+            strDate = strDate.replace("등록일", "").trim();
+            if(strDate.contains("조회수")) {
+            	strDate = strDate.substring(0, strDate.indexOf("조회수")).trim();
             }
+            System.out.println("strDate:" + strDate);
             strFileNameDate = StockUtil.getDateForFileName(strDate);
             System.out.println("strFileNameDate:" + strFileNameDate);
 
             // Elements article = doc.select("#newsView");
-            Elements article = doc.select(".news_article");
-            if (article.size() <= 0) {
-                article = doc.select("#newsView");
-            }
-            // article.select(".image-area").append("<br><br>");
-            article.select(".image-area").after("<br><br>");
+            Elements article = doc.select(".tema_detail .s_left .editor_cnt");
 
             String style = article.select("#mArticle").attr("style");
             System.out.println("style:" + style);
@@ -152,10 +125,6 @@ public class NewsHankyungCom extends News {
             article.removeAttr("style");
             article.removeAttr("class");
             article.attr("style", "width:548px");
-
-            // article.select("img").attr("style", "width:548px");
-            article.select(".txt_caption.default_figure").attr("style", "width:548px");
-            article.select("ylink").remove();
 
             // System.out.println("imageArea:"+article.select(".image-area"));
             String strContent = article.html().replaceAll("640px", "548px");
@@ -168,17 +137,12 @@ public class NewsHankyungCom extends News {
             Elements copyRightElements = doc.select(".news_copyright");
             Element copyRightElement = null;
             String copyRight = "";
-            if (copyRightElements.size() > 0) {
-                copyRightElement = copyRightElements.first();
-                if (copyRightElement != null) {
-                    copyRight = copyRightElement.text();
-                }
-            } else {
+            if (copyRightElements.size() <= 0) {
                 copyRightElements = doc.select("#newsView .copy");
-                copyRightElement = copyRightElements.first();
-                if (copyRightElement != null) {
-                    copyRight = copyRightElement.text();
-                }
+            }
+            copyRightElement = copyRightElements.first();
+            if (copyRightElement != null) {
+            	copyRight = copyRightElement.text();
             }
 
 			sb1.append("<!doctype html>\r\n");

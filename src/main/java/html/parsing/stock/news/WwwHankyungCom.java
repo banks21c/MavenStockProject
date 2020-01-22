@@ -167,13 +167,12 @@ public class WwwHankyungCom extends News {
             Elements copyRightElements = doc.select(".news_copyright");
             Element copyRightElement = null;
             String copyRight = "";
-            if (copyRightElements.size() > 0) {
-                copyRightElement = copyRightElements.first();
-                copyRight = copyRightElement.text();
-            } else {
+            if (copyRightElements.size() <= 0) {
                 copyRightElements = doc.select("#newsView .copy");
-                copyRightElement = copyRightElements.first();
-                copyRight = copyRightElement.text();
+            }
+            copyRightElement = copyRightElements.first();
+            if (copyRightElement != null) {
+            	copyRight = copyRightElement.text();
             }
 
 			sb1.append("<!doctype html>\r\n");

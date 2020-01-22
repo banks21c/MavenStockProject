@@ -125,7 +125,10 @@ public class NewsMediaDaumNet extends News {
             strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
             Element copyRightElement = doc.select(".wrap_viewrelate .txt_copy").first();
-            String copyRight = copyRightElement.text();
+            String copyRight = "";
+            if (copyRightElement != null) {
+                copyRight = copyRightElement.text();
+            }
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
