@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.EncryptedDocumentException;
@@ -264,11 +264,10 @@ public class StockUtil {
 	public static StringBuilder makeStockLinkString(StringBuilder sb1) throws Exception {
 		List<StockVO> stockList = new ArrayList<StockVO>();
 		try {
-			readAllStockCodeNameListFromExcel();
+			stockList = readAllStockCodeNameListFromExcel();
 		} catch (Exception e) {
 			e.printStackTrace();
-			getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
-			getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+			return sb1;
 		}
 		for (int i = 0; i < stockList.size(); i++) {
 			StockVO vo = stockList.get(i);
@@ -284,12 +283,12 @@ public class StockUtil {
 	public static String makeStockLinkString(String textBodyHtml) throws Exception {
 		List<StockVO> stockList = new ArrayList<StockVO>();
 		try {
-			readAllStockCodeNameListFromExcel();
+			stockList = readAllStockCodeNameListFromExcel();
 		} catch (Exception e) {
 			e.printStackTrace();
-			getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
-			getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+			return textBodyHtml;
 		}
+		logger.debug("stockList.size:"+stockList.size());
 		for (int i = 0; i < stockList.size(); i++) {
 			StockVO vo = stockList.get(i);
 //			logger.debug("증권코드:" + vo.getStockCode() + " 증권명:" + vo.getStockName());
@@ -824,7 +823,9 @@ public class StockUtil {
 		} catch (EncryptedDocumentException ex) {
 			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
 		}
+		logger.debug("svoList.size :"+svoList.size());
 		stockList.addAll(svoList);
+		logger.debug("stockList.size :"+stockList.size());
 		return stockList;
 	}
 

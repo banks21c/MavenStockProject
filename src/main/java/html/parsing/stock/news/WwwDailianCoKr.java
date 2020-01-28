@@ -5,17 +5,16 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
-
 
 import javax.swing.JOptionPane;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
 
-import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.FileUtil;
 
 public class WwwDailianCoKr extends News {
 
@@ -37,12 +36,12 @@ public class WwwDailianCoKr extends News {
 	}
 
 	WwwDailianCoKr() {
-		
+
 	}
 
 	WwwDailianCoKr(int i) {
-		
-		
+
+
 		String url = JOptionPane.showInputDialog("뉴스 URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
@@ -54,7 +53,7 @@ public class WwwDailianCoKr extends News {
 
 	public static StringBuilder createHTMLFile(String url) {
 //        getURL(url);
-		News.getURL(url);
+		getURL(url);
 
 		StringBuilder sb1 = new StringBuilder();
 		Document doc;
