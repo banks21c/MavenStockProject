@@ -61,10 +61,8 @@ public class NewsJtbcJoinsCom extends News {
     }
 
     public static StringBuilder createHTMLFile(String url) {
-//        if (url.contains("?")) {
-//            url = url.substring(0, url.indexOf("?"));
-//        }
-//        getURL(url);
+        System.out.println("url:" + url);
+        getURL(url);
 
         StringBuilder sb1 = new StringBuilder();
         Document doc;
@@ -72,7 +70,6 @@ public class NewsJtbcJoinsCom extends News {
         String strFileNameDate = "";
         try {
             doc = Jsoup.connect(url).get();
-            System.out.println("doc:" + doc);
             doc.select("iframe").remove();
             doc.select("script").remove();
             doc.select("body").removeAttr("onload");
@@ -101,8 +98,8 @@ public class NewsJtbcJoinsCom extends News {
             strFileNameDate = StockUtil.getDateForFileName(strDate);
             System.out.println("strFileNameDate:" + strFileNameDate);
 
-            String author = doc.select("#articletitle .title .provide").text();
-            System.out.println("author:" + author);
+            String writer = doc.select("#articletitle .title .provide").text();
+            System.out.println("writer:" + writer);
 
             Elements article = doc.select(".article_content");
             System.out.println("article:" + article);
@@ -121,7 +118,6 @@ public class NewsJtbcJoinsCom extends News {
             strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
             String copyright = "";
-            System.out.println("copyright:" + copyright);
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
@@ -135,8 +131,8 @@ public class NewsJtbcJoinsCom extends News {
 
             sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
             sb1.append("<h2>[" + strDate + "] " + strTitle + "</h2>\n");
-            sb1.append("<span style='font-size:14px'>" + strDate + "</span><br><br>\n");
-            sb1.append("<span style='font-size:14px'>" + author + "</span><br><br>\n");
+            sb1.append("<span style='font-size:12px'>" + writer + "</span><br><br>\n");
+            sb1.append("<span style='font-size:12px'>" + strDate + "</span><br><br>\n");
             sb1.append(strContent + "<br><br>\n");
             sb1.append(copyright + "<br><br>\n");
             sb1.append("</div>\r\n");

@@ -73,18 +73,23 @@ public class NewsJTBC extends News {
             doc = Jsoup.connect(url).get();
             doc.select("iframe").remove();
             doc.select("script").remove();
-
-            strTitle = doc.select("H3#jtbcBody").text();
-            System.out.println("title:" + strTitle);
-            strTitleForFileName = strTitle;
-            strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
-            System.out.println("strTitleForFileName:" + strTitleForFileName);
+            doc.select("body").removeAttr("onload");
+            doc.select("div.pop_prt_btns").remove();
 
             JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
             JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
             JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
             JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 
+            strTitle = doc.select("H3#jtbcBody").text();
+            System.out.println("title:" + strTitle);
+            if (strTitle.equals("")) {
+                strTitle = doc.select("#article_title").text();
+            }
+            strTitleForFileName = strTitle;
+            strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
+            System.out.println("strTitleForFileName:" + strTitleForFileName);
+            
             Element writerElement = doc.select(".provide").get(0);
             String writer = writerElement.text();
 
@@ -122,7 +127,7 @@ public class NewsJTBC extends News {
             strContent = strContent.replaceAll("figcaption", "div");
             strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
-            String copyRight = "";
+            String copyright = "";
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
@@ -136,10 +141,10 @@ public class NewsJTBC extends News {
 
             sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
             sb1.append("<h2>[" + strDate + "] " + strTitle + "</h2>\n");
-            sb1.append("<span style='font-size:12px'>" + writer + "</span><br>\n");
+            sb1.append("<span style='font-size:12px'>" + writer + "</span><br><br>\n");
             sb1.append("<span style='font-size:12px'>" + strDate + "</span><br><br>\n");
-            sb1.append(strContent + "\n");
-            sb1.append(copyRight);
+            sb1.append(strContent + "<br><br>\n");
+            sb1.append(copyright + "<br><br>\n");
             sb1.append("</div>\r\n");
             sb1.append("</body>\r\n");
             sb1.append("</html>\r\n");

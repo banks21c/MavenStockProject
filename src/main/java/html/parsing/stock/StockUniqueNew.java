@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -89,13 +89,16 @@ public class StockUniqueNew extends Thread {
      * @param args
      */
     public static void main(String[] args) {
-        new StockUniqueNew(1).start();
+//        new StockUniqueNew().test();
+        new StockUniqueNew().start();
     }
 
     StockUniqueNew() {
+        Class thisClass = this.getClass();
+        logger1 = LoggerFactory.getLogger(thisClass);
     }
 
-    StockUniqueNew(int i) {
+    public void test() {
         Class thisClass = this.getClass();
         logger1 = LoggerFactory.getLogger(thisClass);
 
@@ -139,48 +142,87 @@ public class StockUniqueNew extends Thread {
 
     @Override
 	public void run() {
-        execute();
+        execute1();
+        execute2();
+    }
+//  public void execute() {
+//	try {
+//		Class thisClass = this.getClass();
+//		logger1 = LoggerFactory.getLogger(thisClass);
+//
+//		readExcelFile("코스피", kospiFileName);
+//		listSortAndAdd();
+//		writeFile(allStockList, kospiFileName, "코스피 특징종목");
+//
+//		clearList();
+//
+//		readExcelFile("코스닥", kosdaqFileName);
+//		listSortAndAdd();
+//		writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");
+//	} catch (Exception ex) {
+//		java.util.logging.Logger.getLogger(StockUniqueNew.class.getName()).log(Level.SEVERE, null, ex);
+//
+//		kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
+//		for(int i=0;i<kospiStockList.size();i++) {
+//			StockVO svo = kospiStockList.get(i);
+//			String strStockCode = svo.getStockCode();
+//			String strStockName = svo.getStockName();
+//			getStockInfo(i+1, strStockCode, strStockName);
+//		}
+//		listSortAndAdd();
+//		writeFile(allStockList, kospiFileName, "코스피 특징종목");
+//
+//		clearList();
+//
+//		kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+//		for(int i=0;i<kosdaqStockList.size();i++) {
+//			StockVO svo = kosdaqStockList.get(i);
+//			String strStockCode = svo.getStockCode();
+//			String strStockName = svo.getStockName();
+//			getStockInfo(i+1, strStockCode, strStockName);
+//		}
+//		listSortAndAdd();
+//		writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");
+//	}
+//}
+
+    public void execute1() {
+        try {
+//            readExcelFile("코스피", kospiFileName);
+        	kospiStockList = StockUtil.readKospiStockCodeNameList();
+       } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(StockUniqueNew.class.getName()).log(Level.SEVERE, null, ex);
+//			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
+        }
+
+		for(int i=0;i<kospiStockList.size();i++) {
+			StockVO svo = kospiStockList.get(i);
+			String strStockCode = svo.getStockCode();
+			String strStockName = svo.getStockName();
+			getStockInfo(i+1, strStockCode, strStockName);
+		}
+        listSortAndAdd();
+        writeFile(allStockList, kospiFileName, "코스피 특징종목");
+        clearList();
     }
 
-    public void execute() {
-        try {
-            Class thisClass = this.getClass();
-            logger1 = LoggerFactory.getLogger(thisClass);
-
-            readExcelFile("코스피", kospiFileName);
-            listSortAndAdd();
-            writeFile(allStockList, kospiFileName, "코스피 특징종목");
-
-            clearList();
-
-            readExcelFile("코스닥", kosdaqFileName);
-            listSortAndAdd();
-            writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");
-        } catch (Exception ex) {
+    public void execute2() {
+    	try {
+//            readExcelFile("코스닥", kosdaqFileName);
+    		kosdaqStockList = StockUtil.readKosdaqStockCodeNameList();
+    	} catch (Exception ex) {
             java.util.logging.Logger.getLogger(StockUniqueNew.class.getName()).log(Level.SEVERE, null, ex);
-
-			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
-			for(int i=0;i<kospiStockList.size();i++) {
-				StockVO svo = kospiStockList.get(i);
-				String strStockCode = svo.getStockCode();
-				String strStockName = svo.getStockName();
-				getStockInfo(i+1, strStockCode, strStockName);
-			}
-            listSortAndAdd();
-            writeFile(allStockList, kospiFileName, "코스피 특징종목");
-
-            clearList();
-
-			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
-			for(int i=0;i<kosdaqStockList.size();i++) {
-				StockVO svo = kosdaqStockList.get(i);
-				String strStockCode = svo.getStockCode();
-				String strStockName = svo.getStockName();
-				getStockInfo(i+1, strStockCode, strStockName);
-			}
-            listSortAndAdd();
-            writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");
-        }
+//    		kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+    	}
+    	for(int i=0;i<kosdaqStockList.size();i++) {
+    		StockVO svo = kosdaqStockList.get(i);
+    		String strStockCode = svo.getStockCode();
+    		String strStockName = svo.getStockName();
+    		getStockInfo(i+1, strStockCode, strStockName);
+    	}
+    	listSortAndAdd();
+    	writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");
+		clearList();
     }
 
     public void readOne(String stockCode, String stockName) {
