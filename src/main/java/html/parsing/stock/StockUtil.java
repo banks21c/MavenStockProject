@@ -166,26 +166,25 @@ public class StockUtil {
 		return sb.toString();
 	}
 
-
-	public static List<StockVO> readKospiStockCodeNameList(){
+	public static List<StockVO> readKospiStockCodeNameList() {
 		String kospiFileName = GlobalVariables.kospiFileName;
 		List<StockVO> kospiStockList = new ArrayList<>();
 		try {
-			kospiStockList = readExcelFile(kospiStockList, kospiFileName);
-        } catch (Exception ex) {
-        	System.out.println("1.ex.getMessage :"+ex.getMessage());
+			kospiStockList = readStockCodeNameListFromExcel(kospiStockList, kospiFileName);
+		} catch (Exception ex) {
+			System.out.println("1.ex.getMessage :" + ex.getMessage());
 			kospiStockList = getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
-        }
+		}
 		return kospiStockList;
-    }
+	}
 
-	public static List<StockVO> readKosdaqStockCodeNameList(){
+	public static List<StockVO> readKosdaqStockCodeNameList() {
 		String kosdaqFileName = GlobalVariables.kosdaqFileName;
 		List<StockVO> kosdaqStockList = new ArrayList<>();
 		try {
-			kosdaqStockList = readExcelFile(kosdaqStockList, kosdaqFileName);
+			kosdaqStockList = readStockCodeNameListFromExcel(kosdaqStockList, kosdaqFileName);
 		} catch (Exception ex) {
-        	System.out.println("2.ex.getMessage :"+ex.getMessage());
+			System.out.println("2.ex.getMessage :" + ex.getMessage());
 			kosdaqStockList = getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
 		}
 		return kosdaqStockList;
@@ -208,8 +207,10 @@ public class StockUtil {
 		Collections.sort(kosdaqStockList, new StockNameLengthDescCompare());
 		return kosdaqStockList;
 	}
+
 	/**
 	 * marketType = stockMkt, kosdaqMkt
+	 *
 	 * @param marketType
 	 * @return
 	 * @throws Exception
@@ -220,23 +221,13 @@ public class StockUtil {
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		return stockList;
 	}
+
 	/**
 	 *
 	 * @param marketType
-	 * @param searchType
-			13:상장법인
-			01:관리종목
-			05:불성실공시법인
-			07:자산2조법인
-			99:외국법인
-			181:(코스닥) 우량기업부
-			182:(코스닥) 벤처기업부
-			183:(코스닥) 중견기업부
-			184:(코스닥) 기술성장기업부
-			11:KRX100
-			06:KOSPI200
-			09:STAR30
-			10:PREMIER
+	 * @param searchType 13:상장법인 01:관리종목 05:불성실공시법인 07:자산2조법인 99:외국법인 181:(코스닥)
+	 *                   우량기업부 182:(코스닥) 벤처기업부 183:(코스닥) 중견기업부 184:(코스닥) 기술성장기업부
+	 *                   11:KRX100 06:KOSPI200 09:STAR30 10:PREMIER
 	 * @return
 	 * @throws Exception
 	 */
@@ -313,7 +304,7 @@ public class StockUtil {
 			e.printStackTrace();
 			return textBodyHtml;
 		}
-		logger.debug("stockList.size:"+stockList.size());
+		logger.debug("stockList.size:" + stockList.size());
 		for (int i = 0; i < stockList.size(); i++) {
 			StockVO vo = stockList.get(i);
 //			logger.debug("증권코드:" + vo.getStockCode() + " 증권명:" + vo.getStockName());
@@ -486,8 +477,7 @@ public class StockUtil {
 		return strNews + "<br>" + newsStockTable.toString();
 	}
 
-	public static List<StockVO> readStockCodeNameListFromExcel(List<StockVO> stockList, String fileName)
-			throws Exception {
+	public static List<StockVO> readStockCodeNameListFromExcel(List<StockVO> stockList, String fileName)			throws Exception {
 		List<StockVO> svoList = new ArrayList<>();
 		// Creating a Workbook from an Excel file (.xls or .xlsx)
 		logger.debug("fileName:" + fileName);
@@ -510,6 +500,7 @@ public class StockUtil {
 			Iterator<Cell> cellIterator = row.cellIterator();
 			String strStockName = null;
 			String strStockCode = null;
+			int stockNameLength = 0;
 			if (row.getLastCellNum() > 1) {
 				int i = 0;
 				while (cellIterator.hasNext()) {
@@ -520,9 +511,13 @@ public class StockUtil {
 					String cellValue = dataFormatter.formatCellValue(cell);
 					if (i == 0) {
 						strStockName = cellValue;
+						svo.setStockName(strStockName);
+						stockNameLength = strStockName.length();
+						svo.setStockNameLength(stockNameLength);
 					}
 					if (i == 1) {
 						strStockCode = cellValue;
+						svo.setStockCode(strStockCode);
 					}
 					i++;
 				}
@@ -531,9 +526,6 @@ public class StockUtil {
 				}
 //					logger.debug(strStockCode + "\t" + strStockName);
 			}
-			svo.setStockCode(strStockCode);
-			svo.setStockName(strStockName);
-			svo.setStockNameLength(strStockName.length());
 			svoList.add(svo);
 			cnt++;
 		}
@@ -758,19 +750,18 @@ public class StockUtil {
 	 */
 	public static final String SERVER_URI = "http://kind.krx.co.kr/corpgeneral/corpList.do";
 
-
 	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(List<StockVO> stockList, String marketType) {
-		//searchType 13 = 상장법인
+		// searchType 13 = 상장법인
 		return getStockCodeNameListFromKindKrxCoKr(stockList, marketType, "13");
 	}
 
-	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(List<StockVO> stockList, String marketType, String searchType) {
+	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(List<StockVO> stockList, String marketType,
+			String searchType) {
 		List<StockVO> svoList = new ArrayList<>();
 		try {
 			String param = "method=download&pageIndex=1&currentPageSize=5000&comAbbrv=&beginIndex=&orderMode=3"
-					+"&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType="
-					+"&marketType="	+ marketType + "&searchType="+searchType
-					+"&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
+					+ "&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=" + "&marketType=" + marketType + "&searchType="
+					+ searchType + "&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
 
 			String strUri = SERVER_URI + "?" + param;
 //			Document doc = Jsoup.parse(new URL(strUri).openStream(), "EUC-KR", strUri);
@@ -827,10 +818,10 @@ public class StockUtil {
 				if (tdElements.size() > 0) {
 					StockVO svo = new StockVO();
 
-					if(tdElements.size() > 1) {
+					if (tdElements.size() > 1) {
 						String strStockName = tdElements.get(0).text();
 						String strStockCode = tdElements.get(1).text();
-						System.out.print((i)+"."+strStockName+"(");
+						System.out.print((i) + "." + strStockName + "(");
 						System.out.println(strStockCode + ")");
 						svo.setStockName(strStockName);
 						svo.setStockCode(strStockCode);
@@ -848,9 +839,9 @@ public class StockUtil {
 		} catch (EncryptedDocumentException ex) {
 			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		logger.debug("svoList.size :"+svoList.size());
+		logger.debug("svoList.size :" + svoList.size());
 		stockList.addAll(svoList);
-		logger.debug("stockList.size :"+stockList.size());
+		logger.debug("stockList.size :" + stockList.size());
 		return stockList;
 	}
 
@@ -1152,66 +1143,6 @@ public class StockUtil {
 		} finally {
 			logger.debug("stockList end.....................");
 		}
-	}
-
-	public static List<StockVO> readExcelFile(List<StockVO> stockList, String fileName) throws Exception {
-		// Creating a Workbook from an Excel file (.xls or .xlsx)
-		logger.debug("fileName:" + fileName);
-		File file = new File(fileName);
-		Workbook workbook = WorkbookFactory.create(file);
-		// Getting the Sheet at index zero
-		Sheet sheet = workbook.getSheetAt(0);
-
-		// Create a DataFormatter to format and get each cell's value as String
-		DataFormatter dataFormatter = new DataFormatter();
-
-		// 1. You can obtain a rowIterator and columnIterator and iterate over them
-		logger.debug("\n\n readExcelFile \n");
-		logger.debug("\n\nIterating over Rows and Columns using Iterator4\n");
-		Iterator<Row> rowIterator = sheet.rowIterator();
-		int cnt = 0;
-		while (rowIterator.hasNext()) {
-			Row row = rowIterator.next();
-
-			// Now let's iterate over the columns of the current row
-			Iterator<Cell> cellIterator = row.cellIterator();
-			StockVO svo = new StockVO();
-			String strStockName = null;
-			String strStockCode = null;
-			int stockNameLength = 0;
-			if (row.getLastCellNum() > 1) {
-				int i = 0;
-				while (cellIterator.hasNext()) {
-					if (i == 2) {
-						break;
-					}
-					Cell cell = cellIterator.next();
-					String cellValue = dataFormatter.formatCellValue(cell);
-					if (i == 0) {
-						strStockName = cellValue;
-						svo.setStockName(strStockName);
-						stockNameLength = strStockName.length();
-						svo.setStockNameLength(stockNameLength);
-					}
-					if (i == 1) {
-						strStockCode = cellValue;
-						svo.setStockCode(strStockCode);
-					}
-					i++;
-				}
-				if (strStockCode.length() != 6) {
-					continue;
-				}
-				stockList.add(svo);
-//					logger.debug(strStockCode + "\t" + strStockName);
-			}
-			cnt++;
-		}
-		// Closing the workbook
-		workbook.close();
-
-		logger.debug("stockList.size :" + stockList.size());
-		return stockList;
 	}
 
 	public static List<StockVO> getNewsStockInfo(List<StockVO> stockList) {
