@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -108,23 +109,22 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 		logger.debug(this.getClass().getSimpleName() + " .execute started");
 		// MakeKospiKosdaqList.makeKospiKosdaqList();
 
-		Properties props = new Properties();
+		Properties props1 = new Properties();
+		Properties props2 = new Properties();
 		try {
-			// InputStream is = new FileInputStream("log4j.properties");
-			// props.load(new FileInputStream("log4j.properties"));
-			// InputStream is =
-			// getClass().getResourceAsStream("/log4j.properties");
-			System.out.println(getClass());
-			System.out.println(getClass().getResource("."));
-			System.out.println(getClass().getResource("/"));
-			logger.debug(getClass().getResource(".").getPath());
-			logger.debug(getClass().getResource("/").getPath());
-			props.load(getClass().getResourceAsStream("/log4j.properties"));
-			logger.debug("props:" + props);
+			InputStream is = getClass().getResourceAsStream("log4j.properties");
+			props1.load(is);
+			PropertyConfigurator.configure(props1);
+			logger.debug("props1:" + props1);
+			InputStream is2 = new FileInputStream("log4j.properties");
+			props2.load(is2);
+			logger.debug("props2:" + props2);
+			PropertyConfigurator.configure(props2);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		PropertyConfigurator.configure(props);
 
 		// ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		// URL url = loader.getResource("log4j.properties");
