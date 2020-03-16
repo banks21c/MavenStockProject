@@ -71,8 +71,9 @@ public class AllStockPlusMinusDivide extends Thread {
 	public static void main(String[] args) throws InterruptedException {
 		long startTime = System.currentTimeMillis();
 
-		AllStockPlusMinusDivide list1 = new AllStockPlusMinusDivide();
-		list1.start();
+		AllStockPlusMinusDivide list1 = new AllStockPlusMinusDivide(1);
+		//AllStockPlusMinusDivide list1 = new AllStockPlusMinusDivide();
+		//list1.start();
 
 		long endTime = System.currentTimeMillis();
 		String elapsedTimeSecond = (endTime - startTime) / 1000 % 60 + "초";
@@ -83,14 +84,6 @@ public class AllStockPlusMinusDivide extends Thread {
 	AllStockPlusMinusDivide() {
 		Class thisClass = this.getClass();
 		logger = LoggerFactory.getLogger(thisClass);
-		// List<Stock> kospiStockList = readOne("123890", "한국자산신탁");
-//        List<StockVO> kospiStockList = readOne("032980");
-//        writeFile(kospiStockList, kospiFileName, "코스피", "상승율");
-//
-//        List<StockVO> kospiStockList1 = readOne("123890");
-//        writeFile(kospiStockList1, kospiFileName, "코스피", "상승율");
-		// List<Stock> kosdaqStockList = readOne("003520");
-		// writeFile(kosdaqStockList,kosdaqFileName,"코스닥");
 	}
 
 	@Override
@@ -99,7 +92,17 @@ public class AllStockPlusMinusDivide extends Thread {
 	}
 
 	AllStockPlusMinusDivide(int i) {
-		execute();
+		List<StockVO> kospiStockList = readOne("123890", "한국자산신탁");
+//      List<StockVO> kospiStockList = readOne("032980");
+		StringBuilder info1 = getStockInformation(kospiStockList, "코스피", "상승율");
+		writeFile(info1, "코스피 상승율");		
+//
+//      List<StockVO> kospiStockList1 = readOne("123890");
+//      writeFile(kospiStockList1, kospiFileName, "코스피", "상승율");
+		 List<StockVO> kosdaqStockList = readOne("204990");
+			StringBuilder info2 = getStockInformation(kosdaqStockList, "코스닥", "상승율");
+			writeFile(info2, "코스닥 상승율");		
+		// writeFile(kosdaqStockList,kosdaqFileName,"코스닥");
 	}
 
 	public void getDateInfo(String stockCode) {
@@ -159,7 +162,7 @@ public class AllStockPlusMinusDivide extends Thread {
 		getDateInfo(svo4Date.getStockCode());
 
 		kospiAllStockList = sUtil.getAllStockInfo(kospiAllStockList);
-			iExtractCount = kospiAllStockList.size();
+		iExtractCount = kospiAllStockList.size();
 		logger.debug("kospiAllStockList.size :" + kospiAllStockList.size());
 
 		topCount = sUtil.getTopCount();
@@ -205,7 +208,7 @@ public class AllStockPlusMinusDivide extends Thread {
 			logger.debug("kosdaqAllStockList :" + kosdaqAllStockList);
 		}
 		kosdaqAllStockList = sUtil.getAllStockInfo(kosdaqAllStockList);
-			iExtractCount = kosdaqAllStockList.size();
+		iExtractCount = kosdaqAllStockList.size();
 		System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
 
 		topCount = sUtil.getTopCount();
@@ -237,6 +240,17 @@ public class AllStockPlusMinusDivide extends Thread {
 	}
 
 	public List<StockVO> readOne(String stockCode) {
+		List<StockVO> stocks = new ArrayList<StockVO>();
+
+		int cnt = 1;
+		StockVO stock = getStockInfo(cnt, stockCode);
+		if (stock != null) {
+			stocks.add(stock);
+		}
+		return stocks;
+	}
+	
+	public List<StockVO> readOne(String stockCode, String stockName) {
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
 		int cnt = 1;
@@ -471,20 +485,6 @@ public class AllStockPlusMinusDivide extends Thread {
 
 	public StringBuilder getStockInformation(List<StockVO> list, String title, String gubun) {
 		StringBuilder sb1 = new StringBuilder();
-		sb1.append("<!doctype html>\r\n");
-		sb1.append("<html lang='ko'>\r\n");
-		sb1.append("<head>\r\n");
-		//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
-		sb1.append("<style>\r\n");
-		sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
-		sb1.append("    td {border:1px solid #aaaaaa;font-size:12px;}\r\n");
-		sb1.append("</style>\r\n");
-		sb1.append("</head>\r\n");
-		sb1.append("<body>\r\n");
-		sb1.append("\t<h2>" + strYmdDashBracket + " " + title + " " + gubun + "</h2>");
-		sb1.append("<h4><font color='red'>상한가:" + topCount + "</font><font color='red'> 상승:" + upCount
-			+ "</font><font color='blue'> 하한가:" + bottomCount + "</font><font color='blue'> 하락:" + downCount
-			+ "</font><font color='gray'> 보합:" + steadyCount + "</font></h4>");
 		sb1.append("<table>\r\n");
 		sb1.append("<tr>\r\n");
 		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
@@ -532,11 +532,11 @@ public class AllStockPlusMinusDivide extends Thread {
 				String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
 				sb1.append("<td>" + cnt + "</td>\r\n");
 				sb1.append("<td><a href='" + url + "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
-
+	
 				String varyPrice = s.getVaryPrice();
-
+	
 				System.out.println("varyPrice+++>" + varyPrice);
-
+	
 				if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
 					|| specialLetter.startsWith("+")) {
 					sb1.append("<td style='text-align:right;color:red'>"
@@ -554,7 +554,7 @@ public class AllStockPlusMinusDivide extends Thread {
 						+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>0</td>\r\n");
 				}
-
+	
 				// if(gubun.equals("ALL")){
 				// String varyRatio =
 				// StringUtils.defaultIfEmpty(s.getVaryRatio(), "");
@@ -611,16 +611,14 @@ public class AllStockPlusMinusDivide extends Thread {
 					+ "</td>\r\n");
 				sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingAmount(), "")
 					+ "</td>\r\n");
-
+	
 				sb1.append("</tr>\r\n");
-
+	
 			}
 			cnt++;
 		}
 		// 뉴스 첨부
 		//sb1.append(getNews(list).toString());
-		sb1.append("</body>\r\n");
-		sb1.append("</html>\r\n");
 		return sb1;
 	}
 

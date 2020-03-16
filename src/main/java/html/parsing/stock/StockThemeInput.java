@@ -108,11 +108,18 @@ public class StockThemeInput extends News {
 //        readFile("코스피", kospiFileName);
 		// 코스닥
 //        readFile("코스닥", kosdaqFileName);
-		StockUtil.readStockCodeNameListFromExcel(allStockList, kospiFileName);
-		StockUtil.readStockCodeNameListFromExcel(allStockList, kosdaqFileName);
+//		StockUtil.readStockCodeNameListFromExcel(allStockList, kospiFileName);
+//		StockUtil.readStockCodeNameListFromExcel(allStockList, kosdaqFileName);
+		List<StockVO> kospiStockList = StockUtil.readKospiStockCodeNameListFromKrx();
+		List<StockVO> kosdaqStockList = StockUtil.readKosdaqStockCodeNameListFromKrx();
+		
+		allStockList.addAll(kospiStockList);
+		allStockList.addAll(kosdaqStockList);
 
 		Collections.sort(allStockList, new StockNameLengthDescCompare());
 
+		strThemeName.replace("\\", ",");
+		strThemeName.replace("/", ",");
 		writeFile(strThemeName, themeMarketPrice);
 	}
 

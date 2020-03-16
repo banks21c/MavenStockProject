@@ -92,11 +92,11 @@ public class NewsEtodayCoKr extends News {
 
 //            Elements timeElements = doc.select(".byline em");
             strDate = doc.select(".view_top_container div.newsinfo").text();
-            strDate = strDate.replace("입력", "");
+            strDate = strDate.replace("입력", "").trim();
             if(strDate.indexOf("수정") != -1) {
             	strDate = strDate.substring(0,  strDate.indexOf("수정")).trim();
             }
-            strDate = strDate.replace("입력", "");
+            strDate = strDate.replace("입력", "").trim();
             System.out.println("strDate:" + strDate);
             strFileNameDate = strDate;
 

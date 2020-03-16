@@ -54,8 +54,8 @@ public class JsoupChangeImageElementsAttribute {
 //                img = docImg.select("img").first();
 //                System.out.println("Jsoup parse img 1:"+img);
 
-				imgWidth = img.attr("width");
-				imgHeight = img.attr("height");
+				imgWidth = img.attr("width").replace("px", "");
+				imgHeight = img.attr("height").replace("px", "");
 				System.out.println("imgWidth:" + imgWidth);
 				System.out.println("imgHeight:" + imgHeight);
 				if (imgWidth.equals("")) {

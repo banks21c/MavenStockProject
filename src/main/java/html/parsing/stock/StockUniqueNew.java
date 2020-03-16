@@ -135,13 +135,49 @@ public class StockUniqueNew extends Thread {
 
 	@Override
 	public void run() {
+		
+		
 		execute1();
 		execute2();
+	}
+	
+	public void getDateInfo(String strStockCode) {
+		// 종합정보
+		//http://finance.naver.com/item/main.nhn?code=005930
+		Document doc;
+		try {
+			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + strStockCode).get();
+			Elements dates = doc.select(".date");
+			if (dates != null) {
+				if (dates.size() > 0) {
+					Element date = dates.get(0);
+					strYmdDash = date.ownText();
+					strYmdDash = date.childNode(0).toString().trim();
+					
+					String strYmd4Int = strYmdDash.replaceAll("\\.", "");
+					if (strYmd4Int.length() > 8) {
+						strYmd4Int = strYmd4Int.substring(0, 8);
+					}
+					iYmd = Integer.parseInt(strYmd4Int);
+					
+					strYmdDash = strYmdDash.replaceAll("\\.", "-");
+					strYmdDash = strYmdDash.replaceAll(":", "-");
+					strYmdDashBracket = "[" + strYmdDash + "]";
+					
+					logger1.debug("iYmd:[" + iYmd + "]");
+					logger1.debug("strYmdDash:[" + strYmdDash + "]");
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void execute1() {
 		try {
 			kospiStockList = StockUtil.readKospiStockCodeNameList();
+			getDateInfo(kospiStockList.get(0).getStockCode());
 		} catch (Exception ex) {
 			java.util.logging.Logger.getLogger(StockUniqueNew.class.getName()).log(Level.SEVERE, null, ex);
 //			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
@@ -151,6 +187,7 @@ public class StockUniqueNew extends Thread {
 			StockVO svo = kospiStockList.get(i);
 			String strStockCode = svo.getStockCode();
 			String strStockName = svo.getStockName();
+			System.out.println(strStockCode+":"+strStockName);
 			getStockInfo(i + 1, strStockCode, strStockName);
 		}
 		listSortAndAdd();
@@ -169,6 +206,7 @@ public class StockUniqueNew extends Thread {
 			StockVO svo = kosdaqStockList.get(i);
 			String strStockCode = svo.getStockCode();
 			String strStockName = svo.getStockName();
+			System.out.println(strStockCode+":"+strStockName);
 			getStockInfo(i + 1, strStockCode, strStockName);
 		}
 		listSortAndAdd();
@@ -219,29 +257,9 @@ public class StockUniqueNew extends Thread {
 		stock.setStockName(strStockName);
 		try {
 			// 종합정보
+			//http://finance.naver.com/item/main.nhn?code=005930
 			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + strStockCode).get();
 			// System.out.println("doc:"+doc);
-
-			Elements dates = doc.select(".date");
-			if (dates != null) {
-				if (dates.size() > 0) {
-					Element date = dates.get(0);
-					strYmdDash = date.ownText();
-					strYmdDash = date.childNode(0).toString().trim();
-
-					String strYmd4Int = strYmdDash.replaceAll("\\.", "");
-					if (strYmd4Int.length() > 8) {
-						strYmd4Int = strYmd4Int.substring(0, 8);
-					}
-					iYmd = Integer.parseInt(strYmd4Int);
-
-					strYmdDash = strYmdDash.replaceAll("\\.", "-");
-					strYmdDash = strYmdDash.replaceAll(":", "-");
-					strYmdDashBracket = "[" + strYmdDash + "]";
-				}
-			}
-			logger1.debug("iYmd:[" + iYmd + "]");
-			logger1.debug("strYmdDash:[" + strYmdDash + "]");
 
 			// Element tradeVolumeText =
 			// doc.select(".sp_txt9").get(0);
@@ -378,12 +396,9 @@ public class StockUniqueNew extends Thread {
 			System.out.println("highPrice:" + highPrice);
 			System.out.println("lowPrice:" + lowPrice);
 			System.out.println("maxPrice:" + maxPrice);
-			// 고가가 0이 아니고 고가가 상한가인가?
-			System.out.println(!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice()));
-			// 현재가가 상한가가 아닌가?
-			System.out.println(!curPrice.equals(stock.getMaxPrice()));
-			// 고가가 상한가인가?
-			System.out.println(highPrice.equals(stock.getMaxPrice()));
+			System.out.println("고가가 0이 아니고 고가가 상한가인가?"+(!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())));
+			System.out.println("현재가가 상한가가 아닌가?"+!curPrice.equals(stock.getMaxPrice()));
+			System.out.println("고가가 상한가인가?"+highPrice.equals(stock.getMaxPrice()));
 			// 고가가 0이 아니고 고가가 상한가인가?
 			if (!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())
 					&& !curPrice.equals(stock.getMaxPrice())) {
@@ -527,25 +542,32 @@ public class StockUniqueNew extends Thread {
 			}
 			sb1.append("</table>\r\n");
 			sb1.append("<br><br>\r\n");
-
+			/* 기업개요 */
+			//http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=005930
+			/*
+			String companyInfoUrlPrefix = "http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=";
 			for (StockVO s : list) {
 				if (s != null) {
-					Document classAnalysisDoc = Jsoup.connect(
-							"http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + s.getStockCode())
-							.get();
-					// System.out.println("classAnalysisDoc:"+classAnalysisDoc);
-					Elements comment = classAnalysisDoc.select(".cmp_comment");
-					sb1.append("<div>\n");
-					sb1.append("<h4><a href='http://finance.naver.com/item/main.nhn?code=" + s.getStockCode() + "'>"
-							+ s.getStockName() + "(" + s.getStockCode() + ")" + "</a></h4>\n");
-					sb1.append("<p>\n");
-					sb1.append(comment + "\n");
-					sb1.append("</p>");
-					sb1.append("</div>\n");
-					sb1.append("<br>\n");
+					Document classAnalysisDoc;
+					try {
+						classAnalysisDoc = Jsoup.connect(companyInfoUrlPrefix + s.getStockCode()).get();
+						// System.out.println("classAnalysisDoc:"+classAnalysisDoc);
+						Elements comment = classAnalysisDoc.select(".cmp_comment");
+						sb1.append("<div>\n");
+						sb1.append("<h4><a href='http://finance.naver.com/item/main.nhn?code=" + s.getStockCode() + "'>"
+								+ s.getStockName() + "(" + s.getStockCode() + ")" + "</a></h4>\n");
+						sb1.append("<p>\n");
+						sb1.append(comment + "\n");
+						sb1.append("</p>");
+						sb1.append("</div>\n");
+						sb1.append("<br>\n");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
-
+			*/
 			// 뉴스 첨부
 			sb1.append(getNews(list).toString());
 
@@ -557,10 +579,6 @@ public class StockUniqueNew extends Thread {
 			fileName = userHome + "\\documents\\" + strYmdDashBracket + " " + strHms + "_" + title.replaceAll(" ", "_")
 					+ ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
 		} finally {
 		}
 	}

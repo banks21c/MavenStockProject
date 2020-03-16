@@ -1,7 +1,8 @@
-package html.parsing.stock;
+package html.parsing.stock.news;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,24 +16,27 @@ import java.nio.channels.ReadableByteChannel;
 
 import javax.swing.JOptionPane;
 
-public class FinanceNaverCom {
+public class FinanceNaverComWorld {
 
-    FinanceNaverCom() {
+    FinanceNaverComWorld() {
         // urlOpenConnection();
-        String code = JOptionPane.showInputDialog("코드를 입력하여 주세요");
-        printUrlOpenStream(code);
-        // urlOpenStream(code);
-        writeFromUrlOpenStream(code);
+        //printUrlOpenStream();
+        urlOpenStream();
+        writeFromUrlOpenStream();
     }
 
-    public void printUrlOpenStream(String code) {
-        URL oracle;
+    public void printUrlOpenStream() {
+        URL url;
+        String strUrl = "https://finance.naver.com/world/";
         try {
-            oracle = new URL("http://finance.naver.com/item/coinfo.nhn?code=" + code);
-            BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream(),"UTF8"));
+        	url = new URL(strUrl);
+            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(),"KSC5601"));
+            
             String inputLine;
+            int lineNumber = 1;
             while ((inputLine = in.readLine()) != null) {
-                System.out.println(inputLine);
+                System.out.println(lineNumber+" : "+inputLine);
+                lineNumber++;
             }
             in.close();
         } catch (MalformedURLException e) {
@@ -42,38 +46,23 @@ public class FinanceNaverCom {
         }
     }
 
-    public void urlOpenStream(String code) {
+    public void urlOpenStream() {
         URL url;
-        String url1 = "http://finance.naver.com/item/main.nhn?code=" + code;
-        String url2 = "http://finance.naver.com/item/fchart.nhn?code=" + code;
-        String url3 = "http://finance.naver.com/item/coinfo.nhn?code=" + code;
+        String strUrl = "https://finance.naver.com/world/";
         try {
-            url = new URL(url3);
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+            url = new URL(strUrl);
+            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(),"KSC5601"));
             String inputLine;
             int start = 0;
+            int lineNumber = 1;
             while ((inputLine = in.readLine()) != null) {
                 inputLine = inputLine.trim();
+                System.out.println(lineNumber+" : "+inputLine);
+                lineNumber++;
+
                 if (inputLine.indexOf("<title>") != -1) {
                     inputLine = inputLine.substring("<title>".length(), inputLine.indexOf(":"));
-                    System.out.println("<h1>" + inputLine.trim() + " " + code + "</h1>");
-                    System.out.println("<h5>" + url1 + "</h5>");
-                    System.out.println("<h5>" + url2 + "</h5>");
-                }
-                if (inputLine.indexOf("<h4>기업개요</h4>") != -1) {
-                    start = 1;
-                    System.out.println(inputLine);
-                    System.out.println("<ul>");
-                    continue;
-                }
-                if (start == 1) {
-                    if (inputLine.indexOf("<div class=\"txt_notice\">") != -1) {
-                        start = 0;
-                    } else {
-                        inputLine = inputLine.replaceAll("<p>", "<li>");
-                        inputLine = inputLine.replaceAll("</p>", "</li>");
-                        System.out.println(inputLine);
-                    }
+                    System.out.println("<h1>" + inputLine.trim() + "</h1>");
                 }
             }
             System.out.println("</ul>");
@@ -86,14 +75,12 @@ public class FinanceNaverCom {
         }
     }
 
-    public void writeFromUrlOpenStream(String code) {
+    public void writeFromUrlOpenStream() {
         URL url;
-        String url1 = "http://finance.naver.com/item/main.nhn?code=" + code;
-        String url2 = "http://finance.naver.com/item/fchart.nhn?code=" + code;
-        String url3 = "http://finance.naver.com/item/coinfo.nhn?code=" + code;
+        String strUrl = "https://finance.naver.com/world/";
         try {
-            url = new URL(url3);
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+            url = new URL(strUrl);
+            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(),"KSC5601"));
             BufferedWriter out = null;
             String inputLine;
             int start = 0;
@@ -101,13 +88,9 @@ public class FinanceNaverCom {
                 inputLine = inputLine.trim();
                 if (inputLine.indexOf("<title>") != -1) {
                     inputLine = inputLine.substring("<title>".length(), inputLine.indexOf(":"));
-                    out = new BufferedWriter(new FileWriter(inputLine.trim() + "_" + code + "_기업개요.html"));
-                    out.write("<h1>" + inputLine.trim() + " " + code + "</h1>\n");
-                    out.write("<h5>" + url1 + "</h5>\n");
-                    out.write("<h5>" + url2 + "</h5>\n");
-                    System.out.println("<h1>" + inputLine.trim() + " " + code + "</h1>");
-                    System.out.println("<h5>" + url1 + "</h5>");
-                    System.out.println("<h5>" + url2 + "</h5>");
+                    out = new BufferedWriter(new FileWriter(inputLine.trim() + "_" + "_기업개요.html"));
+                    out.write("<h1>" + inputLine.trim() + " " + "</h1>\n");
+                    System.out.println("<h1>" + inputLine.trim() + "</h1>");
                 }
                 if (inputLine.indexOf("<h4>기업개요</h4>") != -1) {
                     start = 1;
@@ -188,7 +171,7 @@ public class FinanceNaverCom {
     }
 
     public static void main(String args[]) {
-        new FinanceNaverCom();
+        new FinanceNaverComWorld();
     }
 
 }

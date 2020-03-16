@@ -196,6 +196,7 @@ public class AllStockPlusMinusDivide100 extends Thread {
 		sUtil.setBottomCount(0);
 		sUtil.setDownCount(0);
 		sUtil.setSteadyCount(0);
+		//초기화
 		sBuilder = new StringBuilder();
 
 		// 코스닥
@@ -466,7 +467,7 @@ public class AllStockPlusMinusDivide100 extends Thread {
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
 		String fileName = userHome + "\\documents\\" + strYmdDashBracket + " " + strHms + "_" + title;
-		if(iExtractCount != -1){
+		if (iExtractCount != -1) {
 			fileName += iExtractCount;
 		}
 		fileName += ".html";

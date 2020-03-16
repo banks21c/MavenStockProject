@@ -273,6 +273,8 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 				}
 				strDate = strDate.replace("&nbsp;", "").trim();
 				logger.debug("strDate :[" + strDate+"]");
+				strDate = strDate.replace(".", "-");
+				logger.debug("strDate :[" + strDate+"]");
 
 				strFileNameDate = strDate;
 				strFileNameDate = StockUtil.getDateForFileName(strDate);
