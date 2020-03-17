@@ -225,7 +225,7 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 	}
 
 	public StockVO getStockInfo(int cnt, String strStockCode, String strStockName, String marketGubun) {
-		System.out.println(marketGubun+"."+cnt+"."+strStockCode+"."+strStockName);
+		System.out.println(marketGubun + "." + cnt + "." + strStockCode + "." + strStockName);
 		Document doc;
 		StockVO stock = new StockVO();
 		stock.setStockCode(strStockCode);
@@ -408,22 +408,18 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 			if (stock.getiHighPrice() >= iWeeks52MaxPrice) {
 				if (marketGubun.equals("P")) {
 					kospiNewHighPriceList.add(stock);
-					logger.debug(" kospiNewHighPriceList.size :"
-							+ kospiNewHighPriceList.size());
+					logger.debug(" kospiNewHighPriceList.size :" + kospiNewHighPriceList.size());
 				} else {
 					kosdaqNewHighPriceList.add(stock);
-					logger.debug(" kosdaqNewHighPriceList.size :"
-							+ kosdaqNewHighPriceList.size());
+					logger.debug(" kosdaqNewHighPriceList.size :" + kosdaqNewHighPriceList.size());
 				}
 			} else if (stock.getiLowPrice() <= iWeeks52MinPrice) {
 				if (marketGubun.equals("P")) {
 					kospiNewLowPriceList.add(stock);
-					logger.debug(" kospiNewLowPriceList.size :"
-							+ kospiNewLowPriceList.size());
+					logger.debug(" kospiNewLowPriceList.size :" + kospiNewLowPriceList.size());
 				} else {
 					kosdaqNewLowPriceList.add(stock);
-					logger.debug(" kosdaqNewLowPriceList.size :"
-							+ kosdaqNewLowPriceList.size());
+					logger.debug(" kosdaqNewLowPriceList.size :" + kosdaqNewLowPriceList.size());
 				}
 			}
 		} catch (IOException e) {
