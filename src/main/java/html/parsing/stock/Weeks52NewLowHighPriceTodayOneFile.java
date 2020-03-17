@@ -409,21 +409,21 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 			if (stock.getiHighPrice() >= iWeeks52MaxPrice) {
 				if (marketGubun.equals("P")) {
 					kospiNewHighPriceList.add(stock);
-					logger.debug("kospiNewHighPriceList :" + kospiNewHighPriceList + " kospiNewHighPriceList.size :"
+					logger.debug(" kospiNewHighPriceList.size :"
 							+ kospiNewHighPriceList.size());
 				} else {
 					kosdaqNewHighPriceList.add(stock);
-					logger.debug("kosdaqNewHighPriceList :" + kosdaqNewHighPriceList + " kosdaqNewHighPriceList.size :"
+					logger.debug(" kosdaqNewHighPriceList.size :"
 							+ kosdaqNewHighPriceList.size());
 				}
 			} else if (stock.getiLowPrice() <= iWeeks52MinPrice) {
 				if (marketGubun.equals("P")) {
 					kospiNewLowPriceList.add(stock);
-					logger.debug("kospiNewLowPriceList :" + kospiNewLowPriceList + " kospiNewLowPriceList.size :"
+					logger.debug(" kospiNewLowPriceList.size :"
 							+ kospiNewLowPriceList.size());
 				} else {
 					kosdaqNewLowPriceList.add(stock);
-					logger.debug("kosdaqNewLowPriceList :" + kosdaqNewLowPriceList + " kosdaqNewLowPriceList.size :"
+					logger.debug(" kosdaqNewLowPriceList.size :"
 							+ kosdaqNewLowPriceList.size());
 				}
 			}
