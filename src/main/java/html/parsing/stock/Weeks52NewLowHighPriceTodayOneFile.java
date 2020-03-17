@@ -225,6 +225,7 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 	}
 
 	public StockVO getStockInfo(int cnt, String strStockCode, String strStockName, String marketGubun) {
+		System.out.println(marketGubun+"."+cnt+"."+strStockCode+"."+strStockName);
 		Document doc;
 		StockVO stock = new StockVO();
 		stock.setStockCode(strStockCode);
@@ -400,9 +401,9 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 			int iWeeks52MinPrice = Integer.parseInt(weeks52MinPrice);
 
 			logger.debug("stock.getiHighPrice():" + stock.getiHighPrice() + " iWeeks52MaxPrice:" + iWeeks52MaxPrice
-					+ "================:" + (stock.getiHighPrice() >= iWeeks52MaxPrice));
+					+ ".고가 >= 52주 최고가?" + (stock.getiHighPrice() >= iWeeks52MaxPrice));
 			logger.debug("stock.getiLowPrice():" + stock.getiLowPrice() + " iWeeks52MaxPrice:" + iWeeks52MinPrice
-					+ "================:" + (stock.getiLowPrice() >= iWeeks52MinPrice));
+					+ ".저가 <= 52주 최저가?" + (stock.getiLowPrice() <= iWeeks52MinPrice));
 
 			if (stock.getiHighPrice() >= iWeeks52MaxPrice) {
 				if (marketGubun.equals("P")) {
