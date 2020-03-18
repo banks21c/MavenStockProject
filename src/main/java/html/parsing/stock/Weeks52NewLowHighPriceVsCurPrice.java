@@ -175,7 +175,7 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 		writeFile(kospiStockDataList, "코스피","하락율순");
 
 		Collections.sort(kospiStockDataList, new Weeks52NewLowPriceVsCurPriceUpRatioDescCompare());
-		writeFile(kospiStockDataList, "코스피","하락율순");
+		writeFile(kospiStockDataList, "코스피","상승율순");
 
 		logger.debug("kosdaqStockList.size :" + kosdaqStockList.size());
 		for (int i = 0; i < kosdaqStockList.size(); i++) {
@@ -197,7 +197,7 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 		writeFile(kosdaqStockDataList, "코스피","하락율순");
 
 		Collections.sort(kosdaqStockDataList, new Weeks52NewLowPriceVsCurPriceUpRatioDescCompare());
-		writeFile(kosdaqStockDataList, "코스피","하락율순");
+		writeFile(kosdaqStockDataList, "코스피","상승율순");
 
 		/*
 		 * Collections.sort(kospiNewHighPriceList, new NameAscCompare());
@@ -297,6 +297,8 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 			// doc.select(".sp_txt9").get(0);
 			String tradeVolumeText = doc.select(".sp_txt9").get(0).parent().child(1).child(0).text();
 			if (tradeVolumeText.equals("0")) {
+				stock.setWeeks52NewLowPriceVsCurPriceUpRatio(0);
+				stock.setWeeks52NewHighPriceVsCurPriceDownRatio(0);
 				return stock;
 			}
 			logger.debug("tradeVolumeText:" + tradeVolumeText);
