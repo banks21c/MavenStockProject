@@ -561,8 +561,8 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 							.append("</font></td>\r\n");
 				}
 
-				sb1.append("<td style='text-align:right'>").append(s.getWeeks52MinPrice()).append("</td>\r\n");
-				sb1.append("<td style='text-align:right'>").append(s.getWeeks52MaxPrice()).append("</td>\r\n");
+				sb1.append("<td style='text-align:right'>").append(StringUtils.defaultString(s.getWeeks52MinPrice())).append("</td>\r\n");
+				sb1.append("<td style='text-align:right'>").append(StringUtils.defaultString(s.getWeeks52MaxPrice())).append("</td>\r\n");
 
 				sb1.append("<td style='text-align:right'>").append("+" + s.getWeeks52NewLowPriceVsCurPriceUpRatio() + "%").append("</td>\r\n");
 				sb1.append("<td style='text-align:right'>").append("-" + s.getWeeks52NewHighPriceVsCurPriceDownRatio() + "%").append("</td>\r\n");
@@ -578,7 +578,7 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
 		logger.debug(sb1.toString());
-		String fileName = userHome + "\\documents\\" + strYmdDashBracket + " " + strHms + "_코스피,코스닥 신고,신저가.html";
+		String fileName = userHome + "\\documents\\" + strYmdDashBracket + " " + strHms + stockGubun + " 52주 신고가 대비 하락율, 신저가 대비 상승율("+orderBy+").html";
 		logger.debug("fileName==>" + fileName);
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}
