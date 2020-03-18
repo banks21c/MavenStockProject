@@ -1039,4 +1039,48 @@ public class DataSort {
                     : arg0.getStockNameLength() < arg1.getStockNameLength() ? 1 : 0;
         }
     }
+
+    /**
+     * 52주 신고가 대비 하락율 내림차순
+     *
+     * @author banks
+     *
+     */
+    public static class Weeks52NewHighPriceVsCurPriceDownRatioDescCompare implements Comparator<StockVO> {
+
+        /**
+         * 내림차순(DESC)
+         */
+        @Override
+        public int compare(StockVO arg0, StockVO arg1) {
+            int ret = 0;
+            if (arg0 != null) {
+		ret = arg0.getWeeks52NewHighPriceVsCurPriceDownRatio() > arg1.getWeeks52NewHighPriceVsCurPriceDownRatio() ? -1 : arg0.getWeeks52NewHighPriceVsCurPriceDownRatio() < arg1.getWeeks52NewHighPriceVsCurPriceDownRatio() ? 1 : 0;
+            }
+            return ret;
+        }
+
+    }
+    /**
+     * 52주 신저가 대비 상승율 내림차순
+     *
+     * @author banks
+     *
+     */
+    public static class Weeks52NewLowPriceVsCurPriceUpRatioDescCompare implements Comparator<StockVO> {
+
+    	/**
+    	 * 내림차순(DESC)
+    	 */
+    	@Override
+    	public int compare(StockVO arg0, StockVO arg1) {
+    		int ret = 0;
+    		if (arg0 != null) {
+    			ret = arg0.getWeeks52NewLowPriceVsCurPriceUpRatio() > arg1.getWeeks52NewLowPriceVsCurPriceUpRatio() ? -1 : arg0.getWeeks52NewLowPriceVsCurPriceUpRatio() < arg1.getWeeks52NewLowPriceVsCurPriceUpRatio() ? 1 : 0;
+    		}
+    		return ret;
+    	}
+
+    }
+
 }

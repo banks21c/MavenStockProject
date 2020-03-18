@@ -111,6 +111,13 @@ public class StockVO {
 	private int iStockTotalVolume;
 	private String weeks52MinPrice;
 	private String weeks52MaxPrice;
+	private int iWeeks52MinPrice;
+	private int iWeeks52MaxPrice;
+	private boolean weeks52NewHighPrice = false;
+	private boolean weeks52NewLowPrice = false;
+
+	private double weeks52NewHighPriceVsCurPriceDownRatio;
+	private double weeks52NewLowPriceVsCurPriceUpRatio;
 
 	private Vector<MajorStockHolderVO> majorStockHolderList;
 	// 투자의견
@@ -782,6 +789,22 @@ public class StockVO {
 		this.weeks52MaxPrice = weeks52MaxPrice;
 	}
 
+	public int getiWeeks52MinPrice() {
+		return iWeeks52MinPrice;
+	}
+
+	public void setiWeeks52MinPrice(int iWeeks52MinPrice) {
+		this.iWeeks52MinPrice = iWeeks52MinPrice;
+	}
+
+	public int getiWeeks52MaxPrice() {
+		return iWeeks52MaxPrice;
+	}
+
+	public void setiWeeks52MaxPrice(int iWeeks52MaxPrice) {
+		this.iWeeks52MaxPrice = iWeeks52MaxPrice;
+	}
+
 	public Vector<MajorStockHolderVO> getMajorStockHolderList() {
 		return majorStockHolderList;
 	}
@@ -971,6 +994,38 @@ public class StockVO {
 
 	public void setResultDetailMessage(String resultDetailMessage) {
 		this.resultDetailMessage = resultDetailMessage;
+	}
+
+	public boolean isWeeks52NewHighPrice() {
+		return weeks52NewHighPrice;
+	}
+
+	public void setWeeks52NewHighPrice(boolean weeks52NewHighPrice) {
+		this.weeks52NewHighPrice = weeks52NewHighPrice;
+	}
+
+	public boolean isWeeks52NewLowPrice() {
+		return weeks52NewLowPrice;
+	}
+
+	public void setWeeks52NewLowPrice(boolean weeks52NewLowPrice) {
+		this.weeks52NewLowPrice = weeks52NewLowPrice;
+	}
+
+	public double getWeeks52NewHighPriceVsCurPriceDownRatio() {
+		return weeks52NewHighPriceVsCurPriceDownRatio;
+	}
+
+	public void setWeeks52NewHighPriceVsCurPriceDownRatio(double weeks52NewHighPriceVsCurPriceDownRatio) {
+		this.weeks52NewHighPriceVsCurPriceDownRatio = weeks52NewHighPriceVsCurPriceDownRatio;
+	}
+
+	public double getWeeks52NewLowPriceVsCurPriceUpRatio() {
+		return weeks52NewLowPriceVsCurPriceUpRatio;
+	}
+
+	public void setWeeks52NewLowPriceVsCurPriceUpRatio(double weeks52NewLowPriceVsCurPriceUpRatio) {
+		this.weeks52NewLowPriceVsCurPriceUpRatio = weeks52NewLowPriceVsCurPriceUpRatio;
 	}
 
 	@Override
