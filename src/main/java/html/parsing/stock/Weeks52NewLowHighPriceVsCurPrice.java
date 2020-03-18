@@ -194,11 +194,11 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 		writeFile(kosdaqStockDataList, "코스닥", "이름순");
 
 		Collections.sort(kosdaqStockDataList, new Weeks52NewHighPriceVsCurPriceDownRatioDescCompare());
-		writeFile(kosdaqStockDataList, "코스피", "하락율순");
+		writeFile(kosdaqStockDataList, "코스닥", "하락율순");
 
 		Collections.sort(kosdaqStockDataList, new Weeks52NewLowPriceVsCurPriceUpRatioDescCompare());
-		writeFile(kosdaqStockDataList, "코스피", "상승율순");
-
+		writeFile(kosdaqStockDataList, "코스닥", "상승율순");
+/*
 		Collections.sort(kospiNewHighPriceList, new NameAscCompare());
 		Collections.sort(kosdaqNewHighPriceList, new NameAscCompare());
 		Collections.sort(kospiNewLowPriceList, new NameAscCompare());
@@ -215,7 +215,7 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 		newLowHighPriceMap.put("코스닥 신저가", kosdaqNewLowPriceList);
 
 		writeFile(newLowHighPriceMap);
-
+*/
 	}
 
 	public void readOne(String stockCode, String stockName, String marketGubun) {
