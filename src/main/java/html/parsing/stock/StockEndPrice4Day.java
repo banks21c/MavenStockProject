@@ -1,7 +1,9 @@
 package html.parsing.stock;
 
 import java.io.IOException;
+import java.util.Map;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -25,7 +27,17 @@ public class StockEndPrice4Day {
 		Document doc;
 		try {
 			// 종합분석-기업개요
-			doc = Jsoup.connect("https://finance.naver.com/item/sise_day.nhn?tradeDay=" + tradeDay).get();
+//			doc = Jsoup.connect("https://finance.naver.com/item/sise_day.nhn?code=" + stockCode).get();
+//			String url = "https://finance.naver.com/item/frgn.nhn?code=" + stockCode;
+			String url = "https://finance.naver.com/item/sise_day.nhn?code="+stockCode;
+            String userAgent = "Mozilla";
+            // This will get you the response.
+            Connection.Response res = Jsoup.connect(url).method(Connection.Method.POST).followRedirects(false).userAgent(userAgent).execute();
+            // This will get you cookies
+            Map<String, String> loginCookies = res.cookies();
+            // And this is the easiest way I've found to remain in session
+            doc = Jsoup.connect(url).cookies(loginCookies).userAgent(userAgent).get();
+
 			logger.debug("doc:" + doc);
 			String strDoc = doc.html();
 			strDoc = strDoc.replace("&nbsp;", " ");
