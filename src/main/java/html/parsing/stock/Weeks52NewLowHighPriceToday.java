@@ -120,7 +120,7 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 		// 코스피 신저가
 //		newLowPriceList = StockUtil.getAllStockInfo(kospiFileName);
 		try {
-			kospiStockList = StockUtil.getAllStockList(kospiFileName);
+			kospiStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
 			logger.debug("kospiStockList.size1 :" + kospiStockList.size());
 		} catch (Exception ex) {
             java.util.logging.Logger.getLogger(Weeks52NewLowHighPriceToday.class.getName()).log(Level.SEVERE, null, ex);
@@ -149,7 +149,7 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 //        readFile("코스닥", kosdaqFileName);
 		// 코스닥 신저가
 		try {
-			kosdaqStockList = StockUtil.getAllStockList(kosdaqFileName);
+			kosdaqStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
 			logger.debug("kosdaqStockList1 :" + kosdaqStockList);
 		} catch (Exception ex) {
 			java.util.logging.Logger.getLogger(Weeks52NewLowHighPriceToday.class.getName()).log(Level.SEVERE, null, ex);

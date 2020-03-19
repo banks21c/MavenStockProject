@@ -32,6 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.NameAscCompare;
+import html.parsing.stock.DataSort.Weeks52NewHighPriceVsCurPriceDownRatioAscCompare;
+import html.parsing.stock.DataSort.Weeks52NewLowPriceVsCurPriceUpRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
 
 public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
@@ -63,6 +65,9 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 	List<StockVO> kospiStockList = new ArrayList<StockVO>();
 	List<StockVO> kosdaqStockList = new ArrayList<StockVO>();
 
+	List<StockVO> kospiStockDataList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqStockDataList = new ArrayList<StockVO>();
+
 	LinkedHashMap<String, List<StockVO>> newLowHighPriceMap = new LinkedHashMap<String, List<StockVO>>();
 	List<StockVO> newLowPriceList = new ArrayList<StockVO>();
 	List<StockVO> newHighPriceList = new ArrayList<StockVO>();
@@ -90,7 +95,14 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 	Weeks52NewLowHighPriceTodayOneFile(int i) {
 		Class thisClass = this.getClass();
 		logger = LoggerFactory.getLogger(thisClass);
-		readOne("053610", "프로텍");
+
+		readOne("005930", "삼성전자", "P");
+		Collections.sort(kospiStockDataList, new NameAscCompare());
+		writeFile(kospiStockDataList, "코스피", "이름순");
+
+		readOne("134780", "화진", "D");
+		Collections.sort(kosdaqStockDataList, new NameAscCompare());
+		writeFile(kosdaqStockDataList, "코스닥", "이름순");
 
 		Collections.sort(kospiNewLowPriceList, new NameAscCompare());
 		Collections.sort(kospiNewHighPriceList, new NameAscCompare());
@@ -143,8 +155,8 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 		// 코스닥
 //      readFile("코스닥", kosdaqFileName);
 		try {
-			kospiStockList = StockUtil.getAllStockList(kospiFileName);
-			kosdaqStockList = StockUtil.getAllStockList(kosdaqFileName);
+			kospiStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
+			kosdaqStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
 			logger.debug("kospiStockList.size1 :" + kospiStockList.size());
 		} catch (Exception ex) {
 			java.util.logging.Logger.getLogger(Weeks52NewLowHighPriceTodayOneFile.class.getName()).log(Level.SEVERE,
@@ -154,16 +166,49 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 			logger.debug("kospiStockList.size2 :" + kospiStockList.size());
 		}
 
+		/** 날짜 정보 가져오기 */
+		StockVO svo4Date = kospiStockList.get(0);
+		getDateInfo(svo4Date.getStockCode());
+
 		for (int i = 0; i < kospiStockList.size(); i++) {
 			StockVO svo = kospiStockList.get(i);
-			svo = getStockInfo((i + 1), svo.getStockCode(), svo.getStockName(), "P");
+			logger.debug("======================================================================");
+			logger.debug("코스피." + (i + 1) + "." + svo.getStockCode() + "." + svo.getStockName());
+			logger.debug("======================================================================");
+			getStockInfo((i + 1), svo.getStockCode(), svo.getStockName(), "P");
 		}
+		/*
+		 * Collections.sort(kospiStockDataList, new NameAscCompare());
+		 * writeFile(kospiStockDataList, "코스피", "이름순");
+		 * 
+		 * Collections.sort(kospiStockDataList, new
+		 * Weeks52NewHighPriceVsCurPriceDownRatioAscCompare());
+		 * writeFile(kospiStockDataList, "코스피", "하락율순");
+		 * 
+		 * Collections.sort(kospiStockDataList, new
+		 * Weeks52NewLowPriceVsCurPriceUpRatioDescCompare());
+		 * writeFile(kospiStockDataList, "코스피", "상승율순");
+		 */
 		logger.debug("kosdaqStockList.size :" + kosdaqStockList.size());
 		for (int i = 0; i < kosdaqStockList.size(); i++) {
 			StockVO svo = kosdaqStockList.get(i);
-			svo = getStockInfo((i + 1), svo.getStockCode(), svo.getStockName(), "D");
+			logger.debug("======================================================================");
+			logger.debug("코스닥." + (i + 1) + "." + svo.getStockCode() + "." + svo.getStockName());
+			logger.debug("======================================================================");
+			getStockInfo((i + 1), svo.getStockCode(), svo.getStockName(), "D");
 		}
-
+		/*
+		 * Collections.sort(kosdaqStockDataList, new NameAscCompare());
+		 * writeFile(kosdaqStockDataList, "코스닥", "이름순");
+		 * 
+		 * Collections.sort(kosdaqStockDataList, new
+		 * Weeks52NewHighPriceVsCurPriceDownRatioDescCompare());
+		 * writeFile(kosdaqStockDataList, "코스닥", "하락율순");
+		 * 
+		 * Collections.sort(kosdaqStockDataList, new
+		 * Weeks52NewLowPriceVsCurPriceUpRatioDescCompare());
+		 * writeFile(kosdaqStockDataList, "코스닥", "상승율순");
+		 */
 		Collections.sort(kospiNewHighPriceList, new NameAscCompare());
 		Collections.sort(kosdaqNewHighPriceList, new NameAscCompare());
 		Collections.sort(kospiNewLowPriceList, new NameAscCompare());
@@ -183,11 +228,12 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 
 	}
 
-	public void readOne(String stockCode, String stockName) {
+	public void readOne(String stockCode, String stockName, String marketGubun) {
 		int cnt = 1;
 		strStockCode = stockCode;
 		strStockName = stockName;
-		getStockInfo(cnt, strStockCode, strStockName, "P");
+
+		getStockInfo(cnt, strStockCode, strStockName, marketGubun);
 	}
 
 	public void readFile(String marketGubun, String fileName) {
@@ -219,14 +265,8 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 		}
 	}
 
-	public StockVO getStockInfo(int cnt, String strStockCode, String strStockName, String marketGubun) {
-		logger.debug("======================================================================");
-		System.out.println(marketGubun + "." + cnt + "." + strStockCode + "." + strStockName);
-		logger.debug("======================================================================");
+	public void getDateInfo(String strStockCode) {
 		Document doc;
-		StockVO stock = new StockVO();
-		stock.setStockCode(strStockCode);
-		stock.setStockName(strStockName);
 		try {
 			// 종합정보
 			logger.debug("종합정보 http://finance.naver.com/item/main.nhn?code=" + strStockCode);
@@ -253,13 +293,29 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 			}
 			logger.debug("iYmd:[" + iYmd + "]");
 			logger.debug("strYmdDash:[" + strYmdDash + "]");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-			// Element tradeVolumeText =
-			// doc.select(".sp_txt9").get(0);
+	public void getStockInfo(int cnt, String strStockCode, String strStockName, String marketGubun) {
+		logger.debug("======================================================================");
+		System.out.println(marketGubun + "." + cnt + "." + strStockCode + "." + strStockName);
+		logger.debug("======================================================================");
+		Document doc;
+		StockVO stock = new StockVO();
+		stock.setStockCode(strStockCode);
+		stock.setStockName(strStockName);
+		try {
+			// 종합정보
+			logger.debug("종합정보 http://finance.naver.com/item/main.nhn?code=" + strStockCode);
+			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + strStockCode).get();
+			// logger.debug("doc:"+doc);
+
+			// 거래량 체크, 거래량이 0이면 빠져나간다.
+			// Element tradeVolumeText = doc.select(".sp_txt9").get(0);
 			String tradeVolumeText = doc.select(".sp_txt9").get(0).parent().child(1).child(0).text();
-			if (tradeVolumeText.equals("0")) {
-				return stock;
-			}
 			logger.debug("tradeVolumeText:" + tradeVolumeText);
 
 			Element new_totalinfo = doc.select(".new_totalinfo").get(0);
@@ -398,6 +454,34 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 			int iWeeks52MaxPrice = Integer.parseInt(weeks52MaxPrice);
 			int iWeeks52MinPrice = Integer.parseInt(weeks52MinPrice);
 
+			double upRatio = 0d;
+			double downRatio = 0d;
+			if (iWeeks52MinPrice < iCurPrice) {
+				double d1 = iCurPrice - iWeeks52MinPrice;
+				double d2 = d1 / iWeeks52MinPrice * 100;
+				upRatio = Math.round(d2 * 100) / 100.0;
+			} else if (iWeeks52MinPrice > iCurPrice) {
+				System.out.println("신저가라네...");
+				double d1 = iWeeks52MinPrice - iCurPrice;
+				double d2 = d1 / iWeeks52MinPrice * 100;
+				upRatio = -(Math.round(d2 * 100) / 100.0);
+			}
+			if (iWeeks52MaxPrice > iCurPrice) {
+				double d1 = iWeeks52MaxPrice - iCurPrice;
+				double d2 = d1 / iWeeks52MaxPrice * 100;
+				downRatio = -(Math.round(d2 * 100) / 100.0);
+			} else if (iWeeks52MaxPrice < iCurPrice) {
+				System.out.println("신고가라네...");
+				double d1 = iCurPrice - iWeeks52MaxPrice;
+				double d2 = d1 / iWeeks52MaxPrice * 100;
+				downRatio = Math.round(d2 * 100) / 100.0;
+			}
+			logger.debug("52주 신저가 대비 upRatio:" + upRatio + "% 상승");
+			logger.debug("52주 신고가 대비 downRatio:" + downRatio + "% 하락");
+
+			stock.setWeeks52NewHighPriceVsCurPriceDownRatio(downRatio);
+			stock.setWeeks52NewLowPriceVsCurPriceUpRatio(upRatio);
+
 			logger.debug("stock.getiHighPrice():" + stock.getiHighPrice() + " iWeeks52MaxPrice:" + iWeeks52MaxPrice
 					+ ".고가 > 52주 최고가?" + (stock.getiHighPrice() > iWeeks52MaxPrice));
 			logger.debug("stock.getiLowPrice():" + stock.getiLowPrice() + " iWeeks52MaxPrice:" + iWeeks52MinPrice
@@ -422,12 +506,122 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 					logger.debug(" kosdaqNewLowPriceList.size :" + kosdaqNewLowPriceList.size());
 				}
 			}
+			if (marketGubun.equals("P")) {
+				kospiStockDataList.add(stock);
+			} else {
+				kosdaqStockDataList.add(stock);
+			}
 		} catch (IOException e) {
 			logger.debug(e.getMessage());
 		} catch (Exception e) {
 			logger.debug(e.getMessage());
 		}
-		return stock;
+	}
+
+	public void writeFile(List<StockVO> kospiKosdaqStockList, String stockGubun, String orderBy) {
+		String fileNameSuffix = "";
+		if (orderBy.equals("상승율순")) {
+			fileNameSuffix = " 52주 신저가 대비 상승율(" + orderBy + ")";
+		} else {
+			fileNameSuffix = " 52주 신고가 대비 하락율(" + orderBy + ")";
+		}
+		StringBuilder sb1 = new StringBuilder();
+		sb1.append("<html lang='ko'>\r\n");
+		sb1.append("<head>\r\n");
+		// sb1.append("<meta http-equiv=\"Content-Type\"
+		// content=\"text/html;charset=utf-8\">\r\n");
+		sb1.append("<style>\r\n");
+		sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
+		sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
+		sb1.append("</style>\r\n");
+		sb1.append("</head>\r\n");
+		sb1.append("<body>\r\n");
+		sb1.append("\t<h1>").append(strYmdDashBracket).append(stockGubun + fileNameSuffix).append("</h1>");
+
+		sb1.append("<table>\r\n");
+		sb1.append("<tr>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>등락율</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최저가</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최고가</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>최저가 대비 상승율</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>최고가 대비 하락율</td>\r\n");
+		sb1.append("</tr>\r\n");
+
+		int cnt = 1;
+		for (StockVO s : kospiKosdaqStockList) {
+			logger.debug("s :" + s);
+			if (s != null) {
+				sb1.append("<tr>\r\n");
+				String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
+				sb1.append("<td>").append(cnt++).append("</td>\r\n");
+				sb1.append("<td><a href='").append(url).append("' target='_sub'>").append(s.getStockName())
+						.append("</a></td>\r\n");
+
+				String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
+				String varyPrice = s.getVaryPrice();
+
+				logger.debug("specialLetter+++>" + specialLetter);
+				logger.debug("varyPrice+++>" + varyPrice);
+
+				if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲") || specialLetter.startsWith("+")) {
+					sb1.append("<td style='text-align:right;color:red'>")
+							.append(StringUtils.defaultIfEmpty(s.getCurPrice(), "")).append("</td>\r\n");
+					sb1.append("<td style='text-align:right'><font color='red'>").append(specialLetter).append(" ")
+							.append(varyPrice).append("</font></td>\r\n");
+				} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
+						|| specialLetter.startsWith("-")) {
+					sb1.append("<td style='text-align:right;color:blue'>")
+							.append(StringUtils.defaultIfEmpty(s.getCurPrice(), "")).append("</td>\r\n");
+					sb1.append("<td style='text-align:right'><font color='blue'>").append(specialLetter).append(" ")
+							.append(varyPrice).append("</font></td>\r\n");
+				} else {
+					sb1.append("<td style='text-align:right;color:metal'>")
+							.append(StringUtils.defaultIfEmpty(s.getCurPrice(), "")).append("</td>\r\n");
+					sb1.append("<td style='text-align:right'>0</td>\r\n");
+				}
+
+				String varyRatio = StringUtils.defaultIfEmpty(s.getVaryRatio(), "");
+				if (varyRatio.startsWith("+")) {
+					sb1.append("<td style='text-align:right'><font color='red'>").append(varyRatio)
+							.append("</font></td>\r\n");
+				} else if (varyRatio.startsWith("-")) {
+					sb1.append("<td style='text-align:right'><font color='blue'>").append(varyRatio)
+							.append("</font></td>\r\n");
+				} else {
+					sb1.append("<td style='text-align:right'><font color='black'>").append(varyRatio)
+							.append("</font></td>\r\n");
+				}
+
+				sb1.append("<td style='text-align:right'>").append(StringUtils.defaultString(s.getWeeks52MinPrice()))
+						.append("</td>\r\n");
+				sb1.append("<td style='text-align:right'>").append(StringUtils.defaultString(s.getWeeks52MaxPrice()))
+						.append("</td>\r\n");
+
+				sb1.append("<td style='text-align:right'>").append(s.getWeeks52NewLowPriceVsCurPriceUpRatio() + "%")
+						.append("</td>\r\n");
+				sb1.append("<td style='text-align:right'>").append(s.getWeeks52NewHighPriceVsCurPriceDownRatio() + "%")
+						.append("</td>\r\n");
+
+				sb1.append("</tr>\r\n");
+			}
+		}
+		sb1.append("</table>\r\n");
+		sb1.append("<br><br>\r\n");
+
+		// 뉴스 첨부
+		sb1.append(getNews(newLowPriceList).toString());
+		sb1.append("</body>\r\n");
+		sb1.append("</html>\r\n");
+		logger.debug(sb1.toString());
+
+		String fileName = userHome + "\\documents\\" + strYmdDashBracket + " " + strHms + stockGubun + fileNameSuffix
+				+ ".html";
+		logger.debug("fileName==>" + fileName);
+		FileUtil.fileWrite(fileName, sb1.toString());
 	}
 
 	public void writeFile(Map<String, List<StockVO>> newLowHighPriceMap) {

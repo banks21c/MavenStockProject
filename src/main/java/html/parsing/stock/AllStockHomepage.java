@@ -1,18 +1,16 @@
 package html.parsing.stock;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,6 +33,12 @@ public class AllStockHomepage {
     // Locale.KOREAN).format(new Date());
     static String strYMD = "";
 
+    String kospiFileName = GlobalVariables.kospiFileName;
+    String kosdaqFileName = GlobalVariables.kosdaqFileName;
+
+	List<StockVO> kospiStockList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqStockList = new ArrayList<StockVO>();
+
     /**
      * @param args
      */
@@ -43,9 +47,6 @@ public class AllStockHomepage {
     }
 
     AllStockHomepage() {
-
-        String kospiFileName = GlobalVariables.kospiFileName;
-        String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
         List<StockVO> kospiStockList = readOne("012450", "한화테크윈");
         writeFile(kospiStockList, kospiFileName, "코스피");
@@ -58,18 +59,40 @@ public class AllStockHomepage {
 
         // MakeKospiKosdaqList.makeKospiKosdaqList();
 
-        String kospiFileName = GlobalVariables.kospiFileName;
-        String kosdaqFileName = GlobalVariables.kosdaqFileName;
-
         // 모든 주식 정보를 조회한다.
-        // 코스피
-        List<StockVO> kospiAllStockList = getAllStockInfo("코스피", kospiFileName);
-        System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
+		try {
+			kospiStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
+			kosdaqStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
+			logger.debug("kospiStockList.size1 :" + kospiStockList.size());
+		} catch (Exception ex) {
+			java.util.logging.Logger.getLogger(Weeks52NewLowHighPriceVsCurPrice.class.getName()).log(Level.SEVERE, null,
+					ex);
+			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
+			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+			logger.debug("kospiStockList.size2 :" + kospiStockList.size());
+		}
 
+		// 코스피
+        List<StockVO> kospiAllStockList = new ArrayList<StockVO>();
+        for(int j=0;j<kospiStockList.size();j++) {
+        	StockVO svo = kospiStockList.get(j);
+        	if (svo.getStockCode().length() != 6) {
+        		logger.debug("stock code length :"+svo.getStockCode());;
+        	}
+            svo = getStockHomepage(j, svo.getStockCode());
+            kospiAllStockList.add(svo);
+        }
+        logger.debug("kospiAllStockList.size :" + kospiAllStockList.size());
         // 코스닥
-        List<StockVO> kosdaqAllStockList = getAllStockInfo("코스닥", kosdaqFileName);
-        System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
-
+        List<StockVO> kosdaqAllStockList = new ArrayList<StockVO>();
+        for(int j=0;j<kosdaqStockList.size();j++) {
+        	StockVO svo = kosdaqStockList.get(j);
+        	if (svo.getStockCode().length() != 6) {
+        		logger.debug("stock code length :"+svo.getStockCode());;
+        	}
+            svo = getStockHomepage(j, svo.getStockCode());
+            kosdaqAllStockList.add(svo);
+        }
         writeFile(kospiAllStockList, kospiFileName, "코스피 홈페이지 목록");
         writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 홈페이지 목록");
 
@@ -146,7 +169,7 @@ public class AllStockHomepage {
             sb1.append("</body>\r\n");
             sb1.append("</html>\r\n");
             fw.write(sb1.toString());
-            System.out.println(sb1.toString());
+            logger.debug(sb1.toString());
             fw.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -156,43 +179,6 @@ public class AllStockHomepage {
 
         }
 
-    }
-
-    public static List<StockVO> getAllStockInfo(String kospidaq, String fileName) {
-        List<StockVO> stocks = new ArrayList<StockVO>();
-
-        File f = new File(userHome + "\\documents\\" + fileName);
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f),"UTF8"));
-
-            String read = null;
-            String stockCode = null;
-            String stockName = null;
-            int cnt = 1;
-            while ((read = reader.readLine()) != null) {
-                cnt++;
-                System.out.println(cnt + "." + read);
-                stockCode = read.split("\t")[0];
-                stockName = read.split("\t")[1];
-
-                if (stockCode.length() != 6) {
-                    continue;
-                }
-                StockVO stock = getStockHomepage(cnt, stockCode);
-                if (stock != null) {
-                    stock.setStockName(stockName);
-                    stocks.add(stock);
-                }
-            }
-            reader.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } finally {
-
-        }
-        return stocks;
     }
 
     private static StockVO getStockHomepage(int cnt, String stockCode) {
@@ -210,9 +196,9 @@ public class AllStockHomepage {
         try {
             // 종합분석-기업개요
             doc = Jsoup.connect("http://companyinfo.stock.naver.com/v1/company/c1020001.aspx?cmp_cd=" + code).get();
-            System.out.println("title:" + doc.title());
+            logger.debug("title:" + doc.title());
             if (cnt == 1) {
-                // System.out.println(doc.html());
+                // logger.debug(doc.html());
             }
             stock.setStockCode(code);
 
@@ -227,11 +213,11 @@ public class AllStockHomepage {
             if (aClass.size() <= 0) {
                 return null;
             }
-            System.out.println("■■■■■■■■■■■■■■■■■■■■■■");
-            System.out.println("meta:" + aClass);
-            System.out.println("■■■■■■■■■■■■■■■■■■■■■■");
-            System.out.println(aClass.get(0));
-            System.out.println(aClass.get(0).attr("title"));
+            logger.debug("■■■■■■■■■■■■■■■■■■■■■■");
+            logger.debug("meta:" + aClass);
+            logger.debug("■■■■■■■■■■■■■■■■■■■■■■");
+            logger.debug(aClass.get(0).html());
+            logger.debug(aClass.get(0).attr("title"));
             String strHomePage[] = aClass.get(0).attr("title").split(" ");
             if (strHomePage.length > 1) {
                 stockHomePage = aClass.get(0).attr("title").split(" ")[1];
@@ -241,7 +227,7 @@ public class AllStockHomepage {
                 }
             }
             stock.setHomePage(stockHomePage);
-            System.out.println(stockHomePage);
+            logger.debug(stockHomePage);
 
             String title2[] = aClass.get(1).attr("title").split("[\r\n]+");
             mainPhone = title2[0].split(" ")[1];
@@ -253,10 +239,10 @@ public class AllStockHomepage {
             stock.setMainPhone(mainPhone);
             stock.setStockPhone(stockPhone);
 
-            System.out.println(stock.getStockCode());
-            System.out.println(stock.getStockName());
-            System.out.println(stock.getMainPhone());
-            System.out.println(stock.getStockPhone());
+            logger.debug(stock.getStockCode());
+            logger.debug(stock.getStockName());
+            logger.debug(stock.getMainPhone());
+            logger.debug(stock.getStockPhone());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -271,23 +257,23 @@ public class AllStockHomepage {
         try {
             // 종합분석-기업개요
             doc = Jsoup.connect("http://companyinfo.stock.naver.com/v1/company/c1020001.aspx?cmp_cd=" + code).get();
-            System.out.println("title:" + doc.title());
+            logger.debug("title:" + doc.title());
             if (cnt == 1) {
-                // System.out.println(doc.html());
+                // logger.debug(doc.html());
             }
             String strDoc = doc.html();
             strDoc = strDoc.replace("&nbsp;", " ");
 
             doc = Jsoup.parse(strDoc);
 
-            System.out.println("cT201:" + doc.getElementById("cTB201"));
+            //logger.debug("cT201:" + doc.getElementById("cTB201"));
 
             Element cTB201 = doc.getElementById("cTB201");
 
-            System.out.println("tr start----------------");
+            logger.debug("tr start----------------");
             Elements trEls = cTB201.select("tbody tr");
             for (Element tr : trEls) {
-                System.out.println("tr:" + tr);
+                logger.debug("tr:" + tr);
                 Elements thEls = tr.select("th");
                 Elements tdEls = tr.select("td");
                 int thCnt = 0;
@@ -296,7 +282,7 @@ public class AllStockHomepage {
                     String key = th.text();
                     String value = tdEls.get(thCnt).text();
 
-                    System.out.println("key:" + key + " value:" + value);
+                    logger.debug("key:" + key + " value:" + value);
                     if (key.equals("본사주소")) {
                         stock.setHeadquartersAddress(value);
                     } else if (key.equals("홈페이지")) {
@@ -321,8 +307,10 @@ public class AllStockHomepage {
                         String foundDay = value.substring(0, value.indexOf(" "));
                         String listedDay = value.substring(value.indexOf(" ")).trim().replaceAll("\\(", "")
                                 .replaceAll("\\)", "").split(" ")[1];
-                        System.out.println(foundDay + "===" + listedDay);
+                        logger.debug(foundDay + "===" + listedDay);
+                        //설립일
                         stock.setFoundDay(foundDay);
+                        //상장일
                         stock.setListedDay(listedDay);
                     } else if (key.equals("대표이사")) {
                         stock.setCeo(value);
@@ -342,10 +330,8 @@ public class AllStockHomepage {
                     thCnt++;
                 }
             }
-            System.out.println("tr end----------------");
-            System.out.println("----------------");
-            System.out.println(stock.toString());
-            System.out.println("----------------");
+            logger.debug("tr end----------------");
+            logger.debug("----------------");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -394,7 +380,7 @@ public class AllStockHomepage {
             sb1.append("</body>\r\n");
             sb1.append("</html>\r\n");
             fw.write(sb1.toString());
-            System.out.println(sb1.toString());
+            logger.debug(sb1.toString());
             fw.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

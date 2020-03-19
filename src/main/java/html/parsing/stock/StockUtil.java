@@ -62,11 +62,11 @@ public class StockUtil {
 	String strYmdDash = strDefaultDate.replaceAll("\\.", "-");
 	String strYmdDashBracket = "[" + strDefaultDate.replaceAll("\\.", "-") + "]";
 
-	int topCount = 0;
-	int upCount = 0;
-	int bottomCount = 0;
-	int downCount = 0;
-	int steadyCount = 0;
+	static int topCount = 0;
+	static int upCount = 0;
+	static int bottomCount = 0;
+	static int downCount = 0;
+	static int steadyCount = 0;
 
 	public int getTopCount() {
 		return topCount;
@@ -477,7 +477,8 @@ public class StockUtil {
 		return strNews + "<br>" + newsStockTable.toString();
 	}
 
-	public static List<StockVO> readStockCodeNameListFromExcel(List<StockVO> stockList, String fileName)			throws Exception {
+	public static List<StockVO> readStockCodeNameListFromExcel(List<StockVO> stockList, String fileName)
+			throws Exception {
 		List<StockVO> svoList = new ArrayList<>();
 		// Creating a Workbook from an Excel file (.xls or .xlsx)
 		logger.debug("fileName:" + fileName);
@@ -535,7 +536,7 @@ public class StockUtil {
 		return stockList;
 	}
 
-	public List<StockVO> getAllStockInfo(List<StockVO> stockList) {
+	public static List<StockVO> getAllStockInfo(List<StockVO> stockList) {
 		List<StockVO> svoList = new ArrayList<>();
 		int cnt = 0;
 		for (StockVO svo : stockList) {
@@ -619,7 +620,7 @@ public class StockUtil {
 		return svoList;
 	}
 
-	public static List<StockVO> getAllStockList(String fileName)
+	public static List<StockVO> getAllStockListFromExcel(String fileName)
 			throws IOException, EncryptedDocumentException, InvalidFormatException {
 		List<StockVO> svoList = new ArrayList<>();
 		// Creating a Workbook from an Excel file (.xls or .xlsx)
@@ -633,7 +634,7 @@ public class StockUtil {
 		DataFormatter dataFormatter = new DataFormatter();
 
 		// 1. You can obtain a rowIterator and columnIterator and iterate over them
-		logger.debug("\n\n getAllStockList \n");
+		logger.debug("\n\n getAllStockListFromExcel \n");
 		logger.debug("\n\nIterating over Rows and Columns using Iterator3\n");
 		Iterator<Row> rowIterator = sheet.rowIterator();
 		int cnt = 0;
@@ -689,7 +690,7 @@ public class StockUtil {
 			DataFormatter dataFormatter = new DataFormatter();
 
 			// 1. You can obtain a rowIterator and columnIterator and iterate over them
-			logger.debug("\n\n getAllStockList \n");
+			logger.debug("\n\n getAllStockListFromExcel \n");
 			logger.debug("\n\nIterating over Rows and Columns using Iterator3\n");
 			Iterator<Row> rowIterator = sheet.rowIterator();
 			int cnt = 0;
@@ -845,7 +846,7 @@ public class StockUtil {
 		return stockList;
 	}
 
-	public StockVO getStockInfo(int cnt, String strStockCode, String strStockName) {
+	public static StockVO getStockInfo(int cnt, String strStockCode, String strStockName) {
 		Document doc;
 		StockVO stock = new StockVO();
 		stock.setStockCode(strStockCode);
@@ -1548,6 +1549,48 @@ public class StockUtil {
 		sb1.append("</blockquote>\r\n");
 		sb1.append("</div>\r\n");
 		return sb1.toString();
+	}
+
+	public static String getStockListedDay(String stockCode) {
+		String listedDay = "";
+		Document doc;
+		try {
+			// 종합분석-기업개요
+			doc = Jsoup.connect("http://companyinfo.stock.naver.com/v1/company/c1020001.aspx?cmp_cd=" + stockCode).get();
+			logger.debug("title:" + doc.title());
+			String strDoc = doc.html();
+			strDoc = strDoc.replace("&nbsp;", " ");
+
+			doc = Jsoup.parse(strDoc);
+
+			Element cTB201 = doc.getElementById("cTB201");
+
+			Elements trEls = cTB201.select("tbody tr");
+			for (Element tr : trEls) {
+				Elements thEls = tr.select("th");
+				Elements tdEls = tr.select("td");
+				int thCnt = 0;
+				for (Element th : thEls) {
+
+					String key = th.text();
+					String value = tdEls.get(thCnt).text();
+
+					logger.debug("key:" + key + " value:" + value);
+					if (key.equals("설립일")) {
+						// 설립일
+						String foundDay = value.substring(0, value.indexOf(" "));
+						// 상장일
+						listedDay = value.substring(value.indexOf(" ")).trim().replaceAll("\\(", "")
+								.replaceAll("\\)", "").split(" ")[1];
+						logger.debug(foundDay + "===" + listedDay);
+					}
+					thCnt++;
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return listedDay;
 	}
 
 	public static void main(String args[]) throws Exception {

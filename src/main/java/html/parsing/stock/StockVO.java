@@ -141,6 +141,26 @@ public class StockVO {
 	private String resultMessage;
 	private String resultDetailMessage;
 
+    private String eps;
+    private String bps;
+    private String roe;
+    private String per;
+    private String bizTypePer;
+    private String pbr;
+    private String dividendRate;
+
+    private int iBps;
+    private float fRoe;
+    private float fBizTypePer;
+    private float fPbr;
+    private float fDividendRate;
+
+    private float minCurRatio;
+    private float maxCurRatio;
+    private float minMaxRatio;
+    private float startCurRatio;
+    private String yearStartPrice;
+
 	public String getDate() {
 		return date;
 	}
@@ -1026,6 +1046,142 @@ public class StockVO {
 
 	public void setWeeks52NewLowPriceVsCurPriceUpRatio(double weeks52NewLowPriceVsCurPriceUpRatio) {
 		this.weeks52NewLowPriceVsCurPriceUpRatio = weeks52NewLowPriceVsCurPriceUpRatio;
+	}
+
+	public String getEps() {
+		return eps;
+	}
+
+	public void setEps(String eps) {
+		this.eps = eps;
+	}
+
+	public String getBps() {
+		return bps;
+	}
+
+	public void setBps(String bps) {
+		this.bps = bps;
+	}
+
+	public String getRoe() {
+		return roe;
+	}
+
+	public void setRoe(String roe) {
+		this.roe = roe;
+	}
+
+	public String getPer() {
+		return per;
+	}
+
+	public void setPer(String per) {
+		this.per = per;
+	}
+
+	public String getBizTypePer() {
+		return bizTypePer;
+	}
+
+	public void setBizTypePer(String bizTypePer) {
+		this.bizTypePer = bizTypePer;
+	}
+
+	public String getPbr() {
+		return pbr;
+	}
+
+	public void setPbr(String pbr) {
+		this.pbr = pbr;
+	}
+
+	public String getDividendRate() {
+		return dividendRate;
+	}
+
+	public void setDividendRate(String dividendRate) {
+		this.dividendRate = dividendRate;
+	}
+
+	public int getiBps() {
+		return iBps;
+	}
+
+	public void setiBps(int iBps) {
+		this.iBps = iBps;
+	}
+
+	public float getfRoe() {
+		return fRoe;
+	}
+
+	public void setfRoe(float fRoe) {
+		this.fRoe = fRoe;
+	}
+
+	public float getfBizTypePer() {
+		return fBizTypePer;
+	}
+
+	public void setfBizTypePer(float fBizTypePer) {
+		this.fBizTypePer = fBizTypePer;
+	}
+
+	public float getfPbr() {
+		return fPbr;
+	}
+
+	public void setfPbr(float fPbr) {
+		this.fPbr = fPbr;
+	}
+
+	public float getfDividendRate() {
+		return fDividendRate;
+	}
+
+	public void setfDividendRate(float fDividendRate) {
+		this.fDividendRate = fDividendRate;
+	}
+
+	public float getMinCurRatio() {
+		return minCurRatio;
+	}
+
+	public void setMinCurRatio(float minCurRatio) {
+		this.minCurRatio = minCurRatio;
+	}
+
+	public float getMaxCurRatio() {
+		return maxCurRatio;
+	}
+
+	public void setMaxCurRatio(float maxCurRatio) {
+		this.maxCurRatio = maxCurRatio;
+	}
+
+	public float getMinMaxRatio() {
+		return minMaxRatio;
+	}
+
+	public void setMinMaxRatio(float minMaxRatio) {
+		this.minMaxRatio = minMaxRatio;
+	}
+
+	public float getStartCurRatio() {
+		return startCurRatio;
+	}
+
+	public void setStartCurRatio(float startCurRatio) {
+		this.startCurRatio = startCurRatio;
+	}
+
+	public String getYearStartPrice() {
+		return yearStartPrice;
+	}
+
+	public void setYearStartPrice(String yearStartPrice) {
+		this.yearStartPrice = yearStartPrice;
 	}
 
 	@Override

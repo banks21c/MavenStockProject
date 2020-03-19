@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -38,6 +39,12 @@ public class Weeks52MinMax {
     // Locale.KOREAN).format(new Date());
     static String strYMD = "";
 
+	String kospiFileName = GlobalVariables.kospiFileName;
+	String kosdaqFileName = GlobalVariables.kosdaqFileName;
+
+	List<StockVO> kospiStockList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqStockList = new ArrayList<StockVO>();
+
     /**
      * @param args
      */
@@ -47,10 +54,7 @@ public class Weeks52MinMax {
 
     Weeks52MinMax() {
 
-        String kospiFileName = "new_kospi_우선주제외.html";
-        String kosdaqFileName = "new_kosdaq_우선주제외.html";
-
-        List<StockAnalysisVO> kospiStockList = readOne("040910", "아이씨디");
+        List<StockVO> kospiStockList = readOne("040910", "아이씨디");
         writeFile(kospiStockList, kospiFileName, "코스피", "ROE");
 
     }
@@ -59,17 +63,26 @@ public class Weeks52MinMax {
 
         // MakeKospiKosdaqList.makeKospiKosdaqList();
 
-        String kospiFileName = "new_kospi_우선주제외.html";
-        String kosdaqFileName = "new_kosdaq_우선주제외.html";
-
         // 모든 주식 정보를 조회한다.
         // 코스피
-        List<StockAnalysisVO> kospiAllStockList = getAllStockInfo("코스피", kospiFileName);
+        List<StockVO> kospiAllStockList = getAllStockInfo("코스피", kospiFileName);
         System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
 
         // 코스닥
-        List<StockAnalysisVO> kosdaqAllStockList = getAllStockInfo("코스닥", kosdaqFileName);
+        List<StockVO> kosdaqAllStockList = getAllStockInfo("코스닥", kosdaqFileName);
         System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
+
+		try {
+			kospiStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
+			kosdaqStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
+			logger.debug("kospiStockList.size1 :" + kospiStockList.size());
+		} catch (Exception ex) {
+			java.util.logging.Logger.getLogger(Weeks52NewLowHighPriceVsCurPrice.class.getName()).log(Level.SEVERE, null,
+					ex);
+			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
+			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+			logger.debug("kospiStockList.size2 :" + kospiStockList.size());
+		}
 
         // 저가 대비 현재가 상승률
         Collections.sort(kospiAllStockList, new MinCurDescCompare());
@@ -104,19 +117,19 @@ public class Weeks52MinMax {
 
     }
 
-    public List<StockAnalysisVO> readOne(String stockCode, String stockName) {
-        List<StockAnalysisVO> stocks = new ArrayList<StockAnalysisVO>();
+    public List<StockVO> readOne(String stockCode, String stockName) {
+        List<StockVO> stocks = new ArrayList<StockVO>();
 
         int cnt = 1;
-        StockAnalysisVO stock = getStockInfo(cnt, stockCode, stockName);
+        StockVO stock = getStockInfo(cnt, stockCode, stockName);
         if (stock != null) {
             stocks.add(stock);
         }
         return stocks;
     }
 
-    public List<StockAnalysisVO> getAllStockInfo(String kospidaq, String fileName) {
-        List<StockAnalysisVO> stocks = new ArrayList<StockAnalysisVO>();
+    public List<StockVO> getAllStockInfo(String kospidaq, String fileName) {
+        List<StockVO> stocks = new ArrayList<StockVO>();
 
         File f = new File(userHome + "\\documents\\" + fileName);
         try {
@@ -135,7 +148,7 @@ public class Weeks52MinMax {
                 if (stockCode.length() != 6) {
                     continue;
                 }
-                StockAnalysisVO stock = getStockInfo(cnt, stockCode, stockName);
+                StockVO stock = getStockInfo(cnt, stockCode, stockName);
                 if (stock != null) {
                     stocks.add(stock);
                 }
@@ -151,10 +164,10 @@ public class Weeks52MinMax {
         return stocks;
     }
 
-    public StockAnalysisVO getStockInfo(int cnt, String code, String name) {
+    public StockVO getStockInfo(int cnt, String code, String name) {
         System.out.println(code + ":" + name);
         Document doc;
-        StockAnalysisVO stock = new StockAnalysisVO();
+        StockVO stock = new StockVO();
         try {
             // 종목분석-기업현황
             doc = Jsoup.connect("http://companyinfo.stock.naver.com/company/c1010001.aspx?cmp_cd=" + code).get();
@@ -229,7 +242,7 @@ public class Weeks52MinMax {
         return stock;
     }
 
-    public StockAnalysisVO yearStartPrice(StockAnalysisVO stock) {
+    public StockVO yearStartPrice(StockVO stock) {
         String strDate2 = "";
         String strFirstDate = "";
         String strCurPrice = "";
@@ -296,7 +309,7 @@ public class Weeks52MinMax {
         return stock;
     }
 
-    public void writeFile(List<StockAnalysisVO> list, String fileName, String title, String gubun) {
+    public void writeFile(List<StockVO> list, String fileName, String title, String gubun) {
         File f = new File(userHome + "\\documents\\" + fileName);
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
@@ -347,7 +360,7 @@ public class Weeks52MinMax {
             sb1.append("</tr>\r\n");
 
             int cnt = 1;
-            for (StockAnalysisVO s : list) {
+            for (StockVO s : list) {
                 if (s != null) {
                     sb1.append("<tr>\r\n");
                     String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();

@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -147,9 +147,8 @@ public class AllStockPlusMinusDivide100 extends Thread {
 		// 모든 주식 정보를 조회한다.
 		// 코스피
 		List<StockVO> kospiAllStockList = new ArrayList<StockVO>();
-		StockUtil sUtil = new StockUtil();
 		try {
-			kospiAllStockList = StockUtil.getAllStockList(kospiFileName);
+			kospiAllStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
 			logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());
 		}catch(Exception e) {
 			kospiAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiAllStockList, "stockMkt");
@@ -158,6 +157,7 @@ public class AllStockPlusMinusDivide100 extends Thread {
 		StockVO svo4Date = kospiAllStockList.get(0);
 		getDateInfo(svo4Date.getStockCode());
 
+		StockUtil sUtil = new StockUtil();
 		kospiAllStockList = sUtil.getAllStockInfo(kospiAllStockList);
 		if(iExtractCount == -1) iExtractCount = kospiAllStockList.size();
 		logger.debug("kospiAllStockList.size :" + kospiAllStockList.size());
@@ -202,10 +202,10 @@ public class AllStockPlusMinusDivide100 extends Thread {
 		// 코스닥
 		List<StockVO> kosdaqAllStockList = new ArrayList<StockVO>();
 		try {
-			kosdaqAllStockList = sUtil.getAllStockList(kosdaqFileName);
+			kosdaqAllStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
 			logger.debug("kosdaqAllStockList :" + kosdaqAllStockList);
 		}catch(Exception e) {
-			kosdaqAllStockList = sUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqAllStockList, "kosdaqMkt");
+			kosdaqAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqAllStockList, "kosdaqMkt");
 			logger.debug("kosdaqAllStockList :" + kosdaqAllStockList);
 		}
 		kosdaqAllStockList = sUtil.getAllStockInfo(kosdaqAllStockList);

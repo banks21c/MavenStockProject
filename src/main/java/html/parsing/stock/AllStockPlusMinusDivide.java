@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -95,13 +95,13 @@ public class AllStockPlusMinusDivide extends Thread {
 		List<StockVO> kospiStockList = readOne("123890", "한국자산신탁");
 //      List<StockVO> kospiStockList = readOne("032980");
 		StringBuilder info1 = getStockInformation(kospiStockList, "코스피", "상승율");
-		writeFile(info1, "코스피 상승율");		
+		writeFile(info1, "코스피 상승율");
 //
 //      List<StockVO> kospiStockList1 = readOne("123890");
 //      writeFile(kospiStockList1, kospiFileName, "코스피", "상승율");
 		 List<StockVO> kosdaqStockList = readOne("204990");
 			StringBuilder info2 = getStockInformation(kosdaqStockList, "코스닥", "상승율");
-			writeFile(info2, "코스닥 상승율");		
+			writeFile(info2, "코스닥 상승율");
 		// writeFile(kosdaqStockList,kosdaqFileName,"코스닥");
 	}
 
@@ -150,9 +150,8 @@ public class AllStockPlusMinusDivide extends Thread {
 		// 모든 주식 정보를 조회한다.
 		// 코스피
 		List<StockVO> kospiAllStockList = new ArrayList<StockVO>();
-		StockUtil sUtil = new StockUtil();
 		try {
-			kospiAllStockList = StockUtil.getAllStockList(kospiFileName);
+			kospiAllStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
 			logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());
 		}catch(Exception e) {
 			kospiAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiAllStockList, "stockMkt");
@@ -161,6 +160,7 @@ public class AllStockPlusMinusDivide extends Thread {
 		StockVO svo4Date = kospiAllStockList.get(0);
 		getDateInfo(svo4Date.getStockCode());
 
+		StockUtil sUtil = new StockUtil();
 		kospiAllStockList = sUtil.getAllStockInfo(kospiAllStockList);
 		iExtractCount = kospiAllStockList.size();
 		logger.debug("kospiAllStockList.size :" + kospiAllStockList.size());
@@ -201,10 +201,10 @@ public class AllStockPlusMinusDivide extends Thread {
 		// 코스닥
 		List<StockVO> kosdaqAllStockList = new ArrayList<StockVO>();
 		try {
-			kosdaqAllStockList = sUtil.getAllStockList(kosdaqFileName);
+			kosdaqAllStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
 			logger.debug("kosdaqAllStockList :" + kosdaqAllStockList);
 		}catch(Exception e) {
-			kosdaqAllStockList = sUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqAllStockList, "kosdaqMkt");
+			kosdaqAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqAllStockList, "kosdaqMkt");
 			logger.debug("kosdaqAllStockList :" + kosdaqAllStockList);
 		}
 		kosdaqAllStockList = sUtil.getAllStockInfo(kosdaqAllStockList);
@@ -249,7 +249,7 @@ public class AllStockPlusMinusDivide extends Thread {
 		}
 		return stocks;
 	}
-	
+
 	public List<StockVO> readOne(String stockCode, String stockName) {
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
@@ -532,11 +532,11 @@ public class AllStockPlusMinusDivide extends Thread {
 				String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
 				sb1.append("<td>" + cnt + "</td>\r\n");
 				sb1.append("<td><a href='" + url + "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
-	
+
 				String varyPrice = s.getVaryPrice();
-	
+
 				System.out.println("varyPrice+++>" + varyPrice);
-	
+
 				if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
 					|| specialLetter.startsWith("+")) {
 					sb1.append("<td style='text-align:right;color:red'>"
@@ -554,7 +554,7 @@ public class AllStockPlusMinusDivide extends Thread {
 						+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>0</td>\r\n");
 				}
-	
+
 				// if(gubun.equals("ALL")){
 				// String varyRatio =
 				// StringUtils.defaultIfEmpty(s.getVaryRatio(), "");
@@ -611,9 +611,9 @@ public class AllStockPlusMinusDivide extends Thread {
 					+ "</td>\r\n");
 				sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingAmount(), "")
 					+ "</td>\r\n");
-	
+
 				sb1.append("</tr>\r\n");
-	
+
 			}
 			cnt++;
 		}

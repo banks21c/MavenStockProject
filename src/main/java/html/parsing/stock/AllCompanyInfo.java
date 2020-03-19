@@ -1,18 +1,16 @@
 package html.parsing.stock;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -43,6 +41,12 @@ public class AllCompanyInfo {
     // Locale.KOREAN).format(new Date());
     static String strYMD = "";
 
+	String kospiFileName = GlobalVariables.kospiFileName;
+	String kosdaqFileName = GlobalVariables.kosdaqFileName;
+
+	List<StockVO> kospiStockList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqStockList = new ArrayList<StockVO>();
+
     /**
      * @param args
      */
@@ -52,10 +56,7 @@ public class AllCompanyInfo {
 
     AllCompanyInfo() {
 
-        String kospiFileName = GlobalVariables.kospiFileName;
-        String kosdaqFileName = GlobalVariables.kosdaqFileName;
-
-        List<StockAnalysisVO> kospiStockList = readOne("028050");
+        List<StockVO> kospiStockList = readOne("028050");
         writeFile(kospiStockList, kospiFileName, "코스피 현금배당수익률 ", "DRATE");
 
         // List<StockAnalysis> kosdaqStockList = readOne("095570");
@@ -68,16 +69,37 @@ public class AllCompanyInfo {
 
         // MakeKospiKosdaqList.makeKospiKosdaqList();
 
-        String kospiFileName = "new_kospi_우선주제외_선박펀드제외.html";
-        String kosdaqFileName = "new_kosdaq_우선주제외_선박펀드제외.html";
+    	String kospiFileName = GlobalVariables.kospiFileName;
+    	String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
         // 모든 주식 정보를 조회한다.
-        // 코스피
-        List<StockAnalysisVO> kospiAllStockList = getAllStockInfo("코스피", kospiFileName);
-        System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
+		try {
+			kospiStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
+			kosdaqStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
+			logger.debug("kospiStockList.size1 :" + kospiStockList.size());
+		} catch (Exception ex) {
+			java.util.logging.Logger.getLogger(Weeks52NewLowHighPriceVsCurPrice.class.getName()).log(Level.SEVERE, null,
+					ex);
+			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
+			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+			logger.debug("kospiStockList.size2 :" + kospiStockList.size());
+		}
 
+		// 코스피
+        List<StockVO> kospiAllStockList = new ArrayList<StockVO>();
+        for(int j=0;j<kospiStockList.size();j++) {
+        	StockVO svo = kospiStockList.get(j);
+            svo = getStockInfo(j, svo.getStockCode(), svo.getStockName());
+            kospiAllStockList.add(svo);
+        }
+        System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
         // 코스닥
-        List<StockAnalysisVO> kosdaqAllStockList = getAllStockInfo("코스닥", kosdaqFileName);
+        List<StockVO> kosdaqAllStockList = new ArrayList<StockVO>();
+        for(int j=0;j<kosdaqStockList.size();j++) {
+        	StockVO svo = kosdaqStockList.get(j);
+            svo = getStockInfo(j, svo.getStockCode(), svo.getStockName());
+            kosdaqAllStockList.add(svo);
+        }
         System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
 
         // 0.이름순 정렬
@@ -138,57 +160,21 @@ public class AllCompanyInfo {
 
     }
 
-    public static List<StockAnalysisVO> readOne(String stockCode) {
-        List<StockAnalysisVO> stocks = new ArrayList<StockAnalysisVO>();
+    public static List<StockVO> readOne(String stockCode) {
+        List<StockVO> stocks = new ArrayList<StockVO>();
 
         int cnt = 1;
-        StockAnalysisVO stock = getStockInfo(cnt, stockCode, "");
+        StockVO stock = getStockInfo(cnt, stockCode, "");
         if (stock != null) {
             stocks.add(stock);
         }
         return stocks;
     }
 
-    public static List<StockAnalysisVO> getAllStockInfo(String kospidaq, String fileName) {
-        List<StockAnalysisVO> stocks = new ArrayList<StockAnalysisVO>();
-
-        File f = new File(userHome + "\\documents\\" + fileName);
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f),"UTF8"));
-
-            String read = null;
-            String stockCode = null;
-            String stockName = null;
-            int cnt = 1;
-            while ((read = reader.readLine()) != null) {
-                cnt++;
-                System.out.println(cnt + "." + read);
-                stockCode = read.split("\t")[0];
-                stockName = read.split("\t")[1];
-
-                if (stockCode.length() != 6) {
-                    continue;
-                }
-                StockAnalysisVO stock = getStockInfo(cnt, stockCode, stockName);
-                if (stock != null) {
-                    stocks.add(stock);
-                }
-            }
-            reader.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } finally {
-
-        }
-        return stocks;
-    }
-
-    public static StockAnalysisVO getStockInfo(int cnt, String code, String name) {
+    public static StockVO getStockInfo(int cnt, String code, String name) {
         System.out.println(code + ":" + name);
         Document doc;
-        StockAnalysisVO analysis = new StockAnalysisVO();
+        StockVO analysis = new StockVO();
         try {
             // 종합정보
             doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + code).get();
@@ -282,7 +268,7 @@ public class AllCompanyInfo {
         return analysis;
     }
 
-    public void writeFile(List<StockAnalysisVO> list, String fileName, String title, String gubun) {
+    public void writeFile(List<StockVO> list, String fileName, String title, String gubun) {
         System.out.println("gubun:" + gubun);
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
@@ -329,7 +315,7 @@ public class AllCompanyInfo {
             sb1.append("</tr>\r\n");
 
             int cnt = 1;
-            for (StockAnalysisVO s : list) {
+            for (StockVO s : list) {
                 if (s != null) {
                     sb1.append("<tr>\r\n");
                     String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
@@ -379,7 +365,7 @@ public class AllCompanyInfo {
         }
     }
 
-    public void writeDividendRate(List<StockAnalysisVO> list, String fileName, String title, String gubun) {
+    public void writeDividendRate(List<StockVO> list, String fileName, String title, String gubun) {
         File f = new File(userHome + "\\documents\\" + fileName);
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
@@ -405,7 +391,7 @@ public class AllCompanyInfo {
             sb1.append("</tr>\r\n");
 
             int cnt = 1;
-            for (StockAnalysisVO s : list) {
+            for (StockVO s : list) {
                 if (s != null) {
                     String dividendRate = StringUtils.defaultIfEmpty(s.getDividendRate(), "");
                     System.out.println("dividendRate:" + dividendRate);

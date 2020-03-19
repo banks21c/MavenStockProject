@@ -71,6 +71,6 @@ public class StockNewsVO {
     }
 
     public static void main(String args[]) {
-        System.out.println(new StockAnalysisVO().toString());
+        System.out.println(new StockVO().toString());
     }
 }
