@@ -118,6 +118,7 @@ public class StockVO {
 
 	private double weeks52NewHighPriceVsCurPriceDownRatio;
 	private double weeks52NewLowPriceVsCurPriceUpRatio;
+	private double specificeDayPriceVsCurPriceUpDownRatio;
 
 	private Vector<MajorStockHolderVO> majorStockHolderList;
 	// 투자의견
@@ -1046,6 +1047,14 @@ public class StockVO {
 
 	public void setWeeks52NewLowPriceVsCurPriceUpRatio(double weeks52NewLowPriceVsCurPriceUpRatio) {
 		this.weeks52NewLowPriceVsCurPriceUpRatio = weeks52NewLowPriceVsCurPriceUpRatio;
+	}
+
+	public double getSpecificeDayPriceVsCurPriceUpDownRatio() {
+		return specificeDayPriceVsCurPriceUpDownRatio;
+	}
+
+	public void setSpecificeDayPriceVsCurPriceUpDownRatio(double specificeDayPriceVsCurPriceUpDownRatio) {
+		this.specificeDayPriceVsCurPriceUpDownRatio = specificeDayPriceVsCurPriceUpDownRatio;
 	}
 
 	public String getEps() {
