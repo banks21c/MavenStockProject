@@ -1095,5 +1095,55 @@ public class DataSort {
 		}
 
 	}
+	
+	/**
+	 * 년초 대비 하락율 오름차순
+	 *
+	 * @author banks
+	 *
+	 */
+	public static class YearFirstTradeDayVsCurPriceUpDownRatioAscCompare implements Comparator<StockVO> {
+
+		/**
+		 * 오름차순(ASC)
+		 */
+		@Override
+		public int compare(StockVO arg0, StockVO arg1) {
+			int ret = 0;
+			if (arg0 != null) {
+				ret = arg0.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() < arg1
+						.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() ? -1
+								: arg0.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() > arg1
+										.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() ? 1 : 0;
+			}
+			return ret;
+		}
+
+	}
+
+	/**
+	 * 년초가 대비 상승율 내림차순
+	 *
+	 * @author banks
+	 *
+	 */
+	public static class YearFirstTradeDayVsCurPriceUpDownRatioDescCompare implements Comparator<StockVO> {
+
+		/**
+		 * 내림차순(DESC)
+		 */
+		@Override
+		public int compare(StockVO arg0, StockVO arg1) {
+			int ret = 0;
+			if (arg0 != null) {
+				ret = arg0.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() > arg1.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() ? -1
+						: arg0.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() < arg1.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio()
+								? 1
+								: 0;
+			}
+			return ret;
+		}
+
+	}	
 
 }

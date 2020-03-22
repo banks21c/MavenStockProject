@@ -118,6 +118,7 @@ public class StockVO {
 
 	private double weeks52NewHighPriceVsCurPriceDownRatio;
 	private double weeks52NewLowPriceVsCurPriceUpRatio;
+	private double yearFirstTradeDayEndPriceVsCurPriceUpDownRatio;
 	private double specificeDayPriceVsCurPriceUpDownRatio;
 
 	private Vector<MajorStockHolderVO> majorStockHolderList;
@@ -160,6 +161,9 @@ public class StockVO {
     private float maxCurRatio;
     private float minMaxRatio;
     private float startCurRatio;
+    private String yearFirstTradeDay;
+    private String yearFirstTradeDayEndPrice;
+    private int iYearFirstTradeDayEndPrice;
     private String yearStartPrice;
 
 	public String getDate() {
@@ -1057,6 +1061,14 @@ public class StockVO {
 		this.specificeDayPriceVsCurPriceUpDownRatio = specificeDayPriceVsCurPriceUpDownRatio;
 	}
 
+	public double getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() {
+		return yearFirstTradeDayEndPriceVsCurPriceUpDownRatio;
+	}
+
+	public void setYearFirstTradeDayEndPriceVsCurPriceUpDownRatio(double yearFirstTradeDayEndPriceVsCurPriceUpDownRatio) {
+		this.yearFirstTradeDayEndPriceVsCurPriceUpDownRatio = yearFirstTradeDayEndPriceVsCurPriceUpDownRatio;
+	}
+
 	public String getEps() {
 		return eps;
 	}
@@ -1191,6 +1203,30 @@ public class StockVO {
 
 	public void setYearStartPrice(String yearStartPrice) {
 		this.yearStartPrice = yearStartPrice;
+	}
+
+	public String getYearFirstTradeDay() {
+		return yearFirstTradeDay;
+	}
+
+	public void setYearFirstTradeDay(String yearFirstTradeDay) {
+		this.yearFirstTradeDay = yearFirstTradeDay;
+	}
+
+	public String getYearFirstTradeDayEndPrice() {
+		return yearFirstTradeDayEndPrice;
+	}
+
+	public void setYearFirstTradeDayEndPrice(String yearFirstTradeDayEndPrice) {
+		this.yearFirstTradeDayEndPrice = yearFirstTradeDayEndPrice;
+	}
+
+	public int getiYearFirstTradeDayEndPrice() {
+		return iYearFirstTradeDayEndPrice;
+	}
+
+	public void setiYearFirstTradeDayEndPrice(int iYearFirstTradeDayEndPrice) {
+		this.iYearFirstTradeDayEndPrice = iYearFirstTradeDayEndPrice;
 	}
 
 	@Override

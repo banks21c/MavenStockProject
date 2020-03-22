@@ -26,9 +26,9 @@ import html.parsing.stock.DataSort.RetainAmountDescCompare;
 import html.parsing.stock.DataSort.RetainRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
 
-public class MajorStockHoldersInput {
+public class MajorStockHoldersInputDayPriceVsCurPrice {
 
-	private static final Logger logger = LoggerFactory.getLogger(MajorStockHoldersInput.class);
+	private static final Logger logger = LoggerFactory.getLogger(MajorStockHoldersInputDayPriceVsCurPrice.class);
 
 	final static String userHome = System.getProperty("user.home");
 
@@ -38,29 +38,39 @@ public class MajorStockHoldersInput {
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
 	static String strYMD = "";
-	static String majorStockHolders;
+	static String majorStockHolders = "";
 	static List<StockVO> kospiStockList = new ArrayList<StockVO>();
 	static List<StockVO> kosdaqStockList = new ArrayList<StockVO>();
 	String kospiFileName = GlobalVariables.kospiFileName;
 	String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
-	@Test
 	public void readAndWriteMajorStockHoldersTest() {
-		majorStockHolders = JOptionPane.showInputDialog("대주주명을 입력해주세요.");
+		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요."));
 
 		// 대웅제약 069620
-		kospiStockList = readOne("069620","대웅제약");
-		System.out.println("kospiStockList:"+kospiStockList);
+		kospiStockList = readOne("069620", "대웅제약");
+		logger.debug("kospiStockList:" + kospiStockList);
 		writeFile(kospiStockList, "코스피");
 		// 삼성전자 005930
-		kospiStockList = readOne("005930","삼성전자");
-		System.out.println("kospiStockList:"+kospiStockList);
+		kospiStockList = readOne("005930", "삼성전자");
+		logger.debug("kospiStockList:" + kospiStockList);
 		writeFile(kospiStockList, "코스피");
+
+		// 유니슨 018000
+		kosdaqStockList = readOne("018000", "유니슨");
+		logger.debug("kosdaqStockList:" + kosdaqStockList);
+		writeFile(kosdaqStockList, "코스닥");
+
+		// 유안타제6호스팩 340360
+		kosdaqStockList = readOne("340360", "유안타제6호스팩");
+		logger.debug("kosdaqStockList:" + kosdaqStockList);
+		writeFile(kosdaqStockList, "코스닥");
+
 	}
 
 	@Test
 	public void readAndWriteMajorStockHolders() throws Exception {
-		majorStockHolders = JOptionPane.showInputDialog("대주주명을 입력해주세요.");
+		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요."));
 		try {
 //			kospiStockList = StockUtil.readKospiStockCodeNameListFromExcel();
 //			kosdaqStockList = StockUtil.readKosdaqStockCodeNameListFromExcel();
@@ -92,7 +102,7 @@ public class MajorStockHoldersInput {
 
 	}
 
-	public static List<StockVO> readOne(String stockCode,String stockName) {
+	public static List<StockVO> readOne(String stockCode, String stockName) {
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
 		int cnt = 1;
@@ -128,19 +138,43 @@ public class MajorStockHoldersInput {
 	// http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=064260&cn=
 	// 종목분석-기업개요
 	// http://companyinfo.stock.naver.com/v1/company/c1020001.aspx?cmp_cd=010600&cn=
-	public static StockVO getStockHompage(int cnt, String code, String name) {
-		logger.debug("code :" + code + " name :" + name);
+	public static StockVO getStockHompage(int cnt, String strStockCode, String strStockName) {
+		logger.debug("code :" + strStockCode + " name :" + strStockName);
 		Document doc;
 		StockVO stock = new StockVO();
+
+		// ===========================================================================
+		// 상장일 구하기
+		String listedDay = StockUtil.getStockListedDay(strStockCode);
+		logger.debug("listedDay :" + listedDay);
+		stock.setListedDay(listedDay);
+
+		// 연초가 또는 올해 상장했을 경우 상장일가 구하기
+		String yearFirstTradeDay = "2020.01.02";
+		yearFirstTradeDay = StockUtil.getYearFirstTradeDay(yearFirstTradeDay, listedDay);
+		stock.setYearFirstTradeDay(yearFirstTradeDay);
+		String yearFirstTradeDayEndPrice = StockUtil.getYearFirstTradeDayEndPrice(strStockCode, strStockName,
+				yearFirstTradeDay);
+		stock.setYearFirstTradeDayEndPrice(yearFirstTradeDayEndPrice);
+
+		yearFirstTradeDayEndPrice = yearFirstTradeDayEndPrice.replaceAll(",", "");
+		logger.debug("yearFirstTradeDayEndPrice :" + yearFirstTradeDayEndPrice);
+		if (yearFirstTradeDayEndPrice.equals(""))
+			yearFirstTradeDayEndPrice = "0";
+		int iYearFirstTradeDayEndPrice = Integer.parseInt(yearFirstTradeDayEndPrice);
+		stock.setiYearFirstTradeDayEndPrice(iYearFirstTradeDayEndPrice);
+		logger.debug("iYearFirstTradeDayEndPrice :" + iYearFirstTradeDayEndPrice);
+		// ===========================================================================
+
 		try {
 			// 종합정보
-			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + code).get();
+			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + strStockCode).get();
 			if (cnt == 1) {
-				// System.out.println(doc.title());
-				// System.out.println(doc.html());
+				// logger.debug(doc.title());
+				// logger.debug(doc.html());
 			}
-			stock.setStockCode(code);
-			stock.setStockName(name);
+			stock.setStockCode(strStockCode);
+			stock.setStockName(strStockName);
 
 			Elements dates = doc.select(".date");
 			if (dates != null) {
@@ -164,7 +198,24 @@ public class MajorStockHoldersInput {
 			iCurPrice = Integer.parseInt(curPriceWithoutComma);
 			stock.setCurPrice(curPriceWithComma);
 			stock.setiCurPrice(iCurPrice);
-			
+
+			// ===========================================================================
+			double upDownRatio = 0d;
+			if (iYearFirstTradeDayEndPrice != 0) {
+				if (iYearFirstTradeDayEndPrice < iCurPrice) {
+					double d1 = iCurPrice - iYearFirstTradeDayEndPrice;
+					double d2 = d1 / iYearFirstTradeDayEndPrice * 100;
+					upDownRatio = Math.round(d2 * 100) / 100.0;
+				} else if (iYearFirstTradeDayEndPrice > iCurPrice) {
+					double d1 = iYearFirstTradeDayEndPrice - iCurPrice;
+					double d2 = d1 / iYearFirstTradeDayEndPrice * 100;
+					upDownRatio = -(Math.round(d2 * 100) / 100.0);
+				}
+			}
+			logger.debug("특정일 대비 up,down 비율:" + upDownRatio + "%");
+			stock.setYearFirstTradeDayEndPriceVsCurPriceUpDownRatio(upDownRatio);
+			// ===========================================================================
+
 			Elements no_exday = doc.select(".no_exday");
 			Element new_totalinfo = null;
 			if (no_exday.size() > 0) {
@@ -187,7 +238,7 @@ public class MajorStockHoldersInput {
 
 					String text = span0.text();
 
-					// System.out.println("data:" + text);
+					// logger.debug("data:" + text);
 					text = text.replaceAll("플러스", "+");
 					text = text.replaceAll("마이너스", "-");
 					text = text.replaceAll("상승", "▲");
@@ -201,13 +252,15 @@ public class MajorStockHoldersInput {
 			}
 
 			// 종목분석-기업현황
-			doc = Jsoup.connect("http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + code).get();
+			doc = Jsoup.connect("http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + strStockCode)
+					.get();
 			if (cnt == 1) {
-				// System.out.println("title:" + doc.title());
-				// System.out.println(doc.html());
+				// logger.debug("title:" + doc.title());
+				// logger.debug(doc.html());
 			}
 
-			Elements aClass = doc.select(".gHead01");
+			Elements aClass = doc.select("table.gHead01 tbody");
+			// Elements aClass = doc.select("#cTB13");
 			Element aElem = null;
 			if (aClass.size() <= 0) {
 				return null;
@@ -215,10 +268,12 @@ public class MajorStockHoldersInput {
 			if (aClass.size() > 1) {
 				aElem = aClass.get(1);
 			}
-			System.out.println("aElem:" + aElem);
-			if (aElem != null) {
-				Elements tdElem = aElem.select("td");
-				Element trElem = null;
+			logger.debug("aElem:" + aElem);
+
+			Elements trElem = aElem.select("tr");
+			stock.setMajorStockHolderList(new Vector<MajorStockHolderVO>());
+			for (Element tr : trElem) {
+				Elements trTd = tr.select("td");
 
 				String retainVolumeWithComma = "";
 				String retainVolumeWithoutComma = "";
@@ -234,60 +289,61 @@ public class MajorStockHoldersInput {
 				long lRetainVolumeTotal = 0;
 				float fRetainRatioTotal = 0;
 
-				stock.setMajorStockHolderList(new Vector<MajorStockHolderVO>());
 
-				for (Element td : tdElem) {
-					String majorStockHolderName = td.attr("title");
-					// if (title.equals(majorStockHolders)) {
-					if (majorStockHolderName.indexOf(majorStockHolders) != -1) {
-						System.out.println("title:" + majorStockHolderName);
-						stock.setMajorStockHolders(majorStockHolderName);
-						trElem = td.parent();
-						System.out.println("trElem:" + trElem);
+				MajorStockHolderVO majorStockHolderVO = new MajorStockHolderVO();
+				String majorStockHolderName = "";
+				if (trTd.size() > 0) {
+					majorStockHolderName = trTd.get(0).attr("title");
+					if (majorStockHolderName.equals(""))
+						break;
 
-						Elements trTd = trElem.select("td");
-						MajorStockHolderVO majorStockHolderVO = new MajorStockHolderVO();
-						for (int i = 0; i < trTd.size(); i++) {
-							if (i == 1) {
-								logger.debug("trTd.get(1) :" + trTd.get(1));
-								retainVolumeWithComma = StringUtils.defaultIfEmpty(trTd.get(1).text(), "0");
-								logger.debug("retainVolumeWithComma :[" + retainVolumeWithComma + "]");
-								retainVolumeWithoutComma = retainVolumeWithComma.replaceAll(",", "");
-								lRetainVolume = Long.parseLong(retainVolumeWithoutComma);
-								lRetainAmount = lRetainVolume * iCurPrice / 1000000;
+					retainVolumeWithComma = StringUtils.defaultIfEmpty(trTd.get(1).text(), "0");
+					retainVolumeWithoutComma = retainVolumeWithComma.replaceAll(",", "");
+					lRetainVolume = Long.parseLong(retainVolumeWithoutComma);
+					// 단위: 백만원
+					lRetainAmount = lRetainVolume * iCurPrice / 1000000;
 
-								lRetainAmountTotal += lRetainAmount;
-								lRetainVolumeTotal += lRetainVolume;
+					lRetainAmountTotal += lRetainAmount;
+					lRetainVolumeTotal += lRetainVolume;
 
-								DecimalFormat df = new DecimalFormat("#,##0");
-								retainAmount = df.format(lRetainAmount);
-							}
-							if (i == 2) {
-								retainRatio = StringUtils.defaultIfEmpty(trTd.get(2).text(), "0");
-								logger.debug("retainRatio1 :[" + retainRatio + "]");
-								fRetainRatio = Float.parseFloat(retainRatio);
+					DecimalFormat df = new DecimalFormat("#,##0");
+					retainAmount = df.format(lRetainAmount);
 
-								fRetainRatioTotal += fRetainRatio;
-							}
-							majorStockHolderVO.setMajorStockHolderName(majorStockHolderName);
-							majorStockHolderVO.setRetainVolume(retainVolumeWithComma);
-							majorStockHolderVO.setRetainAmount(retainAmount);
-							majorStockHolderVO.setRetainRatio(retainRatio);
-						}
-						stock.getMajorStockHolderList().add(majorStockHolderVO);
+					retainRatio = StringUtils.defaultIfEmpty(trTd.get(2).text(), "0");
+					logger.debug("retainRatio1 :[" + retainRatio + "]");
+					fRetainRatio = Float.parseFloat(retainRatio);
+
+					fRetainRatioTotal += fRetainRatio;
+
+					if (majorStockHolders.equals("") || majorStockHolderName.indexOf(majorStockHolders) != -1) {
+						logger.debug("majorStockHolderName :" + majorStockHolderName);
+						logger.debug("retainVolumeWithComma :" + retainVolumeWithComma);
+						logger.debug("retainAmount :" + retainAmount);
+						logger.debug("retainRatio :" + retainRatio);
+
+						majorStockHolderVO.setMajorStockHolderName(majorStockHolderName);
+						majorStockHolderVO.setRetainVolume(retainVolumeWithComma);
+						majorStockHolderVO.setRetainAmount(retainAmount);
+						majorStockHolderVO.setRetainRatio(retainRatio);
 					}
+
 				}
-				System.out.println(stock.getMajorStockHolderList().toString());
+				logger.debug("majorStockHolderVO :"+majorStockHolderVO);
+				
+				stock.getMajorStockHolderList().add(majorStockHolderVO);
+
+				logger.debug(stock.getMajorStockHolderList().toString());
 
 				stock.setlRetainVolume(lRetainVolumeTotal);
 				stock.setlRetainAmount(lRetainAmountTotal);
 				stock.setfRetainRatio(fRetainRatioTotal);
+			}
+			logger.debug("stock.getMajorStockHolderList().size() :"+stock.getMajorStockHolderList().size());
 
-				if (stock.getMajorStockHolderList().size() > 0) {
-					return stock;
-				} else {
-					return null;
-				}
+			if (stock.getMajorStockHolderList().size() > 0) {
+				return stock;
+			} else {
+				return null;
 			}
 
 		} catch (IOException e) {
@@ -302,7 +358,8 @@ public class MajorStockHoldersInput {
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("<html lang='ko'>\r\n");
 		sb1.append("<head>\r\n");
-		//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+		// sb1.append("<meta http-equiv=\"Content-Type\"
+		// content=\"text/html;charset=utf-8\">\r\n");
 		sb1.append("<style>\r\n");
 		sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 		sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
@@ -312,17 +369,15 @@ public class MajorStockHoldersInput {
 		sb1.append("\t<font size=5>" + strYMD + title + "</font>");
 		sb1.append("<table>\r\n");
 		sb1.append("<tr>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>번호</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>종목명</td>\r\n");
-		if (majorStockHolders.indexOf("국민연금") == -1) {
-			sb1.append(
-				"<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
-		}
-		sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>보유율</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-		sb1.append(
-			"<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>총금액(백만)</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;' rowspan='2'>번호</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;' rowspan='2'>종목명</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>총금액(백만)</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;' rowspan='2'>연초가</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;' rowspan='2'>연초가 대비 등락율</td>\r\n");
 		sb1.append("</tr>\r\n");
 		int cnt = 1;
 		for (StockVO svo : list) {
@@ -331,27 +386,39 @@ public class MajorStockHoldersInput {
 			if (svo != null) {
 				sb1.append("<tr>\r\n");
 				String url = "http://finance.naver.com/item/main.nhn?code=" + svo.getStockCode();
-				sb1.append("<td rowspan=" + listSize + ">" + cnt++ + "</td>\r\n");
-				sb1.append(
-					"<td rowspan=" + listSize + "><a href='" + url + "'>" + svo.getStockName() + "</a></td>\r\n");
+				sb1.append("<td>" + cnt++ + "</td>\r\n");
+				sb1.append("<td><a href='" + url + "'>" + svo.getStockName() + "</a></td>\r\n");
+				sb1.append("<td colspan='5'>\r\n");
+				sb1.append("<table width='100%'>\r\n");
+				sb1.append("<colgroup>\r\n");
+				sb1.append("	<col style='width:30%'>");
+				sb1.append("	<col style='width:20%'>");
+				sb1.append("	<col style='width:15%'>");
+				sb1.append("	<col style='width:15%'>");
+				sb1.append("	<col style='width:20%'>");
+				sb1.append("</colgroup>\r\n");
 
 				for (int i = 0; i < listSize; i++) {
-					if (i > 0) {
-						sb1.append("<tr>\r\n");
-					}
-
 					MajorStockHolderVO holderVO = (MajorStockHolderVO) vt.get(i);
-					if (majorStockHolders.indexOf("국민연금") == -1) {
-						sb1.append("<td>" + holderVO.getMajorStockHolderName() + "</td>\r\n");
-					}
+					sb1.append("<tr>\r\n");
+					sb1.append("<td>" + holderVO.getMajorStockHolderName() + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>" + holderVO.getRetainVolume() + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>" + holderVO.getRetainRatio() + "%</td>\r\n");
 					sb1.append("<td style='text-align:right'>" + svo.getCurPrice() + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>" + holderVO.getRetainAmount() + "</td>\r\n");
 					sb1.append("</tr>\r\n");
 				}
+				sb1.append("</table>\r\n");
+				sb1.append("</td>\r\n");
+				sb1.append("<td style='text-align:right'>").append(svo.getYearFirstTradeDayEndPrice())
+						.append("</td>\r\n");
+				sb1.append("<td style='text-align:right'>")
+						.append(svo.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() + "%").append("</td>\r\n");
+				sb1.append("</tr>\r\n");
 			}
 		}
+
+		sb1.append("</table>\r\n");
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
 		String fileName = userHome + "\\documents\\" + strDate + "_" + title + ".html";

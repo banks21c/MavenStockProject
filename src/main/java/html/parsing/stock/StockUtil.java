@@ -476,7 +476,13 @@ public class StockUtil {
 		logger.debug("stockLinkString end.....................");
 		return strNews + "<br>" + newsStockTable.toString();
 	}
-
+	/**
+	 * 엑셀 파일 읽어서 코스피,코스닥 종목코드,종목명 목록을 추출한다. 
+	 * @param stockList
+	 * @param fileName
+	 * @return List<StockVO>
+	 * @throws Exception
+	 */
 	public static List<StockVO> readStockCodeNameListFromExcel(List<StockVO> stockList, String fileName)
 			throws Exception {
 		List<StockVO> svoList = new ArrayList<>();
@@ -555,71 +561,14 @@ public class StockUtil {
 		return svoList;
 	}
 
-	public List<StockVO> getAllStockListInfo(String fileName) {
-		List<StockVO> svoList = new ArrayList<>();
-		try {
-			// Creating a Workbook from an Excel file (.xls or .xlsx)
-			logger.debug("fileName:" + fileName);
-			File file = new File(fileName);
-			Workbook workbook = WorkbookFactory.create(file);
-			// Getting the Sheet at index zero
-			Sheet sheet = workbook.getSheetAt(0);
-
-			// Create a DataFormatter to format and get each cell's value as String
-			DataFormatter dataFormatter = new DataFormatter();
-
-			// 1. You can obtain a rowIterator and columnIterator and iterate over them
-			logger.debug("\n\n getAllStockInfo \n");
-			logger.debug("\n\nIterating over Rows and Columns using Iterator2\n");
-			Iterator<Row> rowIterator = sheet.rowIterator();
-			int cnt = 0;
-			while (rowIterator.hasNext()) {
-				StockVO svo = new StockVO();
-				Row row = rowIterator.next();
-
-				// Now let's iterate over the columns of the current row
-				Iterator<Cell> cellIterator = row.cellIterator();
-				String strStockName = null;
-				String strStockCode = null;
-				if (row.getLastCellNum() > 1) {
-					int i = 0;
-					while (cellIterator.hasNext()) {
-						if (i == 2) {
-							break;
-						}
-						Cell cell = cellIterator.next();
-						String cellValue = dataFormatter.formatCellValue(cell);
-						if (i == 0) {
-							strStockName = cellValue;
-						}
-						if (i == 1) {
-							strStockCode = cellValue;
-						}
-						i++;
-					}
-					if (strStockCode.length() != 6) {
-						continue;
-					}
-					svo.setStockCode(strStockCode);
-					svo.setStockName(strStockName);
-//					svo = getStockInfo(cnt, strStockCode, strStockName);
-					svoList.add(svo);
-//					logger.debug(strStockCode + "\t" + strStockName);
-				}
-				cnt++;
-			}
-			// Closing the workbook
-			workbook.close();
-		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (InvalidFormatException ex) {
-			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (EncryptedDocumentException ex) {
-			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		return svoList;
-	}
-
+	/**
+	 * 엑셀 파일 읽어서 코스피,코스닥 종목코드,종목명 목록을 추출한다. 
+	 * @param fileName
+	 * @return List<StockVO>
+	 * @throws IOException
+	 * @throws EncryptedDocumentException
+	 * @throws InvalidFormatException
+	 */
 	public static List<StockVO> getAllStockListFromExcel(String fileName)
 			throws IOException, EncryptedDocumentException, InvalidFormatException {
 		List<StockVO> svoList = new ArrayList<>();
@@ -844,6 +793,93 @@ public class StockUtil {
 		stockList.addAll(svoList);
 		logger.debug("stockList.size :" + stockList.size());
 		return stockList;
+	}
+	
+	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(String marketType) {
+		List<StockVO> svoList = new ArrayList<>();
+		try {
+			String param = "method=download&pageIndex=1&currentPageSize=5000&comAbbrv=&beginIndex=&orderMode=3"
+					+ "&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=" + "&marketType=" + marketType + "&searchType=13"
+					+ "&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
+
+			String strUri = SERVER_URI + "?" + param;
+//			Document doc = Jsoup.parse(new URL(strUri).openStream(), "EUC-KR", strUri);
+
+//			Connection conn = Jsoup.connect(strUri).cookie("cookiereference", "cookievalue").method(Method.POST);
+			Map<String, String> headers = new HashMap<String, String>();
+			headers.put("Accept", MediaType.APPLICATION_JSON
+					+ ",text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+			headers.put("Accept-Encoding", "Accept-Encoding: gzip, deflate");
+//			headers.put("Accept-Language", "en-US,en;q=0.9,ko;q=0.8");
+			headers.put("Accept-Language", "ko");
+			headers.put("Cache-Control", "max-age=0");
+			headers.put("Connection", "keep-alive");
+			headers.put("Content-Length", "215");
+//			headers.put("Content-Type", "application/x-www-form-urlencoded");
+//			headers.put("Content-Type", "application/x-www-form-urlencoded; charset=EUC-KR");
+//			headers.put("Content-Type", "text/*; charset=EUC-KR");
+//			headers.put("Content-Type", "application/xml; charset=EUC-KR");
+//			headers.put("Content-Type", "application/xhtml+xml; charset=EUC-KR");
+			headers.put("Content-Type", "application/vnd.ms-excel; charset=EUC-KR");
+			headers.put("Cookie",
+					"__smVisitorID=QxeY65c5t3z; JSESSIONID=NyCFzfuTJuLCu1YTU5tAy2RDQUIha813iVKfZ9cnDZKOG81CUOKWwLcMsKQsK6JP.amV1c19kb21haW4vMTBfRFNUMg==; viewMode=1; krxMenu=ULDDST00000%2C%uC624%uB298%uC758%uACF5%uC2DC/ULDDST00100%2C%uD68C%uC0AC%uBCC4%uAC80%uC0C9/ULDDST00300%2C%uC0C1%uC138%uAC80%uC0C9/ULDDST00200%2C%uD1B5%uD569%uAC80%uC0C9/ULDDST71000%2C%uC608%uBE44%uC2EC%uC0AC%uAE30%uC5C5/");
+			// headers.put("Host", "kind.krx.co.kr");
+			// headers.put("Origin", "http://kind.krx.co.kr");
+			// headers.put("Referer",
+			// "http://kind.krx.co.kr/corpgeneral/corpList.do?method=loadInitPage");
+			headers.put("Host", "203.235.1.50");
+			headers.put("Origin", "http://203.235.1.50");
+			headers.put("Referer", "http://203.235.1.50/corpgeneral/corpList.do?method=loadInitPage");
+			headers.put("Upgrade-Insecure-Requests", "1");
+//			headers.put("User-Agent", "mozilla");
+			headers.put("User-Agent",
+					"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36");
+			headers.put("User-Agent",
+					"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36 NetHelper70");
+
+			headers.put("X-Requested-With", "XMLHttpRequest");
+
+//			Connection conn = Jsoup.connect(strUri).headers(headers).cookie("cookiereference", "cookievalue").method(Method.POST);
+//			Document doc = Jsoup.parse(new String(conn.execute().bodyAsBytes(), "EUC-KR"));
+			// Initialize UnSupportedMimeTypeExeception class
+			UnsupportedMimeTypeException mimeType = new UnsupportedMimeTypeException("Hey this is Mime",
+					"application/vnd.ms-excel", strUri);
+			String mime = mimeType.getMimeType();
+			System.out.println("mime :" + mime);
+//			Jsoup.connect(url).requestBody(json).header("Content-Type", "application/json").post();
+			Document doc = Jsoup.connect(strUri).requestBody("JSON").headers(headers)
+					// .cookies(response.cookies())
+					.ignoreContentType(true).post();
+			/* 총 라인수는 종목수 + 1, 첫째 줄은 header */
+			Elements trElements = doc.select("tr");
+			for (int i = 0; i < trElements.size(); i++) {
+				Elements tdElements = trElements.get(i).select("td");
+				if (tdElements.size() > 0) {
+					StockVO svo = new StockVO();
+
+					if (tdElements.size() > 1) {
+						String strStockName = tdElements.get(0).text();
+						String strStockCode = tdElements.get(1).text();
+						System.out.print((i) + "." + strStockName + "(");
+						System.out.println(strStockCode + ")");
+						svo.setStockName(strStockName);
+						svo.setStockCode(strStockCode);
+						svo.setStockNameLength(strStockName.length());
+						if (strStockCode.length() != 6) {
+							System.out.println(strStockCode + "\t" + strStockName + " 종목은 체크바랍니다.");
+						}
+						svoList.add(svo);
+					}
+				}
+			}
+
+		} catch (IOException ex) {
+			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (EncryptedDocumentException ex) {
+			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		logger.debug("svoList.size :" + svoList.size());
+		return svoList;
 	}
 
 	public static StockVO getStockInfo(int cnt, String strStockCode, String strStockName) {
@@ -1596,38 +1632,37 @@ public class StockUtil {
 
 	private static boolean findDate = false;
 
-	public static String getSpecificDayPrice(String targetDay,String listedDay, String stockCode,String stockName) {
-		String findDay = "";
-		int iTargetDay = Integer.parseInt(targetDay.replaceAll("\\.", ""));
+	public static String getYearFirstTradeDay(String yearFirstTradeDay,String listedDay) {
+		int iYearFirstTradeDay = Integer.parseInt(yearFirstTradeDay.replaceAll("\\.", ""));
 		int iListedDay = Integer.parseInt(listedDay.replaceAll("\\.", ""));
-		if (iListedDay < iTargetDay) {
+		if (iListedDay < iYearFirstTradeDay) {
 			// 상장일이 찾으려는 날짜보다 과거이면...
 			// 찾으려는 날짜가 상장일 이후이면...
-			findDay = targetDay;
+			return yearFirstTradeDay;
 		} else {
-			findDay = listedDay;
+			return listedDay;
 		}
-		return findSpecificDayPrice(stockCode, stockName, findDay);
 	}
 
-	public static String findSpecificDayPrice(String stockCode, String stockName, String findDay) {
+	public static String getYearFirstTradeDayEndPrice(String stockCode, String stockName, String findDay) {
 		System.out.println("findDay:"+findDay);
 		System.out.println("findDate:"+findDate);
 
-		String specificDayPrice = "";
+		String yearFirstTradeDayEndPrice = "";
 		// 상장일이 찾으려는 날짜보다 과거이면...
 		// 찾으려는 날짜가 상장일 이후이면...
 		int pageNo = 1;
 		findDate = false;
 		while (!findDate) {
-			specificDayPrice = findSpecificDayPrice(stockCode, stockName, findDay, pageNo++);
+			if(pageNo > 100) break;
+			yearFirstTradeDayEndPrice = findYearFirstTradeDayEndPrice(stockCode, stockName, findDay, pageNo++);
 		}
-		logger.debug(stockCode + " "+stockName + " "+findDay + " 종가 :" + specificDayPrice);
-		return specificDayPrice;
+		logger.debug(stockCode + " "+stockName + " "+findDay + " 종가 :" + yearFirstTradeDayEndPrice);
+		return yearFirstTradeDayEndPrice;
 	}
 
-	public static String findSpecificDayPrice(String stockCode, String stockName, String findDay, int pageNo) {
-		String specificDayPrice = "0";
+	public static String findYearFirstTradeDayEndPrice(String stockCode, String stockName, String findDay, int pageNo) {
+		String yearFirstTradeDayEndPrice = "0";
 		Document doc;
 		try {
 			// 종합분석-기업개요
@@ -1656,29 +1691,29 @@ public class StockUtil {
 
 			Elements thEls = type2.select("tbody tr th");
 			int dayIndex = 0;
-			int specificDayIndex = 0;
+			int endPriceIndex = 0;
 			for (int i = 0; i < thEls.size(); i++) {
 				Element thEl = thEls.get(i);
 				String key = thEl.text();
 				if (key.equals("날짜")) {
 					dayIndex = i;
 				} else if (key.equals("종가")) {
-					specificDayIndex = i;
+					endPriceIndex = i;
 				}
 			}
 			Elements trEls = type2.select("tbody tr");
-			String temp_specificDay = "";
-			String temp_specificDayPrice = "";
+			String temp_tradeDay = "";
+			String temp_yearFirstTradeDayEndPrice = "";
 			for (Element tr : trEls) {
 				Elements tdEls = tr.select("td");
 				if (tdEls.size() > 1) {
 					Element dayEl = tdEls.get(dayIndex);
-					Element specificDayPriceEl = tdEls.get(specificDayIndex);
-					temp_specificDay = dayEl.text();
-					temp_specificDayPrice = specificDayPriceEl.text();
-					if (findDay.equals(temp_specificDay)) {
-						logger.debug(temp_specificDay + "\t" + temp_specificDayPrice);
-						specificDayPrice = temp_specificDayPrice;
+					Element yearFirstTradeDayEndPriceEl = tdEls.get(endPriceIndex);
+					temp_tradeDay = dayEl.text();
+					temp_yearFirstTradeDayEndPrice = yearFirstTradeDayEndPriceEl.text();
+					if (findDay.equals(temp_tradeDay)) {
+						logger.debug(temp_tradeDay + "\t" + temp_yearFirstTradeDayEndPrice);
+						yearFirstTradeDayEndPrice = temp_yearFirstTradeDayEndPrice;
 						findDate = true;
 						break;
 					}
@@ -1687,8 +1722,8 @@ public class StockUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if(specificDayPrice.equals("")) specificDayPrice = "0";
-		return specificDayPrice;
+		if(yearFirstTradeDayEndPrice.equals("")) yearFirstTradeDayEndPrice = "0";
+		return yearFirstTradeDayEndPrice;
 	}
 
 	public static void main(String args[]) throws Exception {
