@@ -369,15 +369,15 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		sb1.append("\t<font size=5>" + strYMD + title + "</font>");
 		sb1.append("<table>\r\n");
 		sb1.append("<tr>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;' rowspan='2'>번호</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;' rowspan='2'>종목명</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>총금액(백만)</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;' rowspan='2'>연초가</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;' rowspan='2'>연초가 대비 등락율</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>연초가</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>연초가 대비 등락율</td>\r\n");
 		sb1.append("</tr>\r\n");
 		int cnt = 1;
 		for (StockVO svo : list) {
