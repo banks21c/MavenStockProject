@@ -166,6 +166,10 @@ public class StockVO {
     private int iYearFirstTradeDayEndPrice;
     private String yearStartPrice;
 
+    long lRetainVolumeTotal;
+    long lRetainAmountTotal;
+    float fRetainRatioTotal;
+
 	public String getDate() {
 		return date;
 	}
@@ -1227,6 +1231,30 @@ public class StockVO {
 
 	public void setiYearFirstTradeDayEndPrice(int iYearFirstTradeDayEndPrice) {
 		this.iYearFirstTradeDayEndPrice = iYearFirstTradeDayEndPrice;
+	}
+
+	public long getlRetainVolumeTotal() {
+		return lRetainVolumeTotal;
+	}
+
+	public void setlRetainVolumeTotal(long lRetainVolumeTotal) {
+		this.lRetainVolumeTotal = lRetainVolumeTotal;
+	}
+
+	public long getlRetainAmountTotal() {
+		return lRetainAmountTotal;
+	}
+
+	public void setlRetainAmountTotal(long lRetainAmountTotal) {
+		this.lRetainAmountTotal = lRetainAmountTotal;
+	}
+
+	public float getfRetainRatioTotal() {
+		return fRetainRatioTotal;
+	}
+
+	public void setfRetainRatioTotal(float fRetainRatioTotal) {
+		this.fRetainRatioTotal = fRetainRatioTotal;
 	}
 
 	@Override
