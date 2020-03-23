@@ -320,6 +320,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 					retainVolumeWithoutComma = retainVolumeWithComma.replaceAll(",", "");
 					retainVolumeWithoutComma = retainVolumeWithoutComma.replaceAll("&bsp;", "");
 					retainVolumeWithoutComma = retainVolumeWithoutComma.replaceAll("&nbsp;", "");
+					retainVolumeWithoutComma = retainVolumeWithoutComma.replaceAll("&p;", "");
 					lRetainVolume = Long.parseLong(retainVolumeWithoutComma);
 					// 단위: 백만원
 					lRetainAmount = lRetainVolume * iCurPrice;
@@ -333,6 +334,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 					retainRatio = StringUtils.defaultIfEmpty(trTd.get(2).text(), "0");
 					logger.debug("retainRatio1 :[" + retainRatio + "]");
+					retainRatio = retainRatio.replaceAll("&bsp;", "");
+					retainRatio = retainRatio.replaceAll("&nbsp;", "");
 					fRetainRatio = Float.parseFloat(retainRatio);
 
 					fRetainRatioTotal += fRetainRatio;
