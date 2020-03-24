@@ -173,7 +173,7 @@ public class StockUtil {
 		try {
 			kospiStockList = readStockCodeNameListFromExcel(kospiStockList, kospiFileName);
 		} catch (Exception ex) {
-			System.out.println("1.ex.getMessage :" + ex.getMessage());
+			logger.debug("1.ex.getMessage :" + ex.getMessage());
 			kospiStockList = getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
 		}
 		return kospiStockList;
@@ -185,7 +185,7 @@ public class StockUtil {
 		try {
 			kosdaqStockList = readStockCodeNameListFromExcel(kosdaqStockList, kosdaqFileName);
 		} catch (Exception ex) {
-			System.out.println("2.ex.getMessage :" + ex.getMessage());
+			logger.debug("2.ex.getMessage :" + ex.getMessage());
 			kosdaqStockList = getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
 		}
 		return kosdaqStockList;
@@ -757,7 +757,7 @@ public class StockUtil {
 			UnsupportedMimeTypeException mimeType = new UnsupportedMimeTypeException("Hey this is Mime",
 					"application/vnd.ms-excel", strUri);
 			String mime = mimeType.getMimeType();
-			System.out.println("mime :" + mime);
+			logger.debug("mime :" + mime);
 //			Jsoup.connect(url).requestBody(json).header("Content-Type", "application/json").post();
 			Document doc = Jsoup.connect(strUri).requestBody("JSON").headers(headers)
 					// .cookies(response.cookies())
@@ -773,12 +773,12 @@ public class StockUtil {
 						String strStockName = tdElements.get(0).text();
 						String strStockCode = tdElements.get(1).text();
 						System.out.print((i) + "." + strStockName + "(");
-						System.out.println(strStockCode + ")");
+						logger.debug(strStockCode + ")");
 						svo.setStockName(strStockName);
 						svo.setStockCode(strStockCode);
 						svo.setStockNameLength(strStockName.length());
 						if (strStockCode.length() != 6) {
-							System.out.println(strStockCode + "\t" + strStockName + " 종목은 체크바랍니다.");
+							logger.debug(strStockCode + "\t" + strStockName + " 종목은 체크바랍니다.");
 						}
 						svoList.add(svo);
 					}
@@ -846,7 +846,7 @@ public class StockUtil {
 			UnsupportedMimeTypeException mimeType = new UnsupportedMimeTypeException("Hey this is Mime",
 					"application/vnd.ms-excel", strUri);
 			String mime = mimeType.getMimeType();
-			System.out.println("mime :" + mime);
+			logger.debug("mime :" + mime);
 //			Jsoup.connect(url).requestBody(json).header("Content-Type", "application/json").post();
 			Document doc = Jsoup.connect(strUri).requestBody("JSON").headers(headers)
 					// .cookies(response.cookies())
@@ -862,12 +862,12 @@ public class StockUtil {
 						String strStockName = tdElements.get(0).text();
 						String strStockCode = tdElements.get(1).text();
 						System.out.print((i) + "." + strStockName + "(");
-						System.out.println(strStockCode + ")");
+						logger.debug(strStockCode + ")");
 						svo.setStockName(strStockName);
 						svo.setStockCode(strStockCode);
 						svo.setStockNameLength(strStockName.length());
 						if (strStockCode.length() != 6) {
-							System.out.println(strStockCode + "\t" + strStockName + " 종목은 체크바랍니다.");
+							logger.debug(strStockCode + "\t" + strStockName + " 종목은 체크바랍니다.");
 						}
 						svoList.add(svo);
 					}
@@ -1633,37 +1633,37 @@ public class StockUtil {
 
 	private static boolean findDate = false;
 
-	public static String getYearFirstTradeDay(String yearFirstTradeDay,String listedDay) {
-		int iYearFirstTradeDay = Integer.parseInt(yearFirstTradeDay.replaceAll("\\.", ""));
+	public static String getSpecificDay(String specificDay,String listedDay) {
+		int iSpecificDay = Integer.parseInt(specificDay.replaceAll("\\.", ""));
 		int iListedDay = Integer.parseInt(listedDay.replaceAll("\\.", ""));
-		if (iListedDay < iYearFirstTradeDay) {
+		if (iListedDay < iSpecificDay) {
 			// 상장일이 찾으려는 날짜보다 과거이면...
 			// 찾으려는 날짜가 상장일 이후이면...
-			return yearFirstTradeDay;
+			return specificDay;
 		} else {
 			return listedDay;
 		}
 	}
 
-	public static String getYearFirstTradeDayEndPrice(String stockCode, String stockName, String findDay) {
-		System.out.println("findDay:"+findDay);
-		System.out.println("findDate:"+findDate);
+	public static String getSpecificDayEndPrice(String stockCode, String stockName, String findDay) {
+		logger.debug("findDay:"+findDay);
+		logger.debug("findDate:"+findDate);
 
-		String yearFirstTradeDayEndPrice = "";
+		String specificDayEndPrice = "";
 		// 상장일이 찾으려는 날짜보다 과거이면...
 		// 찾으려는 날짜가 상장일 이후이면...
 		int pageNo = 1;
 		findDate = false;
 		while (!findDate) {
 			if(pageNo > 100) break;
-			yearFirstTradeDayEndPrice = findYearFirstTradeDayEndPrice(stockCode, stockName, findDay, pageNo++);
+			specificDayEndPrice = findSpecificDayEndPrice(stockCode, stockName, findDay, pageNo++);
 		}
-		logger.debug(stockCode + " "+stockName + " "+findDay + " 종가 :" + yearFirstTradeDayEndPrice);
-		return yearFirstTradeDayEndPrice;
+		logger.debug(stockCode + " "+stockName + " "+findDay + " 종가 :" + specificDayEndPrice);
+		return specificDayEndPrice;
 	}
 
-	public static String findYearFirstTradeDayEndPrice(String stockCode, String stockName, String findDay, int pageNo) {
-		String yearFirstTradeDayEndPrice = "0";
+	public static String findSpecificDayEndPrice(String stockCode, String stockName, String findDay, int pageNo) {
+		String specificDayEndPrice = "0";
 		Document doc;
 		try {
 			// 종합분석-기업개요
@@ -1704,17 +1704,17 @@ public class StockUtil {
 			}
 			Elements trEls = type2.select("tbody tr");
 			String temp_tradeDay = "";
-			String temp_yearFirstTradeDayEndPrice = "";
+			String temp_specificDayEndPrice = "";
 			for (Element tr : trEls) {
 				Elements tdEls = tr.select("td");
 				if (tdEls.size() > 1) {
 					Element dayEl = tdEls.get(dayIndex);
-					Element yearFirstTradeDayEndPriceEl = tdEls.get(endPriceIndex);
+					Element specificDayEndPriceEl = tdEls.get(endPriceIndex);
 					temp_tradeDay = dayEl.text();
-					temp_yearFirstTradeDayEndPrice = yearFirstTradeDayEndPriceEl.text();
+					temp_specificDayEndPrice = specificDayEndPriceEl.text();
 					if (findDay.equals(temp_tradeDay)) {
-						logger.debug(temp_tradeDay + "\t" + temp_yearFirstTradeDayEndPrice);
-						yearFirstTradeDayEndPrice = temp_yearFirstTradeDayEndPrice;
+						logger.debug(temp_tradeDay + "\t" + temp_specificDayEndPrice);
+						specificDayEndPrice = temp_specificDayEndPrice;
 						findDate = true;
 						break;
 					}
@@ -1723,8 +1723,8 @@ public class StockUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if(yearFirstTradeDayEndPrice.equals("")) yearFirstTradeDayEndPrice = "0";
-		return yearFirstTradeDayEndPrice;
+		if(specificDayEndPrice.equals("")) specificDayEndPrice = "0";
+		return specificDayEndPrice;
 	}
 
 	public static String moneyUnitSplit(long lAmount) {

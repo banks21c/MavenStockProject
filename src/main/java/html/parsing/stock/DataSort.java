@@ -1102,7 +1102,7 @@ public class DataSort {
 	 * @author banks
 	 *
 	 */
-	public static class YearFirstTradeDayVsCurPriceUpDownRatioAscCompare implements Comparator<StockVO> {
+	public static class SpecificDayVsCurPriceUpDownRatioAscCompare implements Comparator<StockVO> {
 
 		/**
 		 * 오름차순(ASC)
@@ -1111,10 +1111,10 @@ public class DataSort {
 		public int compare(StockVO arg0, StockVO arg1) {
 			int ret = 0;
 			if (arg0 != null) {
-				ret = arg0.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() < arg1
-						.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() ? -1
-								: arg0.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() > arg1
-										.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() ? 1 : 0;
+				ret = arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() < arg1
+						.getSpecificDayEndPriceVsCurPriceUpDownRatio() ? -1
+								: arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() > arg1
+										.getSpecificDayEndPriceVsCurPriceUpDownRatio() ? 1 : 0;
 			}
 			return ret;
 		}
@@ -1127,7 +1127,7 @@ public class DataSort {
 	 * @author banks
 	 *
 	 */
-	public static class YearFirstTradeDayVsCurPriceUpDownRatioDescCompare implements Comparator<StockVO> {
+	public static class SpecificDayVsCurPriceUpDownRatioDescCompare implements Comparator<StockVO> {
 
 		/**
 		 * 내림차순(DESC)
@@ -1136,8 +1136,8 @@ public class DataSort {
 		public int compare(StockVO arg0, StockVO arg1) {
 			int ret = 0;
 			if (arg0 != null) {
-				ret = arg0.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() > arg1.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() ? -1
-						: arg0.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() < arg1.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio()
+				ret = arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() > arg1.getSpecificDayEndPriceVsCurPriceUpDownRatio() ? -1
+						: arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() < arg1.getSpecificDayEndPriceVsCurPriceUpDownRatio()
 								? 1
 								: 0;
 			}

@@ -32,10 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.NameAscCompare;
-import html.parsing.stock.DataSort.Weeks52NewHighPriceVsCurPriceDownRatioAscCompare;
-import html.parsing.stock.DataSort.Weeks52NewLowPriceVsCurPriceUpRatioDescCompare;
-import html.parsing.stock.DataSort.YearFirstTradeDayVsCurPriceUpDownRatioAscCompare;
-import html.parsing.stock.DataSort.YearFirstTradeDayVsCurPriceUpDownRatioDescCompare;
+import html.parsing.stock.DataSort.SpecificDayVsCurPriceUpDownRatioAscCompare;
+import html.parsing.stock.DataSort.SpecificDayVsCurPriceUpDownRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
 
 public class Weeks52NewLowHighPriceVsCurPriceYear extends Thread {
@@ -180,10 +178,10 @@ public class Weeks52NewLowHighPriceVsCurPriceYear extends Thread {
 //		Collections.sort(kospiStockDataList, new Weeks52NewLowPriceVsCurPriceUpRatioDescCompare());
 //		writeFile(kospiStockDataList, "코스피", "상승율순");
 
-		Collections.sort(kospiStockDataList, new YearFirstTradeDayVsCurPriceUpDownRatioAscCompare());
+		Collections.sort(kospiStockDataList, new SpecificDayVsCurPriceUpDownRatioAscCompare());
 		writeFile(kospiStockDataList, "코스피", "하락율순");
 
-		Collections.sort(kospiStockDataList, new YearFirstTradeDayVsCurPriceUpDownRatioDescCompare());
+		Collections.sort(kospiStockDataList, new SpecificDayVsCurPriceUpDownRatioDescCompare());
 		writeFile(kospiStockDataList, "코스피", "상승율순");
 
 		logger.debug("kosdaqStockList.size :" + kosdaqStockList.size());
@@ -203,10 +201,10 @@ public class Weeks52NewLowHighPriceVsCurPriceYear extends Thread {
 //		Collections.sort(kosdaqStockDataList, new Weeks52NewLowPriceVsCurPriceUpRatioDescCompare());
 //		writeFile(kosdaqStockDataList, "코스닥", "상승율순");
 
-		Collections.sort(kosdaqStockDataList, new YearFirstTradeDayVsCurPriceUpDownRatioAscCompare());
+		Collections.sort(kosdaqStockDataList, new SpecificDayVsCurPriceUpDownRatioAscCompare());
 		writeFile(kosdaqStockDataList, "코스닥", "하락율순");
 
-		Collections.sort(kosdaqStockDataList, new YearFirstTradeDayVsCurPriceUpDownRatioDescCompare());
+		Collections.sort(kosdaqStockDataList, new SpecificDayVsCurPriceUpDownRatioDescCompare());
 		writeFile(kosdaqStockDataList, "코스닥", "상승율순");
 
 		/*
@@ -515,33 +513,33 @@ public class Weeks52NewLowHighPriceVsCurPriceYear extends Thread {
 
 			// 연초가 또는 올해 상장했을 경우 상장일가 구하기
 			String yearFirstTradeDay = "2020.01.02";
-			yearFirstTradeDay = StockUtil.getYearFirstTradeDay(yearFirstTradeDay, listedDay);
-			stock.setYearFirstTradeDay(yearFirstTradeDay);
-			String yearFirstTradeDayEndPrice = StockUtil.getYearFirstTradeDayEndPrice(strStockCode, strStockName,
+			yearFirstTradeDay = StockUtil.getSpecificDay(yearFirstTradeDay, listedDay);
+			stock.setSpecificDay(yearFirstTradeDay);
+			String yearFirstTradeDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName,
 					yearFirstTradeDay);
-			stock.setYearFirstTradeDayEndPrice(yearFirstTradeDayEndPrice);
+			stock.setSpecificDayEndPrice(yearFirstTradeDayEndPrice);
 
 			yearFirstTradeDayEndPrice = yearFirstTradeDayEndPrice.replaceAll(",", "");
 			logger.debug("yearFirstTradeDayEndPrice :" + yearFirstTradeDayEndPrice);
 			if (yearFirstTradeDayEndPrice.equals(""))
 				yearFirstTradeDayEndPrice = "0";
-			int iYearFirstTradeDayEndPrice = Integer.parseInt(yearFirstTradeDayEndPrice);
-			logger.debug("iYearFirstTradeDayEndPrice :" + iYearFirstTradeDayEndPrice);
+			int iSpecificDayEndPrice = Integer.parseInt(yearFirstTradeDayEndPrice);
+			logger.debug("iSpecificDayEndPrice :" + iSpecificDayEndPrice);
 
 			double upDownRatio = 0d;
-			if (iYearFirstTradeDayEndPrice != 0) {
-				if (iYearFirstTradeDayEndPrice < iCurPrice) {
-					double d1 = iCurPrice - iYearFirstTradeDayEndPrice;
-					double d2 = d1 / iYearFirstTradeDayEndPrice * 100;
+			if (iSpecificDayEndPrice != 0) {
+				if (iSpecificDayEndPrice < iCurPrice) {
+					double d1 = iCurPrice - iSpecificDayEndPrice;
+					double d2 = d1 / iSpecificDayEndPrice * 100;
 					upDownRatio = Math.round(d2 * 100) / 100.0;
-				} else if (iYearFirstTradeDayEndPrice > iCurPrice) {
-					double d1 = iYearFirstTradeDayEndPrice - iCurPrice;
-					double d2 = d1 / iYearFirstTradeDayEndPrice * 100;
+				} else if (iSpecificDayEndPrice > iCurPrice) {
+					double d1 = iSpecificDayEndPrice - iCurPrice;
+					double d2 = d1 / iSpecificDayEndPrice * 100;
 					upDownRatio = -(Math.round(d2 * 100) / 100.0);
 				}
 			}
 			logger.debug("특정일 대비 up,down 비율:" + upDownRatio + "%");
-			stock.setYearFirstTradeDayEndPriceVsCurPriceUpDownRatio(upDownRatio);
+			stock.setSpecificDayEndPriceVsCurPriceUpDownRatio(upDownRatio);
 
 			if (marketGubun.equals("P")) {
 				kospiStockDataList.add(stock);
@@ -557,11 +555,7 @@ public class Weeks52NewLowHighPriceVsCurPriceYear extends Thread {
 
 	public void writeFile(List<StockVO> kospiKosdaqStockList, String stockGubun, String orderBy) {
 		String fileNameSuffix = "";
-		if (orderBy.equals("상승율순")) {
-			fileNameSuffix = " 연초가 대비 상승율(" + orderBy + ")";
-		} else {
-			fileNameSuffix = " 연초가 대비 하락율(" + orderBy + ")";
-		}
+		fileNameSuffix = " 연초가 대비 등락율(" + orderBy + ")";
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("<html lang='ko'>\r\n");
 		sb1.append("<head>\r\n");
@@ -638,10 +632,10 @@ public class Weeks52NewLowHighPriceVsCurPriceYear extends Thread {
 //						.append("</td>\r\n");
 //				sb1.append("<td style='text-align:right'>").append(s.getWeeks52NewHighPriceVsCurPriceDownRatio() + "%")
 //						.append("</td>\r\n");
-				sb1.append("<td class='price' style='text-align:right'>").append(s.getYearFirstTradeDayEndPrice())
+				sb1.append("<td class='price' style='text-align:right'>").append(s.getSpecificDayEndPrice())
 						.append("</td>\r\n");
 				sb1.append("<td class='ratio' style='text-align:right'>")
-						.append(s.getYearFirstTradeDayEndPriceVsCurPriceUpDownRatio() + "%").append("</td>\r\n");
+						.append(s.getSpecificDayEndPriceVsCurPriceUpDownRatio() + "%").append("</td>\r\n");
 
 				sb1.append("</tr>\r\n");
 			}
