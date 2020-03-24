@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -477,7 +478,7 @@ public class StockUtil {
 		return strNews + "<br>" + newsStockTable.toString();
 	}
 	/**
-	 * 엑셀 파일 읽어서 코스피,코스닥 종목코드,종목명 목록을 추출한다. 
+	 * 엑셀 파일 읽어서 코스피,코스닥 종목코드,종목명 목록을 추출한다.
 	 * @param stockList
 	 * @param fileName
 	 * @return List<StockVO>
@@ -562,7 +563,7 @@ public class StockUtil {
 	}
 
 	/**
-	 * 엑셀 파일 읽어서 코스피,코스닥 종목코드,종목명 목록을 추출한다. 
+	 * 엑셀 파일 읽어서 코스피,코스닥 종목코드,종목명 목록을 추출한다.
 	 * @param fileName
 	 * @return List<StockVO>
 	 * @throws IOException
@@ -794,7 +795,7 @@ public class StockUtil {
 		logger.debug("stockList.size :" + stockList.size());
 		return stockList;
 	}
-	
+
 	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(String marketType) {
 		List<StockVO> svoList = new ArrayList<>();
 		try {
@@ -1724,6 +1725,59 @@ public class StockUtil {
 		}
 		if(yearFirstTradeDayEndPrice.equals("")) yearFirstTradeDayEndPrice = "0";
 		return yearFirstTradeDayEndPrice;
+	}
+
+	public static String moneyUnitSplit(long lAmount) {
+		String strPlusMinus = "";
+		if (lAmount < 0) {
+			strPlusMinus = "-";
+		} else {
+			strPlusMinus = "+";
+		}
+
+		StringBuffer sb = new StringBuffer();
+		String strAmount = String.valueOf(Math.abs(lAmount));
+
+		int jo = (int) (Long.parseLong(strAmount) / 1000000000000L);
+		String strJo = String.valueOf(jo);
+		int iJo = Integer.parseInt(strJo);
+
+		int uk = (int) (Long.parseLong(strAmount) / 100000000);
+		double uk2 = uk / 10000d;
+		String uk3 = String.valueOf(uk2);
+		String strUk = uk3.substring(uk3.indexOf(".") + 1);
+		int iUk = Integer.parseInt(strUk);
+
+		long man = Long.parseLong(strAmount) / 10000;
+		double man2 = man / 10000d;
+		String man3 = String.valueOf(man2);
+		String strMan = man3.substring(man3.indexOf(".") + 1);
+		int iMan = Integer.parseInt(strMan);
+
+		BigInteger[] won2 = new BigInteger(strAmount).divideAndRemainder(new BigInteger("10000"));
+		String strWon = "";
+		if (won2.length > 1) {
+			strWon = won2[1].toString();
+		} else {
+			strWon = won2[0].toString();
+		}
+		int iWon = Integer.parseInt(strWon);
+
+		sb.append(strPlusMinus);
+		if (!strJo.equals("0")) {
+			sb.append(iJo + "조 ");
+		}
+		if (!strUk.equals("0")) {
+			sb.append(iUk + "억 ");
+		}
+		if (!strMan.equals("0")) {
+			sb.append(iMan + "만 ");
+		}
+		if (!strWon.equals("0")) {
+			sb.append(iWon + "원");
+		}
+
+		return sb.toString();
 	}
 
 	public static void main(String args[]) throws Exception {
