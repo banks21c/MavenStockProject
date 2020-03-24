@@ -540,11 +540,14 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 
 	public void writeFile(List<StockVO> kospiKosdaqStockList, String stockGubun, String orderBy) {
 		String fileNameSuffix = "";
+		String lowHighPriceTxt = "";
 		if (orderBy.equals("상승율순")) {
-			fileNameSuffix = " 52주 신저가 대비 상승율(" + orderBy + ")";
+			lowHighPriceTxt = "신저가";
 		} else {
-			fileNameSuffix = " 52주 신고가 대비 하락율(" + orderBy + ")";
+			lowHighPriceTxt = "신고가";
 		}
+		fileNameSuffix = " 52주 "+lowHighPriceTxt+" 대비 등락율(" + orderBy + ")";
+
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("<html lang='ko'>\r\n");
 		sb1.append("<head>\r\n");
