@@ -42,8 +42,8 @@ public class YearFirstTradeDay {
 		stockName = "케이씨씨글라스";
 
 		stockListedDay = StockUtil.getStockListedDay(stockCode);
-		yearFirstTradeDay = StockUtil.getYearFirstTradeDay(yearFirstTradeDay, stockListedDay);
-		yearFirstTradeDayEndPrice = StockUtil.getYearFirstTradeDayEndPrice(stockCode, stockName, yearFirstTradeDay);
+		yearFirstTradeDay = StockUtil.getSpecificDay(yearFirstTradeDay, stockListedDay);
+		yearFirstTradeDayEndPrice = StockUtil.getSpecificDayEndPrice(stockCode, stockName, yearFirstTradeDay);
 		System.out.println("stockListedDay:" + stockListedDay);
 		System.out.println("yearFirstTradeDay:" + yearFirstTradeDay);
 
