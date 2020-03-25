@@ -501,7 +501,7 @@ public class StockNewsToday extends News {
 		strStockName = stock.getStockName();
 
 		// 종합정보
-		System.out.println("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=");
+		System.out.println("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
 
 		// SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREAN);
 		// String strDate = sdf.format(new Date());
@@ -509,7 +509,7 @@ public class StockNewsToday extends News {
 
 		Document doc;
 		try {
-			String url = "http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=";
+			String url = "http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=";
 
 			News gurl = new News();
 			gurl.getURL(url);

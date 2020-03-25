@@ -396,7 +396,7 @@ public class StockAlert {
             strStockName = vo.getStockName();
 
             // 종합정보
-            System.out.println("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=");
+            System.out.println("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREAN);
             String strDate = sdf.format(new Date());
@@ -405,7 +405,7 @@ public class StockAlert {
             Document doc;
             try {
                 // http://finance.naver.com/item/news_news.nhn?code=110570
-                doc = Jsoup.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=")
+                doc = Jsoup.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=")
                         .get();
                 // http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
                 // System.out.println(doc.html());
@@ -504,10 +504,10 @@ public class StockAlert {
 
                 // 종합정보
                 // http://finance.naver.com/item/news.nhn?code=246690
-                System.out.println("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=");
+                System.out.println("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
 
                 Document doc = Jsoup
-                        .connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=")
+                        .connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=")
                         .get();
                 // http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
 

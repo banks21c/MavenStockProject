@@ -742,12 +742,12 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 
 			// 종합정보
 			logger.debug("strStockCode:" + strStockCode + " strStockName:" + strStockName);
-			logger.debug("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=");
+			logger.debug("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
 
 			Document doc;
 			try {
 				// http://finance.naver.com/item/news_news.nhn?code=110570
-				doc = Jsoup.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=")
+				doc = Jsoup.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=")
 						.get();
 				// http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
 				// logger.debug(doc.html());
@@ -855,10 +855,10 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 
 				// 종합정보
 				// http://finance.naver.com/item/news.nhn?code=246690
-				logger.debug("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=");
+				logger.debug("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
 
 				Document doc = Jsoup
-						.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&amp;page=")
+						.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=")
 						.get();
 				// http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
 				doc.select("script").remove();
