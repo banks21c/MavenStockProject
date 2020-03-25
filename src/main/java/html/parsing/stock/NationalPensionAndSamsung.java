@@ -27,9 +27,9 @@ import html.parsing.stock.util.FileUtil;
 
 public class NationalPensionAndSamsung {
 
-	private static String SAMSUNG_CORP_NM[] = { "삼성전자", "삼성SDI", "삼성물산", "삼성전기", "삼성에스디에스", "삼성화재해상보험", "삼성생명", "호텔신라",
-			"삼성증권", "삼성중공업", "에스원", "삼성엔지니어링", "제일기획", "신세계", "신세계인터내셔날", "신세계I&C", "신세계푸드" };
-	private static String SAMSUNG_CORP_CD[] = { "005930", "006400", "028260", "009150", "018260", "000810", "032830",
+	private static String SAMSUNG_CORP_NM[] = {"멀티캠퍼스","삼성카드", "삼성바이오로직스","삼성전자", "삼성SDI", "삼성물산", "삼성전기", "삼성에스디에스", "삼성화재", "삼성생명", "호텔신라",
+			"삼성증권", "삼성중공업", "에스원", "삼성엔지니어링", "제일기획", "신세계", "신세계인터내셔날", "신세계 I&C", "신세계푸드" };
+	private static String SAMSUNG_CORP_CD[] = {"067280","029780", "207940","005930", "006400", "028260", "009150", "018260", "000810", "032830",
 			"008770", "016360", "010140", "012750", "028050", "030000", "004170", "031430", "035510", "031440" };
 
 	private static final Logger logger = LoggerFactory.getLogger(NationalPensionAndSamsung.class);
