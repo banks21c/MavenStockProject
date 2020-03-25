@@ -28,9 +28,9 @@ import html.parsing.stock.util.FileUtil;
 public class NationalPensionAndSamsung {
 
 	private static String SAMSUNG_CORP_NM[] = {"멀티캠퍼스","삼성카드", "삼성바이오로직스","삼성전자", "삼성SDI", "삼성물산", "삼성전기", "삼성에스디에스", "삼성화재", "삼성생명", "호텔신라",
-			"삼성증권", "삼성중공업", "에스원", "삼성엔지니어링", "제일기획", "신세계", "신세계인터내셔날", "신세계 I&C", "신세계푸드" };
+			"삼성증권", "삼성중공업", "에스원", "삼성엔지니어링", "제일기획", "이마트","신세계", "신세계인터내셔날", "신세계 I&C", "신세계푸드" };
 	private static String SAMSUNG_CORP_CD[] = {"067280","029780", "207940","005930", "006400", "028260", "009150", "018260", "000810", "032830",
-			"008770", "016360", "010140", "012750", "028050", "030000", "004170", "031430", "035510", "031440" };
+			"008770", "016360", "010140", "012750", "028050", "030000","139480" ,"004170", "031430", "035510", "031440" };
 
 	private static final Logger logger = LoggerFactory.getLogger(NationalPensionAndSamsung.class);
 
@@ -38,6 +38,10 @@ public class NationalPensionAndSamsung {
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
+	static String specificDay = "2020.01.02";
+	static String specificDay1 = "2020.01.20";//2020년 최고지수 2277.23
+	static String specificDay2 = "2019.04.15";//2019년 최고지수 2252.05
+	static String specificDay3 = "2018.01.29";//2018년 최고지수 2607.20
 
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
@@ -53,6 +57,7 @@ public class NationalPensionAndSamsung {
 
 	public void readAndWriteMajorStockHoldersTest() {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
+		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
 
 //		// 대웅제약 069620
 //		kospiStockList = readOne("069620", "대웅제약");
@@ -87,6 +92,7 @@ public class NationalPensionAndSamsung {
 
 	public void readAndWriteMajorStockHolders_bak() throws Exception {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
+		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
 		try {
 //			kospiStockList = StockUtil.readKospiStockCodeNameListFromExcel();
 //			kosdaqStockList = StockUtil.readKosdaqStockCodeNameListFromExcel();
@@ -115,6 +121,8 @@ public class NationalPensionAndSamsung {
 	@Test
 	public void readAndWriteMajorStockHolders() throws Exception {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
+		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
+		
 		kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
 		kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
 		logger.debug("kospiStockList.size2 :" + kospiStockList.size());
@@ -131,8 +139,8 @@ public class NationalPensionAndSamsung {
 		Collections.sort(kospiStockList, new RetainAmountDescCompare());
 		Collections.sort(kosdaqStockList, new RetainAmountDescCompare());
 
-		writeFile(kospiStockList, "코스피 " + majorStockHolders + "(삼성) 보유금액순");
-		writeFile(kosdaqStockList, "코스닥 " + majorStockHolders + "(삼성) 보유금액순");
+		writeFile(kospiStockList, "코스피 " + majorStockHolders + "(삼성) 투자현황");
+		writeFile(kosdaqStockList, "코스닥 " + majorStockHolders + "(삼성) 투자현황");
 
 	}
 
@@ -206,7 +214,6 @@ public class NationalPensionAndSamsung {
 		stock.setListedDay(listedDay);
 
 		// 연초가 또는 올해 상장했을 경우 상장일가 구하기
-		String specificDay = "2020.01.02";
 		specificDay = StockUtil.getSpecificDay(specificDay, listedDay);
 		stock.setSpecificDay(specificDay);
 		String specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
@@ -471,7 +478,7 @@ public class NationalPensionAndSamsung {
 	}
 
 	public void writeFile(List<StockVO> list, String title) {
-		SimpleDateFormat sdf = new SimpleDateFormat("[yyyy-MM-dd] HH.mm.ss.SSS", Locale.KOREAN);
+		SimpleDateFormat sdf = new SimpleDateFormat("[yyyy-MM-dd][HH.mm.ss.SSS]", Locale.KOREAN);
 
 		String strDate = sdf.format(new Date());
 
@@ -486,7 +493,8 @@ public class NationalPensionAndSamsung {
 		sb1.append("</style>\r\n");
 		sb1.append("</head>\r\n");
 		sb1.append("<body>\r\n");
-		sb1.append("\t<h3>" + strYMD + title + "</h3>");
+		sb1.append("\t<h2>" + strYMD + title + "</h2>");
+		sb1.append("\t<h3>비교 대상 기준일 :" + specificDay + "</h3>");
 
 		long lTotalSpecificDayVsCurDayGapAmount = 0;
 		long lTotalSpecificDayRetainAmount = 0;
@@ -510,10 +518,10 @@ public class NationalPensionAndSamsung {
 		sb1.append("현재 총금액(원) = " + retainAmount + "<br/>\r\n");
 
 		String totalSpecificDayRetainAmount = df.format(lTotalSpecificDayRetainAmount);
-		sb1.append("연초 총금액(원) = " + totalSpecificDayRetainAmount + "<br/>\r\n");
+		sb1.append("기준일 총금액(원) = " + totalSpecificDayRetainAmount + "<br/>\r\n");
 
 		String totalSpecificDayVsCurDayGapAmount = df.format(lTotalSpecificDayVsCurDayGapAmount);
-		sb1.append("연초대비 현재총금액 차이(원) = ");
+		sb1.append("기준일대비 현재총금액 차이(원) = ");
 		sb1.append(StockUtil.moneyUnitSplit(lTotalSpecificDayVsCurDayGapAmount));
 
 		sb1.append("<table>\r\n");
@@ -521,16 +529,16 @@ public class NationalPensionAndSamsung {
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>연초가</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>연초가 대비 등락율</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가 대비 등락율</td>\r\n");
 		if (!inputWordIsSameAsMajorStockHolders) {
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
 		}
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재총금액</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>연초총금액</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>연초가 대비 총액차(원)</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 총금액</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 대비 총액차(원)</td>\r\n");
 		sb1.append("</tr>\r\n");
 
 		int cnt = 1;
@@ -574,7 +582,7 @@ public class NationalPensionAndSamsung {
 
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
-		String fileName = userHome + "\\documents\\[" + strDate + "]_" + title + ".html";
+		String fileName = userHome + "\\documents\\" + strDate + "_" + title + ".html";
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}
 
