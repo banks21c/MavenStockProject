@@ -322,7 +322,7 @@ public class MajorStockHoldersKospiKosdaqInput {
     }
 
     public void writeFile(List<StockVO> list, String title) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
+        SimpleDateFormat sdf = new SimpleDateFormat("[yyyy-MM-dd][HH.mm.ss.SSS]", Locale.KOREAN);
         String strDate = sdf.format(new Date());
         StringBuilder sb1 = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();

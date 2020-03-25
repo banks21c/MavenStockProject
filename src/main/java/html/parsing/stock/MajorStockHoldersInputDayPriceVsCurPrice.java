@@ -445,7 +445,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 	}
 
 	public void writeFile(List<StockVO> list, String title) {
-		SimpleDateFormat sdf = new SimpleDateFormat("[yyyy-MM-dd] HH.mm.ss.SSS", Locale.KOREAN);
+		SimpleDateFormat sdf = new SimpleDateFormat("[yyyy-MM-dd][HH.mm.ss.SSS]", Locale.KOREAN);
 
 		String strDate = sdf.format(new Date());
 
@@ -548,7 +548,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
-		String fileName = userHome + "\\documents\\[" + strDate + "]_" + title + ".html";
+		String fileName = userHome + "\\documents\\" + strDate + "_" + title + ".html";
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}
 
