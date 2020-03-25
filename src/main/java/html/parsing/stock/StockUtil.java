@@ -1588,6 +1588,27 @@ public class StockUtil {
 		return sb1.toString();
 	}
 
+	public void getStockIsAlive() {
+//		String url1 = "https://finance.naver.com/item/main.nhn?code=005930";
+		//두산건설
+//		String url = "https://finance.naver.com/search/search.nhn?query=011160";
+		//삼성전자
+		String url = "https://finance.naver.com/search/search.nhn?query=005930";
+		try {
+			Document doc = Jsoup.connect(url).get();
+			String strCount = doc.select(".result_area p em").text();
+			logger.debug("strCount:"+strCount);
+			if(strCount.equals("0")) {
+				logger.debug("dead");
+			}else {
+				logger.debug("alive");
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	public static String getStockListedDay(String stockCode) {
 		String listedDay = "";
 		Document doc;
@@ -1596,11 +1617,13 @@ public class StockUtil {
 			doc = Jsoup.connect("http://companyinfo.stock.naver.com/v1/company/c1020001.aspx?cmp_cd=" + stockCode).get();
 			logger.debug("title:" + doc.title());
 			String strDoc = doc.html();
+			if(strDoc.equals("")) return "";
 			strDoc = strDoc.replace("&nbsp;", " ");
 
 			doc = Jsoup.parse(strDoc);
 
 			Element cTB201 = doc.getElementById("cTB201");
+			if(cTB201==null) return "";
 
 			Elements trEls = cTB201.select("tbody tr");
 			for (Element tr : trEls) {
@@ -1634,6 +1657,10 @@ public class StockUtil {
 	private static boolean findDate = false;
 
 	public static String getSpecificDay(String specificDay,String listedDay) {
+		//상장일 정보가 없으면???
+		if(listedDay.equals("")) return specificDay;
+
+		listedDay = listedDay.replaceAll("\\.", "");
 		int iSpecificDay = Integer.parseInt(specificDay.replaceAll("\\.", ""));
 		int iListedDay = Integer.parseInt(listedDay.replaceAll("\\.", ""));
 		if (iListedDay < iSpecificDay) {
@@ -1650,8 +1677,10 @@ public class StockUtil {
 		logger.debug("findDate:"+findDate);
 
 		String specificDayEndPrice = "";
-		// 상장일이 찾으려는 날짜보다 과거이면...
-		// 찾으려는 날짜가 상장일 이후이면...
+		// 상장일이 찾으려는 날짜보다 과거이면...찾으려는 날짜
+		// 상장일이 찾으려는 날짜보다 이후이면...상장일
+		// 찾으려는 날짜가 상장일 이후이면...찾으려는 날짜
+		// 찾으려는 날짜가 상장일 이전이면...상장일
 		int pageNo = 1;
 		findDate = false;
 		while (!findDate) {
@@ -1780,11 +1809,11 @@ public class StockUtil {
 		return sb.toString();
 	}
 
-	public static void main(String args[]) throws Exception {
-		String kospiFileName = GlobalVariables.kospiFileName;
-		String kosdaqFileName = GlobalVariables.kosdaqFileName;
-		List<StockVO> stockList = new ArrayList<>();
-		readStockCodeNameListFromExcel(stockList, kospiFileName);
-	}
+//	public static void main(String args[]) throws Exception {
+//		String kospiFileName = GlobalVariables.kospiFileName;
+//		String kosdaqFileName = GlobalVariables.kosdaqFileName;
+//		List<StockVO> stockList = new ArrayList<>();
+//		readStockCodeNameListFromExcel(stockList, kospiFileName);
+//	}
 
 }
