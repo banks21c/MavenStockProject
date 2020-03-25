@@ -287,7 +287,7 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 
 	public void getStockInfo(int cnt, String strStockCode, String strStockName, String marketGubun) {
 		logger.debug("======================================================================");
-		System.out.println(marketGubun + "." + cnt + "." + strStockCode + "." + strStockName);
+		logger.debug(marketGubun + "." + cnt + "." + strStockCode + "." + strStockName);
 		logger.debug("======================================================================");
 		Document doc;
 		StockVO stock = new StockVO();
@@ -447,7 +447,7 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 				double d2 = d1 / iWeeks52MinPrice * 100;
 				upRatio = Math.round(d2 * 100) / 100.0;
 			} else if (iWeeks52MinPrice > iCurPrice) {
-				System.out.println("신저가라네...");
+				logger.debug("신저가라네...");
 				double d1 = iWeeks52MinPrice - iCurPrice;
 				double d2 = d1 / iWeeks52MinPrice * 100;
 				upRatio = -(Math.round(d2 * 100) / 100.0);
@@ -457,7 +457,7 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 				double d2 = d1 / iWeeks52MaxPrice * 100;
 				downRatio = -(Math.round(d2 * 100) / 100.0);
 			} else if (iWeeks52MaxPrice < iCurPrice) {
-				System.out.println("신고가라네...");
+				logger.debug("신고가라네...");
 				double d1 = iCurPrice - iWeeks52MaxPrice;
 				double d2 = d1 / iWeeks52MaxPrice * 100;
 				downRatio = Math.round(d2 * 100) / 100.0;
