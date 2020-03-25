@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -477,8 +478,10 @@ public class StockUtil {
 		logger.debug("stockLinkString end.....................");
 		return strNews + "<br>" + newsStockTable.toString();
 	}
+
 	/**
 	 * 엑셀 파일 읽어서 코스피,코스닥 종목코드,종목명 목록을 추출한다.
+	 *
 	 * @param stockList
 	 * @param fileName
 	 * @return List<StockVO>
@@ -564,6 +567,7 @@ public class StockUtil {
 
 	/**
 	 * 엑셀 파일 읽어서 코스피,코스닥 종목코드,종목명 목록을 추출한다.
+	 *
 	 * @param fileName
 	 * @return List<StockVO>
 	 * @throws IOException
@@ -800,8 +804,8 @@ public class StockUtil {
 		List<StockVO> svoList = new ArrayList<>();
 		try {
 			String param = "method=download&pageIndex=1&currentPageSize=5000&comAbbrv=&beginIndex=&orderMode=3"
-					+ "&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=" + "&marketType=" + marketType + "&searchType=13"
-					+ "&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
+					+ "&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=" + "&marketType=" + marketType
+					+ "&searchType=13" + "&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
 
 			String strUri = SERVER_URI + "?" + param;
 //			Document doc = Jsoup.parse(new URL(strUri).openStream(), "EUC-KR", strUri);
@@ -1590,17 +1594,17 @@ public class StockUtil {
 
 	public void getStockIsAlive() {
 //		String url1 = "https://finance.naver.com/item/main.nhn?code=005930";
-		//두산건설
+		// 두산건설
 //		String url = "https://finance.naver.com/search/search.nhn?query=011160";
-		//삼성전자
+		// 삼성전자
 		String url = "https://finance.naver.com/search/search.nhn?query=005930";
 		try {
 			Document doc = Jsoup.connect(url).get();
 			String strCount = doc.select(".result_area p em").text();
-			logger.debug("strCount:"+strCount);
-			if(strCount.equals("0")) {
+			logger.debug("strCount:" + strCount);
+			if (strCount.equals("0")) {
 				logger.debug("dead");
-			}else {
+			} else {
 				logger.debug("alive");
 			}
 		} catch (IOException e) {
@@ -1614,16 +1618,19 @@ public class StockUtil {
 		Document doc;
 		try {
 			// 종합분석-기업개요
-			doc = Jsoup.connect("http://companyinfo.stock.naver.com/v1/company/c1020001.aspx?cmp_cd=" + stockCode).get();
+			doc = Jsoup.connect("http://companyinfo.stock.naver.com/v1/company/c1020001.aspx?cmp_cd=" + stockCode)
+					.get();
 			logger.debug("title:" + doc.title());
 			String strDoc = doc.html();
-			if(strDoc.equals("")) return "";
+			if (strDoc.equals(""))
+				return "";
 			strDoc = strDoc.replace("&nbsp;", " ");
 
 			doc = Jsoup.parse(strDoc);
 
 			Element cTB201 = doc.getElementById("cTB201");
-			if(cTB201==null) return "";
+			if (cTB201 == null)
+				return "";
 
 			Elements trEls = cTB201.select("tbody tr");
 			for (Element tr : trEls) {
@@ -1653,12 +1660,12 @@ public class StockUtil {
 		return listedDay.replaceAll("/", ".");
 	}
 
-
 	private static boolean findDate = false;
 
-	public static String getSpecificDay(String specificDay,String listedDay) {
-		//상장일 정보가 없으면???
-		if(listedDay.equals("")) return specificDay;
+	public static String getSpecificDay(String specificDay, String listedDay) {
+		// 상장일 정보가 없으면???
+		if (listedDay.equals(""))
+			return specificDay;
 
 		listedDay = listedDay.replaceAll("\\.", "");
 		int iSpecificDay = Integer.parseInt(specificDay.replaceAll("\\.", ""));
@@ -1673,8 +1680,8 @@ public class StockUtil {
 	}
 
 	public static String getSpecificDayEndPrice(String stockCode, String stockName, String findDay) {
-		logger.debug("findDay:"+findDay);
-		logger.debug("findDate:"+findDate);
+		logger.debug("findDay:" + findDay);
+		logger.debug("findDate:" + findDate);
 
 		String specificDayEndPrice = "";
 		// 상장일이 찾으려는 날짜보다 과거이면...찾으려는 날짜
@@ -1684,10 +1691,11 @@ public class StockUtil {
 		int pageNo = 1;
 		findDate = false;
 		while (!findDate) {
-			if(pageNo > 100) break;
+			if (pageNo > 100)
+				break;
 			specificDayEndPrice = findSpecificDayEndPrice(stockCode, stockName, findDay, pageNo++);
 		}
-		logger.debug(stockCode + " "+stockName + " "+findDay + " 종가 :" + specificDayEndPrice);
+		logger.debug(stockCode + " " + stockName + " " + findDay + " 종가 :" + specificDayEndPrice);
 		return specificDayEndPrice;
 	}
 
@@ -1752,7 +1760,8 @@ public class StockUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if(specificDayEndPrice.equals("")) specificDayEndPrice = "0";
+		if (specificDayEndPrice.equals(""))
+			specificDayEndPrice = "0";
 		return specificDayEndPrice;
 	}
 
@@ -1807,6 +1816,53 @@ public class StockUtil {
 		}
 
 		return sb.toString();
+	}
+
+	public static String getStockNameFromCode(String stockCode) {
+		String stockName = "";
+		Document doc;
+		try {
+			// 종합분석-기업개요
+			doc = Jsoup.connect("https://finance.naver.com/item/main.nhn?code=" + stockCode).get();
+			logger.debug("title:" + doc.title());
+
+			Element e = doc.select(".h_company h2 a, .h_company h2 a").first();
+			if (e != null) {
+				stockName = e.text();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return stockName;
+	}
+
+	public static String getStockCodeFromName(String stockName) {
+		String enc = "EUC-KR";
+		// https://finance.naver.com/search/searchList.nhn?query=%BB%EF%BC%BA%C0%FC%C0%DA
+		String encodedStockName = null;
+		String stockCode = "";
+		Document doc;
+		try {
+			encodedStockName = URLEncoder.encode(stockName, enc);
+			logger.debug(stockName + " url encode by" + enc + " : " + encodedStockName);
+			// 종합분석-기업개요
+//			doc = Jsoup.connect("https://search.naver.com/search.naver?sm=sta_hty.finance&where=nexearch&ie=UTF8&query=" + stockName).get();
+//			doc = Jsoup.connect("https://finance.naver.com/search/search.nhn?query=" + stockName).get();
+			doc = Jsoup.connect("https://finance.naver.com/search/searchList.nhn?query=" + encodedStockName).get();
+			logger.debug("doc:" + doc);
+
+			Elements as = doc.select(".tbl_search .tit a");
+			if (as.size() > 0) {
+				logger.debug("as:\n" + as);
+				String href = as.get(0).attr("href");
+				logger.debug("href:" + href);
+				stockCode = href.substring(href.indexOf("=") + 1);
+				logger.debug("stockCode:" + stockCode);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return stockCode;
 	}
 
 //	public static void main(String args[]) throws Exception {
