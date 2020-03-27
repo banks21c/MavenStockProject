@@ -228,7 +228,13 @@ public class NewsMtCoKr extends javax.swing.JFrame {
             }
             String strAuthor = article.select("#article .infobox1 a").outerHtml();
             System.out.println("strAuthor:" + strAuthor);
-            strDate = doc.select(".view .view_top .view_info .info2 li.date").get(0).text();
+            Elements dateEl = doc.select(".view .view_top .view_info .info2 li.date");
+            if(dateEl.size() >0) {
+            	strDate = dateEl.get(0).text();
+            }else {
+                strDate = doc.select(".view_content .vc_top .info .info2 li.date").get(0).text();
+            	
+            }
             System.out.println("strDate:" + strDate);
             if (strDate.startsWith(":")) {
                 strDate = strDate.substring(1).trim();
@@ -238,6 +244,7 @@ public class NewsMtCoKr extends javax.swing.JFrame {
             System.out.println("strFileNameDate:" + strFileNameDate);
 
             String textBody = article.select("#textBody").outerHtml();
+            textBody = textBody.replaceAll("src=\"//", "src=\"http://");
             // System.out.println("textBody:"+textBody);
             Document textBodyDoc = Jsoup.parse(textBody);
             System.out.println(textBodyDoc.select("div").get(0));
