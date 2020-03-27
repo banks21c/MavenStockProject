@@ -71,6 +71,7 @@ public class WwwEtodayCoKr extends News {
 			doc.select("iframe").remove();
 			doc.select("script").remove();
 			doc.select(".img_box_C").removeAttr("style");
+			doc.select("#div-gpt-ad-1569217938641-0").remove();
 
 //            strTitle = doc.select(".subject h2").text();
 			strTitle = doc.select(".news_dtail_view_top_wrap h2.main_title").text();
@@ -91,11 +92,11 @@ public class WwwEtodayCoKr extends News {
 
 //            Elements timeElements = doc.select(".byline em");
 			strDate = doc.select(".view_top_container div.newsinfo").text();
-			strDate = strDate.replace("입력", "");
+			strDate = strDate.replace("입력", "").trim();
 			if (strDate.indexOf("수정") != -1) {
 				strDate = strDate.substring(0, strDate.indexOf("수정")).trim();
 			}
-			strDate = strDate.replace("입력", "");
+			strDate = strDate.replace("입력", "").trim();
 			System.out.println("strDate:" + strDate);
 			strFileNameDate = strDate;
 
