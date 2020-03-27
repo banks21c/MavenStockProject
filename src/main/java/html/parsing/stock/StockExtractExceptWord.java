@@ -54,6 +54,7 @@ public class StockExtractExceptWord {
 				|| stockName.equals("SK") && strNews.contains("ASK")
 				|| stockName.equals("SK") && strNews.contains("SKY")
 				|| stockName.equals("SK") && strNews.contains("MMSK")
+				|| stockName.equals("SK") && strNews.contains("GSK")
 				|| stockName.equals("고영") && strNews.contains("최고영도자")
 				|| stockName.equals("고영") && strNews.contains("광고영역")
 				|| stockName.equals("국보") && strNews.contains("중국보다")
