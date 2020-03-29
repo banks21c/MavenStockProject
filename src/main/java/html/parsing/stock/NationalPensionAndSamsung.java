@@ -27,10 +27,12 @@ import html.parsing.stock.util.FileUtil;
 
 public class NationalPensionAndSamsung {
 
-	private static String SAMSUNG_CORP_NM[] = {"멀티캠퍼스","삼성카드", "삼성바이오로직스","삼성전자", "삼성SDI", "삼성물산", "삼성전기", "삼성에스디에스", "삼성화재", "삼성생명", "호텔신라",
-			"삼성증권", "삼성중공업", "에스원", "삼성엔지니어링", "제일기획", "이마트","신세계", "신세계인터내셔날", "신세계 I&C", "신세계푸드" };
-	private static String SAMSUNG_CORP_CD[] = {"067280","029780", "207940","005930", "006400", "028260", "009150", "018260", "000810", "032830",
-			"008770", "016360", "010140", "012750", "028050", "030000","139480" ,"004170", "031430", "035510", "031440" };
+	private static String SAMSUNG_CORP_NM[] = { "멀티캠퍼스", "삼성카드", "삼성바이오로직스", "삼성전자", "삼성SDI", "삼성물산", "삼성전기", "삼성에스디에스",
+			"삼성화재", "삼성생명", "호텔신라", "삼성증권", "삼성중공업", "에스원", "삼성엔지니어링", "제일기획", "이마트", "신세계", "신세계인터내셔날", "신세계 I&C",
+			"신세계푸드" };
+	private static String SAMSUNG_CORP_CD[] = { "067280", "029780", "207940", "005930", "006400", "028260", "009150",
+			"018260", "000810", "032830", "008770", "016360", "010140", "012750", "028050", "030000", "139480",
+			"004170", "031430", "035510", "031440" };
 
 	private static final Logger logger = LoggerFactory.getLogger(NationalPensionAndSamsung.class);
 
@@ -40,11 +42,11 @@ public class NationalPensionAndSamsung {
 	int iYear = Integer.parseInt(strYear);
 	static String specificDay = "";
 	static String thisYearFirstTradeDay = "2020.01.02";
-	static String thisYearPeakTradeDay = "2020.01.20";//2020년 최고지수 2277.23
-	static String lastYearFirstTradeDay = "2019.01.02";//2019년 첫 거래일
-	static String lastYearPeakTradeDay = "2019.04.15";//2019년 최고지수 2252.05
-	static String twoYearAgoFirstTradeDay = "2018.01.02";//2018년 첫 거래일
-	static String twoYearAgoPeakTradeDay = "2018.01.29";//2018년 최고지수 2607.20
+	static String thisYearPeakTradeDay = "2020.01.20";// 2020년 최고지수 2277.23
+	static String lastYearFirstTradeDay = "2019.01.02";// 2019년 첫 거래일
+	static String lastYearPeakTradeDay = "2019.04.15";// 2019년 최고지수 2252.05
+	static String twoYearAgoFirstTradeDay = "2018.01.02";// 2018년 첫 거래일
+	static String twoYearAgoPeakTradeDay = "2018.01.29";// 2018년 최고지수 2607.20
 
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
@@ -60,7 +62,11 @@ public class NationalPensionAndSamsung {
 
 	public void readAndWriteMajorStockHoldersTest() {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
+		if (majorStockHolders.equals(""))
+			majorStockHolders = "국민연금공단";
 		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
+		if (specificDay.equals(""))
+			specificDay = thisYearFirstTradeDay;
 
 //		// 대웅제약 069620
 //		kospiStockList = readOne("069620", "대웅제약");
@@ -95,9 +101,11 @@ public class NationalPensionAndSamsung {
 
 	public void readAndWriteMajorStockHolders_bak() throws Exception {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
-		if(majorStockHolders.equals("")) majorStockHolders = "국민연금공단";
+		if (majorStockHolders.equals(""))
+			majorStockHolders = "국민연금공단";
 		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
-		if(specificDay.equals("")) specificDay = thisYearFirstTradeDay;
+		if (specificDay.equals(""))
+			specificDay = thisYearFirstTradeDay;
 		try {
 //			kospiStockList = StockUtil.readKospiStockCodeNameListFromExcel();
 //			kosdaqStockList = StockUtil.readKosdaqStockCodeNameListFromExcel();
@@ -126,10 +134,12 @@ public class NationalPensionAndSamsung {
 	@Test
 	public void readAndWriteMajorStockHolders() throws Exception {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
-		if(majorStockHolders.equals("")) majorStockHolders = "국민연금공단";
+		if (majorStockHolders.equals(""))
+			majorStockHolders = "국민연금공단";
 		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
-		if(specificDay.equals("")) specificDay = thisYearFirstTradeDay;
-		
+		if (specificDay.equals(""))
+			specificDay = thisYearFirstTradeDay;
+
 		kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
 		kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
 		logger.debug("kospiStockList.size2 :" + kospiStockList.size());
@@ -137,8 +147,8 @@ public class NationalPensionAndSamsung {
 
 		kospiStockList = getSamsungStock(kospiStockList);
 		kosdaqStockList = getSamsungStock(kosdaqStockList);
-		logger.debug("samsung kospiStockList.size():"+kospiStockList.size());
-		logger.debug("samsung kosdaqStockList.size():"+kosdaqStockList.size());
+		logger.debug("samsung kospiStockList.size():" + kospiStockList.size());
+		logger.debug("samsung kosdaqStockList.size():" + kosdaqStockList.size());
 
 		kospiStockList = getAllStockInfo(kospiStockList);
 		kosdaqStockList = getAllStockInfo(kosdaqStockList);
@@ -171,9 +181,9 @@ public class NationalPensionAndSamsung {
 
 		for (StockVO svo : stockList) {
 			String stockCode = svo.getStockCode();
-			for(String scc:SAMSUNG_CORP_CD) {
-				if(stockCode.equals(scc)) {
-					logger.debug("["+stockCode+"]\t["+scc+"]");
+			for (String scc : SAMSUNG_CORP_CD) {
+				if (stockCode.equals(scc)) {
+					logger.debug("[" + stockCode + "]\t[" + scc + "]");
 					stocks.add(svo);
 				}
 			}

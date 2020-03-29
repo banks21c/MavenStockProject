@@ -33,6 +33,13 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
+	static String specificDay = "";
+	static String thisYearFirstTradeDay = "2020.01.02";
+	static String thisYearPeakTradeDay = "2020.01.20";// 2020년 최고지수 2277.23
+	static String lastYearFirstTradeDay = "2019.01.02";// 2019년 첫 거래일
+	static String lastYearPeakTradeDay = "2019.04.15";// 2019년 최고지수 2252.05
+	static String twoYearAgoFirstTradeDay = "2018.01.02";// 2018년 첫 거래일
+	static String twoYearAgoPeakTradeDay = "2018.01.29";// 2018년 최고지수 2607.20
 
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
@@ -48,6 +55,11 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 	public void readAndWriteMajorStockHoldersTest() {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
+		if (majorStockHolders.equals(""))
+			majorStockHolders = "국민연금공단";
+		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
+		if (specificDay.equals(""))
+			specificDay = thisYearFirstTradeDay;
 
 //		// 대웅제약 069620
 //		kospiStockList = readOne("069620", "대웅제약");
@@ -83,6 +95,11 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 	@Test
 	public void readAndWriteMajorStockHolders_bak() throws Exception {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
+		if (majorStockHolders.equals(""))
+			majorStockHolders = "국민연금공단";
+		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
+		if (specificDay.equals(""))
+			specificDay = thisYearFirstTradeDay;
 		try {
 //			kospiStockList = StockUtil.readKospiStockCodeNameListFromExcel();
 //			kosdaqStockList = StockUtil.readKosdaqStockCodeNameListFromExcel();
@@ -171,8 +188,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		// 상장일 구하기
 		String listedDay = StringUtils.defaultString(StockUtil.getStockListedDay(strStockCode));
 		logger.debug("listedDay :" + listedDay);
-		if(listedDay.equals("")) {
-			logger.debug(strStockName+"("+strStockCode+")"+" 상장일 정보가 없습니다. 존재하지 않는 주식입니다.(상장폐지 여부 확인 필요)");
+		if (listedDay.equals("")) {
+			logger.debug(strStockName + "(" + strStockCode + ")" + " 상장일 정보가 없습니다. 존재하지 않는 주식입니다.(상장폐지 여부 확인 필요)");
 			return null;
 		}
 
@@ -180,7 +197,6 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		stock.setListedDay(listedDay);
 
 		// 연초가 또는 올해 상장했을 경우 상장일가 구하기
-		String specificDay = "2020.01.02";
 		specificDay = StockUtil.getSpecificDay(specificDay, listedDay);
 		stock.setSpecificDay(specificDay);
 		String specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
@@ -460,7 +476,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		sb1.append("</style>\r\n");
 		sb1.append("</head>\r\n");
 		sb1.append("<body>\r\n");
-		sb1.append("\t<h3>" + strYMD + title + "</h3>");
+		sb1.append("\t<h2>" + strYMD + title + "</h2>");
+		sb1.append("\t<h3>비교 대상 기준일 :" + specificDay + "</h3>");
 
 		long lTotalSpecificDayVsCurDayGapAmount = 0;
 		long lTotalSpecificDayRetainAmount = 0;
@@ -484,10 +501,10 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		sb1.append("현재 총금액(원) = " + retainAmount + "<br/>\r\n");
 
 		String totalSpecificDayRetainAmount = df.format(lTotalSpecificDayRetainAmount);
-		sb1.append("연초 총금액(원) = " + totalSpecificDayRetainAmount + "<br/>\r\n");
+		sb1.append("기준일 총금액(원) = " + totalSpecificDayRetainAmount + "<br/>\r\n");
 
 		String totalSpecificDayVsCurDayGapAmount = df.format(lTotalSpecificDayVsCurDayGapAmount);
-		sb1.append("연초대비 현재총금액 차이(원) = ");
+		sb1.append("기준일대비 현재총금액 차이(원) = ");
 		sb1.append(StockUtil.moneyUnitSplit(lTotalSpecificDayVsCurDayGapAmount));
 
 		sb1.append("<table>\r\n");
@@ -495,16 +512,16 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>연초가</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>연초가 대비 등락율</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가 대비 등락율</td>\r\n");
 		if (!inputWordIsSameAsMajorStockHolders) {
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
 		}
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재총금액</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>연초총금액</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>연초가 대비 총액차(원)</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 총금액</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 대비 총액차(원)</td>\r\n");
 		sb1.append("</tr>\r\n");
 
 		int cnt = 1;
