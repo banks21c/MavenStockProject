@@ -44,7 +44,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
 	static String strYMD = "";
-	static String majorStockHolders = "";
+	static String majorStockHolders = "국민연금공단";
 	static boolean inputWordIsSameAsMajorStockHolders = false;
 	static List<StockVO> kospiStockList = new ArrayList<StockVO>();
 	static List<StockVO> kosdaqStockList = new ArrayList<StockVO>();
@@ -55,8 +55,6 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 	public void readAndWriteMajorStockHoldersTest() {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
-		if (majorStockHolders.equals(""))
-			majorStockHolders = "국민연금공단";
 		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
 		if (specificDay.equals(""))
 			specificDay = thisYearFirstTradeDay;
@@ -92,11 +90,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 	}
 
-	@Test
 	public void readAndWriteMajorStockHolders_bak() throws Exception {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
-		if (majorStockHolders.equals(""))
-			majorStockHolders = "국민연금공단";
 		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
 		if (specificDay.equals(""))
 			specificDay = thisYearFirstTradeDay;
@@ -125,8 +120,13 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 	}
 
+	@Test
 	public void readAndWriteMajorStockHolders() throws Exception {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
+		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
+		if (specificDay.equals(""))
+			specificDay = thisYearFirstTradeDay;
+		
 		kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
 		kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
 		logger.debug("kospiStockList.size2 :" + kospiStockList.size());

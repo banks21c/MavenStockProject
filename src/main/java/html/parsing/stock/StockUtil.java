@@ -40,6 +40,7 @@ import org.jsoup.UnsupportedMimeTypeException;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -1667,9 +1668,8 @@ public class StockUtil {
 		if (listedDay.equals(""))
 			return specificDay;
 
-		listedDay = listedDay.replaceAll("\\.", "");
-		int iSpecificDay = Integer.parseInt(specificDay.replaceAll("\\.", ""));
-		int iListedDay = Integer.parseInt(listedDay.replaceAll("\\.", ""));
+		int iSpecificDay = Integer.parseInt(specificDay.replaceAll("\\.", "0"));
+		int iListedDay = Integer.parseInt(listedDay.replaceAll("\\.", "0"));
 		if (iListedDay < iSpecificDay) {
 			// 상장일이 찾으려는 날짜보다 과거이면...
 			// 찾으려는 날짜가 상장일 이후이면...
@@ -1677,6 +1677,11 @@ public class StockUtil {
 		} else {
 			return listedDay;
 		}
+	}
+	
+	@Test
+	public void getSpecificDayEndPriceTest() {
+		String specificDayEndPrice = getSpecificDayEndPrice("204210","모두투어리츠","2020.01.21");
 	}
 
 	public static String getSpecificDayEndPrice(String stockCode, String stockName, String findDay) {
@@ -1760,8 +1765,6 @@ public class StockUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if (specificDayEndPrice.equals(""))
-			specificDayEndPrice = "0";
 		return specificDayEndPrice;
 	}
 
