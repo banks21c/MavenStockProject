@@ -38,10 +38,13 @@ public class NationalPensionAndSamsung {
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
-	static String specificDay = "2020.01.02";
-	static String specificDay1 = "2020.01.20";//2020년 최고지수 2277.23
-	static String specificDay2 = "2019.04.15";//2019년 최고지수 2252.05
-	static String specificDay3 = "2018.01.29";//2018년 최고지수 2607.20
+	static String specificDay = "";
+	static String thisYearFirstTradeDay = "2020.01.02";
+	static String thisYearPeakTradeDay = "2020.01.20";//2020년 최고지수 2277.23
+	static String lastYearFirstTradeDay = "2019.01.02";//2019년 첫 거래일
+	static String lastYearPeakTradeDay = "2019.04.15";//2019년 최고지수 2252.05
+	static String twoYearAgoFirstTradeDay = "2018.01.02";//2018년 첫 거래일
+	static String twoYearAgoPeakTradeDay = "2018.01.29";//2018년 최고지수 2607.20
 
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
@@ -92,7 +95,9 @@ public class NationalPensionAndSamsung {
 
 	public void readAndWriteMajorStockHolders_bak() throws Exception {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
+		if(majorStockHolders.equals("")) majorStockHolders = "국민연금공단";
 		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
+		if(specificDay.equals("")) specificDay = thisYearFirstTradeDay;
 		try {
 //			kospiStockList = StockUtil.readKospiStockCodeNameListFromExcel();
 //			kosdaqStockList = StockUtil.readKosdaqStockCodeNameListFromExcel();
@@ -121,7 +126,9 @@ public class NationalPensionAndSamsung {
 	@Test
 	public void readAndWriteMajorStockHolders() throws Exception {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
+		if(majorStockHolders.equals("")) majorStockHolders = "국민연금공단";
 		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
+		if(specificDay.equals("")) specificDay = thisYearFirstTradeDay;
 		
 		kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
 		kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
