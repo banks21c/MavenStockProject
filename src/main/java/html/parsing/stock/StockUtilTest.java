@@ -505,7 +505,10 @@ public class StockUtilTest {
 	 */
 	@Test
 	public void testMoneyUnitSplit() {
-		// fail("Not yet implemented");
+		String sAmount = "95,967,887,950".replaceAll(",", "");
+		long lAmount = Long.parseLong(sAmount);
+		String sAmount2 = StockUtil.moneyUnitSplit(lAmount);
+		logger.debug("sAmount2:"+sAmount2);
 	}
 
 	public void testGetStockNameFromCode() {
@@ -521,7 +524,6 @@ public class StockUtilTest {
 		logger.debug("stockCode :" + stockCode);
 	}
 
-	@Test
 	public void testGetStockCodeFromNameList() {
 		String SAMSUNG_CORP_NM[] = { "삼성전자", "삼성SDI", "삼성물산", "삼성전기", "삼성에스디에스", "삼성화재", "삼성생명", "호텔신라", "삼성증권",
 				"삼성중공업", "에스원", "삼성엔지니어링", "제일기획", "신세계", "신세계인터내셔날", "신세계 I&C", "신세계푸드" };

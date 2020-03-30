@@ -33,6 +33,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
+	static String baseDay = "";
 	static String specificDay = "";
 	static String thisYearFirstTradeDay = "2020.01.02";
 	static String thisYearPeakTradeDay = "2020.01.20";// 2020년 최고지수 2277.23
@@ -40,6 +41,10 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 	static String lastYearPeakTradeDay = "2019.04.15";// 2019년 최고지수 2252.05
 	static String twoYearAgoFirstTradeDay = "2018.01.02";// 2018년 첫 거래일
 	static String twoYearAgoPeakTradeDay = "2018.01.29";// 2018년 최고지수 2607.20
+	//주요주주 목록
+	static List<String> majorStockHolderNameList = new ArrayList<String>();
+	//자산운용사 목록
+	static List<String> assetManagementCompanyList = new ArrayList<String>();
 
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
@@ -55,9 +60,9 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 	public void readAndWriteMajorStockHoldersTest() {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
-		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
-		if (specificDay.equals(""))
-			specificDay = thisYearFirstTradeDay;
+		baseDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
+		if (baseDay.equals(""))
+			baseDay = thisYearFirstTradeDay;
 
 //		// 대웅제약 069620
 //		kospiStockList = readOne("069620", "대웅제약");
@@ -92,9 +97,9 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 	public void readAndWriteMajorStockHolders_bak() throws Exception {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
-		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
-		if (specificDay.equals(""))
-			specificDay = thisYearFirstTradeDay;
+		baseDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
+		if (baseDay.equals(""))
+			baseDay = thisYearFirstTradeDay;
 		try {
 //			kospiStockList = StockUtil.readKospiStockCodeNameListFromExcel();
 //			kosdaqStockList = StockUtil.readKosdaqStockCodeNameListFromExcel();
@@ -115,18 +120,20 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		Collections.sort(kospiStockList, new RetainAmountDescCompare());
 		Collections.sort(kosdaqStockList, new RetainAmountDescCompare());
 
-		writeFile(kospiStockList, "코스피 " + majorStockHolders + " 보유금액순");
-		writeFile(kosdaqStockList, "코스닥 " + majorStockHolders + " 보유금액순");
+		writeFile(kospiStockList, "코스피 " + majorStockHolders + " 보유종목(금액순)");
+		writeFile(kosdaqStockList, "코스닥 " + majorStockHolders + " 보유종목(금액순)");
+		logger.debug("주요주주 목록 :"+majorStockHolderNameList.toString());
+		logger.debug("자산운용사 목록 :"+assetManagementCompanyList.toString());
 
 	}
 
 	@Test
 	public void readAndWriteMajorStockHolders() throws Exception {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
-		specificDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
-		if (specificDay.equals(""))
-			specificDay = thisYearFirstTradeDay;
-		
+		baseDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
+		if (baseDay.equals(""))
+			baseDay = thisYearFirstTradeDay;
+
 		kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
 		kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
 		logger.debug("kospiStockList.size2 :" + kospiStockList.size());
@@ -138,8 +145,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		Collections.sort(kospiStockList, new RetainAmountDescCompare());
 		Collections.sort(kosdaqStockList, new RetainAmountDescCompare());
 
-		writeFile(kospiStockList, "코스피 " + majorStockHolders + " 보유금액순");
-		writeFile(kosdaqStockList, "코스닥 " + majorStockHolders + " 보유금액순");
+		writeFile(kospiStockList, "코스피 " + majorStockHolders + " 보유종목(금액순)");
+		writeFile(kosdaqStockList, "코스닥 " + majorStockHolders + " 보유종목(금액순)");
 
 	}
 
@@ -197,7 +204,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		stock.setListedDay(listedDay);
 
 		// 연초가 또는 올해 상장했을 경우 상장일가 구하기
-		specificDay = StockUtil.getSpecificDay(specificDay, listedDay);
+		specificDay = StockUtil.getSpecificDay(baseDay, listedDay);
 		stock.setSpecificDay(specificDay);
 		String specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
 		stock.setSpecificDayEndPrice(specificDayEndPrice);
@@ -362,6 +369,11 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 						logger.debug("inputWordIsSameAsMajorStockHolders:" + inputWordIsSameAsMajorStockHolders);
 					}
 
+					if (majorStockHolderName.contains("자산운용")) {
+						assetManagementCompanyList.add(majorStockHolderName);
+					}
+					majorStockHolderNameList.add(majorStockHolderName);
+
 					if (majorStockHolders.equals("") || majorStockHolderName.indexOf(majorStockHolders) != -1) {
 						// 보유주식수
 						retainVolumeWithComma = StringUtils.defaultIfEmpty(td.get(1).text(), "0");
@@ -497,11 +509,11 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			}
 		}
 
-		String retainAmount = df.format(lRetainAmount);
-		sb1.append("현재 총금액(원) = " + retainAmount + "<br/>\r\n");
-
 		String totalSpecificDayRetainAmount = df.format(lTotalSpecificDayRetainAmount);
-		sb1.append("기준일 총금액(원) = " + totalSpecificDayRetainAmount + "<br/>\r\n");
+		sb1.append("기준일 총금액(원) = " + StockUtil.moneyUnitSplit(lTotalSpecificDayRetainAmount) + "<br/>\r\n");
+
+		String retainAmount = df.format(lRetainAmount);
+		sb1.append("현재 총금액(원) = " + StockUtil.moneyUnitSplit(lRetainAmount) + "<br/>\r\n");
 
 		String totalSpecificDayVsCurDayGapAmount = df.format(lTotalSpecificDayVsCurDayGapAmount);
 		sb1.append("기준일대비 현재총금액 차이(원) = ");

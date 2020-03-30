@@ -22,9 +22,9 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
-public class NewsNewsisCom extends News {
+public class NewsisCom extends News {
 
-    private static Logger logger = LoggerFactory.getLogger(NewsNewsisCom.class);
+    private static Logger logger = LoggerFactory.getLogger(NewsisCom.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -41,14 +41,14 @@ public class NewsNewsisCom extends News {
      * @param args
      */
     public static void main(String[] args) {
-        new NewsNewsisCom(1);
+        new NewsisCom(1);
     }
 
-    NewsNewsisCom() {
+    NewsisCom() {
 
     }
 
-    NewsNewsisCom(int i) {
+    NewsisCom(int i) {
 
 
         String url = JOptionPane.showInputDialog("뉴스 URL을 입력하여 주세요.");
