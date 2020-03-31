@@ -1698,84 +1698,89 @@ public class StockUtil {
 		while (!findDate) {
 			if (pageNo > 100)
 				break;
-			specificDayEndPrice = findSpecificDayEndPrice(stockCode, stockName, findDay, pageNo++);
+			try {
+				specificDayEndPrice = findSpecificDayEndPrice(stockCode, stockName, findDay, pageNo);
+				pageNo++;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		logger.debug(stockCode + " " + stockName + " " + findDay + " 종가 :" + specificDayEndPrice);
 		return specificDayEndPrice;
 	}
 
-	public static String findSpecificDayEndPrice(String stockCode, String stockName, String findDay, int pageNo) {
+	public static String findSpecificDayEndPrice(String stockCode, String stockName, String findDay, int pageNo) throws IOException {
 		String specificDayEndPrice = "0";
 		Document doc;
-		try {
-			// 종합분석-기업개요
+		// 종합분석-기업개요
 //			doc = Jsoup.connect("https://finance.naver.com/item/sise_day.nhn?code=" + stockCode).get();
 //			String url = "https://finance.naver.com/item/frgn.nhn?code=" + stockCode;
-			String url = "https://finance.naver.com/item/sise_day.nhn?code=" + stockCode + "&page=" + pageNo;
-			logger.debug("url : " + url);
-			String userAgent = "Mozilla";
-			// This will get you the response.
-			Connection.Response res = Jsoup.connect(url).method(Connection.Method.POST).followRedirects(false)
-					.userAgent(userAgent).execute();
-			// This will get you cookies
-			Map<String, String> loginCookies = res.cookies();
-			// And this is the easiest way I've found to remain in session
-			doc = Jsoup.connect(url).cookies(loginCookies).userAgent(userAgent).get();
-			doc.select("link").remove();
-			doc.select("javascript").remove();
+		String url = "https://finance.naver.com/item/sise_day.nhn?code=" + stockCode + "&page=" + pageNo;
+		logger.debug("url : " + url);
+		String userAgent = "Mozilla";
+		// This will get you the response.
+		Connection.Response res = Jsoup.connect(url).method(Connection.Method.POST).followRedirects(false)
+				.userAgent(userAgent).execute();
+		// This will get you cookies
+		Map<String, String> loginCookies = res.cookies();
+		// And this is the easiest way I've found to remain in session
+		doc = Jsoup.connect(url).cookies(loginCookies).userAgent(userAgent).get();
+		doc.select("link").remove();
+		doc.select("javascript").remove();
 
-			String strDoc = doc.html();
-			strDoc = strDoc.replace("&nbsp;", " ");
+		String strDoc = doc.html();
+		strDoc = strDoc.replace("&nbsp;", " ");
 
-			doc = Jsoup.parse(strDoc);
+		doc = Jsoup.parse(strDoc);
 
-			Elements type2s = doc.select(".type2");
-			Element type2 = doc.select(".type2").get(0);
+		Elements type2s = doc.select(".type2");
+		Element type2 = doc.select(".type2").get(0);
 
-			Elements thEls = type2.select("tbody tr th");
-			int dayIndex = 0;
-			int endPriceIndex = 0;
-			for (int i = 0; i < thEls.size(); i++) {
-				Element thEl = thEls.get(i);
-				String key = thEl.text();
-				if (key.equals("날짜")) {
-					dayIndex = i;
-				} else if (key.equals("종가")) {
-					endPriceIndex = i;
+		Elements thEls = type2.select("tbody tr th");
+		int dayIndex = 0;
+		int endPriceIndex = 0;
+		for (int i = 0; i < thEls.size(); i++) {
+			Element thEl = thEls.get(i);
+			String key = thEl.text();
+			if (key.equals("날짜")) {
+				dayIndex = i;
+			} else if (key.equals("종가")) {
+				endPriceIndex = i;
+			}
+		}
+		Elements trEls = type2.select("tbody tr");
+		String temp_tradeDay = "";
+		String temp_specificDayEndPrice = "";
+		for (Element tr : trEls) {
+			Elements tdEls = tr.select("td");
+			if (tdEls.size() > 1) {
+				Element dayEl = tdEls.get(dayIndex);
+				Element specificDayEndPriceEl = tdEls.get(endPriceIndex);
+				temp_tradeDay = dayEl.text();
+				temp_specificDayEndPrice = specificDayEndPriceEl.text();
+				if (findDay.equals(temp_tradeDay)) {
+					logger.debug(temp_tradeDay + "\t" + temp_specificDayEndPrice);
+					specificDayEndPrice = temp_specificDayEndPrice;
+					findDate = true;
+					break;
 				}
 			}
-			Elements trEls = type2.select("tbody tr");
-			String temp_tradeDay = "";
-			String temp_specificDayEndPrice = "";
-			for (Element tr : trEls) {
-				Elements tdEls = tr.select("td");
-				if (tdEls.size() > 1) {
-					Element dayEl = tdEls.get(dayIndex);
-					Element specificDayEndPriceEl = tdEls.get(endPriceIndex);
-					temp_tradeDay = dayEl.text();
-					temp_specificDayEndPrice = specificDayEndPriceEl.text();
-					if (findDay.equals(temp_tradeDay)) {
-						logger.debug(temp_tradeDay + "\t" + temp_specificDayEndPrice);
-						specificDayEndPrice = temp_specificDayEndPrice;
-						findDate = true;
-						break;
-					}
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		return specificDayEndPrice;
+	}
+
+	@Test
+	public void moneyUnitSplitTest() {
+		String amount = "94,395,847,741,020".replaceAll(",", "");
+		long lAmount = Long.parseLong(amount);
+		logger.debug("moneyUnitSplit :" + moneyUnitSplit(lAmount));
 	}
 
 	public static String moneyUnitSplit(long lAmount) {
 		String strPlusMinus = "";
 		if (lAmount < 0) {
 			strPlusMinus = "-";
-		} else {
-			strPlusMinus = "+";
 		}
-
 		StringBuffer sb = new StringBuffer();
 		String strAmount = String.valueOf(Math.abs(lAmount));
 		// 조
