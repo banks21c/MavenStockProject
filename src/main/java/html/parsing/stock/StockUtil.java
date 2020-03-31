@@ -1678,10 +1678,10 @@ public class StockUtil {
 			return listedDay;
 		}
 	}
-	
+
 	@Test
 	public void getSpecificDayEndPriceTest() {
-		String specificDayEndPrice = getSpecificDayEndPrice("204210","모두투어리츠","2020.01.21");
+		String specificDayEndPrice = getSpecificDayEndPrice("204210", "모두투어리츠", "2020.01.21");
 	}
 
 	public static String getSpecificDayEndPrice(String stockCode, String stockName, String findDay) {
@@ -1778,29 +1778,67 @@ public class StockUtil {
 
 		StringBuffer sb = new StringBuffer();
 		String strAmount = String.valueOf(Math.abs(lAmount));
+		// 조
+		/*
+		 * int jo = (int) (Long.parseLong(strAmount) / 1000000000000L); String strJo =
+		 * String.valueOf(jo); int iJo = Integer.parseInt(strJo);
+		 */
 
-		int jo = (int) (Long.parseLong(strAmount) / 1000000000000L);
-		String strJo = String.valueOf(jo);
+		BigInteger[] jo1 = new BigInteger(strAmount).divideAndRemainder(new BigInteger("1000000000000"));
+		String jo2 = jo1[0].toString();
+		BigInteger[] jo3 = new BigInteger(jo2).divideAndRemainder(new BigInteger("10000"));
+
+		String strJo = "";
+		if (jo3.length > 1) {
+			strJo = jo3[1].toString();
+		} else {
+			strJo = jo3[0].toString();
+		}
 		int iJo = Integer.parseInt(strJo);
 
-		int uk = (int) (Long.parseLong(strAmount) / 100000000);
-		double uk2 = uk / 10000d;
-		String uk3 = String.valueOf(uk2);
-		String strUk = uk3.substring(uk3.indexOf(".") + 1);
-		int iUk = Integer.parseInt(strUk);
+		// 억
+		/*
+		 * int uk = (int) (Long.parseLong(strAmount) / 100000000); double uk2 = uk /
+		 * 10000d; String uk3 = String.valueOf(uk2); String strUk =
+		 * uk3.substring(uk3.indexOf(".") + 1); int iUk = Integer.parseInt(strUk);
+		 */
 
-		long man = Long.parseLong(strAmount) / 10000;
-		double man2 = man / 10000d;
-		String man3 = String.valueOf(man2);
-		String strMan = man3.substring(man3.indexOf(".") + 1);
+		BigInteger[] uk1 = new BigInteger(strAmount).divideAndRemainder(new BigInteger("100000000"));
+		String uk2 = uk1[0].toString();
+		BigInteger[] uk3 = new BigInteger(uk2).divideAndRemainder(new BigInteger("10000"));
+
+		String strUk = "";
+		if (uk3.length > 1) {
+			strUk = uk3[1].toString();
+		} else {
+			strUk = uk3[0].toString();
+		}
+		int iUk = Integer.parseInt(strUk);
+		// 만
+		/*
+		 * long man = Long.parseLong(strAmount) / 10000; double man2 = man / 10000d;
+		 * String man3 = String.valueOf(man2); String strMan =
+		 * man3.substring(man3.indexOf(".") + 1); int iMan = Integer.parseInt(strMan);
+		 */
+
+		BigInteger[] man1 = new BigInteger(strAmount).divideAndRemainder(new BigInteger("10000"));
+		String man2 = man1[0].toString();
+		BigInteger[] man3 = new BigInteger(man2).divideAndRemainder(new BigInteger("10000"));
+
+		String strMan = "";
+		if (man3.length > 1) {
+			strMan = man3[1].toString();
+		} else {
+			strMan = man3[0].toString();
+		}
 		int iMan = Integer.parseInt(strMan);
 
-		BigInteger[] won2 = new BigInteger(strAmount).divideAndRemainder(new BigInteger("10000"));
+		BigInteger[] won = new BigInteger(strAmount).divideAndRemainder(new BigInteger("10000"));
 		String strWon = "";
-		if (won2.length > 1) {
-			strWon = won2[1].toString();
+		if (won.length > 1) {
+			strWon = won[1].toString();
 		} else {
-			strWon = won2[0].toString();
+			strWon = won[0].toString();
 		}
 		int iWon = Integer.parseInt(strWon);
 
