@@ -507,7 +507,7 @@ public class StockUtilTest {
 	public void testMoneyUnitSplit() {
 		String sAmount = "95,967,887,950".replaceAll(",", "");
 		long lAmount = Long.parseLong(sAmount);
-		String sAmount2 = StockUtil.moneyUnitSplit(lAmount);
+		String sAmount2 = StockUtil.moneyUnitSplit("원",lAmount);
 		logger.debug("sAmount2:"+sAmount2);
 	}
 

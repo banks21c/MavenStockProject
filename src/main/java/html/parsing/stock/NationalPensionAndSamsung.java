@@ -539,7 +539,7 @@ public class NationalPensionAndSamsung {
 
 		String totalSpecificDayVsCurDayGapAmount = df.format(lTotalSpecificDayVsCurDayGapAmount);
 		sb1.append("기준일대비 현재총금액 차이(원) = ");
-		sb1.append(StockUtil.moneyUnitSplit(lTotalSpecificDayVsCurDayGapAmount));
+		sb1.append(StockUtil.moneyUnitSplit("원",lTotalSpecificDayVsCurDayGapAmount));
 
 		sb1.append("<table>\r\n");
 		sb1.append("<tr>\r\n");

@@ -1709,7 +1709,8 @@ public class StockUtil {
 		return specificDayEndPrice;
 	}
 
-	public static String findSpecificDayEndPrice(String stockCode, String stockName, String findDay, int pageNo) throws IOException {
+	public static String findSpecificDayEndPrice(String stockCode, String stockName, String findDay, int pageNo)
+			throws IOException {
 		String specificDayEndPrice = "0";
 		Document doc;
 		// 종합분석-기업개요
@@ -1773,10 +1774,10 @@ public class StockUtil {
 	public void moneyUnitSplitTest() {
 		String amount = "94,395,847,741,020".replaceAll(",", "");
 		long lAmount = Long.parseLong(amount);
-		logger.debug("moneyUnitSplit :" + moneyUnitSplit(lAmount));
+		logger.debug("moneyUnitSplit :" + moneyUnitSplit("원", lAmount));
 	}
 
-	public static String moneyUnitSplit(long lAmount) {
+	public static String moneyUnitSplit(String unit, long lAmount) {
 		String strPlusMinus = "";
 		if (lAmount < 0) {
 			strPlusMinus = "-";
@@ -1851,14 +1852,20 @@ public class StockUtil {
 		if (!strJo.equals("0")) {
 			sb.append(iJo + "조 ");
 		}
-		if (!strUk.equals("0")) {
-			sb.append(iUk + "억 ");
+		if (unit.equals("억")||unit.equals("만")||unit.equals("원")) {
+			if (!strUk.equals("0")) {
+				sb.append(iUk + "억 ");
+			}
 		}
-		if (!strMan.equals("0")) {
-			sb.append(iMan + "만 ");
+		if (unit.equals("만")||unit.equals("원")) {
+			if (!strMan.equals("0")) {
+				sb.append(iMan + "만 ");
+			}
 		}
-		if (!strWon.equals("0")) {
-			sb.append(iWon + "원");
+		if (unit.equals("원")) {
+			if (!strWon.equals("0")) {
+				sb.append(iWon + "원");
+			}
 		}
 
 		return sb.toString();
