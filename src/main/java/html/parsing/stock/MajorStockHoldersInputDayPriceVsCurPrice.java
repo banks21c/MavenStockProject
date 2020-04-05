@@ -615,10 +615,13 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 					}
 					sb1.append("<td style='text-align:right'>" + holderVO.getRetainVolume() + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>" + holderVO.getRetainRatio() + "%</td>\r\n");
-					sb1.append("<td style='text-align:right'>" + holderVO.getRetainAmount() + "</td>\r\n");
-					sb1.append("<td style='text-align:right'>" + holderVO.getSpecificDayRetainAmount() + "</td>\r\n");
-					sb1.append(
-							"<td style='text-align:right'>" + holderVO.getSpecificDayVsCurDayGapAmount() + "</td>\r\n");
+
+					sb1.append("<td style='text-align:right'>"
+							+ StockUtil.moneyUnitSplit("억", holderVO.getlRetainAmount()) + "</td>\r\n");
+					sb1.append("<td style='text-align:right'>"
+							+ StockUtil.moneyUnitSplit("억", holderVO.getlSpecificDayRetainAmount()) + "</td>\r\n");
+					sb1.append("<td style='text-align:right'>"
+							+ StockUtil.moneyUnitSplit("억", holderVO.getlSpecificDayVsCurDayGapAmount()) + "</td>\r\n");
 
 					sb1.append("</tr>\r\n");
 				}
@@ -676,15 +679,15 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		for (StockVO svo : list) {
 			Vector<MajorStockHolderVO> vt = svo.getMajorStockHolderList();
 			for (int i = 0; i < vt.size(); i++) {
-				MajorStockHolderVO holderVo = vt.get(i);
-				String majorStockHolderName = holderVo.getMajorStockHolderName();
+				MajorStockHolderVO holderVO = vt.get(i);
+				String majorStockHolderName = holderVO.getMajorStockHolderName();
 				if (majorStockHolder.equals(majorStockHolderName)) {
 					// 현재보유총액
-					lRetainAmount += holderVo.getlRetainAmount();
+					lRetainAmount += holderVO.getlRetainAmount();
 					// 특정일총액
-					lTotalSpecificDayRetainAmount += holderVo.getlSpecificDayRetainAmount();
+					lTotalSpecificDayRetainAmount += holderVO.getlSpecificDayRetainAmount();
 					// 특정일VS현재 차이총액
-					long lSpecificDayVsCurDayGapAmount = holderVo.getlSpecificDayVsCurDayGapAmount();
+					long lSpecificDayVsCurDayGapAmount = holderVO.getlSpecificDayVsCurDayGapAmount();
 					lTotalSpecificDayVsCurDayGapAmount += lSpecificDayVsCurDayGapAmount;
 				}
 			}
@@ -736,8 +739,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			Vector vt = svo.getMajorStockHolderList();
 			int listSize = vt.size();
 			for (int i = 0; i < listSize; i++) {
-				MajorStockHolderVO holderVo = (MajorStockHolderVO) vt.get(i);
-				String majorStockHolderName = holderVo.getMajorStockHolderName();
+				MajorStockHolderVO holderVO = (MajorStockHolderVO) vt.get(i);
+				String majorStockHolderName = holderVO.getMajorStockHolderName();
 				if (majorStockHolder.equals(majorStockHolderName)) {
 
 					sb1.append("<tr>\r\n");
@@ -754,17 +757,17 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 					}
 
 					if (!inputWordIsSameAsMajorStockHolders) {
-						sb1.append("<td>" + holderVo.getMajorStockHolderName() + "</td>\r\n");
+						sb1.append("<td>" + holderVO.getMajorStockHolderName() + "</td>\r\n");
 					}
-					sb1.append("<td style='text-align:right'>" + holderVo.getRetainVolume() + "</td>\r\n");
-					sb1.append("<td style='text-align:right'>" + holderVo.getRetainRatio() + "%</td>\r\n");
+					sb1.append("<td style='text-align:right'>" + holderVO.getRetainVolume() + "</td>\r\n");
+					sb1.append("<td style='text-align:right'>" + holderVO.getRetainRatio() + "%</td>\r\n");
 
 					sb1.append("<td style='text-align:right'>"
-							+ StockUtil.moneyUnitSplit("억", holderVo.getlRetainAmount()) + "</td>\r\n");
+							+ StockUtil.moneyUnitSplit("억", holderVO.getlRetainAmount()) + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>"
-							+ StockUtil.moneyUnitSplit("억", holderVo.getlSpecificDayRetainAmount()) + "</td>\r\n");
+							+ StockUtil.moneyUnitSplit("억", holderVO.getlSpecificDayRetainAmount()) + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>"
-							+ StockUtil.moneyUnitSplit("억", holderVo.getlSpecificDayVsCurDayGapAmount()) + "</td>\r\n");
+							+ StockUtil.moneyUnitSplit("억", holderVO.getlSpecificDayVsCurDayGapAmount()) + "</td>\r\n");
 
 					sb1.append("</tr>\r\n");
 				}
@@ -842,15 +845,15 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			for (StockVO svo : list) {
 				Vector<MajorStockHolderVO> vt = svo.getMajorStockHolderList();
 				for (int i = 0; i < vt.size(); i++) {
-					MajorStockHolderVO holderVo = vt.get(i);
-					String majorStockHolderName = holderVo.getMajorStockHolderName();
+					MajorStockHolderVO holderVO = vt.get(i);
+					String majorStockHolderName = holderVO.getMajorStockHolderName();
 					if (majorStockHolder.equals(majorStockHolderName)) {
 						// 현재보유총액
-						lRetainAmount += holderVo.getlRetainAmount();
+						lRetainAmount += holderVO.getlRetainAmount();
 						// 특정일총액
-						lTotalSpecificDayRetainAmount += holderVo.getlSpecificDayRetainAmount();
+						lTotalSpecificDayRetainAmount += holderVO.getlSpecificDayRetainAmount();
 						// 특정일VS현재 차이총액
-						long lSpecificDayVsCurDayGapAmount = holderVo.getlSpecificDayVsCurDayGapAmount();
+						long lSpecificDayVsCurDayGapAmount = holderVO.getlSpecificDayVsCurDayGapAmount();
 						lTotalSpecificDayVsCurDayGapAmount += lSpecificDayVsCurDayGapAmount;
 					}
 				}
@@ -908,8 +911,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 				int majorStockHolderListSize = vt.size();
 				logger.debug(svo.getStockName() + "\t majorStockHolderListSize:" + majorStockHolderListSize);
 				for (int i = 0; i < majorStockHolderListSize; i++) {
-					MajorStockHolderVO holderVo = (MajorStockHolderVO) vt.get(i);
-					String majorStockHolderName = holderVo.getMajorStockHolderName();
+					MajorStockHolderVO holderVO = (MajorStockHolderVO) vt.get(i);
+					String majorStockHolderName = holderVO.getMajorStockHolderName();
 					logger.debug("majorStockHolderName:" + majorStockHolderName);
 					if (majorStockHolder.equals(majorStockHolderName)) {
 						logger.debug("majorStockHolder.equals(majorStockHolderName):"
@@ -927,16 +930,16 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 								.append(svo.getSpecificDayEndPriceVsCurPriceUpDownRatio() + "%").append("</td>\r\n");
 
 //						if (!inputWordIsSameAsMajorStockHolders) {
-//							sb1.append("<td>" + holderVo.getMajorStockHolderName() + "</td>\r\n");
+//							sb1.append("<td>" + holderVO.getMajorStockHolderName() + "</td>\r\n");
 //						}
-						sb1.append("<td style='text-align:right'>" + holderVo.getRetainVolume() + "</td>\r\n");
-						sb1.append("<td style='text-align:right'>" + holderVo.getRetainRatio() + "%</td>\r\n");
+						sb1.append("<td style='text-align:right'>" + holderVO.getRetainVolume() + "</td>\r\n");
+						sb1.append("<td style='text-align:right'>" + holderVO.getRetainRatio() + "%</td>\r\n");
 						sb1.append("<td style='text-align:right'>"
-								+ StockUtil.moneyUnitSplit("억", holderVo.getlRetainAmount()) + "</td>\r\n");
+								+ StockUtil.moneyUnitSplit("억", holderVO.getlRetainAmount()) + "</td>\r\n");
 						sb1.append("<td style='text-align:right'>"
-								+ StockUtil.moneyUnitSplit("억", holderVo.getlSpecificDayRetainAmount()) + "</td>\r\n");
+								+ StockUtil.moneyUnitSplit("억", holderVO.getlSpecificDayRetainAmount()) + "</td>\r\n");
 						sb1.append("<td style='text-align:right'>"
-								+ StockUtil.moneyUnitSplit("억", holderVo.getlSpecificDayVsCurDayGapAmount())
+								+ StockUtil.moneyUnitSplit("억", holderVO.getlSpecificDayVsCurDayGapAmount())
 								+ "</td>\r\n");
 
 						sb1.append("</tr>\r\n");
