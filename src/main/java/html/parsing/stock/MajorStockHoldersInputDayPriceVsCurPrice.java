@@ -53,7 +53,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
 	static String strYMD = "";
-	static String majorStockHolders = "국민연금공단";
+	static String inputMajorStockHolders = "국민연금공단";
 	static boolean inputWordIsSameAsMajorStockHolders = false;
 	static Map<String, List<StockVO>> kospiKosdaqStockMap = new HashMap<String, List<StockVO>>();
 	static List<StockVO> kospiStockList = new ArrayList<StockVO>();
@@ -64,7 +64,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 	static DecimalFormat df = new DecimalFormat("#,##0");
 
 	public void readAndWriteMajorStockHoldersOne() {
-		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
+		inputMajorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
 		baseDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
 		if (baseDay.equals(""))
 			baseDay = thisYearFirstTradeDay;
@@ -100,9 +100,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 	}
 
-	@Test
 	public void readAndWriteMajorStockHoldersTwo() throws Exception {
-		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
+		inputMajorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
 		baseDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
 		if (baseDay.equals(""))
 			baseDay = thisYearFirstTradeDay;
@@ -122,64 +121,40 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		kospiKosdaqStockMap.put("코스피", kospiStockList);
 		kospiKosdaqStockMap.put("코스닥", kosdaqStockList);
 
-//		writeFile(kospiStockList, "코스피 " + majorStockHolders + " 보유종목(보유금액순)");
-//		writeFile(kosdaqStockList, "코스닥 " + majorStockHolders + " 보유종목(보유금액순)");
+		writeFile(kospiStockList, "코스피 " + inputMajorStockHolders + " 보유종목(보유금액순)");
+		writeFile(kosdaqStockList, "코스닥 " + inputMajorStockHolders + " 보유종목(보유금액순)");
 
-		Set<String> keys = assetMgmtCoMap.keySet();
-		Iterator<String> it = keys.iterator();
-		int count = 1;
-		while (it.hasNext()) {
-			String majorStockHolder = it.next();
-			writeFile(count, kospiKosdaqStockMap, majorStockHolder);
-			count++;
-		}
-		logger.debug("file write finished");
-
-	}
-
-	public void readAndWriteMajorStockHolders_bak() throws Exception {
-		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
-		baseDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
-		if (baseDay.equals(""))
-			baseDay = thisYearFirstTradeDay;
-		try {
-//			kospiStockList = StockUtil.readKospiStockCodeNameListFromExcel();
-//			kosdaqStockList = StockUtil.readKosdaqStockCodeNameListFromExcel();
-			kospiStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
-			kosdaqStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
-			logger.debug("kospiStockList.size1 :" + kospiStockList.size());
-		} catch (Exception ex) {
-			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
-			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
-			logger.debug("kospiStockList.size2 :" + kospiStockList.size());
-			logger.debug("kosdaqStockList.size2 :" + kosdaqStockList.size());
-		}
-
-		kospiStockList = getAllStockInfo(kospiStockList);
-		kosdaqStockList = getAllStockInfo(kosdaqStockList);
-
-		Collections.sort(kospiStockList, new RetainAmountDescCompare());
-		Collections.sort(kosdaqStockList, new RetainAmountDescCompare());
-
-//		writeFile(kospiStockList, "코스피 " + majorStockHolders + " 보유종목(보유금액순)");
-//		writeFile(kosdaqStockList, "코스닥 " + majorStockHolders + " 보유종목(보유금액순)");
-
-		Set<String> keys = assetMgmtCoMap.keySet();
-		Iterator<String> it = keys.iterator();
-		while (it.hasNext()) {
-			String majorStockHolder = it.next();
-			writeFile(kospiStockList, majorStockHolder, "코스피 " + majorStockHolder + " 보유종목(보유금액순)");
-			writeFile(kosdaqStockList, majorStockHolder, "코스닥 " + majorStockHolder + " 보유종목(보유금액순)");
+		if (inputMajorStockHolders.equals("")) {
+			Set<String> keys = assetMgmtCoMap.keySet();
+			Iterator<String> it = keys.iterator();
+			int count = 1;
+			while (it.hasNext()) {
+				String majorStockHolder = it.next();
+				writeFile(count, kospiKosdaqStockMap, majorStockHolder);
+				count++;
+			}
+			logger.debug("file write finished");
 		}
 
 	}
 
+	@Test
 	public void readAndWriteMajorStockHolders() throws Exception {
-		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
+		inputMajorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
 		baseDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
 		if (baseDay.equals(""))
 			baseDay = thisYearFirstTradeDay;
+
+//		try {
+//			//kospiStockList = StockUtil.readKospiStockCodeNameListFromExcel();
+//			//kosdaqStockList = StockUtil.readKosdaqStockCodeNameListFromExcel();
+//			kospiStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
+//			kosdaqStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
+//			logger.debug("kospiStockList.size1 :" + kospiStockList.size());
+//			logger.debug("kosdaqStockList.size1 :" + kosdaqStockList.size());
+//		} catch (Exception ex) {
+//			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+//		}
 
 		kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
 		kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
@@ -195,22 +170,24 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		kospiKosdaqStockMap.put("코스피", kospiStockList);
 		kospiKosdaqStockMap.put("코스닥", kosdaqStockList);
 
-//		writeFile(kospiStockList, "코스피 " + majorStockHolders + " 보유종목(보유금액순)");
-//		writeFile(kosdaqStockList, "코스닥 " + majorStockHolders + " 보유종목(보유금액순)");
+		writeFile(kospiStockList, "코스피 " + inputMajorStockHolders + " 보유종목(보유금액순)");
+		writeFile(kosdaqStockList, "코스닥 " + inputMajorStockHolders + " 보유종목(보유금액순)");
 
-		Set<String> keys = assetMgmtCoMap.keySet();
-		Iterator<String> it = keys.iterator();
-		int count = 1;
-		while (it.hasNext()) {
-			String majorStockHolder = it.next();
-			writeFile(count, kospiKosdaqStockMap, majorStockHolder);
-			count++;
+		if (inputMajorStockHolders.equals("")) {
+			Set<String> keys = assetMgmtCoMap.keySet();
+			Iterator<String> it = keys.iterator();
+			int count = 1;
+			while (it.hasNext()) {
+				String majorStockHolder = it.next();
+				writeFile(count, kospiKosdaqStockMap, majorStockHolder);
+				count++;
+			}
 		}
 
 	}
 
 	public static List<StockVO> readOne(String stockCode, String stockName) {
-		logger.debug(stockCode+"\t"+stockName);
+		logger.debug(stockCode + "\t" + stockName);
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
 		int cnt = 1;
@@ -424,7 +401,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 					logger.debug("majorStockHolderName:" + majorStockHolderName);
 					if (majorStockHolderName.equals(""))
 						break;
-					if (majorStockHolderName.equals(majorStockHolders)) {
+					if (majorStockHolderName.equals(inputMajorStockHolders)) {
 						inputWordIsSameAsMajorStockHolders = true;
 						logger.debug("inputWordIsSameAsMajorStockHolders:" + inputWordIsSameAsMajorStockHolders);
 					}
@@ -438,7 +415,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 					}
 					majorStockHolderNameMap.put(majorStockHolderName, majorStockHolderName);
 
-					if (majorStockHolders.equals("") || majorStockHolderName.indexOf(majorStockHolders) != -1) {
+					if (majorStockHolderName.indexOf(inputMajorStockHolders) != -1) {
 						// 보유주식수
 						retainVolumeWithComma = StringUtils.defaultIfEmpty(td.get(1).text(), "0");
 						retainVolumeWithoutComma = retainVolumeWithComma.replaceAll(",", "");
@@ -473,6 +450,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 						MajorStockHolderVO majorStockHolderVO = new MajorStockHolderVO();
 
 						majorStockHolderVO.setMajorStockHolderName(majorStockHolderName);
+						logger.debug("getMajorStockHolderName:" + majorStockHolderVO.getMajorStockHolderName());
 						majorStockHolderVO.setRetainVolume(retainVolumeWithComma);
 						majorStockHolderVO.setRetainAmount(retainAmount);
 						majorStockHolderVO.setRetainAmountByMillion(retainAmountByMillion);
@@ -583,9 +561,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		double dRetainAmount = Double.parseDouble(lRetainAmount + "");
 		double gapRatio = Math.round(
 				(dTotalSpecificDayRetainAmount - dRetainAmount) / dTotalSpecificDayRetainAmount * 100 * 100) / 100.0;
-		if (dTotalSpecificDayRetainAmount < dRetainAmount) {
-			gapRatio = -gapRatio;
-		}
+		gapRatio = -gapRatio;
 
 		String totalSpecificDayVsCurDayGapAmount = df.format(lTotalSpecificDayVsCurDayGapAmount);
 		sb1.append("기준일대비 현재총금액 차이(원) = ");
@@ -650,21 +626,24 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		}
 
 		sb1.append("</table>\r\n");
-		sb1.append("<h3>자산운용사 목록</h3>");
+		if (assetMgmtCoMap.size() > 0) {
+			sb1.append("<h3>자산운용사 목록</h3>");
+			logger.debug("assetMgmtCoMap.size:" + assetMgmtCoMap.size());
 
-		Set<String> keys = assetMgmtCoMap.keySet();
-		Iterator<String> it = keys.iterator();
-		int count = 0;
-		StringBuilder assetMgmtCoSb = new StringBuilder();
-		while (it.hasNext()) {
-			String key = it.next();
-			if (count != 0) {
-				assetMgmtCoSb.append(",");
+			Set<String> keys = assetMgmtCoMap.keySet();
+			Iterator<String> it = keys.iterator();
+			int count = 0;
+			StringBuilder assetMgmtCoSb = new StringBuilder();
+			while (it.hasNext()) {
+				String key = it.next();
+				if (count != 0) {
+					assetMgmtCoSb.append(",");
+				}
+				assetMgmtCoSb.append("\"" + key + "\"");
+				count++;
 			}
-			assetMgmtCoSb.append("\"" + key + "\"");
-			count++;
+			sb1.append(assetMgmtCoSb.toString());
 		}
-		sb1.append(assetMgmtCoSb.toString());
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
 		String fileName = userHome + "\\documents\\" + strDate + "_" + title + ".html";
@@ -811,7 +790,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}
 
-	private void writeFile(int count, Map<String, List<StockVO>> kospiKosdaqStockMap, String majorStockHolder) {
+	public void writeFile(int count, Map<String, List<StockVO>> kospiKosdaqStockMap, String majorStockHolder) {
 		SimpleDateFormat sdf = new SimpleDateFormat("[yyyy-MM-dd][HH.mm.ss.SSS]", Locale.KOREAN);
 
 		String strDate = sdf.format(new Date());
@@ -830,14 +809,28 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 		Set<String> keySet = kospiKosdaqStockMap.keySet();
 		Iterator kospiKosdaqIt = keySet.iterator();
+		int listSize = 0;
 		while (kospiKosdaqIt.hasNext()) {
 			String strKospiKosdaqKey = (String) kospiKosdaqIt.next();
+			logger.debug("strKospiKosdaqKey1 :" + strKospiKosdaqKey);
 			List<StockVO> list = kospiKosdaqStockMap.get(strKospiKosdaqKey);
+			listSize += list.size();
+		}
 
-			String title = strKospiKosdaqKey + majorStockHolder + " 보유종목(보유금액순)";
+		if (listSize == 0) {
+			return;
+		}
 
-			sb1.append("\t<h2>" + strYMD + title + "</h2>");
-			sb1.append("\t<h3>비교 대상 기준일 :" + specificDay + "</h3>");
+		String title = strYMD + "" + majorStockHolder + " 보유종목(보유금액순)";
+		sb1.append("\t<h1>" + title + "</h1>");
+		sb1.append("\t<h2>비교 대상 기준일 :" + specificDay + "</h2>");
+
+//		keySet = kospiKosdaqStockMap.keySet();
+		kospiKosdaqIt = keySet.iterator();
+		while (kospiKosdaqIt.hasNext()) {
+			String strKospiKosdaqKey = (String) kospiKosdaqIt.next();
+			logger.debug("strKospiKosdaqKey2 :" + strKospiKosdaqKey);
+			List<StockVO> list = kospiKosdaqStockMap.get(strKospiKosdaqKey);
 
 			long lTotalSpecificDayVsCurDayGapAmount = 0;
 			long lTotalSpecificDayRetainAmount = 0;
@@ -860,6 +853,12 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 				}
 			}
 
+			if (lRetainAmount <= 0) {
+				continue;
+			}
+
+			sb1.append("\t<h2>" + strKospiKosdaqKey + "</h2>");
+
 			String totalSpecificDayRetainAmount = df.format(lTotalSpecificDayRetainAmount);
 			sb1.append("기준일 총금액(원) = " + StockUtil.moneyUnitSplit(lTotalSpecificDayRetainAmount) + "<br/>\r\n");
 
@@ -871,9 +870,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			double gapRatio = Math
 					.round((dTotalSpecificDayRetainAmount - dRetainAmount) / dTotalSpecificDayRetainAmount * 100 * 100)
 					/ 100.0;
-			if (dTotalSpecificDayRetainAmount < dRetainAmount) {
-				gapRatio = -gapRatio;
-			}
+			gapRatio = -gapRatio;
 
 			String totalSpecificDayVsCurDayGapAmount = df.format(lTotalSpecificDayVsCurDayGapAmount);
 			sb1.append("기준일대비 현재총금액 차이(원) = ");
@@ -890,9 +887,9 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가 대비 등락율</td>\r\n");
-			if (!inputWordIsSameAsMajorStockHolders) {
-				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
-			}
+//			if (!inputWordIsSameAsMajorStockHolders) {
+//				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
+//			}
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재총금액</td>\r\n");
@@ -905,29 +902,30 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			for (StockVO svo : list) {
 				String url = "http://finance.naver.com/item/main.nhn?code=" + svo.getStockCode();
 				Vector vt = svo.getMajorStockHolderList();
-				int listSize = vt.size();
-				for (int i = 0; i < listSize; i++) {
+				int majorStockHolderListSize = vt.size();
+				logger.debug(svo.getStockName() + "\t majorStockHolderListSize:" + majorStockHolderListSize);
+				for (int i = 0; i < majorStockHolderListSize; i++) {
 					MajorStockHolderVO holderVo = (MajorStockHolderVO) vt.get(i);
 					String majorStockHolderName = holderVo.getMajorStockHolderName();
+					logger.debug("majorStockHolderName:" + majorStockHolderName);
 					if (majorStockHolder.equals(majorStockHolderName)) {
+						logger.debug("majorStockHolder.equals(majorStockHolderName):"
+								+ (majorStockHolder.equals(majorStockHolderName)));
+						logger.debug("majorStockHolder:" + majorStockHolder + "\t majorStockHolderName:"
+								+ majorStockHolderName);
 
 						sb1.append("<tr>\r\n");
-						if (i == 0) {
-							sb1.append("<td rowspan=" + listSize + ">" + cnt++ + "</td>\r\n");
-							sb1.append("<td rowspan=" + listSize + "><a href='" + url + "' target=_new>"
-									+ svo.getStockName() + "</a></td>\r\n");
-							sb1.append("<td rowspan=" + listSize + " style='text-align:right'>" + svo.getCurPrice()
-									+ "</td>\r\n");
-							sb1.append("<td rowspan=" + listSize + " style='text-align:right'>")
-									.append(svo.getSpecificDayEndPrice()).append("</td>\r\n");
-							sb1.append("<td rowspan=" + listSize + " style='text-align:right'>")
-									.append(svo.getSpecificDayEndPriceVsCurPriceUpDownRatio() + "%")
-									.append("</td>\r\n");
-						}
+						sb1.append("<td>" + cnt++ + "</td>\r\n");
+						sb1.append("<td><a href='" + url + "' target=_new>" + svo.getStockName() + "</a></td>\r\n");
+						sb1.append("<td style='text-align:right'>" + svo.getCurPrice() + "</td>\r\n");
+						sb1.append("<td style='text-align:right'>").append(svo.getSpecificDayEndPrice())
+								.append("</td>\r\n");
+						sb1.append("<td style='text-align:right'>")
+								.append(svo.getSpecificDayEndPriceVsCurPriceUpDownRatio() + "%").append("</td>\r\n");
 
-						if (!inputWordIsSameAsMajorStockHolders) {
-							sb1.append("<td>" + holderVo.getMajorStockHolderName() + "</td>\r\n");
-						}
+//						if (!inputWordIsSameAsMajorStockHolders) {
+//							sb1.append("<td>" + holderVo.getMajorStockHolderName() + "</td>\r\n");
+//						}
 						sb1.append("<td style='text-align:right'>" + holderVo.getRetainVolume() + "</td>\r\n");
 						sb1.append("<td style='text-align:right'>" + holderVo.getRetainRatio() + "%</td>\r\n");
 						sb1.append("<td style='text-align:right'>" + holderVo.getRetainAmount() + "</td>\r\n");
@@ -943,25 +941,10 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 			sb1.append("</table>\r\n");
 		}
-		sb1.append("<h3>자산운용사 목록</h3>");
-
-		Set<String> keys = assetMgmtCoMap.keySet();
-		Iterator<String> it = keys.iterator();
-		int assetMgmtCoCount = 0;
-		StringBuilder assetMgmtCoSb = new StringBuilder();
-		while (it.hasNext()) {
-			String key = it.next();
-			if (assetMgmtCoCount != 0) {
-				assetMgmtCoSb.append(",");
-			}
-			assetMgmtCoSb.append("\"" + key + "\"");
-			assetMgmtCoCount++;
-		}
-		sb1.append(assetMgmtCoSb.toString());
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
 
-		String fileName = userHome + "\\documents\\" + strDate + "_코스피,코스닥_" + count + "." + majorStockHolder
+		String fileName = userHome + "\\documents\\" + strDate + "_코스피,코스닥_" + StringUtils.leftPad(String.valueOf(count), 2, "0") + "." + majorStockHolder
 				+ "_보유종목(보유금액순).html";
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}
