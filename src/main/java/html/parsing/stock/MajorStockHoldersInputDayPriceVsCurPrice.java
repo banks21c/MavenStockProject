@@ -758,10 +758,13 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 					}
 					sb1.append("<td style='text-align:right'>" + holderVo.getRetainVolume() + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>" + holderVo.getRetainRatio() + "%</td>\r\n");
-					sb1.append("<td style='text-align:right'>" + holderVo.getRetainAmount() + "</td>\r\n");
-					sb1.append("<td style='text-align:right'>" + holderVo.getSpecificDayRetainAmount() + "</td>\r\n");
-					sb1.append(
-							"<td style='text-align:right'>" + holderVo.getSpecificDayVsCurDayGapAmount() + "</td>\r\n");
+
+					sb1.append("<td style='text-align:right'>"
+							+ StockUtil.moneyUnitSplit("억", holderVo.getlRetainAmount()) + "</td>\r\n");
+					sb1.append("<td style='text-align:right'>"
+							+ StockUtil.moneyUnitSplit("억", holderVo.getlSpecificDayRetainAmount()) + "</td>\r\n");
+					sb1.append("<td style='text-align:right'>"
+							+ StockUtil.moneyUnitSplit("억", holderVo.getlSpecificDayVsCurDayGapAmount()) + "</td>\r\n");
 
 					sb1.append("</tr>\r\n");
 				}
