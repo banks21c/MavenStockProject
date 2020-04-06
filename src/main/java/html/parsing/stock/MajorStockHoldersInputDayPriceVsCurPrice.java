@@ -563,7 +563,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			Vector<MajorStockHolderVO> vt = svo.getMajorStockHolderList();
 			for (int i = 0; i < vt.size(); i++) {
 				MajorStockHolderVO holderVO = vt.get(i);
-				// 현재보유총액
+				// 현재 보유총액
 				lRetainAmount += holderVO.getlRetainAmount();
 				// 특정일총액
 				lTotalSpecificDayRetainAmount += holderVO.getlSpecificDayRetainAmount();
@@ -574,10 +574,10 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		}
 
 		String totalSpecificDayRetainAmount = df.format(lTotalSpecificDayRetainAmount);
-		sb1.append("기준일 총금액(원) = " + StockUtil.moneyUnitSplit("원", lTotalSpecificDayRetainAmount) + "<br/>\r\n");
+		sb1.append("기준일 보유총액(원) = " + StockUtil.moneyUnitSplit("원", lTotalSpecificDayRetainAmount) + "<br/>\r\n");
 
 		String retainAmount = df.format(lRetainAmount);
-		sb1.append("현재 총금액(원) = " + StockUtil.moneyUnitSplit("원", lRetainAmount) + "<br/>\r\n");
+		sb1.append("현재 보유총액(원) = " + StockUtil.moneyUnitSplit("원", lRetainAmount) + "<br/>\r\n");
 
 		double dTotalSpecificDayRetainAmount = Double.parseDouble(lTotalSpecificDayRetainAmount + "");
 		double dRetainAmount = Double.parseDouble(lRetainAmount + "");
@@ -586,7 +586,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		gapRatio = -gapRatio;
 
 		String totalSpecificDayVsCurDayGapAmount = df.format(lTotalSpecificDayVsCurDayGapAmount);
-		sb1.append("기준일대비 현재총금액 차이(원) = ");
+		sb1.append("기준일대비 현재 보유총액 차이(원) = ");
 		sb1.append(StockUtil.moneyUnitSplit("원", lTotalSpecificDayVsCurDayGapAmount));
 
 		sb1.append("<br/>\r\n");
@@ -605,8 +605,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		}
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재총금액(억)</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 총금액(억)</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재 보유총액(억)</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 보유총액(억)</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 대비 총액차(억)</td>\r\n");
 		sb1.append("</tr>\r\n");
 
@@ -664,7 +664,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 				if (count != 0) {
 					assetMgmtCoSb.append(",");
 				}
-				assetMgmtCoSb.append("\"" + key + "\"");
+				assetMgmtCoSb.append("" + key + "");
 				count++;
 			}
 			sb1.append(assetMgmtCoSb.toString());
@@ -704,7 +704,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 				MajorStockHolderVO holderVO = vt.get(i);
 				String majorStockHolderName = holderVO.getMajorStockHolderName();
 				if (majorStockHolderName.contains(majorStockHolder)) {
-					// 현재보유총액
+					// 현재 보유총액
 					lRetainAmount += holderVO.getlRetainAmount();
 					// 특정일총액
 					lTotalSpecificDayRetainAmount += holderVO.getlSpecificDayRetainAmount();
@@ -716,10 +716,10 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		}
 
 		String totalSpecificDayRetainAmount = df.format(lTotalSpecificDayRetainAmount);
-		sb1.append("기준일 총금액(원) = " + StockUtil.moneyUnitSplit("원", lTotalSpecificDayRetainAmount) + "<br/>\r\n");
+		sb1.append("기준일 보유총액(원) = " + StockUtil.moneyUnitSplit("원", lTotalSpecificDayRetainAmount) + "<br/>\r\n");
 
 		String retainAmount = df.format(lRetainAmount);
-		sb1.append("현재 총금액(원) = " + StockUtil.moneyUnitSplit("원", lRetainAmount) + "<br/>\r\n");
+		sb1.append("현재 보유총액(원) = " + StockUtil.moneyUnitSplit("원", lRetainAmount) + "<br/>\r\n");
 
 		double dTotalSpecificDayRetainAmount = Double.parseDouble(lTotalSpecificDayRetainAmount + "");
 		double dRetainAmount = Double.parseDouble(lRetainAmount + "");
@@ -730,7 +730,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		}
 
 		String totalSpecificDayVsCurDayGapAmount = df.format(lTotalSpecificDayVsCurDayGapAmount);
-		sb1.append("기준일대비 현재총금액 차이(원) = ");
+		sb1.append("기준일대비 현재 보유총액 차이(원) = ");
 		sb1.append(StockUtil.moneyUnitSplit("원", lTotalSpecificDayVsCurDayGapAmount));
 
 		sb1.append("<br/>\r\n");
@@ -749,8 +749,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		}
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재총금액(억)</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 총금액(억)</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재 보유총액(억)</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 보유총액(억)</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 대비 총액차(억)</td>\r\n");
 		sb1.append("</tr>\r\n");
 
@@ -808,7 +808,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			if (count != 0) {
 				assetMgmtCoSb.append(",");
 			}
-			assetMgmtCoSb.append("\"" + key + "\"");
+			assetMgmtCoSb.append("" + key + "");
 			count++;
 		}
 		sb1.append(assetMgmtCoSb.toString());
@@ -871,7 +871,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 					MajorStockHolderVO holderVO = vt.get(i);
 					String majorStockHolderName = holderVO.getMajorStockHolderName();
 					if (majorStockHolderName.contains(majorStockHolder)) {
-						// 현재보유총액
+						// 현재 보유총액
 						lRetainAmount += holderVO.getlRetainAmount();
 						// 특정일총액
 						lTotalSpecificDayRetainAmount += holderVO.getlSpecificDayRetainAmount();
@@ -889,10 +889,10 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			sb1.append("\t<h2>" + strKospiKosdaqKey + "</h2>");
 
 			String totalSpecificDayRetainAmount = df.format(lTotalSpecificDayRetainAmount);
-			sb1.append("기준일 총금액(원) = " + StockUtil.moneyUnitSplit("원", lTotalSpecificDayRetainAmount) + "<br/>\r\n");
+			sb1.append("기준일 보유총액(원) = " + StockUtil.moneyUnitSplit("원", lTotalSpecificDayRetainAmount) + "<br/>\r\n");
 
 			String retainAmount = df.format(lRetainAmount);
-			sb1.append("현재 총금액(원) = " + StockUtil.moneyUnitSplit("원", lRetainAmount) + "<br/>\r\n");
+			sb1.append("현재 보유총액(원) = " + StockUtil.moneyUnitSplit("원", lRetainAmount) + "<br/>\r\n");
 
 			double dTotalSpecificDayRetainAmount = Double.parseDouble(lTotalSpecificDayRetainAmount + "");
 			double dRetainAmount = Double.parseDouble(lRetainAmount + "");
@@ -902,7 +902,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			gapRatio = -gapRatio;
 
 			String totalSpecificDayVsCurDayGapAmount = df.format(lTotalSpecificDayVsCurDayGapAmount);
-			sb1.append("기준일대비 현재총금액 차이(원) = ");
+			sb1.append("기준일대비 현재 보유총액 차이(원) = ");
 			sb1.append(StockUtil.moneyUnitSplit("원", lTotalSpecificDayVsCurDayGapAmount));
 
 			sb1.append("<br/>\r\n");
@@ -921,8 +921,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 //			}
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
-			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재총금액(억)</td>\r\n");
-			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 총금액(억)</td>\r\n");
+			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재 보유총액(억)</td>\r\n");
+			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 보유총액(억)</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 대비 총액차(억)</td>\r\n");
 			sb1.append("</tr>\r\n");
 
