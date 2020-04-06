@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
-import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

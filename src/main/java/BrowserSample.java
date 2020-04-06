@@ -8,11 +8,13 @@
  *
  * @author openmade
  */
+import java.awt.BorderLayout;
+
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
- 
-import javax.swing.*;
-import java.awt.*;
  
 /**
  * This sample demonstrates how to create Browser instance,
