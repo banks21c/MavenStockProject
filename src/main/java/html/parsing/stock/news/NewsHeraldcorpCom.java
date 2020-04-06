@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -52,7 +53,7 @@ public class NewsHeraldcorpCom extends News {
 		logger = LoggerFactory.getLogger(NewsHeraldcorpCom.class);
 		String url = JOptionPane.showInputDialog("헤럴드경제 URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
-		if (url.equals("")) {
+		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://news.heraldcorp.com/view.php?ud=20190226000403";
 		}
 		createHTMLFile(url);

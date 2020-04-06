@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -56,7 +57,7 @@ public class EstateMkCoKr extends News {
 
         String url = JOptionPane.showInputDialog("News URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             url = "http://estate.mk.co.kr/news2011/view.php?year=2018&no=675016";
         }
         createHTMLFile(url);

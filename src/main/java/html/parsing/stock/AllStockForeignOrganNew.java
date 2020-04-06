@@ -474,7 +474,7 @@ public class AllStockForeignOrganNew {
 			stock.setSpecialLetter(specialLetter);
 
 			url = "http://finance.naver.com/item/frgn.nhn?code=" + code;
-			logger.debug("url :"+url);
+			logger.debug("url :" + url);
 			doc = Jsoup.connect(url).get();
 
 			String tradingDate = "";
@@ -492,8 +492,8 @@ public class AllStockForeignOrganNew {
 				if (tdElements.size() == 9) {
 					// 날짜
 					tradingDate = tdElements.get(0).text();
-					logger.debug("strYmd4Compare :"+strYmd4Compare);
-					logger.debug("tradingDate :"+tradingDate);
+					logger.debug("strYmd4Compare :" + strYmd4Compare);
+					logger.debug("tradingDate :" + tradingDate);
 					if (strYmd4Compare.equals(tradingDate)) {
 						// 기관순매매량
 						organTradingVolume = tdElements.get(5).text();
@@ -510,7 +510,7 @@ public class AllStockForeignOrganNew {
 				stock.setResultMessage("FAIL");
 //				JOptionPane.showMessageDialog(null, "당일 집계가 되지 않았거나 입력하신 일자 데이터가 존재하지 않습니다.");
 				return stock;
-			}else {
+			} else {
 				stock.setResultCode("S00001");
 				stock.setResultMessage("SUCCESS");
 
@@ -589,7 +589,8 @@ public class AllStockForeignOrganNew {
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("<html lang='ko'>\r\n");
 		sb1.append("<head>\r\n");
-		//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+		// sb1.append("<meta http-equiv=\"Content-Type\"
+		// content=\"text/html;charset=utf-8\">\r\n");
 		sb1.append("<style>\r\n");
 		sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 		sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
@@ -697,7 +698,8 @@ public class AllStockForeignOrganNew {
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("<html lang='ko'>\r\n");
 		sb1.append("<head>\r\n");
-		//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+		// sb1.append("<meta http-equiv=\"Content-Type\"
+		// content=\"text/html;charset=utf-8\">\r\n");
 		sb1.append("<style>\r\n");
 		sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 		sb1.append("    td {border:1px solid #aaaaaa;}\r\n");

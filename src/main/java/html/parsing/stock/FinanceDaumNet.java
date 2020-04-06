@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -49,7 +50,7 @@ public class FinanceDaumNet extends News {
 
         String url = JOptionPane.showInputDialog("다음뉴스 URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             url = "http://finance.daum.net/news/20181101040046650";
         }
         createHTMLFile(url);

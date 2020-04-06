@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -177,7 +178,7 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 
 		String url = JOptionPane.showInputDialog("돈이보이는 스페셜뉴스 MoneyS URL:");
 		System.out.println("url:[" + url + "]");
-		if (url.equals("")) {
+		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://moneys.mt.co.kr/news/mwView.php?no=2019050721408048558&type=4&code=w0401&MTN";
 		}
 		createHTMLFile(url);

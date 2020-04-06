@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -53,7 +54,7 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 		logger.debug(this.getClass().getSimpleName());
 		String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
-		if (url.equals("")) {
+		if (StringUtils.defaultString(url).equals("")) {
 			url = "https://www.mk.co.kr/news/society/view/2019/12/1091653/";
 		}
 		createHTMLFile(url);

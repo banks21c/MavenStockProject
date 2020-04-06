@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

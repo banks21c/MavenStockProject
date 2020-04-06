@@ -15,6 +15,7 @@ import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFa
 
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -48,7 +49,7 @@ public class NewsEdaily extends News {
 		
 		String url = JOptionPane.showInputDialog("이데일리뉴스 URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
-		if (url.equals("")) {
+		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://www.edaily.co.kr/news/news_detail.asp?newsId=01918806619115112&mediaCodeNo=257";
 		}
 		createHTMLFile(url);

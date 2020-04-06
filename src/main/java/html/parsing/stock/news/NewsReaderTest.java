@@ -25,6 +25,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.LoggerFactory;
@@ -651,7 +652,7 @@ public class NewsReaderTest extends javax.swing.JFrame {
         logger.debug("jTextField1ActionPerformed");
         String url = textFieldPopupMenuPanel1.getTextField().getText();
         logger.debug("url :" + url);
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             return;
         };
         try {
@@ -667,7 +668,7 @@ public class NewsReaderTest extends javax.swing.JFrame {
         logger.debug("jTextField1FocusLost");
         String url = textFieldPopupMenuPanel1.getTextField().getText();
         logger.debug("url :" + url);
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             return;
         };
         try {

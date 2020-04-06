@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -58,7 +59,7 @@ public class NocutNews extends News {
 
         String url = JOptionPane.showInputDialog("Money Today URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             url = "http://land.hankyung.com/news/app/newsview.php?aid=201802207330H";
         }
         createHTMLFile(url);

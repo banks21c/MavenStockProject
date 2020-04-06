@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -52,7 +53,7 @@ public class NewsEtnewsCom extends News {
 
         String url = JOptionPane.showInputDialog("etnews URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.etnews.com/20180122000226#";
         }
         createHTMLFile(url);

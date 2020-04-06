@@ -6,11 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.jws.soap.SOAPBinding.Style;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.xssf.model.StylesTable;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -57,7 +55,7 @@ public class ImnewsImbcCom extends News {
 
         String url = StringUtils.defaultString(JOptionPane.showInputDialog(classSimpleName+" URL을 입력하여 주세요."));
         System.out.println("url:[" + url + "]");
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             url = "https://imnews.imbc.com/replay/2020/nwtoday/article/5700698_32531.html";
         }
         createHTMLFile(url);
@@ -78,11 +76,11 @@ public class ImnewsImbcCom extends News {
             doc.select("body").removeAttr("onload");
             doc.select("div.pop_prt_btns").remove();
             doc.select(".w_mug_emotion").remove();
-            
+
             doc.select(".wrap_next_news").remove();
             doc.select(".wrap_playall").remove();
             doc.select(".layer_popup").remove();
-            
+
             doc.select(".section_mid").remove();
             doc.select(".imoji").remove();
             doc.select(".wrap_comment").remove();
@@ -125,7 +123,7 @@ public class ImnewsImbcCom extends News {
             }
             strContent = StockUtil.makeStockLinkStringByExcel(strContent);
             System.out.println("content:" + strContent);
-            
+
             Elements divs = doc.select(".news_cont .news_img");
         	logger.debug("divs:"+divs);
             String style = "";

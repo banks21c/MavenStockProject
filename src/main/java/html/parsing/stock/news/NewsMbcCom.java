@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -51,7 +52,7 @@ public class NewsMbcCom extends News {
 
         String url = JOptionPane.showInputDialog("KBS URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             url = "http://imnews.imbc.com/replay/2018/nwtoday/article/4587282_22669.html?menuid=politic";
         }
         createHTMLFile(url);

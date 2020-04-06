@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -53,7 +54,7 @@ public class NewsMkCoKrPremium extends javax.swing.JFrame {
 		logger1.debug(this.getClass().getSimpleName());
 		String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
-		if (url.equals("")) {
+		if (StringUtils.defaultString(url).equals("")) {
 			url = "https://www.mk.co.kr/premium/special-report/view/2019/12/27289/";
 		}
 		createHTMLFile(url);

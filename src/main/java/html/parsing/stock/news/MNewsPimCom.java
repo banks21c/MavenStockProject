@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -54,7 +55,7 @@ public class MNewsPimCom extends News {
 
         String url = JOptionPane.showInputDialog("뉴스핌 URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             url = "http://m.newspim.com/news/view/20181010000022";
         }
         createHTMLFile(url);

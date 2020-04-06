@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -53,7 +54,7 @@ public class NewsPressian extends News {
 
         String url = JOptionPane.showInputDialog("프레시안뉴스 URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.pressian.com/news/article.html?no=188351";
         }
         createHTMLFile(url);

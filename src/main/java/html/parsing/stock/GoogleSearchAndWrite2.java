@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.apache.commons.io.FilenameUtils;
 import org.jsoup.nodes.Document;

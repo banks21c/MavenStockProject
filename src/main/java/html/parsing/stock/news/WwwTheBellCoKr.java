@@ -13,6 +13,7 @@ import java.util.Locale;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -58,7 +59,7 @@ public class WwwTheBellCoKr extends News {
 
 		String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
-		if (url.equals("")) {
+		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://www.thebell.co.kr/free/content/ArticleView.asp?key=201908160100029190001805";
 		}
 		createHTMLFile(url);

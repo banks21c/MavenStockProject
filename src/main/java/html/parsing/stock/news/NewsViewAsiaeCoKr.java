@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -57,7 +58,7 @@ public class NewsViewAsiaeCoKr extends javax.swing.JFrame {
 
         String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             url = "http://view.asiae.co.kr/news/view.htm?idxno=2019030211255648939";
         }
         if (url != null && !url.equals("")) {

@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -58,7 +59,7 @@ public class NewsVipMkCoKr extends javax.swing.JFrame {
 
         String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             url = "http://vip.mk.co.kr/newSt/news/news_view.php?p_page=&sCode=122&t_uid=22&c_uid=136511&topGubun=";
         }
         createHTMLFile(url);

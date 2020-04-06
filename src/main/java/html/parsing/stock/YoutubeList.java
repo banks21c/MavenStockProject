@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -42,7 +43,7 @@ public class YoutubeList {
 
         String url = JOptionPane.showInputDialog("유튜브 재생목록 URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             url = "https://www.youtube.com/playlist?list=PLSWSKiRfBgbEXHYG-Sqw62Ucp13fsE2pJ";
         }
 

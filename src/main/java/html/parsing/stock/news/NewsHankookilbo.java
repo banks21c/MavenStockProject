@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -53,7 +54,7 @@ public class NewsHankookilbo extends News {
 
         String url = JOptionPane.showInputDialog("한국일보 URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
-        if (url.equals("")) {
+        if (StringUtils.defaultString(url).equals("")) {
             url = "http://hankookilbo.com/v/a9ca292c10774e6888c1523adc3dac0d";
         }
         if (url != null && !url.equals("")) {

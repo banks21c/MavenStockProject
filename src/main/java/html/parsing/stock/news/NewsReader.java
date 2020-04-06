@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 

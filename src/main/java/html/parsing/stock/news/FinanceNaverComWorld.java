@@ -2,7 +2,6 @@ package html.parsing.stock.news;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,8 +12,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.ReadableByteChannel;
-
-import javax.swing.JOptionPane;
 
 public class FinanceNaverComWorld {
 
@@ -31,7 +28,7 @@ public class FinanceNaverComWorld {
         try {
         	url = new URL(strUrl);
             BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(),"KSC5601"));
-            
+
             String inputLine;
             int lineNumber = 1;
             while ((inputLine = in.readLine()) != null) {

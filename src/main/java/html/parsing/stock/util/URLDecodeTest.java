@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
+import org.apache.commons.lang3.StringUtils;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -48,7 +49,7 @@ public class URLDecodeTest{
 	public URLDecodeTest(int i) {
 		String url = JOptionPane.showInputDialog("디코딩할 URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
-		if (url.equals("")) {
+		if (StringUtils.defaultString(url).equals("")) {
 			url = "https://blog.naver.com/openapi/share?serviceCode=share&url=https://www.hankyung.com/international/article/2020010646277&title=%EC%9D%B4%EB%9E%80+%26quot%3B%EC%9D%B4%EC%8A%A4%EB%9D%BC%EC%97%98+%EA%B0%80%EB%A3%A8%EB%A1%9C+%EB%A7%8C%EB%93%A4%EA%B2%A0%EB%8B%A4%26quot%3B+%EB%AF%B8%EA%B5%AD%EC%97%90+%EA%B2%BD%EA%B3%A0&token=d824605cb955bab9bdecd1846e6f91351722dfa515d981881273cf0581d9b4a4&timestamp=1578284088739&isMobile=false";
 		}
 		createHTMLFile(url);
