@@ -14,7 +14,6 @@ import java.net.URLConnection;
 import java.nio.channels.ReadableByteChannel;
 
 import javax.swing.JOptionPane;
-import org.apache.commons.lang3.StringUtils;
 
 public class FinanceNaverCom {
 

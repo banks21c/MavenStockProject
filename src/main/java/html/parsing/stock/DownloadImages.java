@@ -10,8 +10,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.logging.Level;import org.slf4j.Logger;import org.slf4j.LoggerFactory;
-
+import java.util.logging.Level;
 
 import javax.imageio.ImageIO;
 

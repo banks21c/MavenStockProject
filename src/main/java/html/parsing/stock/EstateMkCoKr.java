@@ -14,8 +14,8 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
-import org.apache.commons.lang3.StringUtils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
