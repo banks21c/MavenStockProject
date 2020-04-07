@@ -10,6 +10,12 @@ public class MajorStockHoldersInputDayPriceVsCurPriceTest {
 	public void testReadAndWriteMajorStockHoldersOne() {
 		fail("Not yet implemented");
 	}
+	@Test
+	public void testReadAndWriteMajorStockHoldersTwo() throws Exception {
+//		fail("Not yet implemented");
+//		new MajorStockHoldersInputDayPriceVsCurPrice().readAndWriteMajorStockHoldersTwo();
+		
+	}
 
 	@Test
 	public void testReadAndWriteMajorStockHolders_bak() {
@@ -17,8 +23,9 @@ public class MajorStockHoldersInputDayPriceVsCurPriceTest {
 	}
 
 	@Test
-	public void testReadAndWriteMajorStockHolders() {
-		fail("Not yet implemented");
+	public void testReadAndWriteMajorStockHolders() throws Exception {
+//		fail("Not yet implemented");
+		new MajorStockHoldersInputDayPriceVsCurPrice().readAndWriteMajorStockHolders();
 	}
 
 	@Test
