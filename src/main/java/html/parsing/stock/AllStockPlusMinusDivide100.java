@@ -61,7 +61,6 @@ public class AllStockPlusMinusDivide100 extends Thread {
 	int downCount = 0;
 	int steadyCount = 0;
 
-	StringBuilder sBuilder;
 	int iExtractCount = 100;
 
 	/**
@@ -168,7 +167,7 @@ public class AllStockPlusMinusDivide100 extends Thread {
 		downCount = sUtil.getDownCount();
 		steadyCount = sUtil.getSteadyCount();
 
-		sBuilder = new StringBuilder();
+		StringBuilder sBuilder = new StringBuilder();
 		// 1.상승율순 정렬
 		Collections.sort(kospiAllStockList, new VaryRatioDescCompare());
 		StringBuilder info1 = getStockInformation(kospiAllStockList, "코스피", "상승율");
@@ -191,11 +190,6 @@ public class AllStockPlusMinusDivide100 extends Thread {
 
 		writeFile(sBuilder, "코스피 시세");
 
-		sUtil.setTopCount(0);
-		sUtil.setUpCount(0);
-		sUtil.setBottomCount(0);
-		sUtil.setDownCount(0);
-		sUtil.setSteadyCount(0);
 		//초기화
 		sBuilder = new StringBuilder();
 
@@ -208,6 +202,19 @@ public class AllStockPlusMinusDivide100 extends Thread {
 			kosdaqAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqAllStockList, "kosdaqMkt");
 			logger.debug("kosdaqAllStockList :" + kosdaqAllStockList);
 		}
+		
+		sUtil.setTopCount(0);
+		sUtil.setUpCount(0);
+		sUtil.setBottomCount(0);
+		sUtil.setDownCount(0);
+		sUtil.setSteadyCount(0);
+		
+		topCount = sUtil.getTopCount();
+		upCount = sUtil.getUpCount();
+		bottomCount = sUtil.getBottomCount();
+		downCount = sUtil.getDownCount();
+		steadyCount = sUtil.getSteadyCount();
+		
 		kosdaqAllStockList = sUtil.getAllStockInfo(kosdaqAllStockList);
 		if(iExtractCount == -1) iExtractCount = kosdaqAllStockList.size();
 		System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
