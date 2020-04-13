@@ -113,7 +113,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 //		logger.debug("kospiStockList:" + kospiStockList);
 //		writeFile(kospiStockList, "코스피");
 
-		logger.debug("assetMgmtCoMap.size=>" + investCompanyMap.size());
+		logger.debug("investCompanyMap.size=>" + investCompanyMap.size());
 		if (inputMajorStockHolders.equals("")) {
 			Set<String> keys = investCompanyMap.keySet();
 			Iterator<String> it = keys.iterator();
@@ -153,6 +153,54 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		writeFile(kosdaqStockList, "코스닥 주요주주 " + inputMajorStockHolders + " 보유종목(보유금액순)");
 
 		writeFile(kospiKosdaqStockMap);
+
+	}
+	
+	public void readAndWriteMajorStockHoldersThree() throws Exception {
+		inputMajorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
+		baseDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
+		if (baseDay.equals(""))
+			baseDay = thisYearFirstTradeDay;
+
+//		try {
+//			//kospiStockList = StockUtil.readKospiStockCodeNameListFromExcel();
+//			//kosdaqStockList = StockUtil.readKosdaqStockCodeNameListFromExcel();
+//			kospiStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
+//			kosdaqStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
+//			logger.debug("kospiStockList.size1 :" + kospiStockList.size());
+//			logger.debug("kosdaqStockList.size1 :" + kosdaqStockList.size());
+//		} catch (Exception ex) {
+//			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+//		}
+
+		kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
+		kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+		logger.debug("kospiStockList.size2 :" + kospiStockList.size());
+		logger.debug("kosdaqStockList.size2 :" + kosdaqStockList.size());
+
+		kospiStockList = getAllStockInfo(kospiStockList);
+		kosdaqStockList = getAllStockInfo(kosdaqStockList);
+
+		Collections.sort(kospiStockList, new RetainAmountDescCompare());
+		Collections.sort(kosdaqStockList, new RetainAmountDescCompare());
+
+		kospiKosdaqStockMap.put("코스피", kospiStockList);
+		kospiKosdaqStockMap.put("코스닥", kosdaqStockList);
+
+		writeFile(kospiStockList, "코스피 주요주주 " + inputMajorStockHolders + " 보유종목(보유금액순)");
+		writeFile(kosdaqStockList, "코스닥 주요주주 " + inputMajorStockHolders + " 보유종목(보유금액순)");
+
+		if (inputMajorStockHolders.equals("")) {
+			Set<String> keys = investCompanyMap.keySet();
+			Iterator<String> it = keys.iterator();
+			int count = 1;
+			while (it.hasNext()) {
+				String majorStockHolder = it.next();
+				writeFile(count, kospiKosdaqStockMap, majorStockHolder);
+				count++;
+			}
+			logger.debug("file write finished");
+		}
 
 	}
 
