@@ -1,54 +1,80 @@
+/**
+ *
+ */
 package html.parsing.stock;
 
-import static org.junit.Assert.fail;
+import junit.framework.TestCase;
 
-import org.junit.Test;
+/**
+ * @author user
+ *
+ */
+public class MajorStockHoldersInputDayPriceVsCurPriceTest extends TestCase {
 
-public class MajorStockHoldersInputDayPriceVsCurPriceTest {
-
-	@Test
+	/**
+	 * Test method for {@link html.parsing.stock.MajorStockHoldersInputDayPriceVsCurPrice#readAndWriteMajorStockHoldersOne()}.
+	 */
 	public void testReadAndWriteMajorStockHoldersOne() {
-		fail("Not yet implemented");
+		//new MajorStockHoldersInputDayPriceVsCurPrice().readAndWriteMajorStockHoldersOne();
 	}
-	@Test
-	public void testReadAndWriteMajorStockHoldersTwo() throws Exception {
-//		fail("Not yet implemented");
-//		new MajorStockHoldersInputDayPriceVsCurPrice().readAndWriteMajorStockHoldersTwo();
-		
+	/**
+	 * Test method for {@link html.parsing.stock.MajorStockHoldersInputDayPriceVsCurPrice#readAndWriteMajorStockHoldersTwo()}.
+	 */
+	public void testReadAndWriteMajorStockHoldersTwo() {
+		try {
+			//new MajorStockHoldersInputDayPriceVsCurPrice().readAndWriteMajorStockHoldersTwo();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	@Test
+	/**
+	 * Test method for {@link html.parsing.stock.MajorStockHoldersInputDayPriceVsCurPrice#readAndWriteMajorStockHolders_bak()}.
+	 */
 	public void testReadAndWriteMajorStockHolders_bak() {
 		fail("Not yet implemented");
 	}
 
-	@Test
+	/**
+	 * Test method for {@link html.parsing.stock.MajorStockHoldersInputDayPriceVsCurPrice#readAndWriteMajorStockHolders()}.
+	 * @throws Exception
+	 */
 	public void testReadAndWriteMajorStockHolders() throws Exception {
-//		fail("Not yet implemented");
 		new MajorStockHoldersInputDayPriceVsCurPrice().readAndWriteMajorStockHolders();
 	}
 
-	@Test
+	/**
+	 * Test method for {@link html.parsing.stock.MajorStockHoldersInputDayPriceVsCurPrice#readOne(java.lang.String, java.lang.String)}.
+	 */
 	public void testReadOne() {
 		fail("Not yet implemented");
 	}
 
-	@Test
+	/**
+	 * Test method for {@link html.parsing.stock.MajorStockHoldersInputDayPriceVsCurPrice#getAllStockInfo(java.util.List)}.
+	 */
 	public void testGetAllStockInfo() {
 		fail("Not yet implemented");
 	}
 
-	@Test
+	/**
+	 * Test method for {@link html.parsing.stock.MajorStockHoldersInputDayPriceVsCurPrice#getStockHompage(int, java.lang.String, java.lang.String)}.
+	 */
 	public void testGetStockHompage() {
 		fail("Not yet implemented");
 	}
 
-	@Test
+	/**
+	 * Test method for {@link html.parsing.stock.MajorStockHoldersInputDayPriceVsCurPrice#writeFile(java.util.List, java.lang.String)}.
+	 */
 	public void testWriteFileListOfStockVOString() {
 		fail("Not yet implemented");
 	}
 
-	@Test
+	/**
+	 * Test method for {@link html.parsing.stock.MajorStockHoldersInputDayPriceVsCurPrice#writeFile(java.util.List, java.lang.String, java.lang.String)}.
+	 */
 	public void testWriteFileListOfStockVOStringString() {
 		fail("Not yet implemented");
 	}
