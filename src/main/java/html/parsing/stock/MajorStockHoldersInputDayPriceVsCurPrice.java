@@ -131,6 +131,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 	}
 
+	@Test
 	public void readAndWriteMajorStockHoldersTwo() throws Exception {
 		inputMajorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
 		baseDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
@@ -142,9 +143,10 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		logger.debug("kospiStockList.size2 :" + kospiStockList.size());
 		logger.debug("kosdaqStockList.size2 :" + kosdaqStockList.size());
 
-		kospiStockList = readOne("344820 ", "케이씨씨글라스");
+		// kospiStockList = readOne("344820 ", "케이씨씨글라스");
 		kospiStockList = readOne("005930", "삼성전자");
-		kosdaqStockList = readOne("052260 ", "SK바이오랜드");
+		// kosdaqStockList = readOne("052260 ", "SK바이오랜드");
+		kosdaqStockList = readOne("068270", "셀트리온");
 
 		Collections.sort(kospiStockList, new RetainAmountDescCompare());
 		Collections.sort(kosdaqStockList, new RetainAmountDescCompare());
@@ -292,21 +294,21 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			return null;
 		}
 
-		StockVO stock = new StockVO();
-		stock.setListedDay(listedDay);
+		StockVO svo = new StockVO();
+		svo.setListedDay(listedDay);
 
 		// 연초가 또는 올해 상장했을 경우 상장일가 구하기
 		specificDay = StockUtil.getSpecificDay(baseDay, listedDay);
-		stock.setSpecificDay(specificDay);
+		svo.setSpecificDay(specificDay);
 		String specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
-		stock.setSpecificDayEndPrice(specificDayEndPrice);
+		svo.setSpecificDayEndPrice(specificDayEndPrice);
 
 		specificDayEndPrice = specificDayEndPrice.replaceAll(",", "");
 		logger.debug("specificDayEndPrice :" + specificDayEndPrice);
 		if (specificDayEndPrice.equals(""))
 			specificDayEndPrice = "0";
 		int iSpecificDayEndPrice = Integer.parseInt(specificDayEndPrice);
-		stock.setiSpecificDayEndPrice(iSpecificDayEndPrice);
+		svo.setiSpecificDayEndPrice(iSpecificDayEndPrice);
 		logger.debug("iSpecificDayEndPrice :" + iSpecificDayEndPrice);
 		// ===========================================================================
 
@@ -320,8 +322,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 				// logger.debug(doc.title());
 				// logger.debug(doc.html());
 			}
-			stock.setStockCode(strStockCode);
-			stock.setStockName(strStockName);
+			svo.setStockCode(strStockCode);
+			svo.setStockName(strStockName);
 
 			Elements dates = doc.select(".date");
 			if (dates != null) {
@@ -347,8 +349,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 				curPriceWithComma = curPriceWithComma.split(" ")[0];
 			String curPriceWithoutComma = curPriceWithComma.replace(",", "");
 			iCurPrice = Integer.parseInt(curPriceWithoutComma);
-			stock.setCurPrice(curPriceWithComma);
-			stock.setiCurPrice(iCurPrice);
+			svo.setCurPrice(curPriceWithComma);
+			svo.setiCurPrice(iCurPrice);
 
 			// ===========================================================================
 			double upDownRatio = 0d;
@@ -364,7 +366,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 				}
 			}
 			logger.debug("특정일 대비 up,down 비율:" + upDownRatio + "%");
-			stock.setSpecificDayEndPriceVsCurPriceUpDownRatio(upDownRatio);
+			svo.setSpecificDayEndPriceVsCurPriceUpDownRatio(upDownRatio);
 			// ===========================================================================
 
 			Elements no_exday = doc.select(".no_exday");
@@ -423,157 +425,173 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			logger.debug("aElem:" + aElem);
 
 			Elements trElem = aElem.select("tr");
-			stock.setMajorStockHolderList(new Vector<MajorStockHolderVO>());
+			svo.setMajorStockHolderList(new Vector<MajorStockHolderVO>());
 
 			long lRetainAmountTotal = 0;
 			long lRetainVolumeTotal = 0;
 			float fRetainRatioTotal = 0;
 
+			String majorStockHolderName = "";
+
 			for (Element tr : trElem) {
 				Elements td = tr.select("td");
 
-				String retainVolumeWithComma = "";
-				String retainVolumeWithoutComma = "";
-				long lRetainVolume = 0;
-
-				String retainAmount = "";
-				String retainAmountByMillion = "";
-				long lRetainAmount = 0;
-				long lRetainAmountByMillion = 0;
-
-				String specificDayRetainAmount = "";
-				long lSpecificDayRetainAmount = 0;
-
-				String specificDayRetainAmountByMillion = "";
-				long lSpecificDayRetainAmountByMillion = 0;
-
-				String retainRatio = "";
-				float fRetainRatio = 0;
-
 				if (td.size() > 0) {
 					// 주요주주
-					String majorStockHolderName = td.get(0).attr("title");
+					majorStockHolderName = td.get(0).attr("title");
+
 					logger.debug("td title majorStockHolderName:" + majorStockHolderName);
 					if (majorStockHolderName.equals(""))
-						break;
-					if (majorStockHolderName.equals(inputMajorStockHolders)) {
-						inputWordIsSameAsMajorStockHolders = true;
-						logger.debug("inputWordIsSameAsMajorStockHolders:" + inputWordIsSameAsMajorStockHolders);
+						continue;
+
+					if (!inputMajorStockHolders.equals("") && !majorStockHolderName.contains(inputMajorStockHolders)) {
+						continue;
 					}
 
-					if (majorStockHolderName.contains(" ")) {
-						majorStockHolderName = majorStockHolderName.substring(0, majorStockHolderName.indexOf(" "));
+					if (!inputMajorStockHolders.equals("")) {
+						// 입력한 주요주주가 있을 경우
+						if (majorStockHolderName.contains(inputMajorStockHolders)) {
+							if (majorStockHolderName.contains("자산운용")) {
+								investCompanyMap.put(majorStockHolderName, majorStockHolderName);
+							} else if (majorStockHolderName.contains("증권")) {
+								stockCoMap.put(majorStockHolderName, majorStockHolderName);
+							} else if (majorStockHolderName.contains("은행")) {
+								bankMap.put(majorStockHolderName, majorStockHolderName);
+							} else if (majorStockHolderName.toLowerCase().contains("investment")) {
+								investmentMap.put(majorStockHolderName, majorStockHolderName);
+							}
+							
+							StockVO tempSvo = getStock(iCurPrice, iSpecificDayEndPrice, td);
+							
+							lRetainAmountTotal += tempSvo.getlRetainAmount();
+							lRetainVolumeTotal += tempSvo.getlRetainVolume();
+							fRetainRatioTotal += tempSvo.getfRetainRatio();
+							
+							Vector<MajorStockHolderVO> majorStockHolderVO = tempSvo.getMajorStockHolderList();
+							
+							svo.getMajorStockHolderList().addAll(majorStockHolderVO);
+							logger.debug(svo.getMajorStockHolderList().toString());
+							break;
+						}
+					} else {
+						// 입력한 주요주주가 없을 경우
+						majorStockHolderNameMap.put(majorStockHolderName, majorStockHolderName);
+						StockVO tempSvo = getStock(iCurPrice, iSpecificDayEndPrice, td);
+						lRetainAmountTotal += tempSvo.getlRetainAmount();
+						lRetainVolumeTotal += tempSvo.getlRetainVolume();
+						fRetainRatioTotal += tempSvo.getfRetainRatio();
+						
+						Vector<MajorStockHolderVO> majorStockHolderVO = tempSvo.getMajorStockHolderList();
+						
+						svo.getMajorStockHolderList().addAll(majorStockHolderVO);
 					}
-					if (majorStockHolderName.contains("자산운용")) {
-						investCompanyMap.put(majorStockHolderName, majorStockHolderName);
-					}
-					if (majorStockHolderName.contains("증권")) {
-						stockCoMap.put(majorStockHolderName, majorStockHolderName);
-					}
-					if (majorStockHolderName.contains("은행")) {
-						bankMap.put(majorStockHolderName, majorStockHolderName);
-					}
-					if (majorStockHolderName.toLowerCase().contains("investment")) {
-						investmentMap.put(majorStockHolderName, majorStockHolderName);
-					}
 
-					majorStockHolderNameMap.put(majorStockHolderName, majorStockHolderName);
-
-//					if (majorStockHolderName.indexOf(inputMajorStockHolders) != -1) {
-					// 보유주식수
-					retainVolumeWithComma = StringUtils.defaultIfEmpty(td.get(1).text(), "0");
-					retainVolumeWithoutComma = retainVolumeWithComma.replaceAll(",", "");
-					retainVolumeWithoutComma = retainVolumeWithoutComma.replaceAll("&nbsp;", "");
-					retainVolumeWithoutComma = retainVolumeWithoutComma.replaceAll("&bsp;", "");
-					retainVolumeWithoutComma = retainVolumeWithoutComma.replaceAll("&sp;", "");
-					retainVolumeWithoutComma = retainVolumeWithoutComma.replaceAll("&p;", "");
-					lRetainVolume = Long.parseLong(retainVolumeWithoutComma);
-
-					// 단위: 백만원
-					lRetainAmount = lRetainVolume * iCurPrice;
-					lRetainAmountByMillion = lRetainAmount / 1000000;
-
-					retainAmount = df.format(lRetainAmount);
-					retainAmountByMillion = df.format(lRetainAmountByMillion);
-
-					retainRatio = StringUtils.defaultIfEmpty(td.get(2).text(), "0");
-					logger.debug("retainRatio1 :[" + retainRatio + "]");
-					retainRatio = retainRatio.replaceAll("&nbsp;", "");
-					retainRatio = retainRatio.replaceAll("&bsp;", "");
-					retainRatio = retainRatio.replaceAll("&sp;", "");
-					retainRatio = retainRatio.replaceAll("&p;", "");
-					fRetainRatio = Float.parseFloat(retainRatio);
-
-					lRetainAmountTotal += lRetainAmount;
-					lRetainVolumeTotal += lRetainVolume;
-					fRetainRatioTotal += fRetainRatio;
-					logger.debug("retainVolumeWithComma :" + retainVolumeWithComma);
-					logger.debug("retainAmount :" + retainAmount);
-					logger.debug("retainRatio :" + retainRatio);
-
-					MajorStockHolderVO majorStockHolderVO = new MajorStockHolderVO();
-
-					majorStockHolderVO.setMajorStockHolderName(majorStockHolderName);
-					logger.debug("set and getMajorStockHolderName:" + majorStockHolderVO.getMajorStockHolderName());
-					majorStockHolderVO.setRetainVolume(retainVolumeWithComma);
-					majorStockHolderVO.setRetainAmount(retainAmount);
-					majorStockHolderVO.setRetainAmountByMillion(retainAmountByMillion);
-					majorStockHolderVO.setRetainRatio(retainRatio);
-
-					majorStockHolderVO.setlRetainVolume(lRetainVolume);
-					majorStockHolderVO.setlRetainAmount(lRetainAmount);
-					majorStockHolderVO.setlRetainAmountByMillion(lRetainAmountByMillion);
-					majorStockHolderVO.setfRetainRatio(fRetainRatio);
-
-					// 특정일 보유가격=보유주식수*특정일종가
-					lSpecificDayRetainAmount = lRetainVolume * iSpecificDayEndPrice;
-					specificDayRetainAmount = df.format(lSpecificDayRetainAmount);
-
-					lSpecificDayRetainAmountByMillion = lSpecificDayRetainAmount / 1000000;
-					specificDayRetainAmountByMillion = df.format(lSpecificDayRetainAmountByMillion);
-
-					majorStockHolderVO.setSpecificDayRetainAmount(specificDayRetainAmount);
-					majorStockHolderVO.setlSpecificDayRetainAmount(lSpecificDayRetainAmount);
-
-					majorStockHolderVO.setSpecificDayRetainAmountByMillion(specificDayRetainAmountByMillion);
-					majorStockHolderVO.setlSpecificDayRetainAmountByMillion(lSpecificDayRetainAmountByMillion);
-
-					// 차이금액=특정시점 총액-현재 총액
-					long lSpecificDayVsCurDayGapAmount = lRetainAmount - lSpecificDayRetainAmount;
-					String specificDayVsCurDayGapAmount = df.format(lSpecificDayVsCurDayGapAmount);
-					majorStockHolderVO.setlSpecificDayVsCurDayGapAmount(lSpecificDayVsCurDayGapAmount);
-					majorStockHolderVO.setSpecificDayVsCurDayGapAmount(specificDayVsCurDayGapAmount);
-
-					long lSpecificDayVsCurDayGapAmountByMillion = lSpecificDayVsCurDayGapAmount / 1000000;
-					String specificDayVsCurDayGapAmountByMillion = df.format(lSpecificDayVsCurDayGapAmountByMillion);
-					majorStockHolderVO
-							.setlSpecificDayVsCurDayGapAmountByMillion(lSpecificDayVsCurDayGapAmountByMillion);
-					majorStockHolderVO.setSpecificDayVsCurDayGapAmountByMillion(specificDayVsCurDayGapAmountByMillion);
-					logger.debug("majorStockHolderVO :" + majorStockHolderVO);
-
-					stock.getMajorStockHolderList().add(majorStockHolderVO);
-					logger.debug(stock.getMajorStockHolderList().toString());
-//					}
 				}
 			}
 
-			stock.setlRetainVolume(lRetainVolumeTotal);
-			stock.setlRetainAmount(lRetainAmountTotal);
-			stock.setfRetainRatio(fRetainRatioTotal);
+			svo.setlRetainVolume(lRetainVolumeTotal);
+			svo.setlRetainAmount(lRetainAmountTotal);
+			svo.setfRetainRatio(fRetainRatioTotal);
 
-			logger.debug("stock.getMajorStockHolderList().size() :" + stock.getMajorStockHolderList().size());
+			logger.debug("stock.getMajorStockHolderList().size() :" + svo.getMajorStockHolderList().size());
 
-			if (stock.getMajorStockHolderList().size() > 0) {
-				return stock;
+			if (svo.getMajorStockHolderList().size() > 0) {
+				return svo;
 			} else {
 				logger.debug("stock.getMajorStockHolderList().size() is less than 0");
 				return null;
 			}
 
-		} catch (IOException e) {
+		} catch (
+
+		IOException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static String getStringNumberWithoutComma(String strWithComma) {
+		String strWithoutComma = strWithComma.replaceAll(",", "");
+		strWithoutComma = strWithoutComma.replaceAll("&nbsp;", "");
+		strWithoutComma = strWithoutComma.replaceAll("&bsp;", "");
+		strWithoutComma = strWithoutComma.replaceAll("&sp;", "");
+		strWithoutComma = strWithoutComma.replaceAll("&p;", "");
+		return strWithoutComma;
+	}
+
+	public static StockVO getStock(int iCurPrice,int iSpecificDayEndPrice, Elements td) {
+		StockVO tempSvo = new StockVO();
+		tempSvo.setMajorStockHolderList(new Vector<MajorStockHolderVO>());
+		
+		String majorStockHolderName = StringUtils.defaultIfEmpty(td.get(0).attr("title"),"");
+
+		// 보유주식수
+		String retainVolumeWithComma = StringUtils.defaultIfEmpty(td.get(1).text(), "0");
+		String retainVolumeWithoutComma = getStringNumberWithoutComma(retainVolumeWithComma);		
+		long lRetainVolume = Long.parseLong(retainVolumeWithoutComma);
+
+		// 단위: 백만원
+		long lRetainAmount = lRetainVolume * iCurPrice;
+		long lRetainAmountByMillion = lRetainAmount / 1000000;
+
+		String retainAmount = df.format(lRetainAmount);
+		String retainAmountByMillion = df.format(lRetainAmountByMillion);
+
+		String retainRatio = StringUtils.defaultIfEmpty(td.get(2).text(), "0");
+		retainRatio = getStringNumberWithoutComma(retainRatio);		
+		logger.debug("retainRatio1 :[" + retainRatio + "]");
+		float fRetainRatio = Float.parseFloat(retainRatio);
+
+		tempSvo.setlRetainAmount(lRetainAmount);
+		tempSvo.setlRetainVolume(lRetainVolume);
+		tempSvo.setfRetainRatio(fRetainRatio);
+		
+		logger.debug("retainVolumeWithComma :" + retainVolumeWithComma);
+		logger.debug("retainAmount :" + retainAmount);
+		logger.debug("retainRatio :" + retainRatio);
+
+		MajorStockHolderVO majorStockHolderVO = new MajorStockHolderVO();
+
+		majorStockHolderVO.setMajorStockHolderName(majorStockHolderName);
+		logger.debug("set and getMajorStockHolderName:" + majorStockHolderVO.getMajorStockHolderName());
+		majorStockHolderVO.setRetainVolume(retainVolumeWithComma);
+		majorStockHolderVO.setRetainAmount(retainAmount);
+		majorStockHolderVO.setRetainAmountByMillion(retainAmountByMillion);
+		majorStockHolderVO.setRetainRatio(retainRatio);
+
+		majorStockHolderVO.setlRetainVolume(lRetainVolume);
+		majorStockHolderVO.setlRetainAmount(lRetainAmount);
+		majorStockHolderVO.setlRetainAmountByMillion(lRetainAmountByMillion);
+		majorStockHolderVO.setfRetainRatio(fRetainRatio);
+
+		// 특정일 보유가격=보유주식수*특정일종가
+		long lSpecificDayRetainAmount = lRetainVolume * iSpecificDayEndPrice;
+		String specificDayRetainAmount = df.format(lSpecificDayRetainAmount);
+
+		long lSpecificDayRetainAmountByMillion = lSpecificDayRetainAmount / 1000000;
+		String specificDayRetainAmountByMillion = df.format(lSpecificDayRetainAmountByMillion);
+
+		majorStockHolderVO.setSpecificDayRetainAmount(specificDayRetainAmount);
+		majorStockHolderVO.setlSpecificDayRetainAmount(lSpecificDayRetainAmount);
+
+		majorStockHolderVO.setSpecificDayRetainAmountByMillion(specificDayRetainAmountByMillion);
+		majorStockHolderVO.setlSpecificDayRetainAmountByMillion(lSpecificDayRetainAmountByMillion);
+
+		// 차이금액=특정시점 총액-현재 총액
+		long lSpecificDayVsCurDayGapAmount = lRetainAmount - lSpecificDayRetainAmount;
+		String specificDayVsCurDayGapAmount = df.format(lSpecificDayVsCurDayGapAmount);
+		majorStockHolderVO.setlSpecificDayVsCurDayGapAmount(lSpecificDayVsCurDayGapAmount);
+		majorStockHolderVO.setSpecificDayVsCurDayGapAmount(specificDayVsCurDayGapAmount);
+
+		long lSpecificDayVsCurDayGapAmountByMillion = lSpecificDayVsCurDayGapAmount / 1000000;
+		String specificDayVsCurDayGapAmountByMillion = df.format(lSpecificDayVsCurDayGapAmountByMillion);
+		majorStockHolderVO.setlSpecificDayVsCurDayGapAmountByMillion(lSpecificDayVsCurDayGapAmountByMillion);
+		majorStockHolderVO.setSpecificDayVsCurDayGapAmountByMillion(specificDayVsCurDayGapAmountByMillion);
+		logger.debug("majorStockHolderVO :" + majorStockHolderVO);
+
+		tempSvo.getMajorStockHolderList().add(majorStockHolderVO);
+		logger.debug(tempSvo.getMajorStockHolderList().toString());
+		return tempSvo;
 	}
 
 	public void writeFile(List<StockVO> list, String title) {
