@@ -1253,7 +1253,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
-			String title = strYMD + "_" + strKospiKosdaqKey + "_" + companyType + " 주요주주 보유종목(보유금액순)";
+			String title = strYMD + " " + strKospiKosdaqKey + " " + companyType + " 주요주주 보유종목(보유금액순)";
 			sb1.append("\t<h2>" + title + "</h2>");
 
 			sb1.append("\t<h2>비교 대상 기준일 :" + specificDay + "</h2>");
