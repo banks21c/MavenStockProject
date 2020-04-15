@@ -193,7 +193,7 @@ public class WwwHankyungCom extends News {
             sb1.append("<span style='font-size:12px'>").append(writer).append("</span><br><br>\n");
             sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
             sb1.append(strContent).append("<br><br>\n");
-            sb1.append(copyRight).append("<br><br>\n");
+//            sb1.append(copyRight).append("<br><br>\n");
             sb1.append("</div>\r\n");
             sb1.append("</body>\r\n");
             sb1.append("</html>\r\n");
