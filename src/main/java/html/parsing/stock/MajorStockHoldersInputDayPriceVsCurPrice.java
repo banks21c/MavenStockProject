@@ -131,7 +131,6 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 	}
 
-	@Test
 	public void readAndWriteMajorStockHoldersTwo() throws Exception {
 		inputMajorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
 		baseDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
@@ -209,6 +208,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 	}
 
+	@Test
 	public void readAndWriteMajorStockHolders() throws Exception {
 		inputMajorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
 		baseDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
@@ -447,7 +447,12 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 					if (!inputMajorStockHolders.equals("") && !majorStockHolderName.contains(inputMajorStockHolders)) {
 						continue;
 					}
-
+					
+					if (majorStockHolderName.equals(inputMajorStockHolders)) {
+						inputWordIsSameAsMajorStockHolders = true;
+						logger.debug("inputWordIsSameAsMajorStockHolders:" + inputWordIsSameAsMajorStockHolders);
+					}
+					
 					if (!inputMajorStockHolders.equals("")) {
 						// 입력한 주요주주가 있을 경우
 						if (majorStockHolderName.contains(inputMajorStockHolders)) {
@@ -460,15 +465,15 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 							} else if (majorStockHolderName.toLowerCase().contains("investment")) {
 								investmentMap.put(majorStockHolderName, majorStockHolderName);
 							}
-							
+
 							StockVO tempSvo = getStock(iCurPrice, iSpecificDayEndPrice, td);
-							
+
 							lRetainAmountTotal += tempSvo.getlRetainAmount();
 							lRetainVolumeTotal += tempSvo.getlRetainVolume();
 							fRetainRatioTotal += tempSvo.getfRetainRatio();
-							
+
 							Vector<MajorStockHolderVO> majorStockHolderVO = tempSvo.getMajorStockHolderList();
-							
+
 							svo.getMajorStockHolderList().addAll(majorStockHolderVO);
 							logger.debug(svo.getMajorStockHolderList().toString());
 							break;
@@ -480,9 +485,9 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 						lRetainAmountTotal += tempSvo.getlRetainAmount();
 						lRetainVolumeTotal += tempSvo.getlRetainVolume();
 						fRetainRatioTotal += tempSvo.getfRetainRatio();
-						
+
 						Vector<MajorStockHolderVO> majorStockHolderVO = tempSvo.getMajorStockHolderList();
-						
+
 						svo.getMajorStockHolderList().addAll(majorStockHolderVO);
 					}
 
@@ -509,7 +514,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		}
 		return null;
 	}
-	
+
 	public static String getStringNumberWithoutComma(String strWithComma) {
 		String strWithoutComma = strWithComma.replaceAll(",", "");
 		strWithoutComma = strWithoutComma.replaceAll("&nbsp;", "");
@@ -519,15 +524,15 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		return strWithoutComma;
 	}
 
-	public static StockVO getStock(int iCurPrice,int iSpecificDayEndPrice, Elements td) {
+	public static StockVO getStock(int iCurPrice, int iSpecificDayEndPrice, Elements td) {
 		StockVO tempSvo = new StockVO();
 		tempSvo.setMajorStockHolderList(new Vector<MajorStockHolderVO>());
-		
-		String majorStockHolderName = StringUtils.defaultIfEmpty(td.get(0).attr("title"),"");
+
+		String majorStockHolderName = StringUtils.defaultIfEmpty(td.get(0).attr("title"), "");
 
 		// 보유주식수
 		String retainVolumeWithComma = StringUtils.defaultIfEmpty(td.get(1).text(), "0");
-		String retainVolumeWithoutComma = getStringNumberWithoutComma(retainVolumeWithComma);		
+		String retainVolumeWithoutComma = getStringNumberWithoutComma(retainVolumeWithComma);
 		long lRetainVolume = Long.parseLong(retainVolumeWithoutComma);
 
 		// 단위: 백만원
@@ -538,14 +543,14 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		String retainAmountByMillion = df.format(lRetainAmountByMillion);
 
 		String retainRatio = StringUtils.defaultIfEmpty(td.get(2).text(), "0");
-		retainRatio = getStringNumberWithoutComma(retainRatio);		
+		retainRatio = getStringNumberWithoutComma(retainRatio);
 		logger.debug("retainRatio1 :[" + retainRatio + "]");
 		float fRetainRatio = Float.parseFloat(retainRatio);
 
 		tempSvo.setlRetainAmount(lRetainAmount);
 		tempSvo.setlRetainVolume(lRetainVolume);
 		tempSvo.setfRetainRatio(fRetainRatio);
-		
+
 		logger.debug("retainVolumeWithComma :" + retainVolumeWithComma);
 		logger.debug("retainAmount :" + retainAmount);
 		logger.debug("retainRatio :" + retainRatio);
@@ -993,9 +998,9 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가 대비 등락율</td>\r\n");
-//			if (!inputWordIsSameAsMajorStockHolders) {
-//				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
-//			}
+			if (!inputWordIsSameAsMajorStockHolders) {
+				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
+			}
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재 보유총액(억)</td>\r\n");
@@ -1029,9 +1034,9 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 						sb1.append("<td style='text-align:right'>")
 								.append(svo.getSpecificDayEndPriceVsCurPriceUpDownRatio() + "%").append("</td>\r\n");
 
-//						if (!inputWordIsSameAsMajorStockHolders) {
-//							sb1.append("<td>" + holderVO.getMajorStockHolderName() + "</td>\r\n");
-//						}
+						if (!inputWordIsSameAsMajorStockHolders) {
+							sb1.append("<td>" + holderVO.getMajorStockHolderName() + "</td>\r\n");
+						}
 						sb1.append("<td style='text-align:right'>" + holderVO.getRetainVolume() + "</td>\r\n");
 						sb1.append("<td style='text-align:right'>" + holderVO.getRetainRatio() + "%</td>\r\n");
 						sb1.append("<td style='text-align:right'>"
@@ -1160,9 +1165,9 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가</td>\r\n");
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가 대비 등락율</td>\r\n");
-//			if (!inputWordIsSameAsMajorStockHolders) {
-//				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
-//			}
+				if (!inputWordIsSameAsMajorStockHolders) {
+					sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
+				}
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재 보유총액(억)</td>\r\n");
@@ -1198,9 +1203,9 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 									.append(svo.getSpecificDayEndPriceVsCurPriceUpDownRatio() + "%")
 									.append("</td>\r\n");
 
-//						if (!inputWordIsSameAsMajorStockHolders) {
-//							sb1.append("<td>" + holderVO.getMajorStockHolderName() + "</td>\r\n");
-//						}
+							if (!inputWordIsSameAsMajorStockHolders) {
+								sb1.append("<td>" + holderVO.getMajorStockHolderName() + "</td>\r\n");
+							}
 							sb1.append("<td style='text-align:right'>" + holderVO.getRetainVolume() + "</td>\r\n");
 							sb1.append("<td style='text-align:right'>" + holderVO.getRetainRatio() + "%</td>\r\n");
 							sb1.append("<td style='text-align:right'>"
@@ -1343,9 +1348,9 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가</td>\r\n");
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가 대비 등락율</td>\r\n");
-//			if (!inputWordIsSameAsMajorStockHolders) {
-//				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
-//			}
+				if (!inputWordIsSameAsMajorStockHolders) {
+					sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
+				}
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재 보유총액(억)</td>\r\n");
@@ -1381,9 +1386,9 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 									.append(svo.getSpecificDayEndPriceVsCurPriceUpDownRatio() + "%")
 									.append("</td>\r\n");
 
-//						if (!inputWordIsSameAsMajorStockHolders) {
-//							sb1.append("<td>" + holderVO.getMajorStockHolderName() + "</td>\r\n");
-//						}
+							if (!inputWordIsSameAsMajorStockHolders) {
+								sb1.append("<td>" + holderVO.getMajorStockHolderName() + "</td>\r\n");
+							}
 							sb1.append("<td style='text-align:right'>" + holderVO.getRetainVolume() + "</td>\r\n");
 							sb1.append("<td style='text-align:right'>" + holderVO.getRetainRatio() + "%</td>\r\n");
 							sb1.append("<td style='text-align:right'>"
