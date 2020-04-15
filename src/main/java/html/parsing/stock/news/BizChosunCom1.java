@@ -13,7 +13,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public class BizChosunCom {
+public class BizChosunCom1 {
 
     final static String userHome = System.getProperty("user.home");
     java.util.logging.Logger logger = null;
@@ -36,11 +36,11 @@ public class BizChosunCom {
         new BizChosunCom1(1);
     }
 
-    BizChosunCom() {
+    BizChosunCom1() {
         logger = java.util.logging.Logger.getLogger(this.getClass().getName());
     }
 
-    BizChosunCom(int i) {
+    BizChosunCom1(int i) {
         logger = java.util.logging.Logger.getLogger(this.getClass().getName());
         logger.log(Level.INFO, this.getClass().getName());
         String url = JOptionPane.showInputDialog("조선일보 URL을 입력하여 주세요.");
@@ -52,13 +52,14 @@ public class BizChosunCom {
         createHTMLFile(url);
     }
 
-    public static StringBuilder createHTMLFile(String url) {
+    public StringBuilder createHTMLFile(String url) {
         StringBuilder sb1 = new StringBuilder();
         Document doc;
         String strFileNameTitle = "";
         String strFileNameDate = "";
         try {
             doc = Jsoup.connect(url).get();
+            logger.log(Level.INFO, doc.html());
             doc.select("iframe").remove();
             doc.select("script").remove();
             doc.select(".news_rel").remove();

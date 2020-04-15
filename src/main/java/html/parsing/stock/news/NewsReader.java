@@ -715,7 +715,7 @@ public class NewsReader extends javax.swing.JFrame {
         } else if (newsCompany.equals("JAIB")) {
             sb = NewsJoinsCom.createHTMLFile(url);
         } else if (newsCompany.equals("CHOSUNBIZ")) {
-            sb = NewsBizChosunCom.createHTMLFile(url);
+            sb = BizChosunCom.createHTMLFile(url);
         } else if (newsCompany.equals("CSIB")) {
             sb = NewsChosun.createHTMLFile(url);
         } else if (newsCompany.equals("HKIB")) {
