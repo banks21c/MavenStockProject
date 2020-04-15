@@ -27,9 +27,9 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
-public class NewsBizChosunCom extends News {
+public class BizChosunCom extends News {
 
-    private static Logger logger = LoggerFactory.getLogger(NewsBizChosunCom.class);
+    private static Logger logger = LoggerFactory.getLogger(BizChosunCom.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -46,14 +46,14 @@ public class NewsBizChosunCom extends News {
      * @param args
      */
     public static void main(String[] args) {
-        new NewsBizChosunCom(1);
+        new BizChosunCom(1);
     }
 
-    NewsBizChosunCom() {
+    BizChosunCom() {
 
     }
 
-    NewsBizChosunCom(int i) {
+    BizChosunCom(int i) {
 
 
         String url = JOptionPane.showInputDialog("조선Biz URL을 입력하여 주세요.");
@@ -87,7 +87,9 @@ public class NewsBizChosunCom extends News {
             doc.select(".news_like").remove();
             doc.select("#spiLayer").remove();
             doc.select(".sns_share").remove();
-
+            doc.select(".news_rel").remove();
+            doc.select("#news_rel_id").remove();
+            
             strTitle = doc.select("#title_text").text();
             if (strTitle == null || strTitle.equals("")) {
                 strTitle = doc.select(".news_title_text h1").text();
