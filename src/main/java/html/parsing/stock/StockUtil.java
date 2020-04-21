@@ -1609,7 +1609,6 @@ public class StockUtil {
 				logger.debug("alive");
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -1679,7 +1678,7 @@ public class StockUtil {
 		}
 	}
 
-	@Test
+	// @Test
 	public void getSpecificDayEndPriceTest() {
 		String specificDayEndPrice = getSpecificDayEndPrice("204210", "모두투어리츠", "2020.01.21");
 	}
@@ -1709,6 +1708,51 @@ public class StockUtil {
 		return specificDayEndPrice;
 	}
 
+//	@Test
+	public void getSpecificDayPageNoTest() {
+		int pageNo = getSpecificDayPageNo("005930", "삼성전자", "2020.01.02");
+		logger.debug("pageNo:" + pageNo);
+		pageNo = getSpecificDayPageNo("005930", "삼성전자", "2019.01.02");
+		logger.debug("pageNo:" + pageNo);
+		pageNo = getSpecificDayPageNo("005930", "삼성전자", "2018.01.02");
+		logger.debug("pageNo:" + pageNo);
+	}
+
+	public static int getSpecificDayPageNo(String stockCode, String stockName, String findDay) {
+		logger.debug("findDay:" + findDay);
+
+		// 상장일이 찾으려는 날짜보다 과거이면...찾으려는 날짜
+		// 상장일이 찾으려는 날짜보다 이후이면...상장일
+		// 찾으려는 날짜가 상장일 이후이면...찾으려는 날짜
+		// 찾으려는 날짜가 상장일 이전이면...상장일
+		int pageNo = 1;
+		findDate = false;
+		while (!findDate) {
+			if (pageNo > 100)
+				break;
+			try {
+				pageNo = findSpecificDayPageNo(stockCode, stockName, findDay, pageNo);
+				if (!findDate) {
+					pageNo++;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		logger.debug(stockCode + " " + stockName + " " + findDay + " pageNo :" + pageNo);
+		return pageNo;
+	}
+
+	@Test
+	public void findSpecificDayEndPriceTest() {
+		try {
+			String specificDayEndPrice = StockUtil.findSpecificDayEndPrice("338100", "NH프라임리츠", "NH프라임리츠", 9);
+			logger.debug("specificDayEndPrice:" + specificDayEndPrice);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static String findSpecificDayEndPrice(String stockCode, String stockName, String findDay, int pageNo)
 			throws IOException {
 		String specificDayEndPrice = "0";
@@ -1734,7 +1778,6 @@ public class StockUtil {
 
 		doc = Jsoup.parse(strDoc);
 
-		Elements type2s = doc.select(".type2");
 		Element type2 = doc.select(".type2").get(0);
 
 		Elements thEls = type2.select("tbody tr th");
@@ -1770,7 +1813,58 @@ public class StockUtil {
 		return specificDayEndPrice;
 	}
 
-	@Test
+	public static int findSpecificDayPageNo(String stockCode, String stockName, String findDay, int pageNo)
+			throws IOException {
+		Document doc;
+		// 종합분석-기업개요
+//			doc = Jsoup.connect("https://finance.naver.com/item/sise_day.nhn?code=" + stockCode).get();
+//			String url = "https://finance.naver.com/item/frgn.nhn?code=" + stockCode;
+		String url = "https://finance.naver.com/item/sise_day.nhn?code=" + stockCode + "&page=" + pageNo;
+		logger.debug("url : " + url);
+		String userAgent = "Mozilla";
+		// This will get you the response.
+		Connection.Response res = Jsoup.connect(url).method(Connection.Method.POST).followRedirects(false)
+				.userAgent(userAgent).execute();
+		// This will get you cookies
+		Map<String, String> loginCookies = res.cookies();
+		// And this is the easiest way I've found to remain in session
+		doc = Jsoup.connect(url).cookies(loginCookies).userAgent(userAgent).get();
+		doc.select("link").remove();
+		doc.select("javascript").remove();
+
+		String strDoc = doc.html();
+		strDoc = strDoc.replace("&nbsp;", " ");
+
+		doc = Jsoup.parse(strDoc);
+
+		Element type2 = doc.select(".type2").get(0);
+
+		Elements thEls = type2.select("tbody tr th");
+		int dayIndex = 0;
+		for (int i = 0; i < thEls.size(); i++) {
+			Element thEl = thEls.get(i);
+			String key = thEl.text();
+			if (key.equals("날짜")) {
+				dayIndex = i;
+			}
+		}
+		Elements trEls = type2.select("tbody tr");
+		String temp_tradeDay = "";
+		for (Element tr : trEls) {
+			Elements tdEls = tr.select("td");
+			if (tdEls.size() > 1) {
+				Element dayEl = tdEls.get(dayIndex);
+				temp_tradeDay = dayEl.text();
+				if (findDay.equals(temp_tradeDay)) {
+					findDate = true;
+					break;
+				}
+			}
+		}
+		return pageNo;
+	}
+
+	// @Test
 	public void moneyUnitSplitTest() {
 		String amount = "94,395,847,741,020".replaceAll(",", "");
 		long lAmount = Long.parseLong(amount);
@@ -1852,12 +1946,12 @@ public class StockUtil {
 		if (!strJo.equals("0")) {
 			sb.append(iJo + "조 ");
 		}
-		if (unit.equals("억")||unit.equals("만")||unit.equals("원")) {
+		if (unit.equals("억") || unit.equals("만") || unit.equals("원")) {
 			if (!strUk.equals("0")) {
 				sb.append(iUk + "억 ");
 			}
 		}
-		if (unit.equals("만")||unit.equals("원")) {
+		if (unit.equals("만") || unit.equals("원")) {
 			if (!strMan.equals("0")) {
 				sb.append(iMan + "만 ");
 			}

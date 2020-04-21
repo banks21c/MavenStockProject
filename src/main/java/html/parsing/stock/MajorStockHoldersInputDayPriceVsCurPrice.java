@@ -45,6 +45,10 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 	static String lastYearPeakTradeDay = "2019.04.15";// 2019년 최고지수 2252.05
 	static String twoYearAgoFirstTradeDay = "2018.01.02";// 2018년 첫 거래일
 	static String twoYearAgoPeakTradeDay = "2018.01.29";// 2018년 최고지수 2607.20
+
+	// 특정 날짜가 몇 페이지에 있는가?
+	static int pageNo = 0;
+
 	// 주요주주 목록
 	static Map<String, String> majorStockHolderNameMap = new HashMap<String, String>();
 	// 자산운용사 목록
@@ -262,6 +266,10 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 	public static List<StockVO> getAllStockInfo(List<StockVO> stockList) {
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
+		// 대표주식(삼성전자) 페이지 번호 구하기
+		pageNo = StockUtil.getSpecificDayPageNo("005930", "삼성전자", baseDay);
+		logger.debug("pageNo :" + pageNo);
+
 		int cnt = 0;
 		for (StockVO svo : stockList) {
 			String stockCode = svo.getStockCode();
@@ -299,8 +307,22 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 		// 연초가 또는 올해 상장했을 경우 상장일가 구하기
 		specificDay = StockUtil.getSpecificDay(baseDay, listedDay);
+		logger.debug("specificDay :" + specificDay);
 		svo.setSpecificDay(specificDay);
-		String specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
+
+//		String specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
+		String specificDayEndPrice = "0";
+		try {
+			if (baseDay.equals(specificDay)) {
+				specificDayEndPrice = StockUtil.findSpecificDayEndPrice(strStockCode, strStockName, specificDay,
+						pageNo);
+			} else {
+				specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
+			}
+			logger.debug("specificDayEndPrice :" + specificDayEndPrice);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		svo.setSpecificDayEndPrice(specificDayEndPrice);
 
 		specificDayEndPrice = specificDayEndPrice.replaceAll(",", "");
@@ -315,7 +337,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		Document doc;
 		try {
 			// 종합정보
-			//https://finance.naver.com/item/main.nhn?code=065450
+			// https://finance.naver.com/item/main.nhn?code=065450
 			String itemMainUrl = "http://finance.naver.com/item/main.nhn?code=" + strStockCode;
 			logger.debug("itemMainUrl:" + itemMainUrl);
 			doc = Jsoup.connect(itemMainUrl).get();
@@ -448,12 +470,12 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 					if (!inputMajorStockHolders.equals("") && !majorStockHolderName.contains(inputMajorStockHolders)) {
 						continue;
 					}
-					
+
 					if (majorStockHolderName.equals(inputMajorStockHolders)) {
 						inputWordIsSameAsMajorStockHolders = true;
 						logger.debug("inputWordIsSameAsMajorStockHolders:" + inputWordIsSameAsMajorStockHolders);
 					}
-					
+
 					if (!inputMajorStockHolders.equals("")) {
 						// 입력한 주요주주가 있을 경우
 						if (majorStockHolderName.contains(inputMajorStockHolders)) {
