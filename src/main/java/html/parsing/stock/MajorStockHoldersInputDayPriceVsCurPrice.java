@@ -104,7 +104,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		// 유안타제5호스팩 유안타제5호스팩
 		kosdaqStockList = readOne("336060 ", "유안타제5호스팩");
 		logger.debug("kosdaqStockList:" + kosdaqStockList);
-		writeFile(kosdaqStockList, "코스닥 주요주주 " + inputMajorStockHolders + " 보유종목(보유금액순)");
+		writeFile(kosdaqStockList, "코스닥 " + inputMajorStockHolders + " 보유종목(보유금액순)");
 
 		kospiKosdaqStockMap.put("코스닥", kosdaqStockList);
 
@@ -153,8 +153,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		kospiKosdaqStockMap.put("코스피", kospiStockList);
 		kospiKosdaqStockMap.put("코스닥", kosdaqStockList);
 
-		writeFile(kospiStockList, "코스피 주요주주 " + inputMajorStockHolders + " 보유종목(보유금액순)");
-		writeFile(kosdaqStockList, "코스닥 주요주주 " + inputMajorStockHolders + " 보유종목(보유금액순)");
+		writeFile(kospiStockList, "코스피 " + inputMajorStockHolders + " 보유종목(보유금액순)");
+		writeFile(kosdaqStockList, "코스닥 " + inputMajorStockHolders + " 보유종목(보유금액순)");
 
 		writeFile(kospiKosdaqStockMap);
 
@@ -191,8 +191,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		kospiKosdaqStockMap.put("코스피", kospiStockList);
 		kospiKosdaqStockMap.put("코스닥", kosdaqStockList);
 
-		writeFile(kospiStockList, "코스피 주요주주 " + inputMajorStockHolders + " 보유종목(보유금액순)");
-		writeFile(kosdaqStockList, "코스닥 주요주주 " + inputMajorStockHolders + " 보유종목(보유금액순)");
+		writeFile(kospiStockList, "코스피 " + inputMajorStockHolders + " 보유종목(보유금액순)");
+		writeFile(kosdaqStockList, "코스닥 " + inputMajorStockHolders + " 보유종목(보유금액순)");
 
 		if (inputMajorStockHolders.equals("")) {
 			Set<String> keys = investCompanyMap.keySet();
@@ -229,8 +229,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		kospiKosdaqStockMap.put("코스피", kospiStockList);
 		kospiKosdaqStockMap.put("코스닥", kosdaqStockList);
 
-		writeFile(kospiStockList, "코스피 주요주주 " + inputMajorStockHolders + " 보유종목(보유금액순)");
-		writeFile(kosdaqStockList, "코스닥 주요주주 " + inputMajorStockHolders + " 보유종목(보유금액순)");
+		writeFile(kospiStockList, "코스피 " + inputMajorStockHolders + " 보유종목(보유금액순)");
+		writeFile(kosdaqStockList, "코스닥 " + inputMajorStockHolders + " 보유종목(보유금액순)");
 
 		// 자산운용사
 		writeFile(kospiKosdaqStockMap, investCompanyMap, "자산운용사");
@@ -315,6 +315,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		Document doc;
 		try {
 			// 종합정보
+			//https://finance.naver.com/item/main.nhn?code=065450
 			String itemMainUrl = "http://finance.naver.com/item/main.nhn?code=" + strStockCode;
 			logger.debug("itemMainUrl:" + itemMainUrl);
 			doc = Jsoup.connect(itemMainUrl).get();
@@ -932,7 +933,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			return;
 		}
 
-		String title = strYMD + " 주요주주 " + majorStockHolder + " 보유종목(보유금액순)";
+		String title = strYMD + " " + majorStockHolder + " 보유종목(보유금액순)";
 		sb1.append("\t<h1>" + title + "</h1>");
 		sb1.append("\t<h2>비교 대상 기준일 :" + specificDay + "</h2>");
 
@@ -1133,7 +1134,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 					continue;
 				}
 
-				String title = strYMD + " 주요주주 " + assetMgmtCo + " 보유종목(보유금액순)";
+				String title = strYMD + " " + assetMgmtCo + " 보유종목(보유금액순)";
 				sb1.append("\t<h3>" + title + "</h3>");
 
 				String totalSpecificDayRetainAmount = df.format(lTotalSpecificDayRetainAmount);
