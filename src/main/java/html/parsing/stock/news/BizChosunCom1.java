@@ -13,6 +13,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import html.parsing.stock.StockUtil;
+
 public class BizChosunCom1 {
 
     final static String userHome = System.getProperty("user.home");
@@ -117,6 +119,7 @@ public class BizChosunCom1 {
             sb1.append("</style>\r\n");
             sb1.append("</head>\r\n");
             sb1.append("<body>\r\n");
+			sb1.append(StockUtil.getMyCommentBox());
             sb1.append("<div style='width:548px'>\r\n");
 
             strDates = strDate.split("\\|");

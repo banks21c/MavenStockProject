@@ -78,7 +78,7 @@ enum NewsPublisher {
 	wwwkhancokr("www.khan.co.kr"),
 	bizkhancokr("biz.khan.co.kr"),
 	newskhancokr("news.khan.co.kr"),
-	ttalgi21KhanKr("ttalgi21.khan.kr"),
+	Ttalgi21KhanKr("ttalgi21.khan.kr"),
 	autodailycokr("www.autodaily.co.kr"),
 	mnewspimcom("m.newspim.com"),
 	newspimcom("newspim.com"),
@@ -91,10 +91,11 @@ enum NewsPublisher {
 	wwwsegyecom("www.segye.com"),
 	wwwnewsencom("www.newsen.com"),
 	wwwkinewsnet("www.kinews.net"),
-	newswowtvcokr("news.wowtv.co.kr"),
-	hngynacokr("hng.yna.co.kr"),
-	wwwsiksinhotcom("www.siksinhot.com"),
-	wwwdailiancokr("www.dailian.co.kr")
+	NewsWowtvCoKr("news.wowtv.co.kr"),
+	WwwWowtvCoKr("www.wowtv.co.kr"),
+	HngYnaCoKr("hng.yna.co.kr"),
+	WwwSiksinhotCom("www.siksinhot.com"),
+	WwwDailianCoKr("www.dailian.co.kr")
 	;
 
 	final private String name;
@@ -185,6 +186,7 @@ enum NewsPublisher {
 		"NewsenCom",
 		"WwwKinewsNet",
 		"NewsWowtvCoKr",
+		"WwwWowtvCoKr",
 		"HngYnaCoKr",
 		"WwwSiksinhotCom",
 		"WwwDailianCoKr"
