@@ -472,8 +472,10 @@ public class StockUtil {
 
 		logger.debug("newsStockList:" + newsStockList);
 		List<StockVO> newsStockList2 = getNewsStockInfo(newsStockList);
-		logger.debug("newsStockList2:" + newsStockList2);
+		logger.debug("newsStockList2.size:" + newsStockList2.size());
 		StringBuilder newsStockTable = createNewsStockTable(newsStockList2);
+		StringBuilder newsStockChart = drawNewsStockChart(newsStockList2);
+		newsStockTable.append(newsStockChart);
 
 		strNews = strNews.replaceAll("&nbsp;", "");
 		logger.debug("stockLinkString end.....................");
@@ -1511,55 +1513,92 @@ public class StockUtil {
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래량</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래대금(백만)</td>\r\n");
 			sb1.append("</tr>\r\n");
-		}
-		int cnt = 1;
-		for (StockVO s : stockList) {
-			if (s != null) {
-				String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
-				logger.debug("specialLetter+++>" + specialLetter);
-				sb1.append("<tr>\r\n");
-				String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
-				sb1.append("<td>" + cnt++ + "</td>\r\n");
-				sb1.append("<td><a href='" + url + "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
+			int cnt = 1;
+			for (StockVO s : stockList) {
+				if (s != null) {
+					String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
+					logger.debug("specialLetter+++>" + specialLetter);
+					sb1.append("<tr>\r\n");
+					String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
+					sb1.append("<td>" + cnt++ + "</td>\r\n");
+					sb1.append("<td><a href='" + url + "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
 
-				String varyPrice = s.getVaryPrice();
+					String varyPrice = s.getVaryPrice();
 
-				logger.debug("varyPrice+++>" + varyPrice);
+					logger.debug("varyPrice+++>" + varyPrice);
 
-				if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲") || specialLetter.startsWith("+")) {
-					sb1.append("<td style='text-align:right;color:red'>"
-							+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
-					sb1.append("<td style='text-align:right'><font color='red'>" + specialLetter + " " + varyPrice
-							+ "</font></td>\r\n");
-				} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
-						|| specialLetter.startsWith("-")) {
-					sb1.append("<td style='text-align:right;color:blue'>"
-							+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
-					sb1.append("<td style='text-align:right'><font color='blue'>" + specialLetter + " " + varyPrice
-							+ "</font></td>\r\n");
-				} else {
-					sb1.append("<td style='text-align:right;color:metal'>"
-							+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
-					sb1.append("<td style='text-align:right'>0</td>\r\n");
+					if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
+							|| specialLetter.startsWith("+")) {
+						sb1.append("<td style='text-align:right;color:red'>"
+								+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
+						sb1.append("<td style='text-align:right'><font color='red'>" + specialLetter + " " + varyPrice
+								+ "</font></td>\r\n");
+					} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
+							|| specialLetter.startsWith("-")) {
+						sb1.append("<td style='text-align:right;color:blue'>"
+								+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
+						sb1.append("<td style='text-align:right'><font color='blue'>" + specialLetter + " " + varyPrice
+								+ "</font></td>\r\n");
+					} else {
+						sb1.append("<td style='text-align:right;color:metal'>"
+								+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
+						sb1.append("<td style='text-align:right'>0</td>\r\n");
+					}
+
+					String varyRatio = StringUtils.defaultIfEmpty(s.getVaryRatio(), "");
+					if (varyRatio.startsWith("+")) {
+						sb1.append("<td style='text-align:right'><font color='red'>" + varyRatio + "</font></td>\r\n");
+					} else if (varyRatio.startsWith("-")) {
+						sb1.append("<td style='text-align:right'><font color='blue'>" + varyRatio + "</font></td>\r\n");
+					} else {
+						sb1.append(
+								"<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
+					}
+					sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingVolume(), "")
+							+ "</td>\r\n");
+					sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingAmount(), "")
+							+ "</td>\r\n");
+
+					sb1.append("</tr>\r\n");
 				}
-
-				String varyRatio = StringUtils.defaultIfEmpty(s.getVaryRatio(), "");
-				if (varyRatio.startsWith("+")) {
-					sb1.append("<td style='text-align:right'><font color='red'>" + varyRatio + "</font></td>\r\n");
-				} else if (varyRatio.startsWith("-")) {
-					sb1.append("<td style='text-align:right'><font color='blue'>" + varyRatio + "</font></td>\r\n");
-				} else {
-					sb1.append("<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
-				}
-				sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingVolume(), "")
-						+ "</td>\r\n");
-				sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingAmount(), "")
-						+ "</td>\r\n");
-
-				sb1.append("</tr>\r\n");
 			}
+			sb1.append("</table>\r\n");
 		}
-		logger.debug(sb1.toString());
+		logger.debug("createNewsStockTable:[" + sb1.toString() + "]");
+		return sb1;
+	}
+
+	public static StringBuilder drawNewsStockChart(List<StockVO> stockList) {
+		StringBuilder sb1 = new StringBuilder();
+		if (stockList != null && stockList.size() > 0) {
+			sb1.append("<table width='548' style='border:1px solid gray;background-color:gray;'>\r\n");
+			sb1.append("<tr>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>차트</td>\r\n");
+			sb1.append("</tr>\r\n");
+			int cnt = 1;
+			for (StockVO s : stockList) {
+				if (s != null) {
+					String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
+					logger.debug("specialLetter+++>" + specialLetter);
+					sb1.append("<tr>\r\n");
+					String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
+					sb1.append("<td style='border-bottom:1px solid gray;background-color:white;'>" + cnt++ + "</td>\r\n");
+					sb1.append("<td style='border-bottom:1px solid gray;background-color:white;'><a href='" + url + "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
+					sb1.append("<td style='border-bottom:1px solid gray;background-color:white;'>\r\n");
+//					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/area/day/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/area/day/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
+					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/day/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/day/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
+//					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/week/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/week/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
+//					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/month/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/month/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
+					sb1.append("</td>\r\n");
+
+					sb1.append("</tr>\r\n");
+				}
+			}
+			sb1.append("</table>\r\n");
+		}
+		logger.debug("createNewsStockTable:[" + sb1.toString() + "]");
 		return sb1;
 	}
 

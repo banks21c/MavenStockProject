@@ -58,9 +58,10 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 					break;
 				}
 			}
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| javax.swing.UnsupportedLookAndFeelException ex) {
 			java.util.logging.Logger.getLogger(NewsReader.class.getName()).log(java.util.logging.Level.SEVERE, null,
-				ex);
+					ex);
 		}
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
@@ -81,7 +82,7 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 		jPanel2 = new javax.swing.JPanel();
 		urlLbl = new javax.swing.JLabel();
 		urlTf = new javax.swing.JTextField(
-			"http://moneys.mt.co.kr/news/mwView.php?no=2019050721408048558&type=4&code=w0401&MTN");
+				"http://moneys.mt.co.kr/news/mwView.php?no=2019050721408048558&type=4&code=w0401&MTN");
 		jPanel1 = new javax.swing.JPanel(new java.awt.FlowLayout());
 		executeBtn = new javax.swing.JButton();
 		eraseBtn = new javax.swing.JButton();
@@ -175,7 +176,6 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 
 	MoneysMtCoKr(int i) {
 
-
 		String url = JOptionPane.showInputDialog("돈이보이는 스페셜뉴스 MoneyS URL:");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
@@ -230,9 +230,11 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 			}
 			strFileNameDate = strDate;
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
+			strFileNameDate = strFileNameDate.replace(".", "-");
 			System.out.println("strFileNameDate:" + strFileNameDate);
 
 			String textBody = article.select("#textBody").outerHtml();
+			textBody = textBody.replaceAll("src=\"//", "src=\"http://");
 			// System.out.println("textBody:"+textBody);
 			Document textBodyDoc = Jsoup.parse(textBody);
 			System.out.println(textBodyDoc.select("div").get(0));
@@ -241,9 +243,11 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 			textBodyDoc.select(".lmbox1").attr("style", "font-size:10pt;color:gray;");
 			String strContent = textBodyDoc.html();
 			System.out.println("strContent:" + strContent);
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
 			String copyright = article.select(".copyright").outerHtml();
+			strContent = strContent+copyright;
+			
+			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
@@ -261,7 +265,6 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 			sb1.append(strAuthor + "<br>\r\n");
 			sb1.append(strDate + "<br>\r\n");
 			sb1.append(strContent + "<br>\r\n");
-			sb1.append(copyright + "<br>\r\n");
 
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
@@ -273,10 +276,12 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {
