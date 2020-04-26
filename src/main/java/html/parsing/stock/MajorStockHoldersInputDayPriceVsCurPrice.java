@@ -1340,7 +1340,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 					continue;
 				}
 
-				sb1.append("\t<h3>" + mapCnt + "." + investCompany + "</h3>");
+				sb1.append("\t<h3>" + mapCnt++ + "." + investCompany + "</h3>");
 
 				String totalSpecificDayRetainAmount = df.format(lTotalSpecificDayRetainAmount);
 				sb1.append(
