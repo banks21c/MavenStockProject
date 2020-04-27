@@ -647,15 +647,18 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 			sb1.append("<tr>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
+			if (key.contains("신저가")) {
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최저가</td>\r\n");
+			} else if (key.contains("신고가")) {
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최고가</td>\r\n");
+			}			
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>등락율</td>\r\n");
 			if (key.contains("신저가")) {
 				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>저가</td>\r\n");
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최저가</td>\r\n");
 			} else if (key.contains("신고가")) {
 				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>고가</td>\r\n");
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최고가</td>\r\n");
 			}
 			sb1.append("</tr>\r\n");
 
@@ -668,7 +671,13 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 					sb1.append("<td>").append(cnt++).append("</td>\r\n");
 					sb1.append("<td><a href='").append(url).append("' target='_sub'>").append(s.getStockName())
 							.append("</a></td>\r\n");
-
+					
+					if (key.contains("신저가")) {
+						sb1.append("<td style='text-align:right'>").append(s.getWeeks52MinPrice()).append("</td>\r\n");
+					} else if (key.contains("신고가")) {
+						sb1.append("<td style='text-align:right'>").append(s.getWeeks52MaxPrice()).append("</td>\r\n");
+					}
+					
 					String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
 					String varyPrice = s.getVaryPrice();
 
@@ -707,10 +716,8 @@ public class Weeks52NewLowHighPriceTodayOneFile extends Thread {
 
 					if (key.contains("신저가")) {
 						sb1.append("<td style='text-align:right'>").append(s.getLowPrice()).append("</td>\r\n");
-						sb1.append("<td style='text-align:right'>").append(s.getWeeks52MinPrice()).append("</td>\r\n");
 					} else if (key.contains("신고가")) {
 						sb1.append("<td style='text-align:right'>").append(s.getHighPrice()).append("</td>\r\n");
-						sb1.append("<td style='text-align:right'>").append(s.getWeeks52MaxPrice()).append("</td>\r\n");
 					}
 
 					sb1.append("</tr>\r\n");

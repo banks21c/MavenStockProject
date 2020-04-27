@@ -1584,11 +1584,16 @@ public class StockUtil {
 					logger.debug("specialLetter+++>" + specialLetter);
 					sb1.append("<tr>\r\n");
 					String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
-					sb1.append("<td style='border-bottom:1px solid gray;background-color:white;'>" + cnt++ + "</td>\r\n");
-					sb1.append("<td style='border-bottom:1px solid gray;background-color:white;'><a href='" + url + "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
+					sb1.append(
+							"<td style='border-bottom:1px solid gray;background-color:white;'>" + cnt++ + "</td>\r\n");
+					sb1.append("<td style='border-bottom:1px solid gray;background-color:white;'><a href='" + url
+							+ "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
 					sb1.append("<td style='border-bottom:1px solid gray;background-color:white;'>\r\n");
 //					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/area/day/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/area/day/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
-					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/day/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/day/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
+					sb1.append(
+							"	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/day/" + s.getStockCode()
+									+ ".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/day/"
+									+ s.getStockCode() + ".png' width='350px'></a><br/>\r\n");
 //					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/week/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/week/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
 //					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/month/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/month/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
 					sb1.append("</td>\r\n");
@@ -1702,6 +1707,10 @@ public class StockUtil {
 	private static boolean findDate = false;
 
 	public static String getSpecificDay(String specificDay, String listedDay) {
+		// 특정일 정보가 없으면???
+		if (specificDay.equals(""))
+			return "";
+
 		// 상장일 정보가 없으면???
 		if (listedDay.equals(""))
 			return specificDay;
@@ -1782,7 +1791,7 @@ public class StockUtil {
 		return pageNo;
 	}
 
-	@Test
+	// @Test
 	public void findSpecificDayEndPriceTest() {
 		try {
 			String specificDayEndPrice = StockUtil.findSpecificDayEndPrice("338100", "NH프라임리츠", "NH프라임리츠", 9);
@@ -1817,38 +1826,42 @@ public class StockUtil {
 
 		doc = Jsoup.parse(strDoc);
 
-		Element type2 = doc.select(".type2").get(0);
+		Elements type2Es = doc.select(".type2");
+		if (type2Es.size() > 0) {
+			Element type2 = doc.select(".type2").get(0);
+			Elements thEls = type2.select("tbody tr th");
 
-		Elements thEls = type2.select("tbody tr th");
-		int dayIndex = 0;
-		int endPriceIndex = 0;
-		for (int i = 0; i < thEls.size(); i++) {
-			Element thEl = thEls.get(i);
-			String key = thEl.text();
-			if (key.equals("날짜")) {
-				dayIndex = i;
-			} else if (key.equals("종가")) {
-				endPriceIndex = i;
+			int dayIndex = 0;
+			int endPriceIndex = 0;
+			for (int i = 0; i < thEls.size(); i++) {
+				Element thEl = thEls.get(i);
+				String key = thEl.text();
+				if (key.equals("날짜")) {
+					dayIndex = i;
+				} else if (key.equals("종가")) {
+					endPriceIndex = i;
+				}
 			}
-		}
-		Elements trEls = type2.select("tbody tr");
-		String temp_tradeDay = "";
-		String temp_specificDayEndPrice = "";
-		for (Element tr : trEls) {
-			Elements tdEls = tr.select("td");
-			if (tdEls.size() > 1) {
-				Element dayEl = tdEls.get(dayIndex);
-				Element specificDayEndPriceEl = tdEls.get(endPriceIndex);
-				temp_tradeDay = dayEl.text();
-				temp_specificDayEndPrice = specificDayEndPriceEl.text();
-				if (findDay.equals(temp_tradeDay)) {
-					logger.debug(temp_tradeDay + "\t" + temp_specificDayEndPrice);
-					specificDayEndPrice = temp_specificDayEndPrice;
-					findDate = true;
-					break;
+			Elements trEls = type2.select("tbody tr");
+			String temp_tradeDay = "";
+			String temp_specificDayEndPrice = "";
+			for (Element tr : trEls) {
+				Elements tdEls = tr.select("td");
+				if (tdEls.size() > 1) {
+					Element dayEl = tdEls.get(dayIndex);
+					Element specificDayEndPriceEl = tdEls.get(endPriceIndex);
+					temp_tradeDay = dayEl.text();
+					temp_specificDayEndPrice = specificDayEndPriceEl.text();
+					if (findDay.equals(temp_tradeDay)) {
+						logger.debug(temp_tradeDay + "\t" + temp_specificDayEndPrice);
+						specificDayEndPrice = temp_specificDayEndPrice;
+						findDate = true;
+						break;
+					}
 				}
 			}
 		}
+
 		return specificDayEndPrice;
 	}
 
@@ -2057,5 +2070,295 @@ public class StockUtil {
 //		List<StockVO> stockList = new ArrayList<>();
 //		readStockCodeNameListFromExcel(stockList, kospiFileName);
 //	}
+
+	@Test
+	public void getTodayMarkertPriceTest() {
+		StockVO stock = new StockVO();
+		getTodayMarkertPrice(stock, "105560");
+	}
+
+	public static StockVO getTodayMarkertPrice(StockVO stock, String code) {
+		Document doc;
+		stock.setStockCode(code);
+
+		try {
+			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + code).get();
+
+			Elements new_totalinfos = doc.select(".new_totalinfo");
+
+			if (new_totalinfos == null || new_totalinfos.size() == 0) {
+				return stock;
+			}
+
+			Element new_totalinfo = new_totalinfos.get(0);
+			Document new_totalinfo_doc = Jsoup.parse(new_totalinfo.html());
+			Element blind = new_totalinfo_doc.select(".blind").get(0);
+
+			if (blind == null) {
+				return stock;
+			}
+
+			Elements edds = blind.select("dd");
+			// <dl class="blind">
+			// <dt>종목 시세 정보</dt>
+			// <dd>2020년 04월 27일 16시 10분 기준 장마감</dd>
+			// <dd>종목명 KB금융</dd>
+			// <dd>종목코드 105560 코스피</dd>
+			// <dd>현재가 34,200 전일대비 상승 3,100 플러스 9.97 퍼센트</dd>
+			// <dd>전일가 31,100</dd>
+			// <dd>시가 31,500</dd>
+			// <dd>고가 34,200</dd>
+			// <dd>상한가 40,400</dd>
+			// <dd>저가 31,350</dd>
+			// <dd>하한가 21,800</dd>
+			// <dd>거래량 6,240,181</dd>
+			// <dd>거래대금 207,022백만</dd>
+			// </dl>
+			String specialLetter = "";
+			String sign = "";
+			String curPrice = "";
+			String varyPrice = "";
+			String varyRatio = "";
+
+			for (int i = 0; i < edds.size(); i++) {
+				Element dd = edds.get(i);
+				String text = dd.text();
+				System.out.println("text:" + text);
+				if (text.startsWith("종목명")) {
+					String stockName = text.substring(4);
+					System.out.println("stockName:" + stockName);
+					stock.setStockName(stockName);
+				}
+
+//				if (text.startsWith("종목코드")) {
+//					String stockCode = text.substring(5);
+//					System.out.println("stockCode:" + stockCode);
+//					stock.setStockCode(stockCode);
+//				}
+
+				if (text.startsWith("현재가")) {
+					System.out.println("data1:" + dd.text());
+					text = text.replaceAll("플러스", "+");
+					text = text.replaceAll("마이너스", "-");
+					text = text.replaceAll("상승", "▲");
+					text = text.replaceAll("하락", "▼");
+					text = text.replaceAll("퍼센트", "%");
+
+					String txts[] = text.split(" ");
+					curPrice = txts[1];
+					stock.setCurPrice(curPrice);
+					stock.setiCurPrice(
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+
+					// 특수문자
+					specialLetter = txts[3].replaceAll("보합", "");
+					stock.setSpecialLetter(specialLetter);
+
+					varyPrice = txts[4];
+					stock.setVaryPrice(varyPrice);
+					stock.setiVaryPrice(Integer
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+
+					// +- 부호
+					sign = txts[5];
+					stock.setSign(sign);
+					System.out.println("txts.length:" + txts.length);
+					if (txts.length == 7) {
+						stock.setVaryRatio(txts[5] + txts[6]);
+					} else if (txts.length == 8) {
+						stock.setVaryRatio(txts[5] + txts[6] + txts[7]);
+					}
+					varyRatio = stock.getVaryRatio();
+					stock.setfVaryRatio(Float.parseFloat(varyRatio.replaceAll("%", "")));
+					System.out.println("상승률:" + stock.getVaryRatio());
+				}
+
+				if (text.startsWith("전일가")) {
+					stock.setBeforePrice(text.split(" ")[1]);
+					stock.setiBeforePrice(Integer.parseInt(stock.getBeforePrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("시가")) {
+					stock.setStartPrice(text.split(" ")[1]);
+					stock.setiStartPrice(Integer.parseInt(stock.getStartPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("고가")) {
+					stock.setHighPrice(text.split(" ")[1]);
+					stock.setiHighPrice(Integer.parseInt(stock.getHighPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("상한가")) {
+					stock.setMaxPrice(text.split(" ")[1]);
+					stock.setiMaxPrice(Integer.parseInt(stock.getMaxPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("저가")) {
+					stock.setLowPrice(text.split(" ")[1]);
+					stock.setiLowPrice(Integer.parseInt(stock.getLowPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("하한가")) {
+					stock.setMinPrice(text.split(" ")[1]);
+					stock.setiMinPrice(Integer.parseInt(stock.getMinPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("거래량")) {
+					stock.setTradingVolume(text.split(" ")[1]);
+					stock.setiTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
+				}
+				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
+					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
+					stock.setlTradingAmount(Integer
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+				}
+			}
+
+			String upDown = doc.select(".no_exday").get(0).select("em span").get(0).text();
+			if (upDown.equals("상한가")) {
+				specialLetter = "↑";
+			} else if (upDown.equals("하한가")) {
+				specialLetter = "↓";
+			}
+			stock.setSpecialLetter(specialLetter);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return stock;
+
+	}
+
+	public static StockVO getTodayMarkertPrice(Document doc, StockVO stock, String code) {
+		stock.setStockCode(code);
+
+		Elements new_totalinfos = doc.select(".new_totalinfo");
+
+		if (new_totalinfos == null || new_totalinfos.size() == 0) {
+			return stock;
+		}
+
+		Element new_totalinfo = new_totalinfos.get(0);
+		Document new_totalinfo_doc = Jsoup.parse(new_totalinfo.html());
+		Element blind = new_totalinfo_doc.select(".blind").get(0);
+
+		if (blind == null) {
+			return stock;
+		}
+
+		Elements edds = blind.select("dd");
+		// <dl class="blind">
+		// <dt>종목 시세 정보</dt>
+		// <dd>2020년 04월 27일 16시 10분 기준 장마감</dd>
+		// <dd>종목명 KB금융</dd>
+		// <dd>종목코드 105560 코스피</dd>
+		// <dd>현재가 34,200 전일대비 상승 3,100 플러스 9.97 퍼센트</dd>
+		// <dd>전일가 31,100</dd>
+		// <dd>시가 31,500</dd>
+		// <dd>고가 34,200</dd>
+		// <dd>상한가 40,400</dd>
+		// <dd>저가 31,350</dd>
+		// <dd>하한가 21,800</dd>
+		// <dd>거래량 6,240,181</dd>
+		// <dd>거래대금 207,022백만</dd>
+		// </dl>
+		String specialLetter = "";
+		String sign = "";
+		String curPrice = "";
+		String varyPrice = "";
+		String varyRatio = "";
+
+		for (int i = 0; i < edds.size(); i++) {
+			Element dd = edds.get(i);
+			String text = dd.text();
+			System.out.println("text:" + text);
+			if (text.startsWith("종목명")) {
+				String stockName = text.substring(4);
+				System.out.println("stockName:" + stockName);
+				stock.setStockName(stockName);
+			}
+
+//				if (text.startsWith("종목코드")) {
+//					String stockCode = text.substring(5);
+//					System.out.println("stockCode:" + stockCode);
+//					stock.setStockCode(stockCode);
+//				}
+
+			if (text.startsWith("현재가")) {
+				System.out.println("data1:" + dd.text());
+				text = text.replaceAll("플러스", "+");
+				text = text.replaceAll("마이너스", "-");
+				text = text.replaceAll("상승", "▲");
+				text = text.replaceAll("하락", "▼");
+				text = text.replaceAll("퍼센트", "%");
+
+				String txts[] = text.split(" ");
+				curPrice = txts[1];
+				stock.setCurPrice(curPrice);
+				stock.setiCurPrice(
+						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+
+				// 특수문자
+				specialLetter = txts[3].replaceAll("보합", "");
+				stock.setSpecialLetter(specialLetter);
+
+				varyPrice = txts[4];
+				stock.setVaryPrice(varyPrice);
+				stock.setiVaryPrice(
+						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+
+				// +- 부호
+				sign = txts[5];
+				stock.setSign(sign);
+				System.out.println("txts.length:" + txts.length);
+				if (txts.length == 7) {
+					stock.setVaryRatio(txts[5] + txts[6]);
+				} else if (txts.length == 8) {
+					stock.setVaryRatio(txts[5] + txts[6] + txts[7]);
+				}
+				varyRatio = stock.getVaryRatio();
+				stock.setfVaryRatio(Float.parseFloat(varyRatio.replaceAll("%", "")));
+				System.out.println("상승률:" + stock.getVaryRatio());
+			}
+
+			if (text.startsWith("전일가")) {
+				stock.setBeforePrice(text.split(" ")[1]);
+				stock.setiBeforePrice(Integer.parseInt(stock.getBeforePrice().replaceAll(",", "")));
+			}
+			if (text.startsWith("시가")) {
+				stock.setStartPrice(text.split(" ")[1]);
+				stock.setiStartPrice(Integer.parseInt(stock.getStartPrice().replaceAll(",", "")));
+			}
+			if (text.startsWith("고가")) {
+				stock.setHighPrice(text.split(" ")[1]);
+				stock.setiHighPrice(Integer.parseInt(stock.getHighPrice().replaceAll(",", "")));
+			}
+			if (text.startsWith("상한가")) {
+				stock.setMaxPrice(text.split(" ")[1]);
+				stock.setiMaxPrice(Integer.parseInt(stock.getMaxPrice().replaceAll(",", "")));
+			}
+			if (text.startsWith("저가")) {
+				stock.setLowPrice(text.split(" ")[1]);
+				stock.setiLowPrice(Integer.parseInt(stock.getLowPrice().replaceAll(",", "")));
+			}
+			if (text.startsWith("하한가")) {
+				stock.setMinPrice(text.split(" ")[1]);
+				stock.setiMinPrice(Integer.parseInt(stock.getMinPrice().replaceAll(",", "")));
+			}
+			if (text.startsWith("거래량")) {
+				stock.setTradingVolume(text.split(" ")[1]);
+				stock.setiTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
+			}
+			if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
+				stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
+				stock.setlTradingAmount(Integer
+						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+			}
+		}
+
+		String upDown = doc.select(".no_exday").get(0).select("em span").get(0).text();
+		if (upDown.equals("상한가")) {
+			specialLetter = "↑";
+		} else if (upDown.equals("하한가")) {
+			specialLetter = "↓";
+		}
+		stock.setSpecialLetter(specialLetter);
+		return stock;
+
+	}
 
 }
