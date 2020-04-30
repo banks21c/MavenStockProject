@@ -74,22 +74,22 @@ public class WwwDailianCoKr extends News {
 //            JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
 //            JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
 //            JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
-			strTitle = doc.select(".view_titlebox_r1").text();
+			strTitle = doc.select(".body .contents .news-contents h2").text();
 			System.out.println("strTitle:[" + strTitle + "]");
 			strTitleForFileName = strTitle;
 			strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
 			System.out.println("strTitleForFileName:" + strTitleForFileName);
-			strSubTitle = doc.select(".view_subtitle").text();
+			strSubTitle = "";
 			System.out.println("strSubTitle:" + strSubTitle);
 
-			String strDate = doc.select("#view_titlebox2_3_date").text();
-			strDate = strDate.replaceAll("등록 : ", "");
+			String strDate = doc.select(".body .contents .news-contents .information ul:first-child li:first-child").text();
+			strDate = strDate.replaceAll("[데일리안] 입력 : ", "");
 			System.out.println("strDate:" + strDate);
 			strFileNameDate = strDate;
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
 			System.out.println("strFileNameDate:" + strFileNameDate);
 
-			Elements article = doc.select("#view_con");
+			Elements article = doc.select(".article");
 			// article.select(".image-area").append("<br><br>");
 			article.select(".image-area").after("<br><br>");
 
@@ -129,7 +129,7 @@ public class WwwDailianCoKr extends News {
 			//System.out.println("strContent:[" + strContent + "]strContent");
 			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
-			String copyright = "Copyright ⓒ YTN";
+			String copyright = "";
 			System.out.println("copyright:" + copyright);
 
 			sb1.append("<!doctype html>\r\n");

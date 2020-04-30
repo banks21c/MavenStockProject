@@ -27,9 +27,9 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
-public class NewsFnnews extends News {
+public class WwwFnnewsCom extends News {
 
-    private static Logger logger = LoggerFactory.getLogger(NewsFnnews.class);
+    private static Logger logger = LoggerFactory.getLogger(WwwFnnewsCom.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -46,14 +46,14 @@ public class NewsFnnews extends News {
      * @param args
      */
     public static void main(String[] args) {
-        new NewsFnnews(1);
+        new WwwFnnewsCom(1);
     }
 
-    NewsFnnews() {
+    WwwFnnewsCom() {
 
     }
 
-    NewsFnnews(int i) {
+    WwwFnnewsCom(int i) {
 
 
         String url = JOptionPane.showInputDialog("파이낸셜뉴스 URL을 입력하여 주세요.");
@@ -105,6 +105,7 @@ public class NewsFnnews extends News {
             System.out.println("strDate:" + strDate);
 
             strFileNameDate = StockUtil.getDateForFileName(strDate);
+            strFileNameDate = strFileNameDate.replace(".", "-");
             System.out.println("strFileNameDate:" + strFileNameDate);
 
             String author = doc.select("#customByline").text();

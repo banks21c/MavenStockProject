@@ -10,14 +10,13 @@ import javax.swing.JOptionPane;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
-public class WwwMdtodayCoKr extends News {
+public class WwwDailianCoKr200430 extends News {
 
 	Logger logger = null;
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -28,24 +27,25 @@ public class WwwMdtodayCoKr extends News {
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
 	static String strYMD = "";
-	static String strDate = null;
-	static String strTitle = null;
+	static String strDate = "";
+	static String strTitle = "";
+	static String strSubTitle = "";
 
 	public static void main(String[] args) {
-		new WwwMdtodayCoKr(1);
+		new WwwDailianCoKr200430(1);
 	}
 
-	WwwMdtodayCoKr() {
+	WwwDailianCoKr200430() {
 
 	}
 
-	WwwMdtodayCoKr(int i) {
+	WwwDailianCoKr200430(int i) {
 
 
-		String url = JOptionPane.showInputDialog("메디컬투데이뉴스 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog("뉴스 URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
-			url = "http://www.mdtoday.co.kr/mdtoday/index.html?no=373762";
+			url = "http://www.dailian.co.kr/news/view/850199";
 		}
 		super.getURL(url);
 		createHTMLFile(url);
@@ -62,10 +62,7 @@ public class WwwMdtodayCoKr extends News {
 		try {
 			doc = Jsoup.connect(url).get();
 			doc = Jsoup.parse(doc.html().replaceAll("data-src", "dataSrc"));
-			doc.select(".md_hot_tit").remove();
-			doc.select("a").remove();
-			doc.select("table ins").remove();
-			doc.select("table ins").remove();
+			doc.select("iframe").parents().select("div").removeAttr("style");
 			doc.select("iframe").remove();
 			doc.select("script").remove();
 			doc.select("noscript").remove();
@@ -73,38 +70,30 @@ public class WwwMdtodayCoKr extends News {
 			doc.select("div.pop_prt_btns").remove();
 			doc.select(".hidden-obj").remove();
 
-			Elements divs = doc.select("div");
-			for(Element e:divs) {
-				String style = e.attr("style");
-				System.out.println("style :"+ style);
-				if(style.equals("height:40px;")) {
-					e.remove();
-				}
-			}
-
 //            JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
 //            JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
 //            JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
 //            JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
-			strTitle = doc.select(".sub_sm").text();
+			strTitle = doc.select(".view_titlebox_r1").text();
 			System.out.println("strTitle:[" + strTitle + "]");
 			strTitleForFileName = strTitle;
 			strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
 			System.out.println("strTitleForFileName:" + strTitleForFileName);
+			strSubTitle = doc.select(".view_subtitle").text();
+			System.out.println("strSubTitle:" + strSubTitle);
 
-			String strDate = doc.select(".pr10").text();
-			strDate = strDate.replaceAll("Posted : ", "");
-			strDate = strDate.substring(strDate.indexOf("입력일 : ")+"입력일 : ".length());
+			String strDate = doc.select("#view_titlebox2_3_date").text();
+			strDate = strDate.replaceAll("등록 : ", "");
 			System.out.println("strDate:" + strDate);
 			strFileNameDate = strDate;
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
 			System.out.println("strFileNameDate:" + strFileNameDate);
 
-			Elements article = doc.select("#NewsBody");
+			Elements article = doc.select("#view_con");
 			// article.select(".image-area").append("<br><br>");
 			article.select(".image-area").after("<br><br>");
 
-			String style = article.attr("style");
+			String style = article.select(".article").attr("style");
 			System.out.println("style:" + style);
 			article.removeAttr("style");
 			article.removeAttr("class");
@@ -112,10 +101,11 @@ public class WwwMdtodayCoKr extends News {
 
 			article.select(".adrs").remove();
 
-			Element authorElement = article.select("p").last();
+			Elements authorElements = article.select(".view_reporter_2017");
+			authorElements.select("label").remove();
 			String author = "";
-			if (authorElement != null) {
-				authorElement.html();
+			if (authorElements != null && authorElements.size() > 0) {
+				author = authorElements.text();
 			}
 			System.out.println("author:[" + author + "]");
 

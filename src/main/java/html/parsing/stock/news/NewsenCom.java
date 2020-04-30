@@ -138,7 +138,7 @@ public class NewsenCom extends News {
             //System.out.println("strContent:[" + strContent + "]strContent");
             strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
-            String copyright = "Copyright ⓒ YTN";
+            String copyright = "";
             System.out.println("copyright:" + copyright);
 
             sb1.append("<!doctype html>\r\n");

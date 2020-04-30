@@ -146,7 +146,7 @@ enum NewsPublisher {
 		"NewsisCom",
 		"NewsPressian",
 		"NewsSbsCoKr",
-		"NewsFnnews",
+		"WwwFnnewsCom",
 		"NewsFnnews",
 		"NewsMbcCom",
 		"ImnewsImbcCom",

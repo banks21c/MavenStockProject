@@ -132,7 +132,7 @@ public class WwwSegyeCom extends News {
             strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
             strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
-            String copyright = "Copyright ⓒ YTN";
+            String copyright = "";
             System.out.println("copyright:" + copyright);
 
             sb1.append("<!doctype html>\r\n");
