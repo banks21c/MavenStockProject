@@ -58,7 +58,7 @@ public class HngYnaCoKr extends News {
     HngYnaCoKr(int i) {
         logger = LoggerFactory.getLogger(this.getClass());
 
-        String url = JOptionPane.showInputDialog("스크랩할 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url == null || url.equals("")) {
             url = "https://hng.yna.co.kr/5747";

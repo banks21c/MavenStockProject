@@ -51,7 +51,7 @@ public class NewsHuffingtonpost2 extends News {
     NewsHuffingtonpost2(int i) {
 
 
-        String url = JOptionPane.showInputDialog("허핑턴포스트 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.huffingtonpost.kr/2017/04/19/story_n_16090016.html";

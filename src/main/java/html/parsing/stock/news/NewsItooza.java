@@ -57,7 +57,7 @@ public class NewsItooza extends News {
     NewsItooza(int i) {
 
 
-        String url = JOptionPane.showInputDialog("itooza news URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.itooza.com/common/iview.php?no=2018041310083141918";

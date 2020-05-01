@@ -47,7 +47,7 @@ public class NewsEdaily extends News {
 	public NewsEdaily(int i) {
 		
 		
-		String url = JOptionPane.showInputDialog("이데일리뉴스 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://www.edaily.co.kr/news/news_detail.asp?newsId=01918806619115112&mediaCodeNo=257";

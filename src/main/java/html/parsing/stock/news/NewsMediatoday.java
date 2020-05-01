@@ -51,7 +51,7 @@ public class NewsMediatoday extends News {
     NewsMediatoday(int i) {
 
 
-        String url = JOptionPane.showInputDialog("미디어오늘 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url != null && url.equals("")) {
             url = "http://www.mediatoday.co.kr/?mod=news&act=articleView&idxno=142213";

@@ -41,7 +41,7 @@ public class Mootoon {
     Mootoon() {
 
 
-        String url = JOptionPane.showInputDialog("무툰 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.mootoon.co.kr/comic/moo_view.mg?tcode=iixl&cuid=p9%2Br5MKX0G4%3D&isview=R&in_id=qbmrnsLNwmGdpqio";

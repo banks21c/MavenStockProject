@@ -57,7 +57,7 @@ public class WwwHankyungCom extends News {
     WwwHankyungCom(int i) {
 
 
-        String url = JOptionPane.showInputDialog("한국경제뉴스 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url == null || url.equals("")) {
             url = "http://land.hankyung.com/news/app/newsview.php?aid=201802207330H";

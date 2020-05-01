@@ -52,7 +52,7 @@ public class NewsPressian extends News {
     NewsPressian(int i) {
 
 
-        String url = JOptionPane.showInputDialog("프레시안뉴스 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.pressian.com/news/article.html?no=188351";

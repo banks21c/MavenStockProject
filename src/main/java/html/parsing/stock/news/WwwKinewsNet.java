@@ -49,7 +49,7 @@ public class WwwKinewsNet extends News {
         Class thisClass = this.getClass();
         logger1 = LoggerFactory.getLogger(thisClass);
         logger1.debug("Newsen뉴스");
-        String url = JOptionPane.showInputDialog("Newsen뉴스 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url == null || url.equals("")) {
             url = "http://www.newsen.com/news_view.php?uid=201903141448262410";

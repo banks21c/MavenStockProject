@@ -56,7 +56,7 @@ public class WwwFnnewsCom extends News {
     WwwFnnewsCom(int i) {
 
 
-        String url = JOptionPane.showInputDialog("파이낸셜뉴스 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url == null || url.equals("")) {
             url = "http://www.fnnews.com/news/201803241205515030?utm_source=dable";

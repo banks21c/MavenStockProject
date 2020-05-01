@@ -41,7 +41,7 @@ public class YoutubeList {
     YoutubeList() {
 
 
-        String url = JOptionPane.showInputDialog("유튜브 재생목록 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "https://www.youtube.com/playlist?list=PLSWSKiRfBgbEXHYG-Sqw62Ucp13fsE2pJ";

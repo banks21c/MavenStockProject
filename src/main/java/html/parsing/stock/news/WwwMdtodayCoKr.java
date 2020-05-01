@@ -42,7 +42,7 @@ public class WwwMdtodayCoKr extends News {
 	WwwMdtodayCoKr(int i) {
 
 
-		String url = JOptionPane.showInputDialog("메디컬투데이뉴스 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "http://www.mdtoday.co.kr/mdtoday/index.html?no=373762";

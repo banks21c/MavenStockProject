@@ -53,7 +53,7 @@ public class BizHeraldcorpCom extends News {
 
 	BizHeraldcorpCom(int i) {
 		logger = LoggerFactory.getLogger(BizHeraldcorpCom.class);
-		String url = JOptionPane.showInputDialog("헤럴드경제 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://biz.heraldcorp.com/view.php?ud=20190226000063";

@@ -52,7 +52,7 @@ public class NewsJTBC extends News {
     NewsJTBC(int i) {
 
 
-        String url = JOptionPane.showInputDialog("JTBC뉴스 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://news.jtbc.joins.com/html/686/NB11596686.html";

@@ -46,7 +46,7 @@ public class WwwHidocCoKr extends News {
 	WwwHidocCoKr(int i) {
 
 
-		String url = JOptionPane.showInputDialog("HiDoc URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "https://www.hidoc.co.kr/healthstory/news/C0000467639";

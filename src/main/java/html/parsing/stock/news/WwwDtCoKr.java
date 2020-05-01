@@ -55,7 +55,7 @@ public class WwwDtCoKr extends News {
 
 	WwwDtCoKr(int i) {
 		logger = LoggerFactory.getLogger(WwwDtCoKr.class);
-		String url = JOptionPane.showInputDialog("디지털타임스 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "http://www.dt.co.kr/contents.html?article_no=2019061902101132049001";

@@ -45,7 +45,7 @@ public class BizChosunCom1 {
     BizChosunCom1(int i) {
         logger = java.util.logging.Logger.getLogger(this.getClass().getName());
         logger.log(Level.INFO, this.getClass().getName());
-        String url = JOptionPane.showInputDialog("조선일보 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url.equals("")) {
             url = "http://biz.chosun.com/site/data/html_dir/2018/01/06/2018010601314.html";

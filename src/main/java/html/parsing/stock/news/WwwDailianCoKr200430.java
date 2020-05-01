@@ -42,7 +42,7 @@ public class WwwDailianCoKr200430 extends News {
 	WwwDailianCoKr200430(int i) {
 
 
-		String url = JOptionPane.showInputDialog("뉴스 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "http://www.dailian.co.kr/news/view/850199";

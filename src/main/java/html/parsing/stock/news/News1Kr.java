@@ -47,7 +47,7 @@ public class News1Kr extends News {
     News1Kr(int i) {
 
 
-        String url = JOptionPane.showInputDialog("News1 뉴스 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://news1.kr/articles/?3560804";

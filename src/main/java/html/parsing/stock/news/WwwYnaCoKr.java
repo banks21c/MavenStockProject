@@ -42,7 +42,7 @@ public class WwwYnaCoKr extends News {
 	WwwYnaCoKr(int i) {
 
 
-		String url = JOptionPane.showInputDialog("YNA뉴스 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "https://www.yna.co.kr/view/AKR20190302013700001?input=1195p";

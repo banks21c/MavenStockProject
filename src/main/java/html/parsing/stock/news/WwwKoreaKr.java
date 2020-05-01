@@ -45,7 +45,7 @@ public class WwwKoreaKr extends News {
 
 	WwwKoreaKr(int i) {
 		logger = LoggerFactory.getLogger(WwwKoreaKr.class);
-		String url = JOptionPane.showInputDialog("아시아투데이 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "http://www.asiatoday.co.kr/view.php?key=20180411010006864";

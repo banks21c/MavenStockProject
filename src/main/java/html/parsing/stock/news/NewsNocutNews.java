@@ -58,7 +58,7 @@ public class NewsNocutNews extends News {
 	NewsNocutNews(int i) {
 
 
-		String url = JOptionPane.showInputDialog("노컷뉴스 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://www.nocutnews.co.kr/news/4945666";

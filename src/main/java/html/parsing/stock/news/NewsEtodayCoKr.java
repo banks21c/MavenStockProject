@@ -51,7 +51,7 @@ public class NewsEtodayCoKr extends News {
 
 	NewsEtodayCoKr(int i) {
 
-		String url = JOptionPane.showInputDialog("이투데이뉴스 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://www.etoday.co.kr/news/section/newsview.php?idxno=1600693";

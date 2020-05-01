@@ -50,7 +50,7 @@ public class NewsFinanceNaverCom extends News {
 
 	NewsFinanceNaverCom(int i) {
 		logger = LoggerFactory.getLogger(NewsFinanceNaverCom.class);
-		String url = JOptionPane.showInputDialog("naver news URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "http://finance.naver.com/item/news_read.nhn?article_id=0004037813&office_id=008&code=192080&page=&sm=title_entity_id.basic";

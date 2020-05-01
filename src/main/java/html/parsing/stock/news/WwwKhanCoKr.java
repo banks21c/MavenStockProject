@@ -53,7 +53,7 @@ public class WwwKhanCoKr extends News {
     WwwKhanCoKr(int i) {
 
 
-        String url = JOptionPane.showInputDialog("한겨레 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.hani.co.kr/arti/society/society_general/779348.html?_fr=mt2";

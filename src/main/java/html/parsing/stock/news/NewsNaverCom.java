@@ -57,7 +57,7 @@ public class NewsNaverCom extends News {
     NewsNaverCom(int i) {
 
 
-        String url = JOptionPane.showInputDialog("naver news URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://news.naver.com/main/read.nhn?mode=LSD&mid=shm&sid1=101&oid=008&aid=0003999234";

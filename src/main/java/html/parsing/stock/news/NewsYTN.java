@@ -52,7 +52,7 @@ public class NewsYTN extends News {
     NewsYTN(int i) {
 
 
-        String url = JOptionPane.showInputDialog("YTN뉴스 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.ytn.co.kr/_ln/0103_201802230921503812?utm_source=dable";

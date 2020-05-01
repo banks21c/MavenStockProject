@@ -52,7 +52,7 @@ public class NewsNewsisCom extends News {
     NewsNewsisCom(int i) {
 
 
-        String url = JOptionPane.showInputDialog("뉴스 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "https://www.newsis.com/view/?id=NISX20200326_0000971235";

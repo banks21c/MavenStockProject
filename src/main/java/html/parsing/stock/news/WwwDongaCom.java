@@ -47,7 +47,7 @@ public class WwwDongaCom extends News {
     WwwDongaCom(int i) {
 
 
-        String url = JOptionPane.showInputDialog("동아뉴스 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url == null || url.equals("")) {
             url = "http://news.donga.com/3/all/20190302/94359600/1";

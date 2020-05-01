@@ -52,7 +52,7 @@ public class NewsMediaDaumNet extends News {
     NewsMediaDaumNet(int i) {
 
 
-        String url = JOptionPane.showInputDialog("미디어다음뉴스 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://v.media.daum.net/v/20180326212000787?f=m";

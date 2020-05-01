@@ -51,7 +51,7 @@ public class NewsJtbcJoinsCom extends News {
     NewsJtbcJoinsCom(int i) {
 
 
-        String url = JOptionPane.showInputDialog("중앙일보 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://news.joins.com/article/21126593";

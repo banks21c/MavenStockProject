@@ -53,7 +53,7 @@ public class KrChristianitydailyCom extends News {
 
 	KrChristianitydailyCom(int i) {
 
-		String url = JOptionPane.showInputDialog("뉴스 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://kr.christianitydaily.com/articles/100431/20190611/%EA%B8%B0%EB%8F%84%EB%8A%94-%EB%8B%B9%EC%8B%A0%EC%9D%84-%EB%8C%80%ED%86%B5%EB%A0%B9%EC%9C%BC%EB%A1%9C-%EB%A7%8C%EB%93%A4-%EC%88%98%EB%8F%84-%EC%9E%88%EB%8B%A4.htm";

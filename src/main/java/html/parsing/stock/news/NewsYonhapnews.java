@@ -178,7 +178,7 @@ public class NewsYonhapnews extends javax.swing.JFrame {
     NewsYonhapnews(int i) {
 
 
-        String url = JOptionPane.showInputDialog("Money Today URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://stylem.mt.co.kr/stylemView.php?no=2018020809234688426";

@@ -57,7 +57,7 @@ public class PaxnetMonetaCoKr extends News {
     PaxnetMonetaCoKr(int i) {
 
 
-        String url = JOptionPane.showInputDialog("News URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://paxnet.moneta.co.kr/news/mainView?articleId=2018103016274303119";

@@ -52,7 +52,7 @@ public class NewsBusan extends News {
     NewsBusan(int i) {
 
 
-        String url = JOptionPane.showInputDialog("부산일보뉴스 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url == null || url.equals("")) {
             url = "http://news20.busan.com/controller/newsController.jsp?newsId=20180410000209";

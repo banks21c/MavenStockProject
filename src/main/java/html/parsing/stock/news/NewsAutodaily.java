@@ -51,7 +51,7 @@ public class NewsAutodaily extends News {
     NewsAutodaily(int i) {
 
 
-        String url = JOptionPane.showInputDialog("autodaily URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.autodaily.co.kr/news/articleView.html?idxno=403301";

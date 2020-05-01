@@ -50,7 +50,7 @@ public class SnaptimeEdailyCoKr extends News {
 	public SnaptimeEdailyCoKr(int i) {
 
 
-		String url = JOptionPane.showInputDialog("이데일리 스냅타임뉴스 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://snaptime.edaily.co.kr/2019/05/김보영의-키워드-우리는-왜-펭귄문제를-풀고-스냅챗/";

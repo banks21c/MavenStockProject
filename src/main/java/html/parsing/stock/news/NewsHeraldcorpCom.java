@@ -51,7 +51,7 @@ public class NewsHeraldcorpCom extends News {
 
 	NewsHeraldcorpCom(int i) {
 		logger = LoggerFactory.getLogger(NewsHeraldcorpCom.class);
-		String url = JOptionPane.showInputDialog("헤럴드경제 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://news.heraldcorp.com/view.php?ud=20190226000403";

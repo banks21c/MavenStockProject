@@ -52,7 +52,7 @@ public class NewsSisain extends News {
     NewsSisain(int i) {
 
 
-        String url = JOptionPane.showInputDialog("시사인 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.sisain.co.kr/?mod=news&act=articleView&idxno=28743";

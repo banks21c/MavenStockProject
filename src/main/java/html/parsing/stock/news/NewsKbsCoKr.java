@@ -50,7 +50,7 @@ public class NewsKbsCoKr extends News {
     NewsKbsCoKr(int i) {
 
 
-        String url = JOptionPane.showInputDialog("KBS URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://news.kbs.co.kr/news/view.do?ncd=3634567&ref=NA";

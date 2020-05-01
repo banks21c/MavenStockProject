@@ -176,7 +176,7 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 
 	MoneysMtCoKr(int i) {
 
-		String url = JOptionPane.showInputDialog("돈이보이는 스페셜뉴스 MoneyS URL:");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL:");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://moneys.mt.co.kr/news/mwView.php?no=2019050721408048558&type=4&code=w0401&MTN";

@@ -50,7 +50,7 @@ public class NewsMbcCom extends News {
     NewsMbcCom(int i) {
 
 
-        String url = JOptionPane.showInputDialog("KBS URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://imnews.imbc.com/replay/2018/nwtoday/article/4587282_22669.html?menuid=politic";

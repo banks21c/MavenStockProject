@@ -45,7 +45,7 @@ public class NewsChosun extends News {
 	}
 
 	NewsChosun(int i) {
-		String url = JOptionPane.showInputDialog("조선일보 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "http://news.chosun.com/site/data/html_dir/2017/02/24/2017022401428.html";

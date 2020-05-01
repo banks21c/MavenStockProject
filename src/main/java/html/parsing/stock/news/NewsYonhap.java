@@ -52,7 +52,7 @@ public class NewsYonhap extends News {
     NewsYonhap(int i) {
 
 
-        String url = JOptionPane.showInputDialog("연합뉴스 URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.yonhapnews.co.kr/pyeongchang2018/2018/02/23/5501000000AKR20180223142500007.HTML?template=2085";
