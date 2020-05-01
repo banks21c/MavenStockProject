@@ -42,7 +42,7 @@ public class WwwDailianCoKr extends News {
 	WwwDailianCoKr(int i) {
 
 
-		String url = JOptionPane.showInputDialog("뉴스 URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "http://www.dailian.co.kr/news/view/850199";
@@ -83,10 +83,12 @@ public class WwwDailianCoKr extends News {
 			System.out.println("strSubTitle:" + strSubTitle);
 
 			String strDate = doc.select(".body .contents .news-contents .information ul:first-child li:first-child").text();
-			strDate = strDate.replaceAll("[데일리안] 입력 : ", "");
+			strDate = strDate.replace("[데일리안] 입력 ", "");
 			System.out.println("strDate:" + strDate);
 			strFileNameDate = strDate;
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
+			strFileNameDate = strFileNameDate.replace(".", "-");
+
 			System.out.println("strFileNameDate:" + strFileNameDate);
 
 			Elements article = doc.select(".article");
