@@ -58,7 +58,7 @@ public class NewsSeoul extends javax.swing.JFrame {
     NewsSeoul(int i) {
 
 
-        String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.seoul.co.kr/news/newsView.php?id=20180418500064&wlog_sub=svt_100";

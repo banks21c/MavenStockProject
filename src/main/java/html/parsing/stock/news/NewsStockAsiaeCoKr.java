@@ -60,7 +60,7 @@ public class NewsStockAsiaeCoKr extends javax.swing.JFrame {
     NewsStockAsiaeCoKr(int i) {
 
 
-        String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.asiae.co.kr/news/view.htm?idxno=2018041911043434606";

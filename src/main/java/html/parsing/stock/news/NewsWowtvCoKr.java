@@ -53,7 +53,7 @@ public class NewsWowtvCoKr extends javax.swing.JFrame {
     public NewsWowtvCoKr(int i) {
 
 
-        String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.wowtv.co.kr/NewsCenter/News/Read?menuSeq=4324&subMenu=latest&wowcode=&Class=&articleId=A201908110009#_enliple";

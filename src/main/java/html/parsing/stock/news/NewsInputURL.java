@@ -45,7 +45,7 @@ public class NewsInputURL extends News {
 
 	NewsInputURL(int i) {
 		logger = LoggerFactory.getLogger(NewsInputURL.class);
-		String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url != null && !url.equals("")) {
 			createHTMLFile(url);

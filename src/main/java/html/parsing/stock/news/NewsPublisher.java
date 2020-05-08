@@ -62,8 +62,8 @@ enum NewsPublisher {
 	wwwseoulcokr("www.seoul.co.kr"),
 	wwwmunhwacom("www.munhwa.com"),
 	wwwasiaecokr("www.asiae.co.kr"),
-	newsStockAsiaeCoKr("stock.asiae.co.kr"),
-	newsViewAsiaeCoKr("view.asiae.co.kr"),
+	StockAsiaeCoKr("stock.asiae.co.kr"),
+	ViewAsiaeCoKr("view.asiae.co.kr"),
 	wwwmkcokr("www.mk.co.kr"),
 	wwwmkcokrpremium("www.mk.co.kr/premium"),
 	newsmkcokr("news.mk.co.kr"),
@@ -97,7 +97,9 @@ enum NewsPublisher {
 	WwwSiksinhotCom("www.siksinhot.com"),
 	WwwDailianCoKr("www.dailian.co.kr"),
 	BizNewdailyCoKr("biz.newdaily.co.kr"),
-	NewsNewswayCoKr("news.newsway.co.kr")
+	NewsNewswayCoKr("news.newsway.co.kr"),
+	KrInvestingCom("kr.investing.com"),
+	WwwPharmnewsCom("www.pharmnews.com")
 	;
 
 	final private String name;
@@ -158,8 +160,8 @@ enum NewsPublisher {
 		"NewsSeoul",
 		"NewsMunhwa",
 		"WwwAsiaeCoKr",
-		"NewsStockAsiaeCoKr",
-		"NewViewAsiaeCoKr",
+		"StockAsiaeCoKr",
+		"ViewAsiaeCoKr",
 		"WwwMkCoKr",
 		"NewsMkCoKrPremium",
 		"NewsMkCoKr",
@@ -193,7 +195,9 @@ enum NewsPublisher {
 		"WwwSiksinhotCom",
 		"WwwDailianCoKr",
 		"BizNewdailyCoKr",
-		"NewsNewswayCoKr"
+		"NewsNewswayCoKr",
+		"KrInvestingCom",
+		"WwwPharmnewsCom"
 	};
 
 	private NewsPublisher(String name) { //enum에서 생성자 같은 역할

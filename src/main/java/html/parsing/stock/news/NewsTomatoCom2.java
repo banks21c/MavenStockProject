@@ -60,7 +60,7 @@ public class NewsTomatoCom2 extends javax.swing.JFrame {
     NewsTomatoCom2(int i) {
 
 
-        String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.newstomato.com/ReadNews.aspx?no=819904";

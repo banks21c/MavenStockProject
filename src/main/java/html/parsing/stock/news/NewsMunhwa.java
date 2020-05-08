@@ -58,7 +58,7 @@ public class NewsMunhwa extends javax.swing.JFrame {
     NewsMunhwa(int i) {
 
 
-        String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
+        String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
             url = "http://www.munhwa.com/news/view.html?no=2018041801072127107001";

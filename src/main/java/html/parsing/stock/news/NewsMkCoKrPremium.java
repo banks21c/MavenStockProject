@@ -52,7 +52,7 @@ public class NewsMkCoKrPremium extends javax.swing.JFrame {
 	NewsMkCoKrPremium(int i) {
 		logger1 = LoggerFactory.getLogger(this.getClass());
 		logger1.debug(this.getClass().getSimpleName());
-		String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "https://www.mk.co.kr/premium/special-report/view/2019/12/27289/";

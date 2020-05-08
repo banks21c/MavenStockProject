@@ -182,7 +182,7 @@ public class News {
 		return filePath;
 	}
 
-	public String getProtocolHost() {
+	public static String getProtocolHost() {
 		return protocolHost;
 	}
 

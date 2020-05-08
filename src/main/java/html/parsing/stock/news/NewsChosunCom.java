@@ -130,7 +130,7 @@ public class NewsChosunCom extends News {
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
-			logger.debug(sb1.toString());
+			logger.debug("[sb.toString:" + sb1.toString() + "]");
 
 			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
