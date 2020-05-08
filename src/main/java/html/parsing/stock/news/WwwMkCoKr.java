@@ -213,6 +213,7 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 
 			doc.select("iframe").remove();
 			doc.select("script").remove();
+			doc.select("all").remove();
 			doc.select("div").attr("style", "width:548px");
 
 			Elements title = doc.select("h1.top_title");
@@ -294,12 +295,22 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 			}
 						
 			Elements imgEls = contentEls.select("img");
-			for (Element imgEl : imgEls) {
+			for(Element imgEl:imgEls){
 				String imgUrl = imgEl.attr("src");
-				ImageUtil.getImageWithStyle(imgEl, imgUrl);
+				logger.debug("imgUrl:"+imgUrl);
+				if(!imgUrl.startsWith("http")) {
+					if(imgUrl.startsWith("//")) {
+						imgUrl = protocol+":"+imgUrl;
+					}else {					
+						imgUrl = protocolHost+imgUrl;
+					}
+				}				
+				imgEl = ImageUtil.getImageWithStyle(imgEl,imgUrl);
+				logger.debug("imgEl:"+imgEl);
 			}
 			
 			String strContent = contentEls.html();
+			strContent = strContent.replace("src=\"//", "src=\""+protocol+"://");
 			
 			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 

@@ -891,6 +891,7 @@ public class StockUtil {
 	}
 
 	public static StockVO getStockInfo(int cnt, String strStockCode, String strStockName) {
+		logger.debug("stockName:"+strStockName+"("+strStockCode+")");
 		Document doc;
 		StockVO stock = new StockVO();
 		stock.setStockCode(strStockCode);
@@ -902,8 +903,9 @@ public class StockUtil {
 
 			// Element tradeVolumeText =
 			// doc.select(".sp_txt9").get(0);
-			String tradeVolumeText = doc.select(".spot .rate_info .sp_txt9").get(0).parent().child(1).select("span")
-					.get(0).text();
+			Elements els = doc.select(".spot .rate_info .sp_txt9");
+			if(els.size() <= 0) return stock;
+			String tradeVolumeText = els.get(0).parent().child(1).select("span").get(0).text();
 			if (tradeVolumeText.equals("0")) {
 				return stock;
 			}
@@ -2035,15 +2037,15 @@ public class StockUtil {
 		return stockName;
 	}
 
-	public static String getStockCodeFromName(String stockName) {
+	public static String getStockCodeFromName(String strStockName) {
 		String enc = "EUC-KR";
 		// https://finance.naver.com/search/searchList.nhn?query=%BB%EF%BC%BA%C0%FC%C0%DA
 		String encodedStockName = null;
-		String stockCode = "";
+		String strStockCode = "";
 		Document doc;
 		try {
-			encodedStockName = URLEncoder.encode(stockName, enc);
-			logger.debug(stockName + " url encode by" + enc + " : " + encodedStockName);
+			encodedStockName = URLEncoder.encode(strStockName, enc);
+			logger.debug(strStockName + " url encode by" + enc + " : " + encodedStockName);
 			// 종합분석-기업개요
 //			doc = Jsoup.connect("https://search.naver.com/search.naver?sm=sta_hty.finance&where=nexearch&ie=UTF8&query=" + stockName).get();
 //			doc = Jsoup.connect("https://finance.naver.com/search/search.nhn?query=" + stockName).get();
@@ -2055,13 +2057,13 @@ public class StockUtil {
 				logger.debug("as:\n" + as);
 				String href = as.get(0).attr("href");
 				logger.debug("href:" + href);
-				stockCode = href.substring(href.indexOf("=") + 1);
-				logger.debug("stockCode:" + stockCode);
+				strStockCode = href.substring(href.indexOf("=") + 1);
+				logger.debug("strStockCode:" + strStockCode);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return stockCode;
+		return strStockCode;
 	}
 
 //	public static void main(String args[]) throws Exception {

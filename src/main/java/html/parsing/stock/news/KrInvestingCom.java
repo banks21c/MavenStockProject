@@ -140,7 +140,11 @@ public class KrInvestingCom extends News {
 				String imgUrl = imgEl.attr("src");
 				logger.debug("imgUrl:"+imgUrl);
 				if(!imgUrl.startsWith("http")) {
-					imgUrl = getProtocolHost()+imgUrl;
+					if(imgUrl.startsWith("//")) {
+						imgUrl = protocol+":"+imgUrl;
+					}else {					
+						imgUrl = getProtocolHost()+imgUrl;
+					}
 				}				
 				imgEl = ImageUtil.getImageWithStyle(imgEl,imgUrl);
 				logger.debug("imgEl:"+imgEl);

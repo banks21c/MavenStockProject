@@ -1,17 +1,11 @@
 package html.parsing.stock.news;
 
 import java.io.File;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import javax.swing.JOptionPane;
 
 import org.jsoup.Jsoup;
@@ -21,14 +15,18 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
+import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.ImageUtil;
 
-public class WwwPharmnewsCom extends News {
+public class MonthlyChosunCom extends News {
 
 	final static String userHome = System.getProperty("user.home");
-	private static Logger logger = LoggerFactory.getLogger(WwwPharmnewsCom.class);
+	private static Logger logger = LoggerFactory.getLogger(MonthlyChosunCom.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -45,19 +43,19 @@ public class WwwPharmnewsCom extends News {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new WwwPharmnewsCom(1);
+		new MonthlyChosunCom(1);
 	}
 
-	WwwPharmnewsCom() {
+	MonthlyChosunCom() {
 		logger = LoggerFactory.getLogger(this.getClass());
 	}
 
-	WwwPharmnewsCom(int i) {
+	MonthlyChosunCom(int i) {
 		logger = LoggerFactory.getLogger(this.getClass());
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
 		if (url.equals("")) {
-			url = "http://www.pharmnews.com/news/articleView.html?idxno=100399";
+			url = "http://health.chosun.com/site/data/html_dir/2020/05/07/2020050702591.html";
 		}
 		createHTMLFile(url);
 	}
@@ -71,29 +69,6 @@ public class WwwPharmnewsCom extends News {
 		String strTitleForFileName = "";
 		String strFileNameDate = "";
 		try {
-			TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-				public X509Certificate[] getAcceptedIssuers() {
-					return new X509Certificate[0];
-				}
-
-				public void checkClientTrusted(X509Certificate[] certs, String authType) {
-				}
-
-				public void checkServerTrusted(X509Certificate[] certs, String authType) {
-				}
-			} };
-
-//			SSLContext sc = SSLContext.getInstance("TLS");
-//			SSLContext sc = SSLContext.getInstance("TLSv1");
-			SSLContext sc = SSLContext.getInstance("TLSv1.1");
-//			SSLContext sc = SSLContext.getInstance("TLSv1.2");
-
-			sc.init(null, trustAllCerts, new SecureRandom());
-			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-
-			System.setProperty("https.protocols", "TLSv1.1");
-			System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
-
 			doc = Jsoup.connect(url).get();
 			doc.select("iframe").remove();
 			doc.select("script").remove();
@@ -102,20 +77,25 @@ public class WwwPharmnewsCom extends News {
 			doc.select("#news_rel_id").remove();
 			doc.select(".news_copyright_links").remove();
 			doc.select(".copy_bottom").remove();
+
+			JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
+			JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
+			JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
+			JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
+			
 //제목
-			strTitle = doc.select(".article-view-header .article-header-wrap .article-head-title").html();
+			strTitle = doc.select(".title_title h2.title").html();
 			logger.debug("title:" + strTitle);
 			strTitleForFileName = strTitle;
-			strTitleForFileName = strTitleForFileName.replaceAll(":", "-");
 			strTitleForFileName = strTitleForFileName.replaceAll(" ", "_");
 			strTitleForFileName = strTitleForFileName.replaceAll("\"", "'");
 			strTitleForFileName = strTitleForFileName.replaceAll("\\?", "§");
 			logger.debug("strFileNameTitle:" + strTitleForFileName);
 //날짜
-			strDate = doc.select(".article-view-header .info-text li").get(1).text();
-			strDate = strDate.replace("승인", "").trim();
+			strDate = doc.select(".date_text p").text();
+			strDate = strDate.replace("입력 :", "");
 			logger.debug("strDate:" + strDate);
-			if (strDate.contains("|")) {
+			if(strDate.contains("|")) {
 				String strDateArray[] = strDate.split("\\|");
 				strDate = strDateArray[0].trim();
 			}
@@ -126,15 +106,16 @@ public class WwwPharmnewsCom extends News {
 			strFileNameDate = "[" + strFileNameDate + "]";
 			logger.debug("strFileNameDate:" + strFileNameDate);
 //작자
-			Elements title_author_2011 = doc.select(".article-view-header .info-text li");
+			Elements title_author_2011 = doc.select(".name_ctrl p");
 			logger.debug("title_author_2011:" + title_author_2011);
-			String strAuthor = title_author_2011.get(0).text();
+			String strAuthor = title_author_2011.text();
 			logger.debug("author:" + strAuthor);
 
-			Elements article = doc.select("#article-view-content-div");
+			Elements article = doc.select("#articleBody");
 			logger.debug("article:" + article);
 			article.select(".news_body .news_date").remove();
-
+			article.attr("style", "width:548px");
+			
 			Elements imgEls = article.select("img");
 			for(Element imgEl:imgEls){
 				String imgUrl = imgEl.attr("src");
@@ -144,13 +125,14 @@ public class WwwPharmnewsCom extends News {
 						imgUrl = protocol+":"+imgUrl;
 					}else {					
 						imgUrl = getProtocolHost()+imgUrl;
+						logger.debug("getProtocolHost:"+getProtocolHost());
+						logger.debug("imgUrl:"+imgUrl);
 					}
 				}				
 				imgEl = ImageUtil.getImageWithStyle(imgEl,imgUrl);
 				logger.debug("imgEl:"+imgEl);
 			}
-
-			article.attr("style", "width:548px");
+			
 			String articleHtml = article.outerHtml();
 			logger.debug("articleHtml:[" + articleHtml + "]articleHtml");
 
@@ -159,7 +141,6 @@ public class WwwPharmnewsCom extends News {
 
 			String strContent = articleHtml.replaceAll("640px", "548px");
 			strContent = strContent.replaceAll("<figure>", "");
-			strContent = strContent.replaceAll("\"/", "\""+getProtocolHost()+"/");
 			strContent = strContent.replaceAll("</figure>", "<br>");
 			strContent = strContent.replaceAll("<figcaption>", "");
 			strContent = strContent.replaceAll("</figcaption>", "<br>");
@@ -195,11 +176,12 @@ public class WwwPharmnewsCom extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = "";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
+			FileUtil.fileWrite(fileName, sb1.toString());
 
 			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
-			logger.debug("fileName:" + fileName);
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

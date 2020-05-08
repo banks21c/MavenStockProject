@@ -71,9 +71,9 @@ public class AllStockPlusMinusDivide extends Thread {
 	public static void main(String[] args) throws InterruptedException {
 		long startTime = System.currentTimeMillis();
 
-		AllStockPlusMinusDivide list1 = new AllStockPlusMinusDivide(1);
-		//AllStockPlusMinusDivide list1 = new AllStockPlusMinusDivide();
-		//list1.start();
+//		AllStockPlusMinusDivide list1 = new AllStockPlusMinusDivide(1);
+		AllStockPlusMinusDivide list1 = new AllStockPlusMinusDivide();
+		list1.start();
 
 		long endTime = System.currentTimeMillis();
 		String elapsedTimeSecond = (endTime - startTime) / 1000 % 60 + "초";

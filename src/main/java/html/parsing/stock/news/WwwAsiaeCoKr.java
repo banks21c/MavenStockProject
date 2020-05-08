@@ -255,9 +255,18 @@ public class WwwAsiaeCoKr extends javax.swing.JFrame {
 
 			Elements contentEls = doc.select(".article_view");
 			Elements imgEls = contentEls.select("img");
-			for (Element imgEl : imgEls) {
+			for(Element imgEl:imgEls){
 				String imgUrl = imgEl.attr("src");
-				ImageUtil.getImageWithStyle(imgEl, imgUrl);
+				logger.debug("imgUrl:"+imgUrl);
+				if(!imgUrl.startsWith("http")) {
+					if(imgUrl.startsWith("//")) {
+						imgUrl = protocol+":"+imgUrl;
+					}else {					
+						imgUrl = protocolHost+imgUrl;
+					}
+				}				
+				imgEl = ImageUtil.getImageWithStyle(imgEl,imgUrl);
+				logger.debug("imgEl:"+imgEl);
 			}
 
 			String strContent = contentEls.html();

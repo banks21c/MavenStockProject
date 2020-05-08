@@ -362,8 +362,10 @@ public class ImageUtil {
 		System.out.println("Width : " + width);
 		return image;
 	}
+
 	/**
-	 * url에서 이미지 정보를 읽어와서 width와 height에 대한 style을 만들어 return한다. 
+	 * url에서 이미지 정보를 읽어와서 width와 height에 대한 style을 만들어 return한다.
+	 * 
 	 * @param imgUrl
 	 * @return
 	 * @throws IOException
@@ -391,7 +393,8 @@ public class ImageUtil {
 	}
 
 	/**
-	 * url에서 이미지 정보를 읽어와서 width와 height를 org.jsoup.nodes.Element에 style 속성값에 세팅한다. 
+	 * url에서 이미지 정보를 읽어와서 width와 height를 org.jsoup.nodes.Element에 style 속성값에 세팅한다.
+	 * 
 	 * @param img    org.jsoup.nodes.Element
 	 * @param imgUrl
 	 * @return
@@ -403,20 +406,22 @@ public class ImageUtil {
 		}
 		URL url = new URL(imgUrl);
 		BufferedImage image = ImageIO.read(url);
-		int iHeight = image.getHeight();
-		int iWidth = image.getWidth();
-		int changeHeight = iHeight;
-		int changeWidth = iWidth;
-		System.out.println("iHeight : " + iHeight);
-		System.out.println("iWidth : " + iWidth);
+		if (image != null) {
+			int iHeight = image.getHeight();
+			int iWidth = image.getWidth();
+			int changeHeight = iHeight;
+			int changeWidth = iWidth;
+			System.out.println("iHeight : " + iHeight);
+			System.out.println("iWidth : " + iWidth);
 
-		if (iWidth > 548) {
-			changeWidth = 548;
-			changeHeight = 548 * iHeight / iWidth;
+			if (iWidth > 548) {
+				changeWidth = 548;
+				changeHeight = 548 * iHeight / iWidth;
+			}
+			System.out.println("style : " + "width:" + changeWidth + "px;height:" + changeHeight + "px;");
+
+			img.attr("style", "width:" + changeWidth + "px;height:" + changeHeight + "px;");
 		}
-		System.out.println("style : " + "width:" + changeWidth + "px;height:" + changeHeight + "px;");
-
-		img.attr("style", "width:" + changeWidth + "px;height:" + changeHeight + "px;");
 		return img;
 	}
 

@@ -42,6 +42,11 @@ public class JsoupChangeImageElementsAttribute {
 			int iImgHeight = 0;
 
 			for (Element img : imgs) {
+
+				setImgAttr("src", protocol, protocolHost, filePath, tempPath, img, resizeYn);
+				System.out.println("img--------->" + img);
+				System.out.println("----------------------img.attr(src)3:" + img.attr("src"));
+				
 				img.attr("alt", "");
 				img.attr("title", "");
 				tempPath = path;
@@ -75,14 +80,11 @@ public class JsoupChangeImageElementsAttribute {
 				img.attr("width", imgWidth);
 				img.attr("height", imgHeight);
 
-				setImgAttr("src", protocol, protocolHost, filePath, tempPath, img, resizeYn);
-				System.out.println("img--------->" + img);
-				System.out.println("----------------------img.attr(src)3:" + img.attr("src"));
 			}
 		}
-		System.out.println("===============imgs=================>");
+		System.out.println("<===============imgs=================");
 		System.out.println(imgs);
-		System.out.println("<==============imgs==================");
+		System.out.println("==============imgs==================>");
 	}
 
 	public static void setImgAttr(String attrType, String protocol, String protocolHost, String filePath,
@@ -106,10 +108,11 @@ public class JsoupChangeImageElementsAttribute {
 			if (src.startsWith("//")) {
 				src = protocol + ":" + src;
 				img.attr(attrType, src);
-				System.out.println("img====>" + img);
+				System.out.println("//img====>" + img);
 			} else {
 				src = protocolHost + src;
 				img.attr(attrType, src);
+				System.out.println("/img====>" + img);
 			}
 		} else if (src.startsWith("../../")) {
 			tempPath = tempPath.substring(0, tempPath.lastIndexOf("/") - 1);
