@@ -61,7 +61,7 @@ enum NewsPublisher {
 	wwwmediauscokr("www.mediaus.co.kr"),
 	wwwseoulcokr("www.seoul.co.kr"),
 	wwwmunhwacom("www.munhwa.com"),
-	wwwasiaecokr("www.asiae.co.kr"),
+	WwwAsiaeCoKr("www.asiae.co.kr"),
 	StockAsiaeCoKr("stock.asiae.co.kr"),
 	ViewAsiaeCoKr("view.asiae.co.kr"),
 	wwwmkcokr("www.mk.co.kr"),

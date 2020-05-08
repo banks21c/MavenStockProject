@@ -24,6 +24,7 @@ import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.ImageUtil;
 
 public class WwwMkCoKr extends javax.swing.JFrame {
 
@@ -283,14 +284,23 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 			}
 			logger.debug("strDate:[" + strDate + "]");
 
-			String strContent = doc.select("#article_body").html();
-			if (strContent == null || strContent.trim().equals("")) {
-				strContent = doc.select(".view_txt").html();
+			Elements contentEls = doc.select("#article_body");
+			if (contentEls.size() <= 0) {
+				contentEls = doc.select(".view_txt");
 			}
-			logger.debug("strContent:" + strContent);
-			if(strContent == null || strContent.trim().equals("")) {
-				strContent = doc.select(".read_txt").html();
+			logger.debug("contentEls:" + contentEls);
+			if (contentEls.size() <= 0) {
+				contentEls = doc.select(".read_txt");
 			}
+						
+			Elements imgEls = contentEls.select("img");
+			for (Element imgEl : imgEls) {
+				String imgUrl = imgEl.attr("src");
+				ImageUtil.getImageWithStyle(imgEl, imgUrl);
+			}
+			
+			String strContent = contentEls.html();
+			
 			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
 			String copyright = "";
