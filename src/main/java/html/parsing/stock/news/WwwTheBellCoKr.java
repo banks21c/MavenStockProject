@@ -57,7 +57,7 @@ public class WwwTheBellCoKr extends News {
 	WwwTheBellCoKr(int i) {
 
 
-		String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://www.thebell.co.kr/free/content/ArticleView.asp?key=201908160100029190001805";

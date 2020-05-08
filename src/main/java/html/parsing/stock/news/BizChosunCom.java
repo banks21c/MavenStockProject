@@ -1,26 +1,26 @@
 package html.parsing.stock.news;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
-public class BizChosunCom {
+public class BizChosunCom extends News {
 
 	final static String userHome = System.getProperty("user.home");
-	java.util.logging.Logger logger = null;
+	private static Logger logger = LoggerFactory.getLogger(BizChosunCom.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -41,26 +41,26 @@ public class BizChosunCom {
 	}
 
 	BizChosunCom() {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getName());
+		logger = LoggerFactory.getLogger(this.getClass());
 	}
 
 	BizChosunCom(int i) {
-		logger = java.util.logging.Logger.getLogger(this.getClass().getName());
-		logger.log(Level.INFO, this.getClass().getName());
+		logger = LoggerFactory.getLogger(this.getClass());
 		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
-		System.out.println("url:[" + url + "]");
+		logger.debug("url:[" + url + "]");
 		if (url.equals("")) {
 			url = "http://biz.chosun.com/site/data/html_dir/2018/01/06/2018010601314.html";
-			// url =
-			// "http://biz.chosun.com/site/data/html_dir/2018/01/09/2018010901170.html";
 		}
 		createHTMLFile(url);
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		logger.debug("url:" + url);
+		getURL(url);
+
 		StringBuilder sb1 = new StringBuilder();
 		Document doc;
-		String strFileNameTitle = "";
+		String strTitleForFileName = "";
 		String strFileNameDate = "";
 		try {
 			doc = Jsoup.connect(url).get();
@@ -73,39 +73,44 @@ public class BizChosunCom {
 			doc.select(".copy_bottom").remove();
 //제목
 			strTitle = doc.select(".news_title_text h1").html();
-			System.out.println("title:" + strTitle);
-			strFileNameTitle = strTitle;
-			strFileNameTitle = strFileNameTitle.replaceAll(" ", "_");
-			strFileNameTitle = strFileNameTitle.replaceAll("\"", "'");
-			strFileNameTitle = strFileNameTitle.replaceAll("\\?", "§'");
-			System.out.println("strFileNameTitle:" + strFileNameTitle);
+			logger.debug("title:" + strTitle);
+			strTitleForFileName = strTitle;
+			strTitleForFileName = strTitleForFileName.replaceAll(" ", "_");
+			strTitleForFileName = strTitleForFileName.replaceAll("\"", "'");
+			strTitleForFileName = strTitleForFileName.replaceAll("\\?", "§");
+			logger.debug("strFileNameTitle:" + strTitleForFileName);
 //날짜
 			strDate = doc.select(".news_body .news_date").text();
 			strDate = strDate.replace("입력 ", "");
-			System.out.println("strDate:" + strDate);
+			logger.debug("strDate:" + strDate);
+			if(strDate.contains("|")) {
+				String strDateArray[] = strDate.split("\\|");
+				strDate = strDateArray[0].trim();
+			}
+			logger.debug("strDate:" + strDate);
 			strFileNameDate = strDate;
 			strFileNameDate = strFileNameDate.replaceAll(" ", "_");
 			strFileNameDate = strFileNameDate.replaceAll(":", ".");
 			strFileNameDate = "[" + strFileNameDate + "]";
-			System.out.println("strFileNameDate:" + strFileNameDate);
+			logger.debug("strFileNameDate:" + strFileNameDate);
 //작자
 			Elements title_author_2011 = doc.select(".news_title_author li");
-			System.out.println("title_author_2011:" + title_author_2011);
-			String author = title_author_2011.text();
-			System.out.println("author:" + author);
+			logger.debug("title_author_2011:" + title_author_2011);
+			String strAuthor = title_author_2011.text();
+			logger.debug("author:" + strAuthor);
 
 			Elements article = doc.select("#news_body_id");
-			System.out.println("article:" + article);
+			logger.debug("article:" + article);
 			article.select(".news_body .news_date").remove();
 
 			article.attr("style", "width:548px");
-			String contentElements = article.outerHtml();
-			System.out.println("contentElements:[" + contentElements + "]contentElements");
+			String articleHtml = article.outerHtml();
+			logger.debug("articleHtml:[" + articleHtml + "]articleHtml");
 
 			String copyright = doc.select(".news_copyright").outerHtml();
-			System.out.println("copyright:" + copyright);
+			logger.debug("copyright:" + copyright);
 
-			String strContent = contentElements.replaceAll("640px", "548px");
+			String strContent = articleHtml.replaceAll("640px", "548px");
 			strContent = strContent.replaceAll("<figure>", "");
 			strContent = strContent.replaceAll("</figure>", "<br>");
 			strContent = strContent.replaceAll("<figcaption>", "");
@@ -122,26 +127,38 @@ public class BizChosunCom {
 			sb1.append("</style>\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
+
+			sb1.append(StockUtil.getMyCommentBox());
+
 			sb1.append("<div style='width:548px'>\r\n");
 
-
+			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
-			sb1.append("<span style='font-size:12px'>").append(author).append("</span><br><br>\n");
-			sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
+			sb1.append("<span style='font-size:14px'>").append(strAuthor).append("</span><br><br>\n");
+			sb1.append("<span style='font-size:14px'>").append(strDate).append("</span><br><br>\n");
 			sb1.append(strContent).append("<br><br>\n");
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
-			System.out.println("[sb.toString:" + sb1.toString() + "]");
+			logger.debug("[sb.toString:" + sb1.toString() + "]");
+
+			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
 
 			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
-					+ strFileNameTitle + ".html";
+					+ strTitleForFileName + ".html";
+			FileUtil.fileWrite(fileName, sb1.toString());
+
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			System.out.println("추출완료");
+			logger.debug("추출완료");
 		}
 		return sb1;
 	}

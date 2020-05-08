@@ -52,7 +52,7 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 	WwwMkCoKr(int i) {
 		logger = LoggerFactory.getLogger(this.getClass());
 		logger.debug(this.getClass().getSimpleName());
-		String url = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "https://www.mk.co.kr/news/society/view/2019/12/1091653/";

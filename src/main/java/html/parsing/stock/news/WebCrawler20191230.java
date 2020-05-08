@@ -48,7 +48,7 @@ public class WebCrawler20191230 extends javax.swing.JFrame {
 	WebCrawler20191230(int i) {
 		logger = LoggerFactory.getLogger(this.getClass());
 		logger.debug(this.getClass().getSimpleName());
-		inputUrl = JOptionPane.showInputDialog("URL을 입력하여 주세요.");
+		inputUrl = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
 		logger.debug("url:[" + inputUrl + "]");
 		if (inputUrl.equals("")) {
 			inputUrl = defaultUrl;

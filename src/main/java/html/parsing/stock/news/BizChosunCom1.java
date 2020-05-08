@@ -72,7 +72,7 @@ public class BizChosunCom1 {
             strFileNameTitle = strTitle;
             strFileNameTitle = strFileNameTitle.replaceAll(" ", "_");
             strFileNameTitle = strFileNameTitle.replaceAll("\"", "'");
-            strFileNameTitle = strFileNameTitle.replaceAll("\\?", "§'");
+            strFileNameTitle = strFileNameTitle.replaceAll("\\?", "§");
             System.out.println("strFileNameTitle:" + strFileNameTitle);
 
             strDate = doc.select("#date_text").text();
