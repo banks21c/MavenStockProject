@@ -202,10 +202,10 @@ public class AllStockPlusMinusDivide extends Thread {
 		List<StockVO> kosdaqAllStockList = new ArrayList<StockVO>();
 		try {
 			kosdaqAllStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
-			logger.debug("kosdaqAllStockList :" + kosdaqAllStockList);
+			logger.debug("kosdaqAllStockList.size1 :" + kosdaqAllStockList.size());
 		}catch(Exception e) {
 			kosdaqAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqAllStockList, "kosdaqMkt");
-			logger.debug("kosdaqAllStockList :" + kosdaqAllStockList);
+			logger.debug("kosdaqAllStockList.size2 :" + kosdaqAllStockList.size());
 		}
 		kosdaqAllStockList = sUtil.getAllStockInfo(kosdaqAllStockList);
 		iExtractCount = kosdaqAllStockList.size();
