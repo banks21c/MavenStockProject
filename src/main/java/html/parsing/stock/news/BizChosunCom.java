@@ -46,7 +46,7 @@ public class BizChosunCom extends News {
 
 	BizChosunCom(int i) {
 		logger = LoggerFactory.getLogger(this.getClass());
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
 		if (url.equals("")) {
 			url = "http://biz.chosun.com/site/data/html_dir/2018/01/06/2018010601314.html";
@@ -83,7 +83,7 @@ public class BizChosunCom extends News {
 			strDate = doc.select(".news_body .news_date").text();
 			strDate = strDate.replace("입력 ", "");
 			logger.debug("strDate:" + strDate);
-			if(strDate.contains("|")) {
+			if (strDate.contains("|")) {
 				String strDateArray[] = strDate.split("\\|");
 				strDate = strDateArray[0].trim();
 			}

@@ -498,7 +498,7 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 //			logger.debug("listedDay :" + listedDay);
 //			stock.setListedDay(listedDay);
 //
-//			// 연초가 또는 올해 상장했을 경우 상장일가 구하기
+//			// 기준일가 또는 올해 상장했을 경우 상장일가 구하기
 //			String yearFirstTradeDay = "2020.01.02";
 //			yearFirstTradeDay= StockUtil.getYearFirstTradeDay(yearFirstTradeDay, listedDay);
 //			stock.setYearFirstTradeDay(yearFirstTradeDay);

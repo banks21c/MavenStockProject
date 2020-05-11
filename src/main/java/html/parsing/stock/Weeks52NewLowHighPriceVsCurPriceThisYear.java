@@ -511,7 +511,7 @@ public class Weeks52NewLowHighPriceVsCurPriceThisYear extends Thread {
 			logger.debug("listedDay :" + listedDay);
 			stock.setListedDay(listedDay);
 
-			// 연초가 또는 올해 상장했을 경우 상장일가 구하기
+			// 기준일가 또는 올해 상장했을 경우 상장일가 구하기
 			String yearFirstTradeDay = "2020.01.02";
 			yearFirstTradeDay = StockUtil.getSpecificDay(yearFirstTradeDay, listedDay);
 			stock.setSpecificDay(yearFirstTradeDay);
@@ -555,7 +555,7 @@ public class Weeks52NewLowHighPriceVsCurPriceThisYear extends Thread {
 
 	public void writeFile(List<StockVO> kospiKosdaqStockList, String stockGubun, String orderBy) {
 		String fileNameSuffix = "";
-		fileNameSuffix = " 연초가 대비 등락율(" + orderBy + ")";
+		fileNameSuffix = " 기준일가 대비 등락율(" + orderBy + ")";
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("<html lang='ko'>\r\n");
 		sb1.append("<head>\r\n");
@@ -580,8 +580,8 @@ public class Weeks52NewLowHighPriceVsCurPriceThisYear extends Thread {
 //		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최고가</td>\r\n");
 //		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>최저가 대비 상승율</td>\r\n");
 //		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>최고가 대비 하락율</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>연초가</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>연초가 대비 등락율</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가 대비 등락율</td>\r\n");
 		sb1.append("</tr>\r\n");
 
 		int cnt = 1;

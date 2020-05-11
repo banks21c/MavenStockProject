@@ -160,7 +160,48 @@ public class DataSort {
 		}
 
 	}
+	/**
+	 * 기준일 대비 등락율 오름차순
+	 *
+	 * @author banks
+	 *
+	 */
+	public static class SpecificDayEndPriceVsCurPriceUpDownRatioRatioAscCompare implements Comparator<StockVO> {
 
+		/**
+		 * 오름차순(ASC)
+		 */
+		@Override
+		public int compare(StockVO arg0, StockVO arg1) {
+			return arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() < arg1.getSpecificDayEndPriceVsCurPriceUpDownRatio() ? -1
+					: arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() > arg1.getSpecificDayEndPriceVsCurPriceUpDownRatio() ? 1 : 0;
+		}
+
+	}
+
+	/**
+	 * 기준일 대비 등락율 내림차순
+	 *
+	 * @author banks
+	 *
+	 */
+	public static class SpecificDayEndPriceVsCurPriceUpDownRatioRatioDescCompare implements Comparator<StockVO> {
+
+		/**
+		 * 내림차순(DESC)
+		 */
+		@Override
+		public int compare(StockVO arg0, StockVO arg1) {
+			int ret = 0;
+			if (arg0 != null) {
+				ret = arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() > arg1.getSpecificDayEndPriceVsCurPriceUpDownRatio() ? -1
+						: arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() < arg1.getSpecificDayEndPriceVsCurPriceUpDownRatio() ? 1 : 0;
+			}
+			return ret;
+		}
+
+	}	
+	
 	/**
 	 * 거래량 오름차순
 	 *

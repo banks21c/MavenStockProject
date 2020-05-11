@@ -337,7 +337,7 @@ public class Weeks52MinMax50P100P {
             if (gubun.equals("ALL")) {
                 sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 저가</td>\r\n");
                 sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 고가</td>\r\n");
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>연초가</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가</td>\r\n");
 
                 sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 저vs현td>\r\n");
                 sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 고vs현</td>\r\n");
@@ -354,7 +354,7 @@ public class Weeks52MinMax50P100P {
                 sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 고가</td>\r\n");
                 sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 저vs고</td>\r\n");
             } else if (gubun.equals("START_CUR")) {
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>연초가</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가</td>\r\n");
                 sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>년초vs현</td>\r\n");
             }
             sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>비고</td>\r\n");

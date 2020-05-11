@@ -230,7 +230,7 @@ public class NationalPensionAndSamsung {
 		StockVO stock = new StockVO();
 		stock.setListedDay(listedDay);
 
-		// 연초가 또는 올해 상장했을 경우 상장일가 구하기
+		// 기준일가 또는 올해 상장했을 경우 상장일가 구하기
 		specificDay = StockUtil.getSpecificDay(specificDay, listedDay);
 		stock.setSpecificDay(specificDay);
 		String specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);

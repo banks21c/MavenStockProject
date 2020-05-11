@@ -161,9 +161,31 @@ public class StockVO {
     private float maxCurRatio;
     private float minMaxRatio;
     private float startCurRatio;
+    
     private String specificDay;
     private String specificDayEndPrice;
     private int iSpecificDayEndPrice;
+
+    private String specificDay1;
+    private String specificDayEndPrice1;
+    private int iSpecificDayEndPrice1;
+
+    private String specificDay2;
+    private String specificDayEndPrice2;
+    private int iSpecificDayEndPrice2;
+
+    private String specificDay3;
+    private String specificDayEndPrice3;
+    private int iSpecificDayEndPrice3;
+
+    private String specificDay4;
+    private String specificDayEndPrice4;
+    private int iSpecificDayEndPrice4;
+
+    private String specificDay5;
+    private String specificDayEndPrice5;
+    private int iSpecificDayEndPrice5;
+
     private String yearStartPrice;
 
     long lRetainVolumeTotal;
@@ -1255,6 +1277,126 @@ public class StockVO {
 
 	public void setfRetainRatioTotal(float fRetainRatioTotal) {
 		this.fRetainRatioTotal = fRetainRatioTotal;
+	}
+
+	public String getSpecificDay1() {
+		return specificDay1;
+	}
+
+	public void setSpecificDay1(String specificDay1) {
+		this.specificDay1 = specificDay1;
+	}
+
+	public String getSpecificDayEndPrice1() {
+		return specificDayEndPrice1;
+	}
+
+	public void setSpecificDayEndPrice1(String specificDayEndPrice1) {
+		this.specificDayEndPrice1 = specificDayEndPrice1;
+	}
+
+	public int getiSpecificDayEndPrice1() {
+		return iSpecificDayEndPrice1;
+	}
+
+	public void setiSpecificDayEndPrice1(int iSpecificDayEndPrice1) {
+		this.iSpecificDayEndPrice1 = iSpecificDayEndPrice1;
+	}
+
+	public String getSpecificDay2() {
+		return specificDay2;
+	}
+
+	public void setSpecificDay2(String specificDay2) {
+		this.specificDay2 = specificDay2;
+	}
+
+	public String getSpecificDayEndPrice2() {
+		return specificDayEndPrice2;
+	}
+
+	public void setSpecificDayEndPrice2(String specificDayEndPrice2) {
+		this.specificDayEndPrice2 = specificDayEndPrice2;
+	}
+
+	public int getiSpecificDayEndPrice2() {
+		return iSpecificDayEndPrice2;
+	}
+
+	public void setiSpecificDayEndPrice2(int iSpecificDayEndPrice2) {
+		this.iSpecificDayEndPrice2 = iSpecificDayEndPrice2;
+	}
+
+	public String getSpecificDay3() {
+		return specificDay3;
+	}
+
+	public void setSpecificDay3(String specificDay3) {
+		this.specificDay3 = specificDay3;
+	}
+
+	public String getSpecificDayEndPrice3() {
+		return specificDayEndPrice3;
+	}
+
+	public void setSpecificDayEndPrice3(String specificDayEndPrice3) {
+		this.specificDayEndPrice3 = specificDayEndPrice3;
+	}
+
+	public int getiSpecificDayEndPrice3() {
+		return iSpecificDayEndPrice3;
+	}
+
+	public void setiSpecificDayEndPrice3(int iSpecificDayEndPrice3) {
+		this.iSpecificDayEndPrice3 = iSpecificDayEndPrice3;
+	}
+
+	public String getSpecificDay4() {
+		return specificDay4;
+	}
+
+	public void setSpecificDay4(String specificDay4) {
+		this.specificDay4 = specificDay4;
+	}
+
+	public String getSpecificDayEndPrice4() {
+		return specificDayEndPrice4;
+	}
+
+	public void setSpecificDayEndPrice4(String specificDayEndPrice4) {
+		this.specificDayEndPrice4 = specificDayEndPrice4;
+	}
+
+	public int getiSpecificDayEndPrice4() {
+		return iSpecificDayEndPrice4;
+	}
+
+	public void setiSpecificDayEndPrice4(int iSpecificDayEndPrice4) {
+		this.iSpecificDayEndPrice4 = iSpecificDayEndPrice4;
+	}
+
+	public String getSpecificDay5() {
+		return specificDay5;
+	}
+
+	public void setSpecificDay5(String specificDay5) {
+		this.specificDay5 = specificDay5;
+	}
+
+	public String getSpecificDayEndPrice5() {
+		return specificDayEndPrice5;
+	}
+
+	public void setSpecificDayEndPrice5(String specificDayEndPrice5) {
+		this.specificDayEndPrice5 = specificDayEndPrice5;
+	}
+
+	public int getiSpecificDayEndPrice5() {
+		return iSpecificDayEndPrice5;
+	}
+
+	public void setiSpecificDayEndPrice5(int iSpecificDayEndPrice5) {
+		this.iSpecificDayEndPrice5 = iSpecificDayEndPrice5;
 	}
 
 	@Override

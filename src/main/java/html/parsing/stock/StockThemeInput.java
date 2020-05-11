@@ -65,7 +65,7 @@ public class StockThemeInput extends News {
 	 * @param args
 	 * @throws Exception
 	 */
-	public static void main(String[] args){
+	public static void main(String[] args) {
 		try {
 			new StockThemeInput(1);
 		} catch (Exception e) {
@@ -76,14 +76,17 @@ public class StockThemeInput extends News {
 
 	StockThemeInput() {
 		strThemeName = JOptionPane.showInputDialog("테마명을 입력해 주세요", strThemeName);
+		strThemeName = strThemeName.trim();
 		System.out.println("strThemeName:" + strThemeName);
 		String themeMarketPrice = getThemeMarketPrice(strThemeName);
+		logger.debug("themeMarketPrice:" + themeMarketPrice);
 		writeFile(strThemeName, themeMarketPrice);
 	}
 
 	StockThemeInput(int i) throws Exception {
 		// MakeKospiKosdaqList.makeKospiKosdaqList();
 		strDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDefaultDate);
+		strDate = strDate.trim();
 		strDate = StringUtils.defaultString(strDate);
 		if (strDate.equals("")) {
 			strDate = strDefaultDate;
@@ -99,9 +102,10 @@ public class StockThemeInput extends News {
 		cal1.set(iYear, iMonth, iDay);
 
 		strThemeName = JOptionPane.showInputDialog("테마명을 입력해 주세요", strThemeName);
+		strThemeName = strThemeName.trim();
 		// System.out.println("strThemeName:" + strThemeName);
 		String themeMarketPrice = getThemeMarketPrice(strThemeName);
-		// System.out.println("themeMarketPrice:" + themeMarketPrice);
+		logger.debug("themeMarketPrice:" + themeMarketPrice);
 
 		// 코스피
 //        readFile("코스피", kospiFileName);
@@ -111,7 +115,7 @@ public class StockThemeInput extends News {
 //		StockUtil.readStockCodeNameListFromExcel(allStockList, kosdaqFileName);
 		List<StockVO> kospiStockList = StockUtil.readKospiStockCodeNameListFromKrx();
 		List<StockVO> kosdaqStockList = StockUtil.readKosdaqStockCodeNameListFromKrx();
-		
+
 		allStockList.addAll(kospiStockList);
 		allStockList.addAll(kosdaqStockList);
 
@@ -236,43 +240,50 @@ public class StockThemeInput extends News {
 			// }
 			themeStockTable.select("caption").remove();
 			Elements themeStockTableTr = themeStockTable.select("tr");
-			for (int i = 0; i < themeStockTableTr.size(); i++) {
-				Element tr = themeStockTableTr.get(i);
+
+			for (Element tr : themeStockTableTr) {
 				Elements ths = tr.select("th");
 				for (int j = 0; j < ths.size(); j++) {
 					Element th = ths.get(j);
 					th.attr("style", "white-space:nowrap");
 
-					if (j == 4 || j == 5 || j == 8 ) {
+					if (j == 0) {
+						th.removeAttr("colspan");
+					}
+
+					if (j == 4 || j == 5 || j == 8) {
 						th.remove();
 					}
 				}
 
 				Elements tds = tr.select("td");
+				logger.debug("tds.size:"+tds.size());
 				String color = "";
 				if (!tds.isEmpty() && tds.size() > 2) {
 					System.out.println("tds.size:" + tds.size());
-					Elements spanElements = tds.get(2).select("span");
-					if (!spanElements.isEmpty()) {
-						Element spanElement = spanElements.get(0);
-						if (spanElement != null && !spanElement.text().equals("")) {
-							String spanClass = spanElement.attr("class");
-							System.out.println("spanClass:" + spanClass);
-							if (spanClass.contains("nv01")) {
-								color = "blue";
-								spanElement.attr("style", "color:blue");
-							} else if (spanClass.contains("red01") || spanClass.contains("red02")) {
-								color = "red";
-								spanElement.attr("style", "color:red");
+					for (Element td : tds) {
+						Elements spanElements = td.select("span");
+						if (!spanElements.isEmpty()) {
+							Element spanElement = spanElements.get(0);
+							if (spanElement != null && !spanElement.text().equals("")) {
+								String spanClass = spanElement.attr("class");
+								System.out.println("spanClass:" + spanClass);
+								if (spanClass.contains("nv01")) {
+									color = "blue";
+									spanElement.attr("style", "color:blue");
+								} else if (spanClass.contains("red01") || spanClass.contains("red02")) {
+									color = "red";
+									spanElement.attr("style", "color:red");
+								}
+								System.out.println("color :" + color);
 							}
-							System.out.println("color :" + color);
 						}
 					}
 				}
 
 				Elements imgs = tds.select("img");
 				String upDown = "";
-				if(imgs.size() > 0){
+				if (imgs.size() > 0) {
 					upDown = imgs.get(0).attr("alt");
 				}
 				System.out.println("tds.select(\"img\")===>" + tds.select("img"));
@@ -280,28 +291,16 @@ public class StockThemeInput extends News {
 				for (int j = 0; j < tds.size(); j++) {
 					Element td = tds.get(j);
 
-					if (j == 4 || j == 5 || j == 8 ) {
+					if (j == 5 || j == 6 || j == 8) {
 						td.remove();
 					}
 					td.removeAttr("style");
-					if (j == 0) {
-						td.attr("style", "text-align:left;padding:1px;color:" + color + ";");
-					} else if (j > 0 && j < 4) {
-						td.attr("style", "text-align:right;padding:0 5px;color:" + color + ";");
-					} else {
-						if (upDown.equals("상승")) {
-							td.attr("style", "text-align:right;padding:0 5px;color:red;");
-						} else if (upDown.equals("하락")) {
-							td.attr("style", "text-align:right;padding:0 5px;color:blue");
-						} else {
-							td.attr("style", "text-align:right;padding:0 5px;");
-						}
-					}
 					td.removeClass("number");
 					td.removeAttr("class");
 					System.out.println("span:" + td.select("span"));
 				}
-				if (tds.size() == 10) {
+				
+				if (tds.size() > 3) {
 					Element a = tds.select("a").get(0);
 					String href = a.attr("href");
 					String stockCode = "";
@@ -309,7 +308,7 @@ public class StockThemeInput extends News {
 						stockCode = href.substring(href.indexOf("code=") + 5);
 					}
 					String stockName = a.text();
-					System.out.println(stockCode + ":" + stockName);
+					System.out.println("stockCode:"+stockCode + " stockName:" + stockName);
 
 					StockVO stock = new StockVO();
 					stock.setStockCode(stockCode);
@@ -318,6 +317,16 @@ public class StockThemeInput extends News {
 					searchList.add(stock);
 				}
 			}
+			logger.debug("searchList:"+searchList);
+
+			for (Element tr : themeStockTableTr) {
+				Elements tds = tr.select("td");
+				if (!tds.isEmpty() && tds.size() > 2) {
+					// 테마 편입 사유 삭제
+					tds.get(1).remove();
+				}
+			}
+
 			themeMarketPrice = themeStockTable.outerHtml();
 			themeMarketPrice = themeMarketPrice.replaceAll("<a href=\"/", "<a href=\"http://finance.naver.com/");
 		}
@@ -329,7 +338,8 @@ public class StockThemeInput extends News {
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("<style>\r\n");
 			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 			sb1.append("    th {border:1px solid #aaaaaa;background:#00c73c;}\r\n");
@@ -342,7 +352,7 @@ public class StockThemeInput extends News {
 			sb1.append("<body>\r\n");
 
 			String strYMD = "[" + strDate.replaceAll("\\.", "-") + "] ";
-			sb1.append("\t<h2>" + strYMD + " 테마[" + strThemeName + "] 관련 뉴스</h2>");
+			sb1.append("\t<h2>" + strYMD + " 테마[" + strThemeName + "] 관련 뉴스</h2>\r\n");
 
 			sb1.append(themeMarketPrice + "\r\n");
 
@@ -350,8 +360,8 @@ public class StockThemeInput extends News {
 			for (StockVO s : searchList) {
 				if (s != null) {
 					Document classAnalysisDoc = Jsoup.connect(
-						"http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + s.getStockCode())
-						.get();
+							"http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + s.getStockCode())
+							.get();
 					// System.out.println("classAnalysisDoc:"+classAnalysisDoc);
 					Elements comment = classAnalysisDoc.select(".cmp_comment");
 					String strCommentCheck = classAnalysisDoc.select(".cmp_comment .dot_cmp li").text();
@@ -360,7 +370,7 @@ public class StockThemeInput extends News {
 					}
 					commentSb.append("<div>\n");
 					commentSb.append("<h4><a href='http://finance.naver.com/item/main.nhn?code=" + s.getStockCode()
-						+ "'>" + s.getStockName() + "(" + s.getStockCode() + ")" + "</a></h4>\n");
+							+ "'>" + s.getStockName() + "(" + s.getStockCode() + ")" + "</a></h4>\n");
 					commentSb.append("<p>\n");
 					commentSb.append(comment + "\n");
 					commentSb.append("</p>");
@@ -546,9 +556,9 @@ public class StockThemeInput extends News {
 					strView = strView.replaceAll("&amp;", "&");
 
 					strView = strView.replaceAll("<script type=\"text/javascript\" src=\"/js/news_read.js\"></script>",
-						"");
+							"");
 					strView = strView.replaceAll("NEWS\" data-cid=\"ne_[0-9]*_[0-9]*\" style=\"visibility: hidden;\">",
-						"");
+							"");
 
 					String title = view.select("tr th strong").get(0).text();
 					Element dateElement = view.select("tr th span span").get(0);
@@ -573,7 +583,7 @@ public class StockThemeInput extends News {
 					if (stockNewsList1.size() == 0) {
 						stockNewsList1.add(newsVO);
 						sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-							+ strStockName + "(" + strStockCode + ")</a></h3>");
+								+ strStockName + "(" + strStockCode + ")</a></h3>");
 						sb1.append(strView);
 						sb1.append("<br><br>\n");
 					} else {
@@ -600,7 +610,7 @@ public class StockThemeInput extends News {
 							System.out.println("strStockName:" + strStockName);
 							stockNewsList1.add(newsVO);
 							sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-								+ strStockName + "(" + strStockCode + ")</a></h3>");
+									+ strStockName + "(" + strStockCode + ")</a></h3>");
 							sb1.append(strView);
 							sb1.append("<br><br>\n");
 						}

@@ -568,6 +568,90 @@ public class StockUtil {
 		return svoList;
 	}
 
+	public static List<StockVO> getAllStockInfoAddBaseDayPrice(List<StockVO> stockList, String baseDay,
+			String thisYearFirstTradeDay, int pageNo) {
+		List<StockVO> svoList = new ArrayList<>();
+		int cnt = 0;
+		for (StockVO svo : stockList) {
+			cnt++;
+			String strStockCode = svo.getStockCode();
+			String strStockName = svo.getStockName();
+			StockVO vo = getStockInfo(cnt, strStockCode, strStockName);
+			logger.debug("getCurPrice :" + vo.getCurPrice());
+			logger.debug("getiCurPrice :" + vo.getiCurPrice());
+
+			if (vo != null) {
+				// ===========================================================================
+				// 상장일 구하기
+				String listedDay = StringUtils.defaultString(StockUtil.getStockListedDay(strStockCode));
+				logger.debug("listedDay :" + listedDay);
+				if (listedDay.equals("")) {
+					logger.debug(
+							strStockName + "(" + strStockCode + ")" + " 상장일 정보가 없습니다. 존재하지 않는 주식입니다.(상장폐지 여부 확인 필요)");
+					continue;
+				}
+				vo.setListedDay(listedDay);
+
+				// 기준일가 또는 올해 상장했을 경우 상장일가 구하기
+				if (baseDay.equals("")) {
+					baseDay = thisYearFirstTradeDay;
+				}
+				String specificDay = StockUtil.getSpecificDay(baseDay, listedDay);
+				logger.debug("specificDay :" + specificDay);
+				vo.setSpecificDay(specificDay);
+
+//				String specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
+				String specificDayEndPrice = "0";
+				try {
+					if (baseDay.equals(specificDay)) {
+						specificDayEndPrice = StockUtil.findSpecificDayEndPrice(strStockCode, strStockName, specificDay,
+								pageNo);
+					} else {
+						specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
+					}
+					logger.debug("specificDayEndPrice :" + specificDayEndPrice);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				vo.setSpecificDayEndPrice(specificDayEndPrice);
+
+				specificDayEndPrice = specificDayEndPrice.replaceAll(",", "");
+				logger.debug("specificDayEndPrice :" + specificDayEndPrice);
+				if (specificDayEndPrice.equals(""))
+					specificDayEndPrice = "0";
+				int iSpecificDayEndPrice = Integer.parseInt(specificDayEndPrice);
+				vo.setiSpecificDayEndPrice(iSpecificDayEndPrice);
+				logger.debug("iSpecificDayEndPrice :" + iSpecificDayEndPrice);
+
+				int iCurPrice = vo.getiCurPrice();
+				// ===========================================================================
+				double upDownRatio = 0d;
+				if (iSpecificDayEndPrice != 0) {
+					if (iSpecificDayEndPrice < iCurPrice) {
+						double d1 = iCurPrice - iSpecificDayEndPrice;
+						double d2 = d1 / iSpecificDayEndPrice * 100;
+						upDownRatio = Math.round(d2 * 100) / 100.0;
+					} else if (iSpecificDayEndPrice > iCurPrice) {
+						double d1 = iSpecificDayEndPrice - iCurPrice;
+						double d2 = d1 / iSpecificDayEndPrice * 100;
+						upDownRatio = -(Math.round(d2 * 100) / 100.0);
+					}
+				}
+				logger.debug("iCurPrice:" + iCurPrice + " iSpecificDayEndPrice :" + iSpecificDayEndPrice);
+				logger.debug("특정일 대비 up,down 비율:" + upDownRatio + "%");
+				vo.setSpecificDayEndPriceVsCurPriceUpDownRatio(upDownRatio);
+				// ===========================================================================
+
+				svoList.add(vo);
+			} else {
+				logger.debug("vo##########:" + vo);
+				logger.debug(strStockName + "(" + strStockCode + ") is null");
+//				stockList.remove(svo);
+			}
+		}
+		return svoList;
+	}
+
 	/**
 	 * 엑셀 파일 읽어서 코스피,코스닥 종목코드,종목명 목록을 추출한다.
 	 *
@@ -890,8 +974,13 @@ public class StockUtil {
 		return svoList;
 	}
 
+	@Test
+	public void test() {
+		getStockInfo(1, "159650", "하이골드8호");
+	}
+
 	public static StockVO getStockInfo(int cnt, String strStockCode, String strStockName) {
-		logger.debug("stockName:"+strStockName+"("+strStockCode+")");
+		logger.debug("stockName:" + strStockName + "(" + strStockCode + ")");
 		Document doc;
 		StockVO stock = new StockVO();
 		stock.setStockCode(strStockCode);
@@ -901,16 +990,9 @@ public class StockUtil {
 			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + strStockCode).get();
 			// logger.debug("doc:"+doc);
 
-			// Element tradeVolumeText =
-			// doc.select(".sp_txt9").get(0);
-			Elements els = doc.select(".spot .rate_info .sp_txt9");
-			if(els.size() <= 0) return stock;
-			String tradeVolumeText = els.get(0).parent().child(1).select("span").get(0).text();
-			if (tradeVolumeText.equals("0")) {
+			Elements new_totalinfos = doc.select(".new_totalinfo");
+			if (new_totalinfos.size() <= 0)
 				return stock;
-			}
-			logger.debug("tradeVolumeText:" + tradeVolumeText);
-
 			Element new_totalinfo = doc.select(".new_totalinfo").get(0);
 			Document new_totalinfo_doc = Jsoup.parse(new_totalinfo.html());
 			Element blind = new_totalinfo_doc.select(".blind").get(0);
@@ -2073,7 +2155,7 @@ public class StockUtil {
 //		readStockCodeNameListFromExcel(stockList, kospiFileName);
 //	}
 
-	@Test
+//	@Test
 	public void getTodayMarkertPriceTest() {
 		StockVO stock = new StockVO();
 		getTodayMarkertPrice(stock, "105560");
