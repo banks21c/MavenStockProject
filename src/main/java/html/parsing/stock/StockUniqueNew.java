@@ -191,7 +191,7 @@ public class StockUniqueNew extends Thread {
 			getStockInfo(i + 1, strStockCode, strStockName);
 		}
 		listSortAndAdd();
-		writeFile(allStockList, kospiFileName, "코스피 특징종목");
+		writeFile(allStockList, kospiFileName, "코스피 특징주");
 		clearList();
 	}
 
@@ -210,7 +210,7 @@ public class StockUniqueNew extends Thread {
 			getStockInfo(i + 1, strStockCode, strStockName);
 		}
 		listSortAndAdd();
-		writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");
+		writeFile(allStockList, kosdaqFileName, "코스닥 특징주");
 		clearList();
 	}
 

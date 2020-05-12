@@ -343,14 +343,14 @@ public class StockUniqueByWeekly {
         // 코스피
         readFile("코스피", kospiFileName);
         listSortAndAdd();
-        writeFile(allStockList, kospiFileName, "코스피 특징종목");
+        writeFile(allStockList, kospiFileName, "코스피 특징주");
 
         clearList();
 
         // 코스닥
         readFile("코스닥", kosdaqFileName);
         listSortAndAdd();
-        writeFile(allStockList, kosdaqFileName, "코스닥 특징종목");
+        writeFile(allStockList, kosdaqFileName, "코스닥 특징주");
     }
 
     public void readOne(String stockCode, String stockName) {
