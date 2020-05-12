@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,27 +76,36 @@ public class NewsKbsCoKr extends News {
             doc.select("body").removeAttr("onload");
             doc.select("div.pop_prt_btns").remove();
             doc.select(".w_mug_emotion").remove();
+            logger.debug("doc:["+doc+"]");
 
             JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
             JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
             JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
             JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 
-            System.out.println("doc:::[" + doc + "]");
-
-            strTitle = doc.select(".subject_area").text();
+            strTitle = doc.select(".det-news .landing-caption .tit-s").text();
             System.out.println("title2:" + strTitle);
             strTitleForFileName = strTitle;
             strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
             System.out.println("strTitleForFileName:" + strTitleForFileName);
 
             String strAuthor = "";
-            System.out.println("strAuthor:[" + strAuthor + "]");
+            //strAuthor = doc.select(".det-news .news-writer .name span").get(0).html();
+            System.out.println("strAuthor:[" + doc.select("meta") + "]");
+            
+            Elements metaEls = doc.select("meta");
+            for(Element metaEl:metaEls) {
+            	String metaName = metaEl.attr("name");
+            	if(metaName.equals("twitter:creator")) {
+            		strAuthor = metaEl.attr("content")+" 기자";
+            	}
+            }
 
             String strEmail = "";
+            //strEmail = doc.select(".det-news .news-writer .name span").get(0).html();
             System.out.println("strEmail:[" + strEmail + "]");
 
-            String strDates = doc.select(".date_area .date").text();
+            String strDates = doc.select(".det-news .landing-caption .txt-info .date").get(0).text();
             strDate = strDates.split("\\|")[0];
             strDate = strDate.replaceAll("입력", "").trim();
             System.out.println("strDate:" + strDate);
@@ -104,7 +115,12 @@ public class NewsKbsCoKr extends News {
 
             String img = doc.select("#imgVodThumbnail").outerHtml();
             System.out.println("img:" + img);
-            String strContent = doc.select(".inner_newstext").outerHtml();
+            
+            String strContent = "";
+            String strContent1 = doc.select(".det-news .detail-visual").outerHtml();
+            String strContent2 = doc.select(".det-news .detail-body").outerHtml();
+            strContent = strContent1 + strContent2;
+            
             strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
             String copyright = "";
