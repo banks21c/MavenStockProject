@@ -73,13 +73,18 @@ public class WwwYnaCoKr extends News {
 //            JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
 //            JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
 //            JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
-			strTitle = doc.select(".tit-article").text();
+			strTitle = doc.select(".title-article01>.tit").text();
 			System.out.println("strTitle:[" + strTitle + "]");
 			strTitleForFileName = strTitle;
 			strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
 			System.out.println("strTitleForFileName:" + strTitleForFileName);
 
-			String strDate = doc.select(".article-sns-md .share-info .tt em").text();
+			String strDate = "";
+			Elements dateEls = doc.select(".title-article01 .update-time");
+			if(dateEls.size() > 0) {
+				dateEls.select("span").remove();
+				strDate = dateEls.get(0).text();
+			}
 			strDate = strDate.replaceAll("Posted : ", "");
 			System.out.println("strDate:" + strDate);
 			strFileNameDate = strDate;
