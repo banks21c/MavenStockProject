@@ -71,7 +71,7 @@ public class TextFieldPopupMenuPanel extends javax.swing.JPanel {
 
         public SelectAll() {
             super("Select All");
-            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control S"));
+            putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke("control + S"));
         }
 
         public void actionPerformed(ActionEvent e) {
