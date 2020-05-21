@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.RetainAmountDescCompare;
 import html.parsing.stock.DataSort.RetainRatioDescCompare;
+import html.parsing.stock.model.MajorStockHolderVO;
 
 public class StockMajorHoldersInput {
 

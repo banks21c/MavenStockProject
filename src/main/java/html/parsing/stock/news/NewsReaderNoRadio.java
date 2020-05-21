@@ -129,400 +129,407 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-        // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-        private void initComponents() {
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
 
-                buttonGroup1 = new javax.swing.ButtonGroup();
-                jPanel7 = new javax.swing.JPanel();
-                jPanel4 = new javax.swing.JPanel();
-                urlLbl = new javax.swing.JLabel();
-                textFieldPopupMenuPanel1 = new html.parsing.stock.TextFieldPopupMenuPanel();
-                jPanel9 = new javax.swing.JPanel();
-                executeBtn = new javax.swing.JButton();
-                extractImgBtn = new javax.swing.JButton();
-                jButton3 = new javax.swing.JButton();
-                jPanel5 = new javax.swing.JPanel();
-                jPanel6 = new javax.swing.JPanel();
-                filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(25, 0), new java.awt.Dimension(25, 0), new java.awt.Dimension(25, 32767));
-                jScrollPane4 = new javax.swing.JScrollPane();
-                extractedUrlTextPane = new javax.swing.JTextPane();
-                jPanel2 = new javax.swing.JPanel();
-                jLabel1 = new javax.swing.JLabel();
-                jLabel2 = new javax.swing.JLabel();
-                jLabel14 = new javax.swing.JLabel();
-                jLabel3 = new javax.swing.JLabel();
-                jLabel4 = new javax.swing.JLabel();
-                jLabel5 = new javax.swing.JLabel();
-                jLabel11 = new javax.swing.JLabel();
-                jLabel12 = new javax.swing.JLabel();
-                jLabel13 = new javax.swing.JLabel();
-                jLabel8 = new javax.swing.JLabel();
-                jLabel9 = new javax.swing.JLabel();
-                jLabel10 = new javax.swing.JLabel();
-                jLabel6 = new javax.swing.JLabel();
-                jLabel7 = new javax.swing.JLabel();
-                jLabel16 = new javax.swing.JLabel();
-                jLabel15 = new javax.swing.JLabel();
-                jPanel1 = new javax.swing.JPanel();
-                jTabbedPane1 = new javax.swing.JTabbedPane();
-                jSplitPane1 = new javax.swing.JSplitPane();
-                jScrollPane1 = new javax.swing.JScrollPane();
-                newsTextArea = new javax.swing.JTextArea();
-                jScrollPane3 = new javax.swing.JScrollPane();
-                jEditorPane1 = new javax.swing.JEditorPane();
-                jScrollPane2 = new javax.swing.JScrollPane();
-                jEditorPane2 = new javax.swing.JEditorPane();
-                jPanel8 = new javax.swing.JPanel();
-                jButton1 = new javax.swing.JButton();
-                jPanel3 = new javax.swing.JPanel();
-                jScrollPane5 = new javax.swing.JScrollPane();
-                jList1 = new javax.swing.JList<>();
-                jScrollPane6 = new javax.swing.JScrollPane();
-                jList2 = new javax.swing.JList<>();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jPanel7 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        urlLbl = new javax.swing.JLabel();
+        textFieldPopupMenuPanel1 = new html.parsing.stock.TextFieldPopupMenuPanel();
+        jPanel9 = new javax.swing.JPanel();
+        executeBtn = new javax.swing.JButton();
+        extractImgBtn = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(25, 0), new java.awt.Dimension(25, 0), new java.awt.Dimension(25, 32767));
+        jScrollPane4 = new javax.swing.JScrollPane();
+        extractedUrlTextPane = new javax.swing.JTextPane();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        newsTextArea = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jEditorPane1 = new javax.swing.JEditorPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jEditorPane2 = new javax.swing.JEditorPane();
+        jPanel8 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jList2 = new javax.swing.JList<>();
 
-                setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                setTitle("웹페이지 추출");
-                setMinimumSize(new java.awt.Dimension(500, 250));
-                setPreferredSize(new java.awt.Dimension(1024, 768));
-                setSize(new java.awt.Dimension(1000, 600));
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("웹페이지 추출");
+        setMinimumSize(new java.awt.Dimension(500, 250));
+        setPreferredSize(new java.awt.Dimension(1024, 768));
+        setSize(new java.awt.Dimension(1000, 600));
 
-                jPanel7.setLayout(new java.awt.BorderLayout());
+        jPanel7.setLayout(new java.awt.BorderLayout());
 
-                jPanel4.setLayout(new java.awt.BorderLayout());
+        jPanel4.setLayout(new java.awt.BorderLayout());
 
-                urlLbl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-                urlLbl.setText("주소 : ");
-                urlLbl.setToolTipText("");
-                jPanel4.add(urlLbl, java.awt.BorderLayout.WEST);
+        urlLbl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        urlLbl.setText("주소 : ");
+        urlLbl.setToolTipText("");
+        jPanel4.add(urlLbl, java.awt.BorderLayout.WEST);
 
-                textFieldPopupMenuPanel1.addFocusListener(new java.awt.event.FocusAdapter() {
-                        @Override
-						public void focusLost(java.awt.event.FocusEvent evt) {
-                                textFieldPopupMenuPanel1FocusLost(evt);
-                        }
-                });
-                textFieldPopupMenuPanel1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-                        @Override
-						public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                                textFieldPopupMenuPanel1PropertyChange(evt);
-                        }
-                });
-                jPanel4.add(textFieldPopupMenuPanel1, java.awt.BorderLayout.CENTER);
+        textFieldPopupMenuPanel1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                textFieldPopupMenuPanel1FocusLost(evt);
+            }
+        });
+        textFieldPopupMenuPanel1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                textFieldPopupMenuPanel1PropertyChange(evt);
+            }
+        });
+        jPanel4.add(textFieldPopupMenuPanel1, java.awt.BorderLayout.CENTER);
 
-                executeBtn.setText("페이지 추출");
-                executeBtn.addActionListener(new java.awt.event.ActionListener() {
-                        @Override
-						public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                executeBtnActionPerformed(evt);
-                        }
-                });
-                jPanel9.add(executeBtn);
+        executeBtn.setText("페이지 추출");
+        executeBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                executeBtnActionPerformed(evt);
+            }
+        });
+        jPanel9.add(executeBtn);
 
-                extractImgBtn.setText("이미지추출");
-                extractImgBtn.addActionListener(new java.awt.event.ActionListener() {
-                        @Override
-						public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                extractImgBtnActionPerformed(evt);
-                        }
-                });
-                jPanel9.add(extractImgBtn);
+        extractImgBtn.setText("이미지추출");
+        extractImgBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                extractImgBtnActionPerformed(evt);
+            }
+        });
+        jPanel9.add(extractImgBtn);
 
-                jButton3.setText("초기화");
-                jButton3.addActionListener(new java.awt.event.ActionListener() {
-                        @Override
-						public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton3ActionPerformed(evt);
-                        }
-                });
-                jPanel9.add(jButton3);
+        jButton3.setText("초기화");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel9.add(jButton3);
 
-                jPanel4.add(jPanel9, java.awt.BorderLayout.EAST);
+        jPanel4.add(jPanel9, java.awt.BorderLayout.EAST);
 
-                jPanel5.setLayout(new java.awt.BorderLayout());
+        jPanel5.setLayout(new java.awt.BorderLayout());
 
-                jPanel6.add(filler1);
+        jPanel6.add(filler1);
 
-                jPanel5.add(jPanel6, java.awt.BorderLayout.WEST);
+        jPanel5.add(jPanel6, java.awt.BorderLayout.WEST);
 
-                extractedUrlTextPane.setEditable(false);
-                jScrollPane4.setViewportView(extractedUrlTextPane);
+        extractedUrlTextPane.setEditable(false);
+        jScrollPane4.setViewportView(extractedUrlTextPane);
 
-                jPanel5.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+        jPanel5.add(jScrollPane4, java.awt.BorderLayout.CENTER);
 
-                jPanel4.add(jPanel5, java.awt.BorderLayout.PAGE_END);
+        jPanel4.add(jPanel5, java.awt.BorderLayout.PAGE_END);
 
-                jPanel7.add(jPanel4, java.awt.BorderLayout.SOUTH);
+        jPanel7.add(jPanel4, java.awt.BorderLayout.SOUTH);
 
-                getContentPane().add(jPanel7, java.awt.BorderLayout.NORTH);
+        getContentPane().add(jPanel7, java.awt.BorderLayout.NORTH);
 
-                jPanel2.setOpaque(false);
-                jPanel2.setLayout(new java.awt.GridLayout(15, 2));
+        jPanel2.setOpaque(false);
+        jPanel2.setLayout(new java.awt.GridLayout(15, 2));
 
-                jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/hani_co_kr.png"))); // NOI18N
-                jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel1MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel1);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/hani_co_kr.png"))); // NOI18N
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel1);
 
-                jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/khan_sub_logo.png"))); // NOI18N
-                jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel2MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel2);
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/khan_sub_logo.png"))); // NOI18N
+        jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel2);
 
-                jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/kmib_logo.png"))); // NOI18N
-                jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel14MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel14);
+        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/kmib_logo.png"))); // NOI18N
+        jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel14MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel14);
 
-                jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/hkib.png"))); // NOI18N
-                jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel3MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel3);
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/hkib.png"))); // NOI18N
+        jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel3);
 
-                jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/hankyung.png"))); // NOI18N
-                jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel4MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel4);
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/hankyung.png"))); // NOI18N
+        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel4MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel4);
 
-                jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/sedaily.png"))); // NOI18N
-                jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel5MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel5);
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/sedaily.png"))); // NOI18N
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel5);
 
-                jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/edaily.png"))); // NOI18N
-                jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel11MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel11);
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/edaily.png"))); // NOI18N
+        jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel11MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel11);
 
-                jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/etoday.png"))); // NOI18N
-                jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel12MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel12);
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/etoday.png"))); // NOI18N
+        jLabel12.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel12MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel12);
 
-                jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/moneytoday.png"))); // NOI18N
-                jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel13MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel13);
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/moneytoday.png"))); // NOI18N
+        jLabel13.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel13MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel13);
 
-                jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/mbc.png"))); // NOI18N
-                jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel8MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel8);
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/mbc.png"))); // NOI18N
+        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel8);
 
-                jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/kbs_logo_01.png"))); // NOI18N
-                jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel9MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel9);
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/kbs_logo_01.png"))); // NOI18N
+        jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel9MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel9);
 
-                jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/sbs_news.png"))); // NOI18N
-                jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel10MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel10);
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/sbs_news.png"))); // NOI18N
+        jLabel10.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel10MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel10);
 
-                jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/chosun_com.png"))); // NOI18N
-                jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel6MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel6);
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/chosun_com.png"))); // NOI18N
+        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel6MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel6);
 
-                jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/joins_gnb.png"))); // NOI18N
-                jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel7MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel7);
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/joins_gnb.png"))); // NOI18N
+        jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel7);
 
-                jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/news_tomato.png"))); // NOI18N
-                jLabel16.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel16MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel16);
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/donga_com.png"))); // NOI18N
+        jLabel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel15MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel15);
 
-                jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/donga_com.png"))); // NOI18N
-                jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel15MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel15);
+        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/news_tomato.png"))); // NOI18N
+        jLabel16.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel16.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel16MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel16);
 
-                getContentPane().add(jPanel2, java.awt.BorderLayout.WEST);
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo_maekyung.png"))); // NOI18N
+        jLabel17.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel17.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel17MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel17);
 
-                jPanel1.setLayout(new java.awt.GridLayout(1, 0));
+        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/fortune_500.png"))); // NOI18N
+        jLabel18.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel18.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel18MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jLabel18);
 
-                jSplitPane1.setDividerLocation(250);
+        getContentPane().add(jPanel2, java.awt.BorderLayout.WEST);
 
-                jScrollPane1.setPreferredSize(new java.awt.Dimension(200, 106));
+        jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
-                newsTextArea.setColumns(20);
-                newsTextArea.setRows(5);
-                jScrollPane1.setViewportView(newsTextArea);
+        jSplitPane1.setDividerLocation(250);
 
-                jSplitPane1.setLeftComponent(jScrollPane1);
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(200, 106));
 
-                jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 100));
+        newsTextArea.setColumns(20);
+        newsTextArea.setRows(5);
+        jScrollPane1.setViewportView(newsTextArea);
 
-                jEditorPane1.setEditable(false);
-                jScrollPane3.setViewportView(jEditorPane1);
-                // add an html editor kit
-                HTMLEditorKit kit = new HTMLEditorKit();
-                jEditorPane1.setEditorKit(kit);
+        jSplitPane1.setLeftComponent(jScrollPane1);
 
-                // add some styles to the html
-                StyleSheet styleSheet = kit.getStyleSheet();
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 100));
 
-                // create a document, set it on the jeditorpane, then add the html
-                javax.swing.text.Document doc = kit.createDefaultDocument();
-                jEditorPane1.setDocument(doc);
-                //jEditorPane1.setText("blah blah blah");
-                // create some simple html as a string
-                String htmlString = "<html>\n"
-                + "<body>\n"
-                + "<h1>Welcome!</h1>\n"
-                + "<h2>This is an H2 header</h2>\n"
-                + "<p>This is some sample text</p>\n"
-                + "<p><a href=\"http://devdaily.com/blog/\">devdaily blog</a></p>\n"
-                + "</body>\n";
-                //jEditorPane1.setText(htmlString);
+        jEditorPane1.setEditable(false);
+        jScrollPane3.setViewportView(jEditorPane1);
+        // add an html editor kit
+        HTMLEditorKit kit = new HTMLEditorKit();
+        jEditorPane1.setEditorKit(kit);
 
-                jSplitPane1.setRightComponent(jScrollPane3);
+        // add some styles to the html
+        StyleSheet styleSheet = kit.getStyleSheet();
 
-                jTabbedPane1.addTab("소스보기", jSplitPane1);
+        // create a document, set it on the jeditorpane, then add the html
+        javax.swing.text.Document doc = kit.createDefaultDocument();
+        jEditorPane1.setDocument(doc);
+        //jEditorPane1.setText("blah blah blah");
+        // create some simple html as a string
+        String htmlString = "<html>\n"
+        + "<body>\n"
+        + "<h1>Welcome!</h1>\n"
+        + "<h2>This is an H2 header</h2>\n"
+        + "<p>This is some sample text</p>\n"
+        + "<p><a href=\"http://devdaily.com/blog/\">devdaily blog</a></p>\n"
+        + "</body>\n";
+        //jEditorPane1.setText(htmlString);
 
-                try {
-                        jEditorPane2.setPage(new java.net.URL("http://www.google.com"));
-                } catch (java.io.IOException e1) {
-                        e1.printStackTrace();
-                }
-                jScrollPane2.setViewportView(jEditorPane2);
+        jSplitPane1.setRightComponent(jScrollPane3);
 
-                jTabbedPane1.addTab("브라우징", jScrollPane2);
+        jTabbedPane1.addTab("소스보기", jSplitPane1);
 
-                jPanel1.add(jTabbedPane1);
+        try {
+            jEditorPane2.setPage(new java.net.URL("http://www.google.com"));
+        } catch (java.io.IOException e1) {
+            e1.printStackTrace();
+        }
+        jScrollPane2.setViewportView(jEditorPane2);
 
-                getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
+        jTabbedPane1.addTab("브라우징", jScrollPane2);
 
-                jButton1.setText("HTML View");
-                jButton1.addActionListener(new java.awt.event.ActionListener() {
-                        @Override
-						public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton1ActionPerformed(evt);
-                        }
-                });
-                jPanel8.add(jButton1);
+        jPanel1.add(jTabbedPane1);
 
-                getContentPane().add(jPanel8, java.awt.BorderLayout.SOUTH);
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-                jPanel3.setMinimumSize(new java.awt.Dimension(100, 100));
-                jPanel3.setPreferredSize(new java.awt.Dimension(300, 138));
-                jPanel3.setLayout(new java.awt.GridLayout(1, 2));
+        jButton1.setText("HTML View");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel8.add(jButton1);
 
-                jScrollPane5.setMinimumSize(new java.awt.Dimension(100, 23));
-                jScrollPane5.setPreferredSize(new java.awt.Dimension(150, 138));
+        getContentPane().add(jPanel8, java.awt.BorderLayout.SOUTH);
 
-                jList1.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "item 1" };
-                        @Override
-						public int getSize() { return strings.length; }
-                        @Override
-						public String getElementAt(int i) { return strings[i]; }
-                });
-                jList1.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jList1MouseClicked(evt);
-                        }
-                });
-                jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-                        @Override
-						public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                                jList1ValueChanged(evt);
-                        }
-                });
-                jScrollPane5.setViewportView(jList1);
+        jPanel3.setMinimumSize(new java.awt.Dimension(100, 100));
+        jPanel3.setPreferredSize(new java.awt.Dimension(300, 138));
+        jPanel3.setLayout(new java.awt.GridLayout(1, 2));
 
-                jPanel3.add(jScrollPane5);
+        jScrollPane5.setMinimumSize(new java.awt.Dimension(100, 23));
+        jScrollPane5.setPreferredSize(new java.awt.Dimension(150, 138));
 
-                jScrollPane6.setMinimumSize(new java.awt.Dimension(100, 23));
-                jScrollPane6.setPreferredSize(new java.awt.Dimension(150, 138));
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "item 1" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jList1MouseClicked(evt);
+            }
+        });
+        jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jList1ValueChanged(evt);
+            }
+        });
+        jScrollPane5.setViewportView(jList1);
 
-                jList2.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "item 1" };
-                        @Override
-						public int getSize() { return strings.length; }
-                        @Override
-						public String getElementAt(int i) { return strings[i]; }
-                });
-                jList2.addMouseListener(new java.awt.event.MouseAdapter() {
-                        @Override
-						public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jList2MouseClicked(evt);
-                        }
-                });
-                jScrollPane6.setViewportView(jList2);
+        jPanel3.add(jScrollPane5);
 
-                jPanel3.add(jScrollPane6);
+        jScrollPane6.setMinimumSize(new java.awt.Dimension(100, 23));
+        jScrollPane6.setPreferredSize(new java.awt.Dimension(150, 138));
 
-                getContentPane().add(jPanel3, java.awt.BorderLayout.EAST);
+        jList2.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "item 1" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jList2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jList2MouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(jList2);
 
-                pack();
-        }// </editor-fold>//GEN-END:initComponents
+        jPanel3.add(jScrollPane6);
+
+        getContentPane().add(jPanel3, java.awt.BorderLayout.EAST);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
 
     private void extractImgBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extractImgBtnActionPerformed
         try {
@@ -708,6 +715,14 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
     private void textFieldPopupMenuPanel1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textFieldPopupMenuPanel1FocusLost
         logger.debug("textFieldPopupMenuPanel1FocusLost");
     }//GEN-LAST:event_textFieldPopupMenuPanel1FocusLost
+
+    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
+        navigate("http://www.mk.co.kr");
+    }//GEN-LAST:event_jLabel17MouseClicked
+
+    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
+        navigate("https://fortune.com/fortune500/");
+    }//GEN-LAST:event_jLabel18MouseClicked
 
     public void createHTMLFile() {
         String newsCompany = getSelectedButtonText(buttonGroup1);
@@ -927,53 +942,55 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
     }
 
     private String url = "http://news.mt.co.kr/newsPrint.html?no=2017051716214167566";
-        // Variables declaration - do not modify//GEN-BEGIN:variables
-        private javax.swing.ButtonGroup buttonGroup1;
-        private javax.swing.JButton executeBtn;
-        private javax.swing.JButton extractImgBtn;
-        private javax.swing.JTextPane extractedUrlTextPane;
-        private javax.swing.Box.Filler filler1;
-        private javax.swing.JButton jButton1;
-        private javax.swing.JButton jButton3;
-        private javax.swing.JEditorPane jEditorPane1;
-        private javax.swing.JEditorPane jEditorPane2;
-        private javax.swing.JLabel jLabel1;
-        private javax.swing.JLabel jLabel10;
-        private javax.swing.JLabel jLabel11;
-        private javax.swing.JLabel jLabel12;
-        private javax.swing.JLabel jLabel13;
-        private javax.swing.JLabel jLabel14;
-        private javax.swing.JLabel jLabel15;
-        private javax.swing.JLabel jLabel16;
-        private javax.swing.JLabel jLabel2;
-        private javax.swing.JLabel jLabel3;
-        private javax.swing.JLabel jLabel4;
-        private javax.swing.JLabel jLabel5;
-        private javax.swing.JLabel jLabel6;
-        private javax.swing.JLabel jLabel7;
-        private javax.swing.JLabel jLabel8;
-        private javax.swing.JLabel jLabel9;
-        private javax.swing.JList<String> jList1;
-        private javax.swing.JList<String> jList2;
-        private javax.swing.JPanel jPanel1;
-        private javax.swing.JPanel jPanel2;
-        private javax.swing.JPanel jPanel3;
-        private javax.swing.JPanel jPanel4;
-        private javax.swing.JPanel jPanel5;
-        private javax.swing.JPanel jPanel6;
-        private javax.swing.JPanel jPanel7;
-        private javax.swing.JPanel jPanel8;
-        private javax.swing.JPanel jPanel9;
-        private javax.swing.JScrollPane jScrollPane1;
-        private javax.swing.JScrollPane jScrollPane2;
-        private javax.swing.JScrollPane jScrollPane3;
-        private javax.swing.JScrollPane jScrollPane4;
-        private javax.swing.JScrollPane jScrollPane5;
-        private javax.swing.JScrollPane jScrollPane6;
-        private javax.swing.JSplitPane jSplitPane1;
-        private javax.swing.JTabbedPane jTabbedPane1;
-        private javax.swing.JTextArea newsTextArea;
-        private html.parsing.stock.TextFieldPopupMenuPanel textFieldPopupMenuPanel1;
-        private javax.swing.JLabel urlLbl;
-        // End of variables declaration//GEN-END:variables
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton executeBtn;
+    private javax.swing.JButton extractImgBtn;
+    private javax.swing.JTextPane extractedUrlTextPane;
+    private javax.swing.Box.Filler filler1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JEditorPane jEditorPane1;
+    private javax.swing.JEditorPane jEditorPane2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jList2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextArea newsTextArea;
+    private html.parsing.stock.TextFieldPopupMenuPanel textFieldPopupMenuPanel1;
+    private javax.swing.JLabel urlLbl;
+    // End of variables declaration//GEN-END:variables
 }

@@ -1,7 +1,6 @@
 package html.parsing.stock.news;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -14,17 +13,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
+import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
-public class NewsHaniCoKr extends News {
+public class NewsKmibCoKr extends News {
 
-    private static Logger logger = LoggerFactory.getLogger(NewsHaniCoKr.class);
+    private static Logger logger = LoggerFactory.getLogger(NewsKmibCoKr.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -41,51 +43,58 @@ public class NewsHaniCoKr extends News {
      * @param args
      */
     public static void main(String[] args) {
-        new NewsHaniCoKr(1);
+        new NewsKmibCoKr(1);
     }
 
-    NewsHaniCoKr() {
+    NewsKmibCoKr() {
 
     }
 
-    NewsHaniCoKr(int i) {
+    NewsKmibCoKr(int i) {
 
 
         String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
-            url = "http://www.hani.co.kr/arti/society/society_general/779348.html?_fr=mt2";
+            url = "http://news.kmib.co.kr/article/print.asp?arcid=0011363082";
         }
-        createHTMLFile(url);
+        if (url != null && !url.equals("")) {
+            createHTMLFile(url);
+        }
     }
 
     public static StringBuilder createHTMLFile(String url) {
-        System.out.println("url:" + url);
         getURL(url);
 
+        System.out.println("url:" + url);
         StringBuilder sb1 = new StringBuilder();
         Document doc;
         String strTitleForFileName = "";
         String strFileNameDate = "";
         try {
             doc = Jsoup.connect(url).get();
-            doc.select(".kisa-sponsor-area").remove();
+            doc.select("iframe").remove();
             doc.select("script").remove();
-            doc.select("img").removeAttr("alt");
-            doc.select("img").removeAttr("title");
-            if (host.startsWith("www.")) {
-                strTitle = doc.select(".article-head .title").text();
-            } else {
-                strTitle = doc.select(".headline h1").get(0).text();
+            doc.select("body").removeAttr("onload");
+            doc.select("div.pop_prt_btns").remove();
+            doc.select(".best_nw").remove();
+
+            JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
+            JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
+            JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
+            JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
+
+            strTitle = doc.select(".nwsti h2").text();
+            System.out.println("title1:" + strTitle);
+            if (strTitle.equals("")) {
+                strTitle = doc.select(".nwsti h3").text();
             }
+            System.out.println("title2:" + strTitle);
             strTitleForFileName = strTitle;
             strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
+
             System.out.println("strTitleForFileName:" + strTitleForFileName);
 
-//            JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
-//            JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
-//            JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
-//            JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
             Elements ahrefs = doc.select("a");
             URL u = new URL(url);
             String protocol = u.getProtocol();
@@ -97,7 +106,6 @@ public class NewsHaniCoKr extends News {
             for (Element ahref : ahrefs) {
                 String strAhref = ahref.attr("href");
                 if (!strAhref.startsWith("http")) {
-                    System.out.println("strAhref1:" + strAhref);
                     if (strAhref.startsWith("/")) {
                         ahref.attr("href", protocol + "://" + host + strAhref);
                     } else {
@@ -106,57 +114,31 @@ public class NewsHaniCoKr extends News {
                 }
             }
 
-            Element timeElement = null;
-            if (host.startsWith("www.")) {
-                timeElement = doc.select(".article-head .date-time span").get(0);
-                timeElement.select("em").remove();
-                strDate = timeElement.text();
-            } else {
-                Node n = doc.select(".tools .date").get(0).childNodes().get(0);
-                strDate = n.toString();
-                strDate = strDate.replaceAll("등록", "").trim();
-            }
+            strDate = doc.select(".date .t11").eq(0).text();
             System.out.println("strDate:" + strDate);
+            strFileNameDate = strDate;
             strFileNameDate = StockUtil.getDateForFileName(strDate);
             System.out.println("strFileNameDate:" + strFileNameDate);
 
-            Elements articles = doc.select(".article-text");
-            Element article = null;
-            System.out.println("article1:" + article);
-            if (articles.size() <= 0) {
-                article = doc.select("div.article").get(0);
-            } else {
-                article = articles.get(0);
+            String author = "";
+            Elements bs = doc.select("b");
+            for (Element b : bs) {
+                if (b.text().indexOf("@kmib.co.kr") > 0) {
+                    author = b.text();
+                }
             }
-            System.out.println("article2:" + article);
-            // article.select(".image-area").append("<br><br>");
-            article.select(".image-area").after("<br><br>");
+            System.out.println("author:" + author);
 
-            Elements articleTextFontSizes = article.select(".article-text-font-size");
-            Element articleTextFontSize = null;
-            String style = "";
-            if (articleTextFontSizes.size() > 0) {
-                articleTextFontSize = article.select(".article-text-font-size").get(0);
-                style = articleTextFontSize.attr("style");
+            Elements article = doc.select("#article");
+            article.attr("style", "width:548px");
 
-                System.out.println("style:" + style);
+            String articleHtml = article.outerHtml();
+            System.out.println("articleHtml:" + articleHtml);
+            String strContent = articleHtml.replaceAll("640px", "548px");
+            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
-                articleTextFontSize.removeAttr("style");
-                articleTextFontSize.attr("style", "width:548px");
-                article.select(".article-text-font-size .imageC").attr("style", "width:548px");
-                article.select(".article-text-font-size .imageC .desc").attr("style", "width:548px");
-
-            }
-            System.out.println("article:" + article);
-
-            // article.select("img").attr("style", "width:548px");
-            article.select(".txt_caption.default_figure").attr("style", "width:548px");
-
-            // System.out.println("imageArea:"+article.select(".image-area"));
-            String strContent = article.html().replaceAll("640px", "548px");
-            strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
-            strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            String copyright = doc.select(".pop_prt_foot").outerHtml();
+            System.out.println("copyright:" + copyright);
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
@@ -169,20 +151,19 @@ public class NewsHaniCoKr extends News {
             sb1.append("<div style='width:548px'>\r\n");
 
             sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-            sb1.append("<h2>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
-            sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
-            sb1.append(strContent).append("\n");
+            sb1.append("<h2>[" + strDate + "] " + strTitle + "</h2>\n");
+            sb1.append("<span style='font-size:13px'>" + strDate + "</span><br><br>\n");
+            sb1.append("<span style='font-size:13px'>" + author + "</span><br><br>\n");
+            sb1.append(strContent + "<br><br>\n");
+            sb1.append(copyright + "<br><br>\n");
             sb1.append("</div>\r\n");
             sb1.append("</body>\r\n");
             sb1.append("</html>\r\n");
-            System.out.println(sb1.toString());
 
             File dir = new File(userHome + File.separator + "documents" + File.separator + host);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-            File f = new File(userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html");
-            System.out.println("f:" + f);
 
             String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
             FileUtil.fileWrite(fileName, sb1.toString());
@@ -190,7 +171,8 @@ public class NewsHaniCoKr extends News {
             fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
             FileUtil.fileWrite(fileName, sb1.toString());
 
-        } catch (IOException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             System.out.println("추출완료");
         }

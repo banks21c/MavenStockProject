@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.DataSort.RetainAmountDescCompare;
+import html.parsing.stock.model.MajorStockHolderVO;
 import html.parsing.stock.util.FileUtil;
 
 public class MajorStockHoldersInputDayPriceVsCurPrice {
@@ -285,10 +286,10 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 		return stocks;
 	}
-	
+
 //	@Test
 	public void getStockHomepage() {
-		getStockHompage(1,"105560","KB금융");
+		getStockHompage(1, "105560", "KB금융");
 	}
 
 	// 종목분석-기업현황
@@ -311,7 +312,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		svo.setListedDay(listedDay);
 
 		// 기준일가 또는 올해 상장했을 경우 상장일가 구하기
-		if(baseDay.equals("")) {
+		if (baseDay.equals("")) {
 			baseDay = thisYearFirstTradeDay;
 		}
 		specificDay = StockUtil.getSpecificDay(baseDay, listedDay);
@@ -361,11 +362,11 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 					strYMD = "[" + strYMD.replaceAll("\\.", "-") + "] ";
 				}
 			}
-			
+
 			svo = StockUtil.getTodayMarkertPrice(doc, svo, strStockCode);
 			int iCurPrice = svo.getiCurPrice();
-			logger.debug("iCurPrice:"+iCurPrice);
-			
+			logger.debug("iCurPrice:" + iCurPrice);
+
 			// ===========================================================================
 			double upDownRatio = 0d;
 			if (iSpecificDayEndPrice != 0) {
@@ -643,8 +644,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-        sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
-        sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>등락률</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>등락률</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가 대비 등락율</td>\r\n");
 		if (!inputWordIsSameAsMajorStockHolders) {
@@ -680,32 +681,33 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 								+ svo.getStockName() + "</a></td>\r\n");
 						sb1.append("<td rowspan=" + listSize + " style='text-align:right'>" + svo.getCurPrice()
 								+ "</td>\r\n");
-						
-	                    String specialLetter = StringUtils.defaultIfEmpty(svo.getSpecialLetter(), "");
-	                    String varyPrice = svo.getVaryPrice();
-	                    if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
-	                            || specialLetter.startsWith("+")) {
-	                        sb1.append("<td rowspan=" + listSize + " style='text-align:right'><font color='red'>" + specialLetter + " " + varyPrice
-	                                + "</font></td>\r\n");
-	                    } else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
-	                            || specialLetter.startsWith("-")) {
-	                        sb1.append("<td rowspan=" + listSize + " style='text-align:right'><font color='blue'>" + specialLetter + " " + varyPrice
-	                                + "</font></td>\r\n");
-	                    } else {
-	                        sb1.append("<td rowspan=" + listSize + " style='text-align:right'>0</td>\r\n");
-	                    }
 
-	                    String varyRatio = StringUtils.defaultIfEmpty(svo.getVaryRatio(), "");
-	                    if (varyRatio.startsWith("+")) {
-	                        sb1.append("<td rowspan=" + listSize + " style='text-align:right'><font color='red'>" + varyRatio + "</font></td>\r\n");
-	                    } else if (varyRatio.startsWith("-")) {
-	                        sb1.append("<td rowspan=" + listSize + " style='text-align:right'><font color='blue'>" + varyRatio + "</font></td>\r\n");
-	                    } else {
-	                        sb1.append(
-	                                "<td rowspan=" + listSize + " style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
-	                    }						
-						
-						
+						String specialLetter = StringUtils.defaultIfEmpty(svo.getSpecialLetter(), "");
+						String varyPrice = svo.getVaryPrice();
+						if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
+								|| specialLetter.startsWith("+")) {
+							sb1.append("<td rowspan=" + listSize + " style='text-align:right'><font color='red'>"
+									+ specialLetter + " " + varyPrice + "</font></td>\r\n");
+						} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
+								|| specialLetter.startsWith("-")) {
+							sb1.append("<td rowspan=" + listSize + " style='text-align:right'><font color='blue'>"
+									+ specialLetter + " " + varyPrice + "</font></td>\r\n");
+						} else {
+							sb1.append("<td rowspan=" + listSize + " style='text-align:right'>0</td>\r\n");
+						}
+
+						String varyRatio = StringUtils.defaultIfEmpty(svo.getVaryRatio(), "");
+						if (varyRatio.startsWith("+")) {
+							sb1.append("<td rowspan=" + listSize + " style='text-align:right'><font color='red'>"
+									+ varyRatio + "</font></td>\r\n");
+						} else if (varyRatio.startsWith("-")) {
+							sb1.append("<td rowspan=" + listSize + " style='text-align:right'><font color='blue'>"
+									+ varyRatio + "</font></td>\r\n");
+						} else {
+							sb1.append("<td rowspan=" + listSize + " style='text-align:right'><font color='black'>"
+									+ varyRatio + "</font></td>\r\n");
+						}
+
 						sb1.append("<td rowspan=" + listSize + " style='text-align:right'>")
 								.append(svo.getSpecificDayEndPrice()).append("</td>\r\n");
 						sb1.append("<td rowspan=" + listSize + " style='text-align:right' class='"
@@ -1353,8 +1355,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-	            sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
-	            sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>등락률</td>\r\n");
+				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
+				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>등락률</td>\r\n");
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가</td>\r\n");
 				sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가 대비 등락율</td>\r\n");
 				if (!inputWordIsSameAsMajorStockHolders) {
@@ -1389,31 +1391,33 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 							String url = "http://finance.naver.com/item/main.nhn?code=" + svo.getStockCode();
 							sb1.append("<td><a href='" + url + "' target=_new>" + svo.getStockName() + "</a></td>\r\n");
 							sb1.append("<td style='text-align:right'>" + svo.getCurPrice() + "</td>\r\n");
-							
-		                    String specialLetter = StringUtils.defaultIfEmpty(svo.getSpecialLetter(), "");
-		                    String varyPrice = svo.getVaryPrice();
-		                    if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
-		                            || specialLetter.startsWith("+")) {
-		                        sb1.append("<td style='text-align:right'><font color='red'>" + specialLetter + " " + varyPrice
-		                                + "</font></td>\r\n");
-		                    } else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
-		                            || specialLetter.startsWith("-")) {
-		                        sb1.append("<td style='text-align:right'><font color='blue'>" + specialLetter + " " + varyPrice
-		                                + "</font></td>\r\n");
-		                    } else {
-		                        sb1.append("<td style='text-align:right'>0</td>\r\n");
-		                    }
 
-		                    String varyRatio = StringUtils.defaultIfEmpty(svo.getVaryRatio(), "");
-		                    if (varyRatio.startsWith("+")) {
-		                        sb1.append("<td style='text-align:right'><font color='red'>" + varyRatio + "</font></td>\r\n");
-		                    } else if (varyRatio.startsWith("-")) {
-		                        sb1.append("<td style='text-align:right'><font color='blue'>" + varyRatio + "</font></td>\r\n");
-		                    } else {
-		                        sb1.append(
-		                                "<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
-		                    }
-		                    
+							String specialLetter = StringUtils.defaultIfEmpty(svo.getSpecialLetter(), "");
+							String varyPrice = svo.getVaryPrice();
+							if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
+									|| specialLetter.startsWith("+")) {
+								sb1.append("<td style='text-align:right'><font color='red'>" + specialLetter + " "
+										+ varyPrice + "</font></td>\r\n");
+							} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
+									|| specialLetter.startsWith("-")) {
+								sb1.append("<td style='text-align:right'><font color='blue'>" + specialLetter + " "
+										+ varyPrice + "</font></td>\r\n");
+							} else {
+								sb1.append("<td style='text-align:right'>0</td>\r\n");
+							}
+
+							String varyRatio = StringUtils.defaultIfEmpty(svo.getVaryRatio(), "");
+							if (varyRatio.startsWith("+")) {
+								sb1.append("<td style='text-align:right'><font color='red'>" + varyRatio
+										+ "</font></td>\r\n");
+							} else if (varyRatio.startsWith("-")) {
+								sb1.append("<td style='text-align:right'><font color='blue'>" + varyRatio
+										+ "</font></td>\r\n");
+							} else {
+								sb1.append("<td style='text-align:right'><font color='black'>" + varyRatio
+										+ "</font></td>\r\n");
+							}
+
 							sb1.append("<td style='text-align:right'>").append(svo.getSpecificDayEndPrice())
 									.append("</td>\r\n");
 							sb1.append("<td style='text-align:right'>")

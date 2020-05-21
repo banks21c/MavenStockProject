@@ -11,6 +11,7 @@ import org.json.simple.parser.ParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import html.parsing.stock.model.MajorStockHolderVO;
 
 public class StockVO {
 
@@ -56,6 +57,17 @@ public class StockVO {
 	private int iVaryPrice;
 	private int iMaxPrice;
 	private int iMinPrice;
+
+	//미국 통화는 달러화로 주식이 소숫점으로 되어 있어서 float 추가
+	private int fCurPrice;
+	private int fStartPrice;
+	private int fBeforePrice;
+	private int fLowPrice;
+	private int fHighPrice;
+	private int fVaryPrice;
+	private int fMaxPrice;
+	private int fMinPrice;
+
 	private float fVaryRatio;
 
 	private int iTradingVolume;
@@ -143,54 +155,62 @@ public class StockVO {
 	private String resultMessage;
 	private String resultDetailMessage;
 
-    private String eps;
-    private String bps;
-    private String roe;
-    private String per;
-    private String bizTypePer;
-    private String pbr;
-    private String dividendRate;
+	private String eps;
+	private String bps;
+	private String roe;
 
-    private int iBps;
-    private float fRoe;
-    private float fBizTypePer;
-    private float fPbr;
-    private float fDividendRate;
+	private String per;
+	private String bizTypePer;
+	private String pbr;
 
-    private float minCurRatio;
-    private float maxCurRatio;
-    private float minMaxRatio;
-    private float startCurRatio;
-    
-    private String specificDay;
-    private String specificDayEndPrice;
-    private int iSpecificDayEndPrice;
+	private String dividends;
+	private String dividendRate;
+	private String ev;
 
-    private String specificDay1;
-    private String specificDayEndPrice1;
-    private int iSpecificDayEndPrice1;
+	private int iBps;
+	private float fRoe;
+	private float fBizTypePer;
+	private float fPbr;
+	private float fDividendRate;
 
-    private String specificDay2;
-    private String specificDayEndPrice2;
-    private int iSpecificDayEndPrice2;
+	private float minCurRatio;
+	private float maxCurRatio;
+	private float minMaxRatio;
+	private float startCurRatio;
 
-    private String specificDay3;
-    private String specificDayEndPrice3;
-    private int iSpecificDayEndPrice3;
+	private String specificDay;
+	private String specificDayEndPrice;
+	private int iSpecificDayEndPrice;
 
-    private String specificDay4;
-    private String specificDayEndPrice4;
-    private int iSpecificDayEndPrice4;
+	private String specificDay1;
+	private String specificDayEndPrice1;
+	private int iSpecificDayEndPrice1;
 
-    private String specificDay5;
-    private String specificDayEndPrice5;
-    private int iSpecificDayEndPrice5;
+	private String specificDay2;
+	private String specificDayEndPrice2;
+	private int iSpecificDayEndPrice2;
 
-    private String yearStartPrice;
+	private String specificDay3;
+	private String specificDayEndPrice3;
+	private int iSpecificDayEndPrice3;
 
-    long lRetainVolumeTotal;
-    long lRetainAmountTotal;
-    float fRetainRatioTotal;
+	private String specificDay4;
+	private String specificDayEndPrice4;
+	private int iSpecificDayEndPrice4;
+
+	private String specificDay5;
+	private String specificDayEndPrice5;
+	private int iSpecificDayEndPrice5;
+
+	private String yearStartPrice;
+
+	long lRetainVolumeTotal;
+	long lRetainAmountTotal;
+	float fRetainRatioTotal;
+
+	String url;
+	String symbolExchangeTicker;
+	String instrumentName;
 
 	public String getDate() {
 		return date;
@@ -1022,7 +1042,6 @@ public class StockVO {
 //
 //		return result.toString();
 //	}
-
 	public String getResultCode() {
 		return resultCode;
 	}
@@ -1141,6 +1160,14 @@ public class StockVO {
 
 	public void setPbr(String pbr) {
 		this.pbr = pbr;
+	}
+
+	public String getDividends() {
+		return dividends;
+	}
+
+	public void setDividends(String dividends) {
+		this.dividends = dividends;
 	}
 
 	public String getDividendRate() {
@@ -1402,6 +1429,102 @@ public class StockVO {
 	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this);
+	}
+
+	public String getEv() {
+		return ev;
+	}
+
+	public void setEv(String ev) {
+		this.ev = ev;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getSymbolExchangeTicker() {
+		return symbolExchangeTicker;
+	}
+
+	public void setSymbolExchangeTicker(String symbolExchangeTicker) {
+		this.symbolExchangeTicker = symbolExchangeTicker;
+	}
+
+	public String getInstrumentName() {
+		return instrumentName;
+	}
+
+	public void setInstrumentName(String instrumentName) {
+		this.instrumentName = instrumentName;
+	}
+
+	public int getfCurPrice() {
+		return fCurPrice;
+	}
+
+	public void setfCurPrice(int fCurPrice) {
+		this.fCurPrice = fCurPrice;
+	}
+
+	public int getfStartPrice() {
+		return fStartPrice;
+	}
+
+	public void setfStartPrice(int fStartPrice) {
+		this.fStartPrice = fStartPrice;
+	}
+
+	public int getfBeforePrice() {
+		return fBeforePrice;
+	}
+
+	public void setfBeforePrice(int fBeforePrice) {
+		this.fBeforePrice = fBeforePrice;
+	}
+
+	public int getfLowPrice() {
+		return fLowPrice;
+	}
+
+	public void setfLowPrice(int fLowPrice) {
+		this.fLowPrice = fLowPrice;
+	}
+
+	public int getfHighPrice() {
+		return fHighPrice;
+	}
+
+	public void setfHighPrice(int fHighPrice) {
+		this.fHighPrice = fHighPrice;
+	}
+
+	public int getfVaryPrice() {
+		return fVaryPrice;
+	}
+
+	public void setfVaryPrice(int fVaryPrice) {
+		this.fVaryPrice = fVaryPrice;
+	}
+
+	public int getfMaxPrice() {
+		return fMaxPrice;
+	}
+
+	public void setfMaxPrice(int fMaxPrice) {
+		this.fMaxPrice = fMaxPrice;
+	}
+
+	public int getfMinPrice() {
+		return fMinPrice;
+	}
+
+	public void setfMinPrice(int fMinPrice) {
+		this.fMinPrice = fMinPrice;
 	}
 
 	@SuppressWarnings("unchecked")
