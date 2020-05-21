@@ -41,13 +41,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.google.common.collect.Lists;
 
-import html.parsing.stock.KindKrxCoKrExcelDownloadTest;
 
 public class KindKrxCoKrExcelDownloadTest2 {
 
 //    public static final String SERVER_URI = "http://203.235.1.50/corpgeneral/corpList.do?method=loadInitPage";
 	public static final String SERVER_URI = "http://kind.krx.co.kr/corpgeneral/corpList.do";
-	private static final Logger logger = LoggerFactory.getLogger(KindKrxCoKrExcelDownloadTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(KindKrxCoKrExcelDownloadTest2.class);
 
 	public static void main(String args[]) throws InterruptedException, IOException, Exception {
 		new KindKrxCoKrExcelDownloadTest2();
@@ -125,7 +124,7 @@ public class KindKrxCoKrExcelDownloadTest2 {
 
 			HttpHeaders headers = new HttpHeaders();
 			headers.set("Accept", "text/html, */*; q=0.01");
-			headers.set("Accept-Encoding", "Accept-Encoding: gzip, deflate");
+			headers.set("Accept-Encoding", "gzip, deflate");
 			headers.set("Accept-Language", "en-US,en;q=0.9,ko;q=0.8");
 			headers.set("Connection", "keep-alive");
 			headers.set("Content-Length", "215");
@@ -252,7 +251,7 @@ public class KindKrxCoKrExcelDownloadTest2 {
 //public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
 
 			headers.set("Accept", "text/html, */*; q=0.01");
-			headers.set("Accept-Encoding", "Accept-Encoding: gzip, deflate");
+			headers.set("Accept-Encoding", "gzip, deflate");
 			headers.set("Accept-Language", "en-US,en;q=0.9,ko;q=0.8");
 			headers.set("Connection", "keep-alive");
 			headers.set("Content-Length", "215");
@@ -323,7 +322,7 @@ public class KindKrxCoKrExcelDownloadTest2 {
 
 			headers.set("Accept", MediaType.APPLICATION_JSON
 					+ ",text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
-			headers.set("Accept-Encoding", "Accept-Encoding: gzip, deflate");
+			headers.set("Accept-Encoding", "gzip, deflate");
 			headers.set("Accept-Language", "en-US,en;q=0.9,ko;q=0.8");
 			headers.set("Cache-Control", "max-age=0");
 			headers.set("Connection", "keep-alive");
@@ -416,7 +415,7 @@ public class KindKrxCoKrExcelDownloadTest2 {
 
 			headers.set("Accept", MediaType.APPLICATION_JSON
 					+ ",text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
-			headers.set("Accept-Encoding", "Accept-Encoding: gzip, deflate");
+			headers.set("Accept-Encoding", "gzip, deflate");
 			headers.set("Accept-Language", "en-US,en;q=0.9,ko;q=0.8");
 			headers.set("Cache-Control", "max-age=0");
 			headers.set("Connection", "keep-alive");
@@ -543,7 +542,7 @@ public class KindKrxCoKrExcelDownloadTest2 {
 
 		headers.set("Accept", MediaType.APPLICATION_JSON
 				+ ",text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
-		headers.set("Accept-Encoding", "Accept-Encoding: gzip, deflate");
+		headers.set("Accept-Encoding", "gzip, deflate");
 //		headers.set("Accept-Language", "en-US,en;q=0.9,ko;q=0.8");
 		headers.set("Accept-Language", "ko");
 		headers.set("Cache-Control", "max-age=0");
@@ -612,7 +611,7 @@ public class KindKrxCoKrExcelDownloadTest2 {
 
 		headers.set("Accept", MediaType.APPLICATION_JSON
 				+ ",text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
-		headers.set("Accept-Encoding", "Accept-Encoding: gzip, deflate");
+		headers.set("Accept-Encoding", "gzip, deflate");
 //		headers.set("Accept-Language", "en-US,en;q=0.9,ko;q=0.8");
 		headers.set("Accept-Language", "ko");
 		headers.set("Cache-Control", "max-age=0");
@@ -706,7 +705,7 @@ public class KindKrxCoKrExcelDownloadTest2 {
 		Map headers = new HashMap();
 		headers.put("Accept", MediaType.APPLICATION_JSON
 				+ ",text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
-		headers.put("Accept-Encoding", "Accept-Encoding: gzip, deflate");
+		headers.put("Accept-Encoding", "gzip, deflate");
 //		headers.put("Accept-Language", "en-US,en;q=0.9,ko;q=0.8");
 		headers.put("Accept-Language", "ko");
 		headers.put("Cache-Control", "max-age=0");

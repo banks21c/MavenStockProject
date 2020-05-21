@@ -40,7 +40,7 @@ public class RestTempleteTest01 {
 //        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 //        headers.set("Accept", "text/html, */*; q=0.01");
-//        headers.set("Accept-Encoding", "Accept-Encoding: gzip, deflate");
+//        headers.set("Accept-Encoding", "gzip, deflate");
 //        headers.set("Accept-Language", "en-US,en;q=0.9,ko;q=0.8");
         headers.set("Connection", "keep-alive");
         headers.set("Host", "203.235.1.50");
