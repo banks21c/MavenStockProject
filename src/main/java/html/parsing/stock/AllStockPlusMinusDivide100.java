@@ -89,8 +89,8 @@ public class AllStockPlusMinusDivide100 extends Thread {
 	}
 
 	AllStockPlusMinusDivide100() {
-		Class thisClass = this.getClass();
-		logger = LoggerFactory.getLogger(thisClass);
+		
+		logger = LoggerFactory.getLogger(this.getClass());
 		iExtractCount = 100;
 	}
 

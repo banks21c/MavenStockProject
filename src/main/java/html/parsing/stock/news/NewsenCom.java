@@ -41,13 +41,13 @@ public class NewsenCom extends News {
     }
 
     NewsenCom() {
-        Class thisClass = this.getClass();
-        logger1 = LoggerFactory.getLogger(thisClass);
+        
+        logger1 = LoggerFactory.getLogger(this.getClass());
     }
 
     NewsenCom(int i) {
-        Class thisClass = this.getClass();
-        logger1 = LoggerFactory.getLogger(thisClass);
+        
+        logger1 = LoggerFactory.getLogger(this.getClass());
         logger1.debug("Newsen뉴스");
         String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");

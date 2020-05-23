@@ -66,11 +66,8 @@ public class Weeks52NewLowHighPriceInput {
     }
 
     Weeks52NewLowHighPriceInput() {
-        Class thisClass = this.getClass();
-        logger1 = LoggerFactory.getLogger(thisClass);
-        logger2 = java.util.logging.Logger.getLogger(thisClass.getSimpleName());
-
-        logger2.log(Level.INFO, this.getClass().getSimpleName());
+        
+        logger1 = LoggerFactory.getLogger(this.getClass());
 
         readOne("053610", "프로텍");
         writeFile(newLowPriceList, kospiFileName, "코스피 신저가", "LOW");
@@ -79,9 +76,8 @@ public class Weeks52NewLowHighPriceInput {
     }
 
     Weeks52NewLowHighPriceInput(int i) {
-        Class thisClass = this.getClass();
-        logger1 = LoggerFactory.getLogger(thisClass);
-        logger2 = java.util.logging.Logger.getLogger(thisClass.getSimpleName());
+        
+        logger1 = LoggerFactory.getLogger(this.getClass());
         // MakeKospiKosdaqList.makeKospiKosdaqList();
         String strInputDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDefaultDate);
         System.out.println("strInputDate:" + strInputDate);

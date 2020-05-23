@@ -64,8 +64,8 @@ public class Weeks52NewLowHighNextDay {
     }
 
     Weeks52NewLowHighNextDay() {
-        Class thisClass = this.getClass();
-        logger1 = LoggerFactory.getLogger(thisClass);
+        
+        logger1 = LoggerFactory.getLogger(this.getClass());
 
         readOne("036530", "S&T홀딩스");
         writeFile(newLowPriceList, kospiFileName, "코스피 신저가", "LOW");
@@ -74,8 +74,8 @@ public class Weeks52NewLowHighNextDay {
     }
 
     Weeks52NewLowHighNextDay(int i) {
-        Class thisClass = this.getClass();
-        logger1 = LoggerFactory.getLogger(thisClass);
+        
+        logger1 = LoggerFactory.getLogger(this.getClass());
         // MakeKospiKosdaqList.makeKospiKosdaqList();
 
         Properties props = new Properties();

@@ -93,9 +93,8 @@ public class StockUniqueByDate {
     }
 
     StockUniqueByDate() {
-        Class thisClass = this.getClass();
-        logger1 = LoggerFactory.getLogger(thisClass);
-        logger2 = java.util.logging.Logger.getLogger(thisClass.getSimpleName());
+        
+        logger1 = LoggerFactory.getLogger(this.getClass());
 
         logger2.log(Level.INFO, this.getClass().getSimpleName());
         // readMkURL("http://vip.mk.co.kr/newSt/rate/item_all.php?koskok=KOSPI&orderBy=dd","KOSPI");
@@ -142,11 +141,8 @@ public class StockUniqueByDate {
     }
 
     StockUniqueByDate(String s) {
-        Class thisClass = this.getClass();
-        logger1 = LoggerFactory.getLogger(thisClass);
-        logger2 = java.util.logging.Logger.getLogger(thisClass.getSimpleName());
-
-        logger2.log(Level.INFO, thisClass.getSimpleName());
+        
+        logger1 = LoggerFactory.getLogger(this.getClass());
 
         getStockInfo(1,"214310", "세미콘라이트");
 
@@ -154,11 +150,8 @@ public class StockUniqueByDate {
 
     StockUniqueByDate(int i) {
         // MakeKospiKosdaqList.makeKospiKosdaqList();
-        Class thisClass = this.getClass();
-        logger1 = LoggerFactory.getLogger(thisClass);
-        logger2 = java.util.logging.Logger.getLogger(thisClass.getSimpleName());
-
-        logger2.log(Level.INFO, thisClass.getSimpleName());
+        
+        logger1 = LoggerFactory.getLogger(this.getClass());
 
         String strInputDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDefaultDate);
         System.out.println("strInputDate:" + strInputDate);

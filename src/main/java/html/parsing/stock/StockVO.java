@@ -18,10 +18,17 @@ public class StockVO {
 	private String date;
 
 	private String market;
+	private String companyNameHan;
+	private String companyNameEn;
+	private String wikiCompanyUrl;
+	/**거래소 구분*/
+	private String stockExchange;
 	private String stockGubun;
 	private int lineUp;
 	private String stockCode;
 	private String stockName;
+	private String abbreviation;
+	private String industry;
 	private int stockNameLength;
 	private String sign;
 	private String specialLetter;
@@ -226,6 +233,30 @@ public class StockVO {
 
 	public void setMarket(String market) {
 		this.market = market;
+	}
+
+	public String getCompanyNameHan() {
+		return companyNameHan;
+	}
+
+	public void setCompanyNameHan(String companyNameHan) {
+		this.companyNameHan = companyNameHan;
+	}
+
+	public String getCompanyNameEn() {
+		return companyNameEn;
+	}
+
+	public void setCompanyNameEn(String companyNameEn) {
+		this.companyNameEn = companyNameEn;
+	}
+
+	public String getStockExchange() {
+		return stockExchange;
+	}
+
+	public void setStockExchange(String stockExchange) {
+		this.stockExchange = stockExchange;
 	}
 
 	public String getStockGubun() {
@@ -1525,6 +1556,30 @@ public class StockVO {
 
 	public void setfMinPrice(int fMinPrice) {
 		this.fMinPrice = fMinPrice;
+	}
+
+	public String getWikiCompanyUrl() {
+		return wikiCompanyUrl;
+	}
+
+	public void setWikiCompanyUrl(String wikiCompanyUrl) {
+		this.wikiCompanyUrl = wikiCompanyUrl;
+	}
+
+	public String getAbbreviation() {
+		return abbreviation;
+	}
+
+	public void setAbbreviation(String abbreviation) {
+		this.abbreviation = abbreviation;
+	}
+
+	public String getIndustry() {
+		return industry;
+	}
+
+	public void setIndustry(String industry) {
+		this.industry = industry;
 	}
 
 	@SuppressWarnings("unchecked")

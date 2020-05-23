@@ -93,8 +93,8 @@ public class Weeks52NewLowHighPriceVsCurPriceThisYear extends Thread {
 	}
 
 	Weeks52NewLowHighPriceVsCurPriceThisYear(int i) {
-		Class thisClass = this.getClass();
-		logger = LoggerFactory.getLogger(thisClass);
+		
+		logger = LoggerFactory.getLogger(this.getClass());
 
 		readOne("005930", "삼성전자", "P");
 		Collections.sort(kospiStockDataList, new NameAscCompare());
@@ -111,8 +111,8 @@ public class Weeks52NewLowHighPriceVsCurPriceThisYear extends Thread {
 	}
 
 	public void execute() {
-		Class thisClass = this.getClass();
-		logger = LoggerFactory.getLogger(thisClass);
+		
+		logger = LoggerFactory.getLogger(this.getClass());
 		logger.debug(this.getClass().getSimpleName() + " .execute started");
 		// MakeKospiKosdaqList.makeKospiKosdaqList();
 

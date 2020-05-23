@@ -104,11 +104,8 @@ public class StockUniqueByWeekly {
 
     StockUniqueByWeekly() {
         // MakeKospiKosdaqList.makeKospiKosdaqList();
-        Class thisClass = this.getClass();
-        logger1 = LoggerFactory.getLogger(thisClass);
-        logger2 = java.util.logging.Logger.getLogger(thisClass.getSimpleName());
-
-        logger2.log(Level.INFO, thisClass.getSimpleName());
+        
+        logger1 = LoggerFactory.getLogger(this.getClass());
 
         String strInputDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDefaultDate);
         System.out.println("strInputDate:" + strInputDate);
@@ -235,11 +232,8 @@ public class StockUniqueByWeekly {
     }
 
     StockUniqueByWeekly(String s) {
-        Class thisClass = this.getClass();
-        logger1 = LoggerFactory.getLogger(thisClass);
-        logger2 = java.util.logging.Logger.getLogger(thisClass.getSimpleName());
-
-        logger2.log(Level.INFO, thisClass.getSimpleName());
+        
+        logger1 = LoggerFactory.getLogger(this.getClass());
 
         getStockInfo(1,"008800", "행남자기");
 
@@ -247,11 +241,8 @@ public class StockUniqueByWeekly {
 
     StockUniqueByWeekly(int i) {
         // MakeKospiKosdaqList.makeKospiKosdaqList();
-        Class thisClass = this.getClass();
-        logger1 = LoggerFactory.getLogger(thisClass);
-        logger2 = java.util.logging.Logger.getLogger(thisClass.getSimpleName());
-
-        logger2.log(Level.INFO, thisClass.getSimpleName());
+        
+        logger1 = LoggerFactory.getLogger(this.getClass());
 
         String strInputDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDefaultDate);
         System.out.println("strInputDate:" + strInputDate);

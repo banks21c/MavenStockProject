@@ -78,16 +78,16 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 	}
 
 	Weeks52NewLowHighPriceToday(int i) {
-		Class thisClass = this.getClass();
-		logger = LoggerFactory.getLogger(thisClass);
+		
+		logger = LoggerFactory.getLogger(this.getClass());
 		readOne("053610", "프로텍");
 		writeFile(newLowPriceList, kospiFileName, "코스피 신저가", "LOW");
 		writeFile(newHighPriceList, kospiFileName, "코스피 신고가", "HIGH");
 	}
 
 	public void execute() {
-		Class thisClass = this.getClass();
-		logger = LoggerFactory.getLogger(thisClass);
+		
+		logger = LoggerFactory.getLogger(this.getClass());
 		logger.debug(this.getClass().getSimpleName() + " .execute started");
 		// MakeKospiKosdaqList.makeKospiKosdaqList();
 

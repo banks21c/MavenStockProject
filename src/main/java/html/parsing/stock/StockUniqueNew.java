@@ -87,13 +87,13 @@ public class StockUniqueNew extends Thread {
 	}
 
 	StockUniqueNew() {
-		Class thisClass = this.getClass();
-		logger1 = LoggerFactory.getLogger(thisClass);
+		
+		logger1 = LoggerFactory.getLogger(this.getClass());
 	}
 
 	public void test() {
-		Class thisClass = this.getClass();
-		logger1 = LoggerFactory.getLogger(thisClass);
+		
+		logger1 = LoggerFactory.getLogger(this.getClass());
 
 		readOne("214310", "세미콘라이트");
 		listSortAndAdd();

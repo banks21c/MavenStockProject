@@ -103,8 +103,8 @@ public class AllStockPlusMinusDivideEx2 extends Thread {
 	}
 
 	AllStockPlusMinusDivideEx2() {
-		Class thisClass = this.getClass();
-		logger = LoggerFactory.getLogger(thisClass);
+		
+		logger = LoggerFactory.getLogger(this.getClass());
 	}
 
 	@Override
