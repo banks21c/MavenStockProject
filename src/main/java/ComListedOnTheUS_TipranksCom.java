@@ -118,7 +118,7 @@ public class ComListedOnTheUS_TipranksCom extends News {
 //			sb.append("<th>현재가</th>");
 //			sb.append("<th>주당순이익</th>");
 //			sb.append("<th>배당금</th>");
-//			sb.append("<th>배당률</th>");
+//			sb.append("<th>배당률(%)</th>");
 //			sb.append("</tr>");
 //			for (Element trEl : trEls) {
 //				logger.debug("trEl:" + trEl);
@@ -255,7 +255,7 @@ public class ComListedOnTheUS_TipranksCom extends News {
 				stockList.add(svo);
 			}
 		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(ComListedOnTheUS_KrInvestingCom.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(ComListedOnTheUS_KrInvestingCom_V1.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		return stockList;
 	}
@@ -271,7 +271,7 @@ public class ComListedOnTheUS_TipranksCom extends News {
 		sb.append("		<th>현재가</th>");
 		sb.append("		<th>주당순이익</th>");
 		sb.append("		<th>배당금</th>");
-		sb.append("		<th>배당률</th>");
+		sb.append("		<th>배당률(%)</th>");
 		sb.append("	</tr>");
 		for (StockVO svo : stockList) {
 			sb.append("	<tr>");
