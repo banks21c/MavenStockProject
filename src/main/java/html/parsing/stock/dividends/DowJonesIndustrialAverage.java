@@ -1,3 +1,4 @@
+package html.parsing.stock.dividends;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +34,7 @@ public class DowJonesIndustrialAverage extends News {
 	public static final String SERVER_URI = "https://www.nyse.com/api/quotes/filter";
 	// 다우존스
 	String dowJones = "https://ko.wikipedia.org/wiki/다우_존스_산업평균지수";
+	String itoozaStockUrlPrefix = "http://us.itooza.com/stocks/summary/";
 
 	private static final Logger logger = LoggerFactory.getLogger(DowJonesIndustrialAverage.class);
 	final static String userHome = System.getProperty("user.home");
@@ -83,7 +85,7 @@ public class DowJonesIndustrialAverage extends News {
 			Elements trEls = tableEl.select("tbody tr");
 			// th line은 삭제
 			trEls.remove(0);
-
+			int i = 0;
 			for (Element trEl : trEls) {
 				StockVO svo = new StockVO();
 				String companyNameEn = "";
@@ -116,11 +118,13 @@ public class DowJonesIndustrialAverage extends News {
 						a = tdEl.select("a").get(0);
 						if (j == 0) {
 							companyNameHan = a.attr("title");
+							logger.debug((i + 1) + ".companyNameHan:" + companyNameHan);
 							companyNameEn = a.text();
+							logger.debug((i + 1) + ".companyNameEn:" + companyNameEn);
 							wikiCompanyUrl = a.attr("href");
-							logger.debug("wikiCompanyUrl1:" + wikiCompanyUrl);
+							logger.debug((i + 1) + ".wikiCompanyUrl1:" + wikiCompanyUrl);
 							wikiCompanyUrl = URLDecoder.decode(wikiCompanyUrl, "UTF8");
-							logger.debug("wikiCompanyUrl2:" + wikiCompanyUrl);
+							logger.debug((i + 1) + ".wikiCompanyUrl2:" + wikiCompanyUrl);
 
 							svo.setCompanyNameHan(companyNameHan);
 							svo.setCompanyNameEn(companyNameEn);
@@ -153,9 +157,13 @@ public class DowJonesIndustrialAverage extends News {
 							svo.setStockName(abbreviation);
 							svo.setStockCode(abbreviation);
 						}
+						if (j == 3) {
+							industry = tdEl.text();
+							svo.setIndustry(industry);
+						}
 					}
 
-					String itoozaStockUrl = "http://us.itooza.com/stocks/summary/" + abbreviation;
+					String itoozaStockUrl = itoozaStockUrlPrefix + abbreviation;
 					svo.setUrl(itoozaStockUrl);
 
 					doc = Jsoup.connect(itoozaStockUrl).get();
@@ -202,7 +210,7 @@ public class DowJonesIndustrialAverage extends News {
 								logger.debug("volume:" + totalNumberOfStock);
 							} else if (title.equals("주당배당금")) {
 								dividends = th.parent().child(1).text();
-								dividends = dividends.replace("달러", "$");
+								dividends = dividends.replace("달러", "");
 								svo.setDividends(StringUtils.defaultString(dividends));
 								logger.debug("dividends:" + dividends);
 							} else if (title.equals("배당수익률")) {
@@ -225,12 +233,12 @@ public class DowJonesIndustrialAverage extends News {
 								logger.debug("ROE:" + roe);
 							} else if (title.equals("주당순이익 EPS")) {
 								eps = th.parent().child(1).text();
-								eps = eps.replace("달러", "$");
+								eps = eps.replace("달러", "");
 								svo.setEps(eps);
 								logger.debug("EPS:" + eps);
 							} else if (title.equals("주당순자산 BPS")) {
 								bps = th.parent().child(1).text();
-								bps = bps.replace("달러", "$");
+								bps = bps.replace("달러", "");
 								svo.setBps(bps);
 								logger.debug("BPS:" + bps);
 							}
@@ -239,6 +247,7 @@ public class DowJonesIndustrialAverage extends News {
 					j++;
 				}
 				stockList.add(svo);
+				i++;
 			}
 		} catch (IOException ex) {
 			java.util.logging.Logger.getLogger(ComListedOnTheUS_KrInvestingCom_V1.class.getName()).log(Level.SEVERE,
@@ -258,9 +267,9 @@ public class DowJonesIndustrialAverage extends News {
 		sb.append("		<th>거래소</th>");
 		sb.append("		<th>약어</th>");
 		sb.append("		<th>산업</th>");
-		sb.append("		<th>현재가</th>");
-		sb.append("		<th>주당순이익</th>");
-		sb.append("		<th>배당금</th>");
+		sb.append("		<th>현재가($)</th>");
+		sb.append("		<th>주당순이익($)</th>");
+		sb.append("		<th>배당금($)</th>");
 		sb.append("		<th>배당률(%)</th>");
 		sb.append("	</tr>");
 		for (StockVO svo : stockList) {
@@ -278,10 +287,10 @@ public class DowJonesIndustrialAverage extends News {
 			sb.append("		<td>" + stockExchange + "</td>");
 			sb.append("		<td><a href='" + url + "' target='_new'>" + stockName + "</a></td>");
 			sb.append("		<td>" + industry + "</td>");
-			sb.append("		<td>" + curPrice + "</td>");
-			sb.append("		<td>" + eps + "</td>");
-			sb.append("		<td>" + dividends + "</td>");
-			sb.append("		<td>" + dividendRate + "</td>");
+			sb.append("		<td style='text-align:right'>" + curPrice + "</td>");
+			sb.append("		<td style='text-align:right'>" + eps + "</td>");
+			sb.append("		<td style='text-align:right'>" + dividends + "</td>");
+			sb.append("		<td style='text-align:right'>" + dividendRate + "</td>");
 			sb.append("	</tr>");
 		}
 		sb.append("</table>");
