@@ -248,6 +248,7 @@ public class StockExtractExceptWord {
 				|| stockName.equals("이디") && strNews.contains("아이디")
 				|| stockName.equals("이디") && strNews.contains("레이디")
 				|| stockName.equals("이디") && strNews.contains("이디야")
+				|| stockName.equals("이월드") && strNews.contains("싸이월드")
 				|| stockName.equals("이마트") && strNews.contains("하이마트")
 				|| stockName.equals("우진") && strNews.contains("정우진")
 				|| stockName.equals("전방") && strNews.contains("전방위")
