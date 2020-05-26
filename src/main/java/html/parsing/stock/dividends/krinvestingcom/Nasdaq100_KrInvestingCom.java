@@ -1,6 +1,7 @@
-package html.parsing.stock.dividends;
+package html.parsing.stock.dividends.krinvestingcom;
 
 import html.parsing.stock.DataSort.DividendRateDescCompare;
+import html.parsing.stock.dividends.NewAuthPayload;
 import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
@@ -34,23 +35,23 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
-public class ComListedOnTheUS_KrInvestingCom_Nasdaq100 extends News {
+public class Nasdaq100_KrInvestingCom extends News {
 
 //public static final String SERVER_URI = "https://www.nyse.com/listings_directory/stock";
 	public static final String SERVER_URI = "https://www.nyse.com/api/quotes/filter";
 	// 나스닥 100
 	String nasdaq100 = "https://kr.investing.com/equities/StocksFilter?noconstruct=1&smlID=595&sid=&tabletype=price&index_id=20";
 
-	private static final Logger logger = LoggerFactory.getLogger(ComListedOnTheUS_KrInvestingCom_Nasdaq100.class);
+	private static final Logger logger = LoggerFactory.getLogger(Nasdaq100_KrInvestingCom.class);
 	final static String userHome = System.getProperty("user.home");
 	static String strCurrentDate = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.ss.SSS", Locale.KOREAN).format(new Date());
 	String fileName = "";
 
 	public static void main(String args[]) {
-		new ComListedOnTheUS_KrInvestingCom_Nasdaq100();
+		new Nasdaq100_KrInvestingCom();
 	}
 
-	ComListedOnTheUS_KrInvestingCom_Nasdaq100() {
+	Nasdaq100_KrInvestingCom() {
 		// 나스닥 100
 		List<StockVO> nasdaq100List = getUsStockList(nasdaq100, "nasdaq100");
 		Collections.sort(nasdaq100List, new DividendRateDescCompare());
@@ -169,7 +170,7 @@ public class ComListedOnTheUS_KrInvestingCom_Nasdaq100 extends News {
 			logger.debug("fileName :" + fileName);
 			FileUtil.fileWrite(fileName, doc.html());
 		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(ComListedOnTheUS_KrInvestingCom_V1.class.getName()).log(Level.SEVERE,
+			java.util.logging.Logger.getLogger(Nasdaq100_KrInvestingCom.class.getName()).log(Level.SEVERE,
 					null, ex);
 		}
 		return sb;
@@ -253,7 +254,7 @@ public class ComListedOnTheUS_KrInvestingCom_Nasdaq100 extends News {
 				i++;
 			}
 		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(ComListedOnTheUS_KrInvestingCom_V1.class.getName()).log(Level.SEVERE,
+			java.util.logging.Logger.getLogger(Nasdaq100_KrInvestingCom.class.getName()).log(Level.SEVERE,
 					null, ex);
 		}
 		return stockList;

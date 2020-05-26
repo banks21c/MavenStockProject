@@ -1,6 +1,7 @@
-package html.parsing.stock.dividends;
+package html.parsing.stock.dividends.krinvestingcom;
 
 import html.parsing.stock.DataSort.DividendRateDescCompare;
+import html.parsing.stock.dividends.NewAuthPayload;
 import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
@@ -34,23 +35,23 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.Test;
 
-public class ComListedOnTheUS_KrInvestingCom_SNP500 extends News {
+public class SNP500_KrInvestingCom extends News {
 
 //public static final String SERVER_URI = "https://www.nyse.com/listings_directory/stock";
 	public static final String SERVER_URI = "https://www.nyse.com/api/quotes/filter";
 	// S&P 500
 	String sAndP500 = "https://kr.investing.com/equities/StocksFilter?noconstruct=1&smlID=595&sid=&tabletype=price&index_id=166";
 
-	private static final Logger logger = LoggerFactory.getLogger(ComListedOnTheUS_KrInvestingCom_SNP500.class);
+	private static final Logger logger = LoggerFactory.getLogger(SNP500_KrInvestingCom.class);
 	final static String userHome = System.getProperty("user.home");
 	static String strCurrentDate = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.ss.SSS", Locale.KOREAN).format(new Date());
 	String fileName = "";
 
 	public static void main(String args[]) {
-		new ComListedOnTheUS_KrInvestingCom_SNP500();
+		new SNP500_KrInvestingCom();
 	}
 
-	ComListedOnTheUS_KrInvestingCom_SNP500() {
+	SNP500_KrInvestingCom() {
 		// S&P 500
 		List<StockVO> sAndP500List = getUsStockList(sAndP500, "sAndP500");
 		Collections.sort(sAndP500List, new DividendRateDescCompare());
@@ -169,7 +170,7 @@ public class ComListedOnTheUS_KrInvestingCom_SNP500 extends News {
 			logger.debug("fileName :" + fileName);
 			FileUtil.fileWrite(fileName, doc.html());
 		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(ComListedOnTheUS_KrInvestingCom_V1.class.getName()).log(Level.SEVERE,
+			java.util.logging.Logger.getLogger(SNP500_KrInvestingCom.class.getName()).log(Level.SEVERE,
 					null, ex);
 		}
 		return sb;
@@ -253,7 +254,7 @@ public class ComListedOnTheUS_KrInvestingCom_SNP500 extends News {
 				i++;
 			}
 		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(ComListedOnTheUS_KrInvestingCom_V1.class.getName()).log(Level.SEVERE,
+			java.util.logging.Logger.getLogger(SNP500_KrInvestingCom.class.getName()).log(Level.SEVERE,
 					null, ex);
 		}
 		return stockList;
