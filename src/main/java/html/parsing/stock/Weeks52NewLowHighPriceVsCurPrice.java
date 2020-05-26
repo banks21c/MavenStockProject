@@ -673,10 +673,10 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>등락율</td>\r\n");
 			if (key.contains("신저가")) {
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>저가</td>\r\n");
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>신저가</td>\r\n");
 				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최저가</td>\r\n");
 			} else if (key.contains("신고가")) {
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>고가</td>\r\n");
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>신고가</td>\r\n");
 				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최고가</td>\r\n");
 			}
 			sb1.append("</tr>\r\n");

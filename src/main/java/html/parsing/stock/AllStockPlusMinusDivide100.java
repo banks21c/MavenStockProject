@@ -25,6 +25,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.DataSort.StockNameAscCompare;
 import html.parsing.stock.DataSort.TradingAmountDescCompare;
 import html.parsing.stock.DataSort.TradingVolumeDescCompare;
 import html.parsing.stock.DataSort.VaryRatioAscCompare;
@@ -63,7 +64,8 @@ public class AllStockPlusMinusDivide100 extends Thread {
 	int downCount = 0;
 	int steadyCount = 0;
 
-	static int iExtractCount = -1;
+	static int iExtractCount = 100;
+	private final String totalInfoUrl = "http://finance.naver.com/item/main.nhn?code=";
 
 	/**
 	 * @param args
@@ -89,9 +91,7 @@ public class AllStockPlusMinusDivide100 extends Thread {
 	}
 
 	AllStockPlusMinusDivide100() {
-		
 		logger = LoggerFactory.getLogger(this.getClass());
-		iExtractCount = 100;
 	}
 
 	@Override
@@ -102,13 +102,13 @@ public class AllStockPlusMinusDivide100 extends Thread {
 	AllStockPlusMinusDivide100(int i) {
 		List<StockVO> kospiStockList = readOne("123890", "한국자산신탁");
 //      List<StockVO> kospiStockList = readOne("032980");
-		StringBuilder info1 = getStockInformation(kospiStockList, "코스피", "상승율");
+		StringBuilder info1 = getStockInfoHtml(kospiStockList, "코스피", "상승율");
 		writeFile(info1, "코스피 상승율");
 //
 //      List<StockVO> kospiStockList1 = readOne("123890");
 //      writeFile(kospiStockList1, kospiFileName, "코스피", "상승율");
 		List<StockVO> kosdaqStockList = readOne("204990");
-		StringBuilder info2 = getStockInformation(kosdaqStockList, "코스닥", "상승율");
+		StringBuilder info2 = getStockInfoHtml(kosdaqStockList, "코스닥", "상승율");
 		writeFile(info2, "코스닥 상승율");
 		// writeFile(kosdaqStockList,kosdaqFileName,"코스닥");
 	}
@@ -116,7 +116,7 @@ public class AllStockPlusMinusDivide100 extends Thread {
 	public void getDateInfo(String stockCode) {
 		try {
 			// 종합정보
-			Document doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + stockCode).get();
+			Document doc = Jsoup.connect(totalInfoUrl + stockCode).get();
 			// logger.debug("doc:"+doc);
 
 			Elements dates = doc.select(".date");
@@ -146,6 +146,21 @@ public class AllStockPlusMinusDivide100 extends Thread {
 	}
 
 	public void execute() {
+		long start = System.currentTimeMillis();
+		execute("코스피");
+		execute("코스닥");
+		long end = System.currentTimeMillis();
+		long timeElapsed = end - start;
+		logger.debug("실행시간 : " + (end - start) / 1000 + "초");
+
+		int second = (int) timeElapsed / 1000 % 60;
+		int minute = (int) timeElapsed / (1000 * 60) % 60;
+		int hour = (int) timeElapsed / (1000 * 60 * 60);
+
+		logger.debug("실행시간 : " + hour + " 시간 " + minute + " 분 " + second + " 초");
+	}
+
+	public void execute_bak() {
 		logger.debug(this.getClass().getSimpleName() + " .execute started");
 		System.out.println(this.getClass().getSimpleName() + " .execute started");
 
@@ -171,26 +186,31 @@ public class AllStockPlusMinusDivide100 extends Thread {
 		bottomCount = sUtil.getBottomCount();
 		downCount = sUtil.getDownCount();
 		steadyCount = sUtil.getSteadyCount();
-		
-		StringBuilder sBuilder = new StringBuilder();
+
 		// 1.상승율순 정렬
 		Collections.sort(kospiAllStockList, new VaryRatioDescCompare());
-		StringBuilder info1 = getStockInformation(kospiAllStockList, "코스피", "상승율");
-		sBuilder.append(info1);
+		StringBuilder info1 = getStockInfoHtml(kospiAllStockList, "코스피", "상승율");
 
 		// 2.하락율순 정렬
 		Collections.sort(kospiAllStockList, new VaryRatioAscCompare());
-		StringBuilder info2 = getStockInformation(kospiAllStockList, "코스피", "하락율");
-		sBuilder.append(info2);
+		StringBuilder info2 = getStockInfoHtml(kospiAllStockList, "코스피", "하락율");
 
-		// 3.거래량 정렬
+		// 3.보합
+		Collections.sort(kospiAllStockList, new StockNameAscCompare());
+		StringBuilder info3 = getStockInfoHtml(kospiAllStockList, "코스피", "보합");
+
+		// 4.거래량 정렬
 		Collections.sort(kospiAllStockList, new TradingVolumeDescCompare());
-		StringBuilder info3 = getStockInformation(kospiAllStockList, "코스피", "거래량");
-		sBuilder.append(info3);
+		StringBuilder info4 = getStockInfoHtml(kospiAllStockList, "코스피", "거래량");
 
-		// 4.거래대금순 정렬
+		// 5.거래대금순 정렬
 		Collections.sort(kospiAllStockList, new TradingAmountDescCompare());
-		StringBuilder info4 = getStockInformation(kospiAllStockList, "코스피", "거래대금");
+		StringBuilder info5 = getStockInfoHtml(kospiAllStockList, "코스피", "거래대금");
+
+		StringBuilder sBuilder = new StringBuilder();
+		sBuilder.append(info1);
+		sBuilder.append(info2);
+		sBuilder.append(info3);
 		sBuilder.append(info4);
 
 		writeFile(sBuilder, "코스피 시세");
@@ -221,28 +241,99 @@ public class AllStockPlusMinusDivide100 extends Thread {
 		downCount = sUtil.getDownCount();
 		steadyCount = sUtil.getSteadyCount();
 
-		// 1.상승율순 정렬
+		// 6.상승율순 정렬
 		Collections.sort(kosdaqAllStockList, new VaryRatioDescCompare());
-		StringBuilder info5 = getStockInformation(kosdaqAllStockList, "코스닥", "상승율");
-		sBuilder.append(info5);
+		StringBuilder info6 = getStockInfoHtml(kosdaqAllStockList, "코스닥", "상승율");
 
-		// 2.하락율순 정렬
+		// 7.하락율순 정렬
 		Collections.sort(kosdaqAllStockList, new VaryRatioAscCompare());
-		StringBuilder info6 = getStockInformation(kosdaqAllStockList, "코스닥", "하락율");
-		sBuilder.append(info6);
+		StringBuilder info7 = getStockInfoHtml(kosdaqAllStockList, "코스닥", "하락율");
 
-		// 3.거래량 정렬
+		// 8.보합
+		Collections.sort(kospiAllStockList, new StockNameAscCompare());
+		StringBuilder info8 = getStockInfoHtml(kosdaqAllStockList, "코스닥", "보합");
+
+		// 9.거래량 정렬
 		Collections.sort(kosdaqAllStockList, new TradingVolumeDescCompare());
-		StringBuilder info7 = getStockInformation(kosdaqAllStockList, "코스닥", "거래량");
-		sBuilder.append(info7);
+		StringBuilder info9 = getStockInfoHtml(kosdaqAllStockList, "코스닥", "거래량");
 
-		// 4.거래대금순 정렬
+		// 10.거래대금순 정렬
 		Collections.sort(kosdaqAllStockList, new TradingAmountDescCompare());
-		StringBuilder info8 = getStockInformation(kosdaqAllStockList, "코스닥", "거래대금");
+		StringBuilder info10 = getStockInfoHtml(kosdaqAllStockList, "코스닥", "거래대금");
+
+		sBuilder.append(info6);
+		sBuilder.append(info7);
 		sBuilder.append(info8);
+		sBuilder.append(info9);
+		sBuilder.append(info10);
 
 		writeFile(sBuilder, "코스닥 시세");
 
+	}
+
+	public void execute(String marketGubun) {
+		logger.debug(this.getClass().getSimpleName() + " .execute(" + marketGubun + ")started");
+
+		String marketFileName = "";
+		String krxMarketGubun = "";
+		if (marketGubun.equals("코스피")) {
+			marketFileName = kospiFileName;
+			krxMarketGubun = "stockMkt";
+		} else {
+			marketFileName = kosdaqFileName;
+			krxMarketGubun = "kosdaqMkt";
+		}
+		// 모든 주식 정보를 조회한다.
+		List<StockVO> stockList = new ArrayList<StockVO>();
+		try {
+			stockList = StockUtil.getAllStockListFromExcel(marketFileName);
+			logger.debug("stockList.size1 :" + stockList.size());
+		} catch (Exception e) {
+			stockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(stockList, krxMarketGubun);
+			logger.debug("stockList.size2 :" + stockList.size());
+		}
+		StockVO svo4Date = stockList.get(0);
+		getDateInfo(svo4Date.getStockCode());
+
+		StockUtil sUtil = new StockUtil();
+		stockList = sUtil.getAllStockInfo(stockList);
+		logger.debug("stockList.size :" + stockList.size());
+
+		topCount = sUtil.getTopCount();
+		upCount = sUtil.getUpCount();
+		bottomCount = sUtil.getBottomCount();
+		downCount = sUtil.getDownCount();
+		steadyCount = sUtil.getSteadyCount();
+
+		// 1.상승율순 정렬
+		Collections.sort(stockList, new VaryRatioDescCompare());
+		StringBuilder info1 = getStockInfoHtml(stockList, marketGubun, "상승율");
+
+		// 2.하락율순 정렬
+		Collections.sort(stockList, new VaryRatioAscCompare());
+		StringBuilder info2 = getStockInfoHtml(stockList, marketGubun, "하락율");
+
+		// 3.보합
+		Collections.sort(stockList, new StockNameAscCompare());
+		StringBuilder info3 = getStockInfoHtml(stockList, marketGubun, "보합");
+
+		// 4.거래량 정렬
+		Collections.sort(stockList, new TradingVolumeDescCompare());
+		StringBuilder info4 = getStockInfoHtml(stockList, marketGubun, "거래량");
+
+		// 5.거래대금순 정렬
+		Collections.sort(stockList, new TradingAmountDescCompare());
+		StringBuilder info5 = getStockInfoHtml(stockList, marketGubun, "거래대금");
+
+		StringBuilder sBuilder = new StringBuilder();
+		sBuilder.append(info1);
+		sBuilder.append(info2);
+		sBuilder.append(info3);
+		sBuilder.append(info4);
+		sBuilder.append(info5);
+
+		writeFile(sBuilder, marketGubun + " 시세");
+		logger.debug("file write finished");
 	}
 
 	public List<StockVO> readOne(String stockCode) {
@@ -309,7 +400,7 @@ public class AllStockPlusMinusDivide100 extends Thread {
 		stock.setStockCode(code);
 		try {
 			// 종합정보
-			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + code).get();
+			doc = Jsoup.connect(totalInfoUrl + code).get();
 
 			Elements new_totalinfos = doc.select(".new_totalinfo");
 
@@ -489,9 +580,10 @@ public class AllStockPlusMinusDivide100 extends Thread {
 		fileName += ".html";
 
 		FileUtil.fileWrite(fileName, sb1.toString());
+		logger.debug(fileName + " write finished");
 	}
 
-	public StringBuilder getStockInformation(List<StockVO> list, String title, String gubun) {
+	public StringBuilder getStockInfoHtml(List<StockVO> list, String title, String gubun) {
 		StringBuilder sb1 = new StringBuilder();
 		if (iExtractCount > 0) {
 			sb1.append("\t<h2>").append(gubun).append("TOP ").append(iExtractCount).append("</h2>");
@@ -527,26 +619,33 @@ public class AllStockPlusMinusDivide100 extends Thread {
 		int cnt = 1;
 		for (StockVO s : list) {
 			String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
-			System.out.println("specialLetter+++>" + specialLetter);
+			logger.debug(gubun + " specialLetter+++>" + specialLetter);
 			if (gubun.equals("상승율")) {
 				// 1.상승율
-				if (specialLetter.equals("▼") || specialLetter.equals("↓")) {
+				if (specialLetter.equals("") || specialLetter.equals("▼") || specialLetter.equals("↓")) {
 					continue;
 				}
 			} else if (gubun.equals("하락율")) {
 				// 2.하락율
-				if (specialLetter.equals("▲") || specialLetter.equals("↑")) {
+				if (specialLetter.equals("") || specialLetter.equals("▲") || specialLetter.equals("↑")) {
+					continue;
+				}
+			} else if (gubun.equals("보합")) {
+				// 3.보합
+				if (specialLetter.equals("▼") || specialLetter.equals("↓") || specialLetter.equals("▲")
+						|| specialLetter.equals("↑")) {
 					continue;
 				}
 			}
 			sb1.append("<tr>\r\n");
-			String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
+			String url = totalInfoUrl + s.getStockCode();
 			sb1.append("<td>" + cnt + "</td>\r\n");
 			sb1.append("<td><a href='" + url + "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
 
 			String varyPrice = s.getVaryPrice();
 
-			System.out.println("varyPrice+++>" + varyPrice);
+			logger.debug(gubun + " varyPrice+++>" + varyPrice);
+			logger.debug(gubun + " 변동가격:" + specialLetter + varyPrice);
 
 			if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲") || specialLetter.startsWith("+")) {
 				sb1.append("<td style='text-align:right;color:red'>" + StringUtils.defaultIfEmpty(s.getCurPrice(), "")
