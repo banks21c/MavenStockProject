@@ -41,7 +41,7 @@ import html.parsing.stock.StockVO;
  */
 public class NewsReaderNoRadio extends javax.swing.JFrame {
 
-    private static org.slf4j.Logger logger = LoggerFactory.getLogger(NewsReaderNoRadio.class);
+	private static org.slf4j.Logger logger = LoggerFactory.getLogger(NewsReaderNoRadio.class);
     URI uri = null;
 
     /**
@@ -399,7 +399,7 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
         });
         jPanel2.add(jLabel16);
 
-        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo_maekyung.png"))); // NOI18N
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/mk_logo.png"))); // NOI18N
         jLabel17.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel17.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

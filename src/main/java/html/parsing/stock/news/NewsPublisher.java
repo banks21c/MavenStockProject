@@ -6,6 +6,7 @@ package html.parsing.stock.news;
  */
 enum NewsPublisher {
 	// 상수("연결할 문자")
+	NewsEinfomaxCoKr("news.einfomax.co.kr"),
 	wwwthebellcokr("www.thebell.co.kr"),
 	wwwhidoccokr("www.hidoc.co.kr"),
 	wwwdtcokr("www.dt.co.kr"),
@@ -108,6 +109,7 @@ enum NewsPublisher {
 
 	final private String name;
 	final private String[] publisherKeys = {
+		"NewsEinfomaxCoKr",
 		"WwwTheBellCoKr",
 		"WwwHidocCoKr",
 		"WwwDtCoKr",

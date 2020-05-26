@@ -50,7 +50,7 @@ public class WwwDongaCom extends News {
         String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (url == null || url.equals("")) {
-            url = "http://news.donga.com/3/all/20190302/94359600/1";
+            url = "https://www.donga.com/news/Economy/article/all/20200525/101204009/1";
         }
         super.getURL(url);
         createHTMLFile(url);
@@ -75,6 +75,7 @@ public class WwwDongaCom extends News {
             doc.select("div.pop_prt_btns").remove();
             doc.select(".hidden-obj").remove();
             doc.select("#bestnews_layer").remove();
+            doc.select(".article_relation").remove();
 
 //            JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
 //            JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
