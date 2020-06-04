@@ -321,17 +321,13 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 
 //		String specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
 		String specificDayEndPrice = "0";
-		try {
-			if (baseDay.equals(specificDay)) {
-				specificDayEndPrice = StockUtil.findSpecificDayEndPrice(strStockCode, strStockName, specificDay,
-						pageNo);
-			} else {
-				specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
-			}
-			logger.debug("specificDayEndPrice :" + specificDayEndPrice);
-		} catch (IOException e1) {
-			e1.printStackTrace();
+		if (baseDay.equals(specificDay)) {
+			specificDayEndPrice = StockUtil.findSpecificDayEndPrice(strStockCode, strStockName, specificDay,
+					pageNo);
+		} else {
+			specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
 		}
+		logger.debug("specificDayEndPrice :" + specificDayEndPrice);
 		svo.setSpecificDayEndPrice(specificDayEndPrice);
 
 		specificDayEndPrice = specificDayEndPrice.replaceAll(",", "");

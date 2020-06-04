@@ -486,8 +486,9 @@ public class StockUtilTest {
 	/**
 	 * Test method for
 	 * {@link html.parsing.stock.StockUtil#getSpecificDayEndPrice(java.lang.String, java.lang.String, java.lang.String)}.
+	 * @throws Exception 
 	 */
-	public void testGetSpecificDayEndPrice() {
+	public void testGetSpecificDayEndPrice() throws Exception {
 		StockUtil.getSpecificDayEndPrice("344820", "케이씨씨글라스", "2020.01.21");
 	}
 

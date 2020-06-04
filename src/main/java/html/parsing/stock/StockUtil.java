@@ -6,13 +6,17 @@
 package html.parsing.stock;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +28,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.EncryptedDocumentException;
@@ -65,6 +71,7 @@ public class StockUtil {
 	int iYmd = Integer.parseInt(strDefaultDate.replaceAll("\\.", ""));
 	String strYmdDash = strDefaultDate.replaceAll("\\.", "-");
 	String strYmdDashBracket = "[" + strDefaultDate.replaceAll("\\.", "-") + "]";
+	public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36 NetHelper70";
 
 	static int topCount = 0;
 	static int upCount = 0;
@@ -229,9 +236,9 @@ public class StockUtil {
 	/**
 	 *
 	 * @param marketType
-	 * @param searchType 13:상장법인 01:관리종목 05:불성실공시법인 07:자산2조법인 99:외국법인
-	 * 181:(코스닥) 우량기업부 182:(코스닥) 벤처기업부 183:(코스닥) 중견기업부 184:(코스닥) 기술성장기업부
-	 * 11:KRX100 06:KOSPI200 09:STAR30 10:PREMIER
+	 * @param searchType 13:상장법인 01:관리종목 05:불성실공시법인 07:자산2조법인 99:외국법인 181:(코스닥)
+	 *                   우량기업부 182:(코스닥) 벤처기업부 183:(코스닥) 중견기업부 184:(코스닥) 기술성장기업부
+	 *                   11:KRX100 06:KOSPI200 09:STAR30 10:PREMIER
 	 * @return
 	 * @throws Exception
 	 */
@@ -390,15 +397,37 @@ public class StockUtil {
 			doc = Jsoup.parse(strNews);
 			if (strNews.contains("현대차") && stockName.equals("현대자동차")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대차", "<strong><a href='" + totalInfoUrl
-					+ stockCode + "'>" + nbspString("현대차") + "</a></strong>");
-			}
-			if (strNews.contains("POSCO") && stockName.equals("포스코")) {
+				strNews = strNews.replaceAll("현대차",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
+			} else if (strNews.contains("현대자동차") && stockName.equals("현대자동차")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("POSCO", "<strong><a href='" + totalInfoUrl
-					+ stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
-			}
-			if (strNews.contains(stockName)) {
+				strNews = strNews.replaceAll("현대자동차",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
+			} else if (strNews.contains("현대자동차") && stockName.equals("현대차")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("현대자동차",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
+			} else if (strNews.contains("현대차") && stockName.equals("현대차")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("현대차",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
+			} else if (strNews.contains("POSCO") && stockName.equals("포스코")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("POSCO",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+			} else if (strNews.contains("POSCO") && stockName.equals("POSCO")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("POSCO",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+			} else if (strNews.contains("포스코") && stockName.equals("POSCO")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("포스코",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
+			} else if (strNews.contains("포스코") && stockName.equals("포스코")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("포스코",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
+			} else if (strNews.contains(stockName)) {
 				int count = StringUtils.countMatches(strNews, stockName);
 				logger.debug(stockName + " 갯수:" + count);
 				Elements imgs = doc.select("img");
@@ -409,12 +438,13 @@ public class StockUtil {
 					}
 				}
 				if (StockExtractExceptWord.dupCheck(stockName, strNews)) {
+					logger.debug("예외어 발견.....");
 					break;
 				}
 				newsStockList.add(stock);
 				// logger.debug("stock link : " + stockCode + ":" + stockName);
-				strNews = strNews.replaceAll(stockName, "<strong><a href='" + totalInfoUrl
-					+ stockCode + "'>" + nbspString(stockName) + "</a></strong>");
+				strNews = strNews.replaceAll(stockName, "<strong><a href='" + totalInfoUrl + stockCode + "'>"
+						+ nbspString(stockName) + "</a></strong>");
 
 			}
 
@@ -442,7 +472,39 @@ public class StockUtil {
 
 			doc = Jsoup.parse(strNews);
 
-			if (strNews.contains(stockName)) {
+			if (strNews.contains("현대차") && stockName.equals("현대자동차")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("현대차",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
+			} else if (strNews.contains("현대자동차") && stockName.equals("현대자동차")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("현대자동차",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
+			} else if (strNews.contains("현대자동차") && stockName.equals("현대차")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("현대자동차",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
+			} else if (strNews.contains("현대차") && stockName.equals("현대차")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("현대차",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
+			} else if (strNews.contains("POSCO") && stockName.equals("포스코")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("POSCO",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+			} else if (strNews.contains("POSCO") && stockName.equals("POSCO")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("POSCO",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+			} else if (strNews.contains("포스코") && stockName.equals("POSCO")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("포스코",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
+			} else if (strNews.contains("포스코") && stockName.equals("포스코")) {
+				newsStockList.add(stock);
+				strNews = strNews.replaceAll("포스코",
+						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
+			} else if (strNews.contains(stockName)) {
 				int count = StringUtils.countMatches(strNews, stockName);
 				logger.debug(stockName + " 갯수:" + count);
 				Elements imgs = doc.select("img");
@@ -456,20 +518,11 @@ public class StockUtil {
 					logger.debug("예외어 발생.....");
 					continue;
 				}
-
 				newsStockList.add(stock);
 				// logger.debug("stock link : " + stockCode + ":" + stockName);
-				strNews = strNews.replaceAll(stockName, "<strong><a href='" + totalInfoUrl
-					+ stockCode + "'>" + nbspString(stockName) + "</a></strong>");
+				strNews = strNews.replaceAll(stockName, "<strong><a href='" + totalInfoUrl + stockCode + "'>"
+						+ nbspString(stockName) + "</a></strong>");
 
-			} else if (strNews.contains("현대차") && stockName.equals("현대자동차")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대차", "<strong><a href='" + totalInfoUrl
-					+ stockCode + "'>" + nbspString("현대차") + "</a></strong>");
-			} else if (strNews.contains("POSCO") && stockName.equals("포스코")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("POSCO", "<strong><a href='" + totalInfoUrl
-					+ stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
 			}
 		}
 
@@ -477,8 +530,8 @@ public class StockUtil {
 		List<StockVO> newsStockList2 = getNewsStockInfo(newsStockList);
 		logger.debug("newsStockList2.size:" + newsStockList2.size());
 		StringBuilder newsStockTable = createNewsStockTable(newsStockList2);
-		StringBuilder newsStockChart = drawNewsStockChart(newsStockList2);
-		newsStockTable.append(newsStockChart);
+//		StringBuilder newsStockChart = drawNewsStockChart(newsStockList2);
+//		newsStockTable.append(newsStockChart);
 
 		strNews = strNews.replaceAll("&nbsp;", "");
 		logger.debug("stockLinkString end.....................");
@@ -494,7 +547,7 @@ public class StockUtil {
 	 * @throws Exception
 	 */
 	public static List<StockVO> readStockCodeNameListFromExcel(List<StockVO> stockList, String fileName)
-		throws Exception {
+			throws Exception {
 		List<StockVO> svoList = new ArrayList<>();
 		// Creating a Workbook from an Excel file (.xls or .xlsx)
 		logger.debug("fileName:" + fileName);
@@ -572,7 +625,7 @@ public class StockUtil {
 	}
 
 	public static List<StockVO> getAllStockInfoAddBaseDayPrice(List<StockVO> stockList, String baseDay,
-		String thisYearFirstTradeDay, int pageNo) {
+			String thisYearFirstTradeDay, int pageNo){
 		List<StockVO> svoList = new ArrayList<>();
 		int cnt = 0;
 		for (StockVO svo : stockList) {
@@ -590,7 +643,7 @@ public class StockUtil {
 				logger.debug("listedDay :" + listedDay);
 				if (listedDay.equals("")) {
 					logger.debug(
-						strStockName + "(" + strStockCode + ")" + " 상장일 정보가 없습니다. 존재하지 않는 주식입니다.(상장폐지 여부 확인 필요)");
+							strStockName + "(" + strStockCode + ")" + " 상장일 정보가 없습니다. 존재하지 않는 주식입니다.(상장폐지 여부 확인 필요)");
 					continue;
 				}
 				vo.setListedDay(listedDay);
@@ -605,17 +658,13 @@ public class StockUtil {
 
 //				String specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
 				String specificDayEndPrice = "0";
-				try {
-					if (baseDay.equals(specificDay)) {
-						specificDayEndPrice = StockUtil.findSpecificDayEndPrice(strStockCode, strStockName, specificDay,
+				if (baseDay.equals(specificDay)) {
+					specificDayEndPrice = StockUtil.findSpecificDayEndPrice(strStockCode, strStockName, specificDay,
 							pageNo);
-					} else {
-						specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
-					}
-					logger.debug("specificDayEndPrice :" + specificDayEndPrice);
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				} else {
+					specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
 				}
+				logger.debug("specificDayEndPrice :" + specificDayEndPrice);
 				vo.setSpecificDayEndPrice(specificDayEndPrice);
 
 				specificDayEndPrice = specificDayEndPrice.replaceAll(",", "");
@@ -666,7 +715,7 @@ public class StockUtil {
 	 * @throws InvalidFormatException
 	 */
 	public static List<StockVO> getAllStockListFromExcel(String fileName)
-		throws IOException, EncryptedDocumentException, InvalidFormatException {
+			throws IOException, EncryptedDocumentException, InvalidFormatException {
 		List<StockVO> svoList = new ArrayList<>();
 		// Creating a Workbook from an Excel file (.xls or .xlsx)
 		logger.debug("fileName:" + fileName);
@@ -788,8 +837,7 @@ public class StockUtil {
 	}
 
 	/**
-	 * extract stockcode, stockname from kind.krx.co.kr gubun = stockMkt,
-	 * kosdaqMkt
+	 * extract stockcode, stockname from kind.krx.co.kr gubun = stockMkt, kosdaqMkt
 	 *
 	 * @param stockList
 	 * @param fileName
@@ -799,24 +847,26 @@ public class StockUtil {
 
 	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(List<StockVO> stockList, String marketType) {
 		// searchType 13 = 상장법인
+		logger.debug("marketType:" + marketType);
 		return getStockCodeNameListFromKindKrxCoKr(stockList, marketType, "13");
 	}
 
 	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(List<StockVO> stockList, String marketType,
-		String searchType) {
+			String searchType) {
 		List<StockVO> svoList = new ArrayList<>();
 		try {
 			String param = "method=download&pageIndex=1&currentPageSize=5000&comAbbrv=&beginIndex=&orderMode=3"
-				+ "&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=" + "&marketType=" + marketType + "&searchType="
-				+ searchType + "&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
+					+ "&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=" + "&marketType=" + marketType + "&searchType="
+					+ searchType + "&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
 
 			String strUri = SERVER_URI + "?" + param;
+			logger.debug("strUri:" + strUri);
 //			Document doc = Jsoup.parse(new URL(strUri).openStream(), "EUC-KR", strUri);
 
 //			Connection conn = Jsoup.connect(strUri).cookie("cookiereference", "cookievalue").method(Method.POST);
 			Map<String, String> headers = new HashMap<String, String>();
 			headers.put("Accept", MediaType.APPLICATION_JSON
-				+ ",text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+					+ ",text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
 			headers.put("Accept-Encoding", "gzip, deflate");
 //			headers.put("Accept-Language", "en-US,en;q=0.9,ko;q=0.8");
 			headers.put("Accept-Language", "ko");
@@ -830,7 +880,7 @@ public class StockUtil {
 //			headers.put("Content-Type", "application/xhtml+xml; charset=EUC-KR");
 			headers.put("Content-Type", "application/vnd.ms-excel; charset=EUC-KR");
 			headers.put("Cookie",
-				"__smVisitorID=QxeY65c5t3z; JSESSIONID=NyCFzfuTJuLCu1YTU5tAy2RDQUIha813iVKfZ9cnDZKOG81CUOKWwLcMsKQsK6JP.amV1c19kb21haW4vMTBfRFNUMg==; viewMode=1; krxMenu=ULDDST00000%2C%uC624%uB298%uC758%uACF5%uC2DC/ULDDST00100%2C%uD68C%uC0AC%uBCC4%uAC80%uC0C9/ULDDST00300%2C%uC0C1%uC138%uAC80%uC0C9/ULDDST00200%2C%uD1B5%uD569%uAC80%uC0C9/ULDDST71000%2C%uC608%uBE44%uC2EC%uC0AC%uAE30%uC5C5/");
+					"__smVisitorID=QxeY65c5t3z; JSESSIONID=NyCFzfuTJuLCu1YTU5tAy2RDQUIha813iVKfZ9cnDZKOG81CUOKWwLcMsKQsK6JP.amV1c19kb21haW4vMTBfRFNUMg==; viewMode=1; krxMenu=ULDDST00000%2C%uC624%uB298%uC758%uACF5%uC2DC/ULDDST00100%2C%uD68C%uC0AC%uBCC4%uAC80%uC0C9/ULDDST00300%2C%uC0C1%uC138%uAC80%uC0C9/ULDDST00200%2C%uD1B5%uD569%uAC80%uC0C9/ULDDST71000%2C%uC608%uBE44%uC2EC%uC0AC%uAE30%uC5C5/");
 			// headers.put("Host", "kind.krx.co.kr");
 			// headers.put("Origin", "http://kind.krx.co.kr");
 			// headers.put("Referer",
@@ -839,25 +889,24 @@ public class StockUtil {
 			headers.put("Origin", "http://203.235.1.50");
 			headers.put("Referer", "http://203.235.1.50/corpgeneral/corpList.do?method=loadInitPage");
 			headers.put("Upgrade-Insecure-Requests", "1");
-//			headers.put("User-Agent", "mozilla");
+//			headers.put("User-Agent", USER_AGENT);
 			headers.put("User-Agent",
-				"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36");
-			headers.put("User-Agent",
-				"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36 NetHelper70");
+					"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36");
+			headers.put("User-Agent", USER_AGENT);
 
 			headers.put("X-Requested-With", "XMLHttpRequest");
 
 //			Connection conn = Jsoup.connect(strUri).headers(headers).cookie("cookiereference", "cookievalue").method(Method.POST);
 //			Document doc = Jsoup.parse(new String(conn.execute().bodyAsBytes(), "EUC-KR"));
 			// Initialize UnSupportedMimeTypeExeception class
-			UnsupportedMimeTypeException mimeType = new UnsupportedMimeTypeException("Hey this is Mime",
-				"application/vnd.ms-excel", strUri);
-			String mime = mimeType.getMimeType();
-			logger.debug("mime :" + mime);
+//			UnsupportedMimeTypeException mimeType = new UnsupportedMimeTypeException("Hey this is Mime", "application/vnd.ms-excel", strUri);
+//			String mime = mimeType.getMimeType();
+//			logger.debug("mime :" + mime);
 //			Jsoup.connect(url).requestBody(json).header("Content-Type", "application/json").post();
 			Document doc = Jsoup.connect(strUri).requestBody("JSON").headers(headers)
-				// .cookies(response.cookies())
-				.ignoreContentType(true).post();
+					// .cookies(response.cookies())
+					.ignoreContentType(true).post();
+
 			/* 총 라인수는 종목수 + 1, 첫째 줄은 header */
 			Elements trElements = doc.select("tr");
 			for (int i = 0; i < trElements.size(); i++) {
@@ -868,7 +917,7 @@ public class StockUtil {
 					if (tdElements.size() > 1) {
 						String strStockName = tdElements.get(0).text();
 						String strStockCode = tdElements.get(1).text();
-						logger.debug((i) + "." + strStockName + "("+strStockCode + ")");
+						logger.debug((i) + "." + strStockName + "(" + strStockCode + ")");
 						svo.setStockName(strStockName);
 						svo.setStockCode(strStockCode);
 						svo.setStockNameLength(strStockName.length());
@@ -895,8 +944,8 @@ public class StockUtil {
 		List<StockVO> svoList = new ArrayList<>();
 		try {
 			String param = "method=download&pageIndex=1&currentPageSize=5000&comAbbrv=&beginIndex=&orderMode=3"
-				+ "&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=" + "&marketType=" + marketType
-				+ "&searchType=13" + "&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
+					+ "&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=" + "&marketType=" + marketType
+					+ "&searchType=13" + "&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
 
 			String strUri = SERVER_URI + "?" + param;
 //			Document doc = Jsoup.parse(new URL(strUri).openStream(), "EUC-KR", strUri);
@@ -904,7 +953,7 @@ public class StockUtil {
 //			Connection conn = Jsoup.connect(strUri).cookie("cookiereference", "cookievalue").method(Method.POST);
 			Map<String, String> headers = new HashMap<String, String>();
 			headers.put("Accept", MediaType.APPLICATION_JSON
-				+ ",text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+					+ ",text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
 			headers.put("Accept-Encoding", "gzip, deflate");
 //			headers.put("Accept-Language", "en-US,en;q=0.9,ko;q=0.8");
 			headers.put("Accept-Language", "ko");
@@ -918,7 +967,7 @@ public class StockUtil {
 //			headers.put("Content-Type", "application/xhtml+xml; charset=EUC-KR");
 			headers.put("Content-Type", "application/vnd.ms-excel; charset=EUC-KR");
 			headers.put("Cookie",
-				"__smVisitorID=QxeY65c5t3z; JSESSIONID=NyCFzfuTJuLCu1YTU5tAy2RDQUIha813iVKfZ9cnDZKOG81CUOKWwLcMsKQsK6JP.amV1c19kb21haW4vMTBfRFNUMg==; viewMode=1; krxMenu=ULDDST00000%2C%uC624%uB298%uC758%uACF5%uC2DC/ULDDST00100%2C%uD68C%uC0AC%uBCC4%uAC80%uC0C9/ULDDST00300%2C%uC0C1%uC138%uAC80%uC0C9/ULDDST00200%2C%uD1B5%uD569%uAC80%uC0C9/ULDDST71000%2C%uC608%uBE44%uC2EC%uC0AC%uAE30%uC5C5/");
+					"__smVisitorID=QxeY65c5t3z; JSESSIONID=NyCFzfuTJuLCu1YTU5tAy2RDQUIha813iVKfZ9cnDZKOG81CUOKWwLcMsKQsK6JP.amV1c19kb21haW4vMTBfRFNUMg==; viewMode=1; krxMenu=ULDDST00000%2C%uC624%uB298%uC758%uACF5%uC2DC/ULDDST00100%2C%uD68C%uC0AC%uBCC4%uAC80%uC0C9/ULDDST00300%2C%uC0C1%uC138%uAC80%uC0C9/ULDDST00200%2C%uD1B5%uD569%uAC80%uC0C9/ULDDST71000%2C%uC608%uBE44%uC2EC%uC0AC%uAE30%uC5C5/");
 			// headers.put("Host", "kind.krx.co.kr");
 			// headers.put("Origin", "http://kind.krx.co.kr");
 			// headers.put("Referer",
@@ -927,11 +976,11 @@ public class StockUtil {
 			headers.put("Origin", "http://203.235.1.50");
 			headers.put("Referer", "http://203.235.1.50/corpgeneral/corpList.do?method=loadInitPage");
 			headers.put("Upgrade-Insecure-Requests", "1");
-//			headers.put("User-Agent", "mozilla");
+//			headers.put("User-Agent", USER_AGENT);
 			headers.put("User-Agent",
-				"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36");
+					"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36");
 			headers.put("User-Agent",
-				"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36 NetHelper70");
+					"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36 NetHelper70");
 
 			headers.put("X-Requested-With", "XMLHttpRequest");
 
@@ -939,13 +988,13 @@ public class StockUtil {
 //			Document doc = Jsoup.parse(new String(conn.execute().bodyAsBytes(), "EUC-KR"));
 			// Initialize UnSupportedMimeTypeExeception class
 			UnsupportedMimeTypeException mimeType = new UnsupportedMimeTypeException("Hey this is Mime",
-				"application/vnd.ms-excel", strUri);
+					"application/vnd.ms-excel", strUri);
 			String mime = mimeType.getMimeType();
 			logger.debug("mime :" + mime);
 //			Jsoup.connect(url).requestBody(json).header("Content-Type", "application/json").post();
 			Document doc = Jsoup.connect(strUri).requestBody("JSON").headers(headers)
-				// .cookies(response.cookies())
-				.ignoreContentType(true).post();
+					// .cookies(response.cookies())
+					.ignoreContentType(true).post();
 			/* 총 라인수는 종목수 + 1, 첫째 줄은 header */
 			Elements trElements = doc.select("tr");
 			for (int i = 0; i < trElements.size(); i++) {
@@ -978,7 +1027,7 @@ public class StockUtil {
 		return svoList;
 	}
 
-	//@Test
+	// @Test
 	public void test() {
 		getStockInfo(1, "159650", "하이골드8호");
 	}
@@ -1034,7 +1083,7 @@ public class StockUtil {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -1044,7 +1093,7 @@ public class StockUtil {
 					varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
@@ -1094,7 +1143,7 @@ public class StockUtil {
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -1148,18 +1197,18 @@ public class StockUtil {
 			logger.debug("고가가 상한가인가?:" + highPrice.equals(stock.getMaxPrice()));
 			// 고가가 0이 아니고 고가가 상한가인가?
 			if (!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())
-				&& !curPrice.equals(stock.getMaxPrice())) {
+					&& !curPrice.equals(stock.getMaxPrice())) {
 				logger.debug("고가가 0이 아니고 고가가 상한가인가?:" + (!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())
-					&& !curPrice.equals(stock.getMaxPrice())));
+						&& !curPrice.equals(stock.getMaxPrice())));
 				stock.setStockGubun("상터치↑↘");
 				stock.setLineUp(12);
 				topTouchStockList.add(stock);
 				return stock;
 			}
 			if (!lowPrice.equals("0") && lowPrice.equals(stock.getMinPrice())
-				&& !curPrice.equals(stock.getMinPrice())) {
+					&& !curPrice.equals(stock.getMinPrice())) {
 				logger.debug("고가가 0이 아니고 저가 하한가인가?:" + (!lowPrice.equals("0") && lowPrice.equals(stock.getMinPrice())
-					&& !curPrice.equals(stock.getMinPrice())));
+						&& !curPrice.equals(stock.getMinPrice())));
 				stock.setStockGubun("하터치↓↗");
 				stock.setLineUp(22);
 				bottomTouchStockList.add(stock);
@@ -1354,7 +1403,7 @@ public class StockUtil {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -1364,7 +1413,7 @@ public class StockUtil {
 					varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
@@ -1412,7 +1461,7 @@ public class StockUtil {
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -1498,7 +1547,7 @@ public class StockUtil {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -1508,7 +1557,7 @@ public class StockUtil {
 					varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
@@ -1556,7 +1605,7 @@ public class StockUtil {
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -1601,6 +1650,7 @@ public class StockUtil {
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>등락율</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래량</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래대금(백만)</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>일차트</td>\r\n");
 			sb1.append("</tr>\r\n");
 			int cnt = 1;
 			for (StockVO s : stockList) {
@@ -1609,45 +1659,56 @@ public class StockUtil {
 					logger.debug("specialLetter+++>" + specialLetter);
 					sb1.append("<tr>\r\n");
 					String url = totalInfoUrl + s.getStockCode();
-					sb1.append("<td>" + cnt++ + "</td>\r\n");
-					sb1.append("<td><a href='" + url + "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
+					sb1.append("<td>").append(cnt++).append("</td>\r\n");
+					sb1.append("<td><a href='").append(url).append("' target='_sub'>").append(s.getStockName())
+							.append("</a></td>\r\n");
 
 					String varyPrice = s.getVaryPrice();
 
 					logger.debug("varyPrice+++>" + varyPrice);
 
 					if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
-						|| specialLetter.startsWith("+")) {
-						sb1.append("<td style='text-align:right;color:red'>"
-							+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
-						sb1.append("<td style='text-align:right'><font color='red'>" + specialLetter + " " + varyPrice
-							+ "</font></td>\r\n");
+							|| specialLetter.startsWith("+")) {
+						sb1.append("<td style='text-align:right;color:red'>")
+								.append(StringUtils.defaultIfEmpty(s.getCurPrice(), "")).append("</td>\r\n");
+						sb1.append("<td style='text-align:right'><font color='red'>").append(specialLetter).append(" ")
+								.append(varyPrice).append("</font></td>\r\n");
 					} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
-						|| specialLetter.startsWith("-")) {
-						sb1.append("<td style='text-align:right;color:blue'>"
-							+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
-						sb1.append("<td style='text-align:right'><font color='blue'>" + specialLetter + " " + varyPrice
-							+ "</font></td>\r\n");
+							|| specialLetter.startsWith("-")) {
+						sb1.append("<td style='text-align:right;color:blue'>")
+								.append(StringUtils.defaultIfEmpty(s.getCurPrice(), "")).append("</td>\r\n");
+						sb1.append("<td style='text-align:right'><font color='blue'>").append(specialLetter).append(" ")
+								.append(varyPrice).append("</font></td>\r\n");
 					} else {
-						sb1.append("<td style='text-align:right;color:metal'>"
-							+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
+						sb1.append("<td style='text-align:right;color:metal'>")
+								.append(StringUtils.defaultIfEmpty(s.getCurPrice(), "")).append("</td>\r\n");
 						sb1.append("<td style='text-align:right'>0</td>\r\n");
 					}
 
 					String varyRatio = StringUtils.defaultIfEmpty(s.getVaryRatio(), "");
 					if (varyRatio.startsWith("+")) {
-						sb1.append("<td style='text-align:right'><font color='red'>" + varyRatio + "</font></td>\r\n");
+						sb1.append("<td style='text-align:right'><font color='red'>").append(varyRatio)
+								.append("</font></td>\r\n");
 					} else if (varyRatio.startsWith("-")) {
-						sb1.append("<td style='text-align:right'><font color='blue'>" + varyRatio + "</font></td>\r\n");
+						sb1.append("<td style='text-align:right'><font color='blue'>").append(varyRatio)
+								.append("</font></td>\r\n");
 					} else {
-						sb1.append(
-							"<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
+						sb1.append("<td style='text-align:right'><font color='black'>").append(varyRatio)
+								.append("</font></td>\r\n");
 					}
-					sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingVolume(), "")
-						+ "</td>\r\n");
-					sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingAmount(), "")
-						+ "</td>\r\n");
-
+					sb1.append("<td style='text-align:right'>")
+							.append(StringUtils.defaultIfEmpty(s.getTradingVolume(), "")).append("</td>\r\n");
+					sb1.append("<td style='text-align:right'>")
+							.append(StringUtils.defaultIfEmpty(s.getTradingAmount(), "")).append("</td>\r\n");
+					sb1.append("<td style='border-bottom:1px solid gray;background-color:white;'>\r\n");
+//					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/area/day/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/area/day/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
+					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/day/"
+							+ s.getStockCode()
+							+ ".png' target='_new'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/day/"
+							+ s.getStockCode() + ".png' width='100px'></a><br/>\r\n");
+//					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/week/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/week/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
+//					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/month/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/month/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
+					sb1.append("</td>\r\n");
 					sb1.append("</tr>\r\n");
 				}
 			}
@@ -1674,15 +1735,15 @@ public class StockUtil {
 					sb1.append("<tr>\r\n");
 					String url = totalInfoUrl + s.getStockCode();
 					sb1.append(
-						"<td style='border-bottom:1px solid gray;background-color:white;'>" + cnt++ + "</td>\r\n");
+							"<td style='border-bottom:1px solid gray;background-color:white;'>" + cnt++ + "</td>\r\n");
 					sb1.append("<td style='border-bottom:1px solid gray;background-color:white;'><a href='" + url
-						+ "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
+							+ "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
 					sb1.append("<td style='border-bottom:1px solid gray;background-color:white;'>\r\n");
 //					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/area/day/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/area/day/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
 					sb1.append(
-						"	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/day/" + s.getStockCode()
-						+ ".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/day/"
-						+ s.getStockCode() + ".png' width='350px'></a><br/>\r\n");
+							"	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/day/" + s.getStockCode()
+									+ ".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/day/"
+									+ s.getStockCode() + ".png' width='350px'></a><br/>\r\n");
 //					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/week/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/week/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
 //					sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/candle/month/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/candle/month/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
 					sb1.append("</td>\r\n");
@@ -1699,10 +1760,10 @@ public class StockUtil {
 	public static Document getUrlDocument(String url) {
 		Document doc = null;
 		try {
-			String userAgent = "Mozilla";
+			String userAgent = USER_AGENT;
 			// This will get you the response.
 			Connection.Response res = Jsoup.connect(url).method(Connection.Method.POST).followRedirects(false)
-				.userAgent(userAgent).execute();
+					.userAgent(userAgent).execute();
 			// This will get you cookies
 			Map<String, String> loginCookies = res.cookies();
 			// And this is the easiest way I've found to remain in session
@@ -1751,9 +1812,12 @@ public class StockUtil {
 		Document doc;
 		try {
 			// 종합분석-기업개요
-			doc = Jsoup.connect("http://companyinfo.stock.naver.com/v1/company/c1020001.aspx?cmp_cd=" + stockCode)
-				.get();
-			logger.debug("title:" + doc.title());
+			String companyInfoUrl = "http://companyinfo.stock.naver.com/v1/company/c1020001.aspx?cmp_cd=" + stockCode;
+			logger.debug("companyInfoUrl:" + companyInfoUrl);
+
+//			doc = Jsoup.connect(companyInfoUrl).get();
+			StringBuffer sb = sendPost(companyInfoUrl, "UTF-8");
+			doc = Jsoup.parse(sb.toString());
 			String strDoc = doc.html();
 			if (strDoc.equals("")) {
 				return "";
@@ -1783,13 +1847,13 @@ public class StockUtil {
 						String foundDay = value.substring(0, value.indexOf(" "));
 						// 상장일
 						listedDay = value.substring(value.indexOf(" ")).trim().replaceAll("\\(", "")
-							.replaceAll("\\)", "").split(" ")[1];
+								.replaceAll("\\)", "").split(" ")[1];
 						logger.debug(foundDay + "===" + listedDay);
 					}
 					thCnt++;
 				}
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return listedDay.replaceAll("/", ".");
@@ -1820,11 +1884,11 @@ public class StockUtil {
 	}
 
 	// @Test
-	public void getSpecificDayEndPriceTest() {
+	public void getSpecificDayEndPriceTest() throws Exception {
 		String specificDayEndPrice = getSpecificDayEndPrice("204210", "모두투어리츠", "2020.01.21");
 	}
 
-	public static String getSpecificDayEndPrice(String stockCode, String stockName, String findDay) {
+	public static String getSpecificDayEndPrice(String stockCode, String stockName, String findDay){
 		logger.debug("findDay:" + findDay);
 		logger.debug("findDate:" + findDate);
 
@@ -1839,12 +1903,8 @@ public class StockUtil {
 			if (pageNo > 100) {
 				break;
 			}
-			try {
-				specificDayEndPrice = findSpecificDayEndPrice(stockCode, stockName, findDay, pageNo);
-				pageNo++;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			specificDayEndPrice = findSpecificDayEndPrice(stockCode, stockName, findDay, pageNo);
+			pageNo++;
 		}
 		logger.debug(stockCode + " " + stockName + " " + findDay + " 종가 :" + specificDayEndPrice);
 		return specificDayEndPrice;
@@ -1887,95 +1947,125 @@ public class StockUtil {
 	}
 
 	// @Test
-	public void findSpecificDayEndPriceTest() {
-		try {
-			String specificDayEndPrice = StockUtil.findSpecificDayEndPrice("338100", "NH프라임리츠", "NH프라임리츠", 9);
-			logger.debug("specificDayEndPrice:" + specificDayEndPrice);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void findSpecificDayEndPriceTest() throws Exception {
+		String specificDayEndPrice = StockUtil.findSpecificDayEndPrice("338100", "NH프라임리츠", "NH프라임리츠", 9);
+		logger.debug("specificDayEndPrice:" + specificDayEndPrice);
 	}
 
-	public static String findSpecificDayEndPrice(String stockCode, String stockName, String findDay, int pageNo)
-		throws IOException {
+	@Test
+	public void a() throws Exception {
+		String specificDayEndPrice = findSpecificDayEndPrice("353200", "대덕전자", "2020.05.21", 1);
+		logger.debug("specificDayEndPrice :" + specificDayEndPrice);
+
+	}
+
+	/**
+	 * 특정일 종가 구하기
+	 * 
+	 * @param stockCode
+	 * @param stockName
+	 * @param findDay
+	 * @param pageNo
+	 * @return
+	 * @throws Exception
+	 */
+	public static String findSpecificDayEndPrice(String stockCode, String stockName, String findDay, int pageNo) {
 		String specificDayEndPrice = "0";
 		Document doc;
 		// 종합분석-기업개요
 //			doc = Jsoup.connect("https://finance.naver.com/item/sise_day.nhn?code=" + stockCode).get();
 //			String url = "https://finance.naver.com/item/frgn.nhn?code=" + stockCode;
-		String url = "https://finance.naver.com/item/sise_day.nhn?code=" + stockCode + "&page=" + pageNo;
-		logger.debug("url : " + url);
-		String userAgent = "Mozilla";
-		// This will get you the response.
-		Connection.Response res = Jsoup.connect(url).method(Connection.Method.POST).followRedirects(false)
-			.userAgent(userAgent).execute();
-		// This will get you cookies
-		Map<String, String> loginCookies = res.cookies();
-		// And this is the easiest way I've found to remain in session
-		doc = Jsoup.connect(url).cookies(loginCookies).userAgent(userAgent).get();
-		doc.select("link").remove();
-		doc.select("javascript").remove();
+		String nhnSiseDayUrl = "https://finance.naver.com/item/sise_day.nhn?code=" + stockCode + "&page=" + pageNo;
+		logger.debug("nhnSiseDayUrl : " + nhnSiseDayUrl);
 
-		String strDoc = doc.html();
-		strDoc = strDoc.replace("&nbsp;", " ");
+//		String userAgent = USER_AGENT;
+//		// This will get you the response.
+//		Connection.Response res = Jsoup.connect(nhnSiseDayUrl).method(Connection.Method.POST).followRedirects(false)
+//				.userAgent(userAgent).execute();
+//		// This will get you cookies
+//		Map<String, String> loginCookies = res.cookies();
+//		// And this is the easiest way I've found to remain in session
+//		doc = Jsoup.connect(nhnSiseDayUrl).cookies(loginCookies).userAgent(userAgent).get();
 
-		doc = Jsoup.parse(strDoc);
+		StringBuffer sb;
+		try {
+			sb = sendPost(nhnSiseDayUrl, "EUC-KR");
+			logger.debug("sb:" + sb);
+			doc = Jsoup.parse(sb.toString());
 
-		Elements type2Es = doc.select(".type2");
-		if (type2Es.size() > 0) {
-			Element type2 = doc.select(".type2").get(0);
-			Elements thEls = type2.select("tbody tr th");
+			doc.select("link").remove();
+			doc.select("javascript").remove();
 
-			int dayIndex = 0;
-			int endPriceIndex = 0;
-			for (int i = 0; i < thEls.size(); i++) {
-				Element thEl = thEls.get(i);
-				String key = thEl.text();
-				if (key.equals("날짜")) {
-					dayIndex = i;
-				} else if (key.equals("종가")) {
-					endPriceIndex = i;
+			String strDoc = doc.html();
+			strDoc = strDoc.replace("&nbsp;", " ");
+
+			doc = Jsoup.parse(strDoc);
+
+			Elements type2Es = doc.select(".type2");
+
+			if (type2Es.size() > 0) {
+				Element type2 = doc.select(".type2").get(0);
+				Elements thEls = type2.select("tbody tr th");
+
+				int dayIndex = 0;
+				int endPriceIndex = 0;
+				for (int i = 0; i < thEls.size(); i++) {
+					Element thEl = thEls.get(i);
+					String key = thEl.text();
+					if (key.equals("날짜")) {
+						dayIndex = i;
+					} else if (key.equals("종가")) {
+						endPriceIndex = i;
+					}
 				}
-			}
-			Elements trEls = type2.select("tbody tr");
-			String temp_tradeDay = "";
-			String temp_specificDayEndPrice = "";
-			for (Element tr : trEls) {
-				Elements tdEls = tr.select("td");
-				if (tdEls.size() > 1) {
-					Element dayEl = tdEls.get(dayIndex);
-					Element specificDayEndPriceEl = tdEls.get(endPriceIndex);
-					temp_tradeDay = dayEl.text();
-					temp_specificDayEndPrice = specificDayEndPriceEl.text();
-					if (findDay.equals(temp_tradeDay)) {
-						logger.debug(temp_tradeDay + "\t" + temp_specificDayEndPrice);
-						specificDayEndPrice = temp_specificDayEndPrice;
-						findDate = true;
-						break;
+				logger.debug("endPriceIndex:" + endPriceIndex);
+
+				Elements trEls = type2.select("tbody tr");
+				String temp_tradeDay = "";
+				String temp_specificDayEndPrice = "";
+				for (Element tr : trEls) {
+					Elements tdEls = tr.select("td");
+					if (tdEls.size() > 1) {
+						Element dayEl = tdEls.get(dayIndex);
+						temp_tradeDay = dayEl.text();
+						logger.debug("temp_tradeDay:" + temp_tradeDay);
+
+						Element specificDayEndPriceEl = tdEls.get(endPriceIndex);
+						temp_specificDayEndPrice = specificDayEndPriceEl.text();
+						logger.debug("temp_specificDayEndPrice:" + temp_specificDayEndPrice);
+						if (findDay.equals(temp_tradeDay)) {
+							logger.debug(temp_tradeDay + "\t" + temp_specificDayEndPrice);
+							specificDayEndPrice = temp_specificDayEndPrice;
+							findDate = true;
+							break;
+						}
 					}
 				}
 			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
+		logger.debug("specificDayEndPrice:" + specificDayEndPrice);
 		return specificDayEndPrice;
 	}
 
 	public static int findSpecificDayPageNo(String stockCode, String stockName, String findDay, int pageNo)
-		throws IOException {
+			throws IOException {
 		Document doc;
 		// 종합분석-기업개요
 //			doc = Jsoup.connect("https://finance.naver.com/item/sise_day.nhn?code=" + stockCode).get();
 //			String url = "https://finance.naver.com/item/frgn.nhn?code=" + stockCode;
-		String url = "https://finance.naver.com/item/sise_day.nhn?code=" + stockCode + "&page=" + pageNo;
-		logger.debug("url : " + url);
-		String userAgent = "Mozilla";
+		String nhnSiseDayUrl = "https://finance.naver.com/item/sise_day.nhn?code=" + stockCode + "&page=" + pageNo;
+		logger.debug("nhnSiseDayUrl : " + nhnSiseDayUrl);
 		// This will get you the response.
-		Connection.Response res = Jsoup.connect(url).method(Connection.Method.POST).followRedirects(false)
-			.userAgent(userAgent).execute();
+		Connection.Response res = Jsoup.connect(nhnSiseDayUrl).method(Connection.Method.POST).followRedirects(false)
+				.userAgent(USER_AGENT).execute();
 		// This will get you cookies
 		Map<String, String> loginCookies = res.cookies();
 		// And this is the easiest way I've found to remain in session
-		doc = Jsoup.connect(url).cookies(loginCookies).userAgent(userAgent).get();
+		doc = Jsoup.connect(nhnSiseDayUrl).cookies(loginCookies).userAgent(USER_AGENT).get();
+
 		doc.select("link").remove();
 		doc.select("javascript").remove();
 
@@ -2008,6 +2098,7 @@ public class StockUtil {
 				}
 			}
 		}
+		logger.debug("pageNo:" + pageNo);
 		return pageNo;
 	}
 
@@ -2240,7 +2331,7 @@ public class StockUtil {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 
 					// 특수문자
 					specialLetter = txts[3].replaceAll("보합", "");
@@ -2249,7 +2340,7 @@ public class StockUtil {
 					varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 
 					// +- 부호
 					sign = txts[5];
@@ -2296,7 +2387,7 @@ public class StockUtil {
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -2381,7 +2472,7 @@ public class StockUtil {
 				curPrice = txts[1];
 				stock.setCurPrice(curPrice);
 				stock.setiCurPrice(
-					Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 
 				// 특수문자
 				specialLetter = txts[3].replaceAll("보합", "");
@@ -2390,7 +2481,7 @@ public class StockUtil {
 				varyPrice = txts[4];
 				stock.setVaryPrice(varyPrice);
 				stock.setiVaryPrice(
-					Integer.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 
 				// +- 부호
 				sign = txts[5];
@@ -2437,7 +2528,7 @@ public class StockUtil {
 			if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 				stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 				stock.setlTradingAmount(Integer
-					.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 			}
 		}
 
@@ -2452,7 +2543,7 @@ public class StockUtil {
 
 	}
 
-	@Test
+//	@Test
 	public void totalInfoUrlCheck() {
 		String strStockCode = "159650";
 		String strStockName = "하이골드8호";
@@ -2470,6 +2561,129 @@ public class StockUtil {
 			e.printStackTrace();
 		}
 		return doc;
+	}
+
+	/**
+	 * Get 방식
+	 * 
+	 * @throws Exception
+	 */
+	private void sendGet() throws Exception {
+		String url = "http://bobr2.tistory.com/";
+
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		// 전송방식
+		con.setRequestMethod("GET");
+		// Request Header 정의
+		con.setRequestProperty("User-Agent", USER_AGENT);
+		con.setConnectTimeout(10000); // 컨텍션타임아웃 10초
+		con.setReadTimeout(5000); // 컨텐츠조회 타임아웃 5총
+
+		int responseCode = con.getResponseCode();
+		logger.debug("\nSending 'GET' request to URL : " + url);
+		logger.debug("Response Code : " + responseCode);
+
+		Charset charset = Charset.forName("UTF-8");
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), charset));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		logger.debug("조회결과 : " + response.toString());
+	}
+
+	/**
+	 * Post 방식 Https
+	 * 
+	 * @throws Exception
+	 */
+	private void sendPostHttps() throws Exception {
+
+		String url = "https://selfsolve.apple.com/wcResults.do";
+		String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
+		URL obj = new URL(url);
+		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+
+		// add reuqest header
+		con.setRequestMethod("POST");
+		con.setRequestProperty("User-Agent", USER_AGENT);
+		con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+		con.setConnectTimeout(10000); // 컨텍션타임아웃 10초
+		con.setReadTimeout(5000); // 컨텐츠조회 타임아웃 5총
+		// Send post request
+		con.setDoOutput(true); // 항상 갱신된내용을 가져옴.
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		wr.writeBytes(urlParameters);
+		wr.flush();
+		wr.close();
+
+		int responseCode = con.getResponseCode();
+		logger.debug("\nSending 'POST' request to URL : " + url);
+		logger.debug("Post parameters : " + urlParameters);
+		logger.debug("Response Code : " + responseCode);
+
+		Charset charset = Charset.forName("UTF-8");
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), charset));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+		logger.debug(response.toString());
+	}
+
+	/**
+	 * Post 방식 Https
+	 * 
+	 * @throws Exception
+	 */
+	static StringBuffer sendPost(String url, String charsetName) throws Exception {
+		logger.debug("sendPost url : " + url);
+		logger.debug("sendPost charsetName : " + charsetName);
+
+//		String url = "http://bobr2.tistory.com/";
+//		String urlParameters = "?Param1=aaaa" + "&Param2=bbbb";
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		// add reuqest header
+		con.setRequestMethod("POST");
+		con.setRequestProperty("User-Agent", USER_AGENT);
+		con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+		con.setConnectTimeout(10000); // 컨텍션타임아웃 10초
+		con.setReadTimeout(5000); // 컨텐츠조회 타임아웃 5초
+		// Send post request
+		con.setDoOutput(true); // 항상 갱신된내용을 가져옴.
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		logger.debug("sendPost wr1 : " + wr);
+//		wr.writeBytes(urlParameters);
+		wr.flush();
+		wr.close();
+		logger.debug("sendPost wr2 : " + wr);
+
+		int responseCode = con.getResponseCode();
+		logger.debug("\nSending 'POST' request to URL : " + url);
+//		logger.debug("Post parameters : " + urlParameters);
+		logger.debug("Response Code : " + responseCode);
+
+		// Naver : <meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+		Charset charset = Charset.forName(charsetName);
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), charset));
+		String inputLine;
+		StringBuffer sb = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			logger.debug("inputLine:" + inputLine);
+			sb.append(inputLine + "\r\n");
+		}
+		in.close();
+		// logger.debug(sb.toString());
+		return sb;
 	}
 
 }

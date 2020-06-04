@@ -2,7 +2,7 @@ package html.parsing.stock;
 
 public class SpecificDay {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		String yearFirstTradeDay = "2020.01.02";
 
 		String stockCode = "";

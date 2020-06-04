@@ -15,7 +15,6 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 
-
 /**
  *
  * @author parsing-25
@@ -92,5 +91,6 @@ public class FileUtil {
 				java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
+		java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.INFO, null, "파일 쓰기 완료");
 	}
 }
