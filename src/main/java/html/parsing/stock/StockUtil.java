@@ -164,7 +164,8 @@ public class StockUtil {
 		strTitleForFileName = strTitleForFileName.replaceAll("\\?", "§");
 		strTitleForFileName = strTitleForFileName.replaceAll("<", "[");
 		strTitleForFileName = strTitleForFileName.replaceAll(">", "]");
-
+		strTitleForFileName = strTitleForFileName.replaceAll("‘", "'");
+		strTitleForFileName = strTitleForFileName.replaceAll("’", "'");
 		return strTitleForFileName;
 	}
 

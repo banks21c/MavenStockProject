@@ -29,6 +29,10 @@ import java.io.IOException;
 
 public class NewsSedailyCom extends javax.swing.JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 590660743475607524L;
 	private static Logger logger = null;
 	final static String userHome = System.getProperty("user.home");
 
@@ -51,6 +55,12 @@ public class NewsSedailyCom extends javax.swing.JFrame {
 	private javax.swing.JTextField urlTf;
 	private javax.swing.JPanel executeResultPnl;
 	private static javax.swing.JLabel executeResultLbl;
+
+	public NewsSedailyCom() {
+		logger = LoggerFactory.getLogger(this.getClass());
+
+		initComponents();
+	}
 
 	NewsSedailyCom(int i) {
 		logger = LoggerFactory.getLogger(this.getClass());
@@ -75,9 +85,10 @@ public class NewsSedailyCom extends javax.swing.JFrame {
 					break;
 				}
 			}
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| javax.swing.UnsupportedLookAndFeelException ex) {
 			java.util.logging.Logger.getLogger(NewsReader.class.getName()).log(java.util.logging.Level.SEVERE, null,
-				ex);
+					ex);
 		}
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
@@ -86,12 +97,6 @@ public class NewsSedailyCom extends javax.swing.JFrame {
 				new NewsSedailyCom().setVisible(true);
 			}
 		});
-	}
-
-	public NewsSedailyCom() {
-		logger = LoggerFactory.getLogger(this.getClass());
-
-		initComponents();
 	}
 
 	private void initComponents() {
@@ -193,6 +198,7 @@ public class NewsSedailyCom extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		logger = LoggerFactory.getLogger(NewsSedailyCom.class.getName());
 
 		News gurl = new News();
 		gurl.getURL(url);
@@ -234,13 +240,13 @@ public class NewsSedailyCom extends javax.swing.JFrame {
 				strAuthor = authorEls.select("li").get(0).text();
 				authorAndTime = authorEls.outerHtml();
 				strDate = authorEls.select("li").get(1).text();
-				strDate = strDate.replace("입력","");
+				strDate = strDate.replace("입력", "");
 			} else {
 				authorEls = doc.select(".article_head .article_info");
 				strAuthor = authorEls.select("span").get(2).text();
 				authorAndTime = authorEls.outerHtml();
 				strDate = authorEls.select("span").get(0).text();
-				strDate = strDate.replace("입력","");
+				strDate = strDate.replace("입력", "");
 			}
 			System.out.println("authorEls:[" + authorEls + "]");
 			System.out.println("strAuthor:[" + strAuthor + "]");
@@ -252,20 +258,25 @@ public class NewsSedailyCom extends javax.swing.JFrame {
 			System.out.println("strFileNameDate:" + strFileNameDate);
 
 			Elements contentEls = doc.select(".view_con");
-			Element contentEl = null;
+			System.out.println("contentEls:" + contentEls);
+			System.out.println("contentEls.size:" + contentEls.size());
+			Element contentEl;
 			String strArticleSummary = "";
 			String strArticle = "";
+			logger.debug("ssssssssssssssssssssssssss");
 			if (contentEls.size() > 0) {
 				contentEl = doc.select(".view_con").get(0);
 				strArticle = contentEl.outerHtml();
 			} else {
+				logger.debug("elseeeeeeeeeeeeee");
 				Elements articleSummaryEls = doc.select(".article_summary");
-					logger.debug("articleSummaryEls:"+articleSummaryEls);
+				logger.debug("articleSummaryEls:" + articleSummaryEls);
 				if (articleSummaryEls.size() > 0) {
 					Element articleSummaryEl = articleSummaryEls.get(0);
-					logger.debug("articleSummaryEl:"+articleSummaryEl);
+					logger.debug("articleSummaryEl:" + articleSummaryEl);
 					articleSummaryEl.removeAttr("style");
-					articleSummaryEl.attr("style","font-family: 'Noto Sans KR', sans-serif;margin-bottom: 6px;font-weight: bold;line-height: 1.2em;letter-spacing: 0 !important;");
+					articleSummaryEl.attr("style",
+							"font-family: 'Noto Sans KR', sans-serif;margin-bottom: 6px;font-weight: bold;line-height: 1.2em;letter-spacing: 0 !important;");
 					strArticleSummary = articleSummaryEl.outerHtml();
 				}
 				contentEl = doc.select(".article_view").get(0);
@@ -291,7 +302,8 @@ public class NewsSedailyCom extends javax.swing.JFrame {
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
@@ -299,7 +311,8 @@ public class NewsSedailyCom extends javax.swing.JFrame {
 
 			sb1.append("<div style='width:548px'>\r\n");
 
-			sb1.append("<h3> 기사주소:[<a href='").append(url).append("' target='_sub'>").append(url).append("</a>] </h3>\n");
+			sb1.append("<h3> 기사주소:[<a href='").append(url).append("' target='_sub'>").append(url)
+					.append("</a>] </h3>\n");
 			sb1.append("<h2>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append(authorAndTime).append("<br>\r\n");
 			sb1.append(strContent).append("<br>\r\n");
@@ -314,13 +327,16 @@ public class NewsSedailyCom extends javax.swing.JFrame {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
 			System.out.println("추출완료");
 			if (executeResultLbl != null) {

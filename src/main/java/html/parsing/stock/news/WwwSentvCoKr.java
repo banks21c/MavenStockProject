@@ -1,19 +1,12 @@
 package html.parsing.stock.news;
 
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +27,10 @@ import html.parsing.stock.util.ImageUtil;
 
 public class WwwSentvCoKr extends javax.swing.JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -233966048037670672L;
 	private static Logger logger = null;
 	final static String userHome = System.getProperty("user.home");
 

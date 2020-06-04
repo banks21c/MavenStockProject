@@ -41,6 +41,10 @@ import html.parsing.stock.StockVO;
  */
 public class NewsReaderNoRadio extends javax.swing.JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5002886789046787575L;
 	private static org.slf4j.Logger logger = LoggerFactory.getLogger(NewsReaderNoRadio.class);
     URI uri = null;
 
