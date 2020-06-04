@@ -147,8 +147,10 @@ public class AllStockPlusMinusDivide extends Thread {
 
 	public void execute() {
 		long start = System.currentTimeMillis();
+		
 		execute("코스피");
 		execute("코스닥");
+		
 		long end = System.currentTimeMillis();
 		long timeElapsed = end - start;
 		logger.debug("실행시간 : " + (end - start) / 1000 + "초");

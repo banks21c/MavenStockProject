@@ -13,13 +13,15 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.ImageUtil;
 
 public class WwwYnaCoKr extends News {
 
-	Logger logger = null;
+	private static Logger logger = LoggerFactory.getLogger(WwwYnaCoKr.class);
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
 	DecimalFormat df = new DecimalFormat("###.##");
@@ -36,13 +38,12 @@ public class WwwYnaCoKr extends News {
 	}
 
 	WwwYnaCoKr() {
-
+		logger = LoggerFactory.getLogger(WwwYnaCoKr.class);
 	}
 
 	WwwYnaCoKr(int i) {
-
-
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		logger = LoggerFactory.getLogger(WwwYnaCoKr.class);
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "https://www.yna.co.kr/view/AKR20190302013700001?input=1195p";
@@ -52,7 +53,8 @@ public class WwwYnaCoKr extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
-//        getURL(url);
+		logger = LoggerFactory.getLogger(WwwYnaCoKr.class);
+		// getURL(url);
 		getURL(url);
 
 		StringBuilder sb1 = new StringBuilder();
@@ -81,7 +83,7 @@ public class WwwYnaCoKr extends News {
 
 			String strDate = "";
 			Elements dateEls = doc.select(".title-article01 .update-time");
-			if(dateEls.size() > 0) {
+			if (dateEls.size() > 0) {
 				dateEls.select("span").remove();
 				strDate = dateEls.get(0).text();
 			}
@@ -91,17 +93,22 @@ public class WwwYnaCoKr extends News {
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
 			System.out.println("strFileNameDate:" + strFileNameDate);
 
+//			//class명에 있는 -를 _로 변경한다.
+//			Elements allEls = doc.getAllElements();
+//			for(Element el:allEls) {
+//				String className = el.className();
+//				className = className.replace("-", "_");
+//				el.attr("class",className);
+//			}
+			
 			Elements article = doc.select(".article");
+			System.out.println("article:[" + article+"]\n\n");
+			
+			
 			// article.select(".image-area").append("<br><br>");
 			article.select(".image-area").after("<br><br>");
-
-			String style = article.select(".article").attr("style");
-			System.out.println("style:" + style);
-			article.removeAttr("style");
 			article.removeAttr("class");
 			article.attr("style", "width:548px");
-
-			article.select(".adrs").remove();
 
 			Element authorElement = article.select("p").last();
 			String author = "";
@@ -115,28 +122,38 @@ public class WwwYnaCoKr extends News {
 			article.select("p").attr("style", "font-size:16px");
 			article.select(".img-info").attr("style", "font-size:12px;font-weight:bold;");
 
-			// System.out.println("imageArea:"+article.select(".image-area"));
-			String articleHtml = article.outerHtml();
-			System.out.println("articleHtml:[" + articleHtml + "]");
-			String strContent = articleHtml.replaceAll("640px", "548px");
-			strContent = strContent.replaceAll("<img src=\"//", "<img src=\"" + protocol + "://");
+			Elements imgEls = article.select(".comp-box figure img");
+			imgEls.removeAttr("alt");
+			for (Element imgEl : imgEls) {
+				String imgSrc = imgEl.attr("src");
+				if (imgSrc.startsWith("//")) {
+					imgEl.attr("src", protocol + ":" + imgSrc);
+					// 이미지 width,height 관련 스타일 문자열을 가져온다.
+					String imageStyle = ImageUtil.getImageStyle(imgEl.attr("src"));
+					imgEl.attr("style", imageStyle);
+				}
+				logger.debug("imgEl:" + imgEl);
+			}
+
+			article.select(".comp-box figure figcaption").tagName("div");
+			article.select(".comp-box figure").tagName("div");
+
+			String strContent = article.outerHtml();
+			System.out.println("strContent:[" + strContent + "]");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
-			strContent = strContent.replaceAll("<figure>", "<div>");
-			strContent = strContent.replaceAll("</figure>", "</div>");
-			strContent = strContent.replaceAll("<figcaption>", "<div>");
-			strContent = strContent.replaceAll("</figcaption>", "</div>");
 			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
-			//System.out.println("strContent:[" + strContent + "]strContent");
+			// System.out.println("strContent:[" + strContent + "]strContent");
 			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
-			String copyright = "Copyright ⓒ YTN";
+			String copyright = article.select(".txt-copyright").html();
 			System.out.println("copyright:" + copyright);
 
 			sb1.append("<!doctype html>\r\n");
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
@@ -148,7 +165,6 @@ public class WwwYnaCoKr extends News {
 			sb1.append("<span style='font-size:13px'>" + strDate + "</span><br><br>\n");
 			sb1.append("<span style='font-size:13px'>" + author + "</span><br><br>\n");
 			sb1.append(strContent + "<br><br>\n");
-			sb1.append(copyright + "<br><br>\n");
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
@@ -158,10 +174,12 @@ public class WwwYnaCoKr extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

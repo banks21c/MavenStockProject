@@ -17,7 +17,19 @@ public final class OpenApiTestApplication {
     // Replace with your own ACCESS_KEY and SECRET_KEY
     private final static String ACCESS_KEY = "1895fbee-cac6-456a-9d9e-7b198e8735b8";
     private final static String SECRET_KEY = "a59ac9889dbeb7b32cd7304bf361e13c05e0387a";
-    private final static String REQUEST_JSON = "{\"coupangUrls\": [\"https://www.coupang.com/np/search?component=&q=good&channel=user\",\"https://www.coupang.com/np/coupangglobal\"]}";
+//    private final static String REQUEST_JSON = "{\"coupangUrls\": [\"https://www.coupang.com/np/search?component=&q=good&channel=user\",\"https://www.coupang.com/np/coupangglobal\"]}";
+    //실패
+//    private final static String REQUEST_JSON = "{\"coupangUrls\": [\"https://pages.coupang.com/f/s299\"]}";
+    //성공
+//    private final static String REQUEST_JSON = "{\"coupangUrls\": [\"https://www.coupang.com/\"]}";
+    //성공
+//    private final static String REQUEST_JSON = "{\"coupangUrls\": [\"https://www.coupang.com/np/goldbox\"]}";
+    //성공
+//    private final static String REQUEST_JSON = "{\"coupangUrls\": [\"https://loyalty.coupang.com/loyalty/sign-up/home\"]}";
+    //성공
+//    private final static String REQUEST_JSON = "{\"coupangUrls\": [\"https://www.coupang.com/np/campaigns/82\"]}";
+    //성공
+    private final static String REQUEST_JSON = "{\"coupangUrls\": [\"https://www.coupang.com/np/coupangglobal\"]}";
 
     public static void main(String[] args) throws IOException {
         // Generate HMAC string

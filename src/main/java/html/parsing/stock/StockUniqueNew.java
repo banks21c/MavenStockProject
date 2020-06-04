@@ -75,13 +75,17 @@ public class StockUniqueNew extends Thread {
 	List<StockVO> downUpStockList = new ArrayList<>();
 	List<StockVO> over5PerUpStockList = new ArrayList<>();
 	List<StockVO> over5PerDownStockList = new ArrayList<>();
+	/**
+	 * 몇% 이상의 데이터를 추출할 것인가?
+	 */
+	int upDownStdNo = 10;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new StockUniqueNew().test();
-//		new StockUniqueNew().start();
+//		new StockUniqueNew().test();
+		new StockUniqueNew().start();
 	}
 
 	StockUniqueNew() {
@@ -492,13 +496,13 @@ public class StockUniqueNew extends Thread {
 			float fRatio = 0f;
 			if (varyRatio.indexOf("%") != -1) {
 				fRatio = Float.parseFloat(varyRatio.substring(1, varyRatio.indexOf("%")));
-				if (fRatio >= 5) {
+				if (fRatio >= upDownStdNo) {
 					if (specialLetter.equals("+") || specialLetter.equals("▲")) {
-						stock.setStockGubun("+5%이상↗");
+						stock.setStockGubun(specialLetter+upDownStdNo+"%이상▲");
 						stock.setLineUp(13);
 						over5PerUpStockList.add(stock);
 					} else if (specialLetter.equals("-") || specialLetter.equals("▼")) {
-						stock.setStockGubun("-5%이상↘");
+						stock.setStockGubun(specialLetter+upDownStdNo+"%이상▼");
 						stock.setLineUp(23);
 						over5PerDownStockList.add(stock);
 					}
