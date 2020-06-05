@@ -24,12 +24,12 @@ import org.jsoup.select.Elements;
  *
  * @author banks
  */
-public class CoupangPartnersGoldBoxJFrame extends javax.swing.JFrame {
+public class CoupangPartnersWsBestRocketFreshJFrame extends javax.swing.JFrame {
 
-	private static final long serialVersionUID = 8369567087448497477L;
-	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersGoldBoxJFrame.class);
+	private static final long serialVersionUID = 3777560095477607169L;
+	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersWsBestRocketFreshJFrame.class);
 	final static String userHome = System.getProperty("user.home");
-	String strUrl = "https://partners.coupang.com/#affiliate/ws/best/goldbox";
+	String strUrl = "https://partners.coupang.com/#affiliate/ws/best/rocket-fresh";
 	private String strShortenedUrl = "https://coupa.ng/bDrZz6";
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 	String strDate = sdf.format(new Date());
@@ -58,7 +58,7 @@ public class CoupangPartnersGoldBoxJFrame extends javax.swing.JFrame {
 	/**
 	 * Creates new form NewJFrame1
 	 */
-	public CoupangPartnersGoldBoxJFrame() {
+	public CoupangPartnersWsBestRocketFreshJFrame() {
 		initComponents();
 		initList();
 	}
@@ -98,7 +98,7 @@ public class CoupangPartnersGoldBoxJFrame extends javax.swing.JFrame {
 			docHtml = docHtml.replace("\"/", "\"" + strProtocol + "://" + strHost + "/");
 //			newsTextArea.setText(docHtml);
 		} catch (IOException ex) {
-			Logger.getLogger(CoupangPartnersGoldBoxJFrame.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -122,6 +122,7 @@ public class CoupangPartnersGoldBoxJFrame extends javax.swing.JFrame {
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
+                buttonGroup1 = new javax.swing.ButtonGroup();
                 jPanel7 = new javax.swing.JPanel();
                 jPanel5 = new javax.swing.JPanel();
                 jLabel1 = new javax.swing.JLabel();
@@ -148,7 +149,7 @@ public class CoupangPartnersGoldBoxJFrame extends javax.swing.JFrame {
 
                 jPanel7.setMinimumSize(new java.awt.Dimension(60, 50));
                 jPanel7.setName(""); // NOI18N
-                jPanel7.setLayout(new java.awt.GridLayout(1, 0));
+                jPanel7.setLayout(new java.awt.GridLayout());
 
                 jPanel5.setLayout(new java.awt.GridLayout(3, 0));
 
@@ -207,7 +208,7 @@ public class CoupangPartnersGoldBoxJFrame extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(201, 201, 201)
                                 .addComponent(jButton1)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap(133, Short.MAX_VALUE))
                 );
 
                 jSplitPane2.setLeftComponent(jPanel2);
@@ -228,7 +229,7 @@ public class CoupangPartnersGoldBoxJFrame extends javax.swing.JFrame {
 
                 getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
-                jPanel3.setLayout(new java.awt.GridLayout(1, 0));
+                jPanel3.setLayout(new java.awt.GridLayout());
 
                 jButton3.setText("저장");
                 jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -244,7 +245,7 @@ public class CoupangPartnersGoldBoxJFrame extends javax.swing.JFrame {
                         .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGap(373, 373, 373)
                                 .addComponent(jButton3)
-                                .addContainerGap(518, Short.MAX_VALUE))
+                                .addContainerGap(434, Short.MAX_VALUE))
                 );
                 jPanel4Layout.setVerticalGroup(
                         jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,7 +260,6 @@ public class CoupangPartnersGoldBoxJFrame extends javax.swing.JFrame {
         }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-	    //	    class="workspace" 또는 class="ws-page best-products" 를 붙여넣는다.
 	    FileWriter fw = null;
 	    String htmlSource = newsTextArea.getText();
 	    Document doc = Jsoup.parse(htmlSource);
@@ -348,11 +348,11 @@ public class CoupangPartnersGoldBoxJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1MouseClicked
 
         private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-		// TODO add your handling code here:
-		String writeContent = newsTextArea1.getText();
-		fileName = userHome + File.separator + "documents" + File.separator + strDate + "_coupang.partners.html";
-//	    FileUtil.fileWrite(fileName, Jsoup.parse(sb1.toString()).html());
-		FileUtil.fileWrite(fileName, writeContent);
+                // TODO add your handling code here:
+                String writeContent = newsTextArea1.getText();
+                fileName = userHome + File.separator + "documents" + File.separator + strDate + "_coupang.partners.html";
+                //	    FileUtil.fileWrite(fileName, Jsoup.parse(sb1.toString()).html());
+                FileUtil.fileWrite(fileName, writeContent);
         }//GEN-LAST:event_jButton3ActionPerformed
 
 	private void urlTfActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_urlTfActionPerformed
@@ -410,9 +410,265 @@ public class CoupangPartnersGoldBoxJFrame extends javax.swing.JFrame {
 				}
 			}
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(CoupangPartnersGoldBoxJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
+			java.util.logging.Logger.getLogger(CoupangPartnersWsBestRocketFreshJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
 				ex);
 		}
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
+		// </editor-fold>
 		// </editor-fold>
 		// </editor-fold>
 		// </editor-fold>
@@ -691,12 +947,13 @@ public class CoupangPartnersGoldBoxJFrame extends javax.swing.JFrame {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new CoupangPartnersGoldBoxJFrame().setVisible(true);
+				new CoupangPartnersWsBestRocketFreshJFrame().setVisible(true);
 			}
 		});
 	}
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
+        private javax.swing.ButtonGroup buttonGroup1;
         private javax.swing.JButton jButton1;
         private javax.swing.JButton jButton3;
         private javax.swing.JLabel jLabel1;

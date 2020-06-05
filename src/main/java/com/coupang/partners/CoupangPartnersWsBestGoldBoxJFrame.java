@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.coupang.partners;
 
 import java.awt.Desktop;
@@ -29,54 +24,81 @@ import org.jsoup.select.Elements;
  *
  * @author banks
  */
-public class CoupangPartnersRocketFresh extends javax.swing.JFrame {
+public class CoupangPartnersWsBestGoldBoxJFrame extends javax.swing.JFrame {
 
-	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersRocketFresh.class);
+	private static final long serialVersionUID = 8369567087448497477L;
+	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersWsBestGoldBoxJFrame.class);
 	final static String userHome = System.getProperty("user.home");
+	String strUrl = "https://partners.coupang.com/#affiliate/ws/best/goldbox";
+	private String strShortenedUrl = "https://coupa.ng/bDrZz6";
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
+	String strDate = sdf.format(new Date());
+	SimpleDateFormat sdf0 = new SimpleDateFormat("[yyyy-MM-dd]", Locale.KOREAN);
+	String strYmdBlacket = sdf0.format(new Date());
+	String fileName;
 	URI uri = null;
+	URL url = null;
+	String strProtocol = null;
+	String strHost = null;
+	String strPath = null;
+	String strQuery = null;
+	String strRef = null;
+	int iPort;
+	String coupangBannerHtml = "<a href='https://coupa.ng/bDpYeA' target='_blank'><img src='https://ads-partners.coupang.com/banners/248366?subId=&traceId=V0-301-879dd1202e5c73b2-I248366&w=728&h=90' alt=''></a>";
+	String goldboxBannerHtml = "<a href='https://coupa.ng/bDpYg9' target='_blank'><img src='https://ads-partners.coupang.com/banners/248368?subId=&traceId=V0-301-969b06e95b87326d-I248368&w=728&h=90' alt=''></a>";
+	String rocketWowBannerHtml = "<a href='https://coupa.ng/bDpYjk' target='_blank'><img src='https://ads-partners.coupang.com/banners/248630?subId=&traceId=V0-301-bae0f72e5e59e45f-I248630&w=728&h=90' alt=''></a>";
+	String rocketFreshBannerHtml = "<a href='https://coupa.ng/bDpYlr' target='_blank'><img src='https://ads-partners.coupang.com/banners/248367?subId=&traceId=V0-301-371ae01f4226dec2-I248367&w=728&h=90' alt=''></a>";
+	String rocketJikguBannerHtml = "<a href='https://coupa.ng/bDpXLQ' target='_blank'><img src='https://ads-partners.coupang.com/banners/248642?subId=&traceId=V0-301-50c6c2b97fba9aee-I248642&w=728&h=90' alt=''></a>";
+	String fixedDeliveryBannerHtml = "<a href='https://coupa.ng/bDqBl0' target='_blank'><img src='https://image7.coupangcdn.com/image/displayitem/displayitem_d9cff975-232b-415d-950c-edc800a1e93d.png' alt='기본배너'></a>";
+	String rocketDeliveryBannerHtml = "<a href='https://coupa.ng/bDsYSW'> <img src='https://image6.coupangcdn.com/image/bannerunit/bannerunit_6de3ea0e-47c0-4a0e-a823-e04806eed4b0.jpg' alt=''> </a>";
+
+	String strTitle = "골드박스";
+	String topBanner = goldboxBannerHtml;
 
 	/**
 	 * Creates new form NewJFrame1
 	 */
-	public CoupangPartnersRocketFresh() {
+	public CoupangPartnersWsBestGoldBoxJFrame() {
 		initComponents();
 		initList();
 	}
 
 	void initList() {
 		try {
-			String strUrl = "https://partners.coupang.com/#affiliate/ws/best/rocket-fresh";
-			Document doc = Jsoup.connect(strUrl).get();
-			URL url = new URL(strUrl);
-			String protocol = url.getProtocol();
-			String host = url.getHost();
+			url = new URL(strUrl);
+			strProtocol = url.getProtocol();
+			strHost = url.getHost();
+			iPort = url.getPort();
+			strPath = url.getPath();
+			logger.debug("strPath:" + strPath);
 
+			Document doc = Jsoup.connect(strUrl).get();
 			Elements linkEls = doc.select("link");
 			for (Element linkEl : linkEls) {
 				String strHref = linkEl.attr("href");
 				if (strHref.startsWith("//")) {
-					linkEl.attr("href", protocol + ":" + strHref);
+					linkEl.attr("href", strProtocol + ":" + strHref);
 				} else if (strHref.startsWith("/")) {
-					linkEl.attr("href", protocol + "://" + host + strHref);
+					linkEl.attr("href", strProtocol + "://" + strHost + strHref);
 				}
 			}
 			Elements scriptEls = doc.select("script");
 			for (Element scriptEl : scriptEls) {
 				String strSrc = scriptEl.attr("src");
 				if (strSrc.startsWith("//")) {
-					scriptEl.attr("src", protocol + ":" + strSrc);
+					scriptEl.attr("src", strProtocol + ":" + strSrc);
 				} else if (strSrc.startsWith("/")) {
-					scriptEl.attr("src", protocol + "://" + host + strSrc);
+					scriptEl.attr("src", strProtocol + "://" + strHost + strSrc);
 				}
 			}
 
 			System.out.println(doc.html());
 			String docHtml = doc.html();
-			docHtml = docHtml.replace("\"//", "\"" + protocol + "://");
-			docHtml = docHtml.replace("\"/", "\"" + protocol + "://" + host + "/");
-			newsTextArea.setText(docHtml);
+			docHtml = docHtml.replace("\"//", "\"" + strProtocol + "://");
+			docHtml = docHtml.replace("\"/", "\"" + strProtocol + "://" + strHost + "/");
+//			newsTextArea.setText(docHtml);
 		} catch (IOException ex) {
-			Logger.getLogger(CoupangPartnersGoldBox.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -100,8 +122,11 @@ public class CoupangPartnersRocketFresh extends javax.swing.JFrame {
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
-                buttonGroup1 = new javax.swing.ButtonGroup();
                 jPanel7 = new javax.swing.JPanel();
+                jPanel5 = new javax.swing.JPanel();
+                jLabel1 = new javax.swing.JLabel();
+                jLabel2 = new javax.swing.JLabel();
+                jLabel3 = new javax.swing.JLabel();
                 jPanel1 = new javax.swing.JPanel();
                 jTabbedPane1 = new javax.swing.JTabbedPane();
                 jSplitPane1 = new javax.swing.JSplitPane();
@@ -112,14 +137,35 @@ public class CoupangPartnersRocketFresh extends javax.swing.JFrame {
                 jButton1 = new javax.swing.JButton();
                 jScrollPane4 = new javax.swing.JScrollPane();
                 newsTextArea1 = new javax.swing.JTextArea();
+                jPanel3 = new javax.swing.JPanel();
+                jPanel4 = new javax.swing.JPanel();
+                jButton3 = new javax.swing.JButton();
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
                 setTitle("웹페이지 추출");
                 setMinimumSize(new java.awt.Dimension(800, 500));
                 setSize(new java.awt.Dimension(1000, 600));
 
-                jPanel7.setLayout(new java.awt.BorderLayout());
-                getContentPane().add(jPanel7, java.awt.BorderLayout.NORTH);
+                jPanel7.setMinimumSize(new java.awt.Dimension(60, 50));
+                jPanel7.setName(""); // NOI18N
+                jPanel7.setLayout(new java.awt.GridLayout(1, 0));
+
+                jPanel5.setLayout(new java.awt.GridLayout(3, 0));
+
+                jLabel1.setFont(new java.awt.Font("굴림", 0, 14)); // NOI18N
+                jLabel1.setText("쿠팡 파트너스 상품 추출");
+                jPanel5.add(jLabel1);
+
+                jLabel2.setForeground(new java.awt.Color(255, 0, 0));
+                jLabel2.setText("* workspace class 또는 ws-page best-products를 붙여넣는다.");
+                jPanel5.add(jLabel2);
+
+                jLabel3.setText("https://partners.coupang.com/#affiliate/ws/best/goldbox 는 a링크를 찾을수 없다. 따라서 shortenedURL을 일일이 넣어줘야 한다.");
+                jPanel5.add(jLabel3);
+
+                jPanel7.add(jPanel5);
+
+                getContentPane().add(jPanel7, java.awt.BorderLayout.PAGE_START);
 
                 jPanel1.setLayout(new java.awt.GridLayout(1, 2));
 
@@ -161,7 +207,7 @@ public class CoupangPartnersRocketFresh extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(201, 201, 201)
                                 .addComponent(jButton1)
-                                .addContainerGap(207, Short.MAX_VALUE))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
 
                 jSplitPane2.setLeftComponent(jPanel2);
@@ -182,10 +228,38 @@ public class CoupangPartnersRocketFresh extends javax.swing.JFrame {
 
                 getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
+                jPanel3.setLayout(new java.awt.GridLayout(1, 0));
+
+                jButton3.setText("저장");
+                jButton3.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jButton3ActionPerformed(evt);
+                        }
+                });
+
+                javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+                jPanel4.setLayout(jPanel4Layout);
+                jPanel4Layout.setHorizontalGroup(
+                        jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(373, 373, 373)
+                                .addComponent(jButton3)
+                                .addContainerGap(518, Short.MAX_VALUE))
+                );
+                jPanel4Layout.setVerticalGroup(
+                        jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING)
+                );
+
+                jPanel3.add(jPanel4);
+
+                getContentPane().add(jPanel3, java.awt.BorderLayout.PAGE_END);
+
                 pack();
         }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+	    //	    class="workspace" 또는 class="ws-page best-products" 를 붙여넣는다.
 	    FileWriter fw = null;
 	    String htmlSource = newsTextArea.getText();
 	    Document doc = Jsoup.parse(htmlSource);
@@ -194,32 +268,20 @@ public class CoupangPartnersRocketFresh extends javax.swing.JFrame {
 	    SimpleDateFormat sdf0 = new SimpleDateFormat("[yyyy-MM-dd]", Locale.KOREAN);
 	    String strYMD = sdf0.format(new Date());
 
-	    Elements h1Els = doc.select("h1");
-	    logger.debug("h1Els.size:" + h1Els.size());
-	    for (Element h1El : h1Els) {
-		    String styleClass = h1El.attr("class");
-		    styleClass = styleClass.replace("-", "_");
-		    h1El.attr("class", styleClass);
+	    Elements allElements = doc.getAllElements();
+	    for (Element el : allElements) {
+		    String strClass = el.attr("class");
+		    strClass = strClass.replace("-", "_");
+		    el.attr("class", strClass);
 	    }
+
+	    logger.debug("title:" + doc.select("h1 .mr1em"));
 	    String strTitle = doc.select("h1 .mr1em").text();
 	    logger.debug("strTitle:" + strTitle);
 
-	    Elements divEls = doc.select("div");
-	    for (Element divEl : divEls) {
-		    String styleClass = divEl.attr("class");
-		    styleClass = styleClass.replace("-", "_");
-		    divEl.attr("class", styleClass);
-	    }
-
-	    Elements spanEls = doc.select("span");
-	    for (Element spanEl : spanEls) {
-		    String styleClass = spanEl.attr("class");
-		    styleClass = styleClass.replace("-", "_");
-		    spanEl.attr("class", styleClass);
-	    }
 	    doc.select(".delivery_badge").remove();
 
-	    StringBuffer sb1 = new StringBuffer();
+	    StringBuilder sb1 = new StringBuilder();
 	    Element e1 = doc.select(".product_list").get(0);
 	    //<a href="https://coupa.ng/bDgoXJ" target="_blank"><img src="https://static.coupangcdn.com/image/affiliate/banner/226ebd857435cd57616247dd0c3d2b46@2x.jpg" alt="트리트룸 시그니처 샴푸 화이트머스크향, 1077ml, 2개" width="120" height="240"></a>
 	    sb1.append("<html>\r\n");
@@ -258,10 +320,10 @@ public class CoupangPartnersRocketFresh extends javax.swing.JFrame {
 			    sb1.append("<li style='height:390px;float:left;background-color: #fff; box-shadow: none; border: 1px solid #dfe1e5; border-radius: 8px; overflow: hidden; margin: 0 0 6px 0;margin-right:8px;margin-top:1px;'>\r\n");
 			    sb1.append("<a href='CoupangShortenedURL' target='_blank' style='text-decoration:none'>\r\n");
 			    sb1.append(strImg + "<br/>\r\n");
-			    sb1.append("<div style='text-align:center;width:212px;font-size:12px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;'>" + strProdName + "</div>/>\r\n");
-			    sb1.append("<div style='text-align:center;color:red;font-weight:bold;font-size:20px;'>" + strDiscountRate + "</div>/>\r\n");
-			    sb1.append("<div style='text-align:center;color:#111;font-weight:bold;font-size:18px;text-decoration:line-through;'>" + strCoupangPrice + "</div>/>\r\n");
-			    sb1.append("<div style='text-align:center;color:#ae0000;font-weight:bold;font-size:20px;'>" + strSalePrice + "</div>/>\r\n");
+			    sb1.append("<div style='text-align:center;width:212px;font-size:12px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;'>" + strProdName + "</div>\r\n");
+			    sb1.append("<div style='text-align:center;color:red;font-weight:bold;font-size:20px;'>" + strDiscountRate + "</div>\r\n");
+			    sb1.append("<div style='text-align:center;color:#111;font-weight:bold;font-size:18px;text-decoration:line-through;'>" + strCoupangPrice + "</div>\r\n");
+			    sb1.append("<div style='text-align:center;color:#ae0000;font-weight:bold;font-size:20px;'>" + strSalePrice + "</div>\r\n");
 			    sb1.append("</a>\r\n");
 			    sb1.append("</li>\r\n");
 		    }
@@ -275,17 +337,23 @@ public class CoupangPartnersRocketFresh extends javax.swing.JFrame {
 	    sb1.append("- 특가 상품 하나만 잘 사면 로켓와우 회원 결제 비용이 아깝지 않습니다.<br><br>\r\n");
 	    sb1.append("※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음<br>\r\n");
 	    sb1.append("</div>\r\n");
+	    sb1.append(coupangBannerHtml);
 	    sb1.append("<br/><br/><br/>\r\n");
 	    sb1.append("</body>\r\n");
 	    sb1.append("</html>\r\n");
 	    newsTextArea1.setText(sb1.toString());
-	    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
-	    String strDate = sdf.format(new Date());
-	    String fileName = "";
-	    fileName = userHome + File.separator + "documents" + File.separator + strDate + "_coupang.partners.html";
+	    fileName = userHome + File.separator + "documents" + File.separator + strDate + "_" + strTitle + ".html";
 //	    FileUtil.fileWrite(fileName, Jsoup.parse(sb1.toString()).html());
 	    FileUtil.fileWrite(fileName, sb1.toString());
     }//GEN-LAST:event_jButton1MouseClicked
+
+        private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+		// TODO add your handling code here:
+		String writeContent = newsTextArea1.getText();
+		fileName = userHome + File.separator + "documents" + File.separator + strDate + "_coupang.partners.html";
+//	    FileUtil.fileWrite(fileName, Jsoup.parse(sb1.toString()).html());
+		FileUtil.fileWrite(fileName, writeContent);
+        }//GEN-LAST:event_jButton3ActionPerformed
 
 	private void urlTfActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_urlTfActionPerformed
 
@@ -342,265 +410,9 @@ public class CoupangPartnersRocketFresh extends javax.swing.JFrame {
 				}
 			}
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(CoupangPartnersRocketFresh.class.getName()).log(java.util.logging.Level.SEVERE, null,
+			java.util.logging.Logger.getLogger(CoupangPartnersWsBestGoldBoxJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
 				ex);
 		}
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
-		// </editor-fold>
 		// </editor-fold>
 		// </editor-fold>
 		// </editor-fold>
@@ -879,17 +691,22 @@ public class CoupangPartnersRocketFresh extends javax.swing.JFrame {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new CoupangPartnersRocketFresh().setVisible(true);
+				new CoupangPartnersWsBestGoldBoxJFrame().setVisible(true);
 			}
 		});
 	}
 
-	private String url = "http://news.mt.co.kr/newsPrint.html?no=2017051716214167566";
         // Variables declaration - do not modify//GEN-BEGIN:variables
-        private javax.swing.ButtonGroup buttonGroup1;
         private javax.swing.JButton jButton1;
+        private javax.swing.JButton jButton3;
+        private javax.swing.JLabel jLabel1;
+        private javax.swing.JLabel jLabel2;
+        private javax.swing.JLabel jLabel3;
         private javax.swing.JPanel jPanel1;
         private javax.swing.JPanel jPanel2;
+        private javax.swing.JPanel jPanel3;
+        private javax.swing.JPanel jPanel4;
+        private javax.swing.JPanel jPanel5;
         private javax.swing.JPanel jPanel7;
         private javax.swing.JScrollPane jScrollPane1;
         private javax.swing.JScrollPane jScrollPane4;

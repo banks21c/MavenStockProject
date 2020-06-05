@@ -35,13 +35,54 @@
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
   <SubComponents>
     <Container class="javax.swing.JPanel" name="jPanel7">
+      <Properties>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[60, 50]"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="" noResource="true"/>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-          <BorderConstraints direction="North"/>
+          <BorderConstraints direction="First"/>
         </Constraint>
       </Constraints>
 
-      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="0"/>
+        <Property name="rows" type="int" value="1"/>
+      </Layout>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="jPanel5">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+            <Property name="columns" type="int" value="0"/>
+            <Property name="rows" type="int" value="3"/>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="jLabel1">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="&#xad74;&#xb9bc;" size="14" style="0"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#xcfe0;&#xd321; &#xd30c;&#xd2b8;&#xb108;&#xc2a4; &#xc0c1;&#xd488; &#xcd94;&#xcd9c;"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel2">
+              <Properties>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="0" green="0" red="ff" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="* workspace class &#xb610;&#xb294; ws-page best-products&#xb97c; &#xbd99;&#xc5ec;&#xb123;&#xb294;&#xb2e4;."/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel3">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="https://partners.coupang.com/#affiliate/ws/best/goldbox &#xb294; a&#xb9c1;&#xd06c;&#xb97c; &#xcc3e;&#xc744;&#xc218; &#xc5c6;&#xb2e4;. &#xb530;&#xb77c;&#xc11c; shortenedURL&#xc744; &#xc77c;&#xc77c;&#xc774; &#xb123;&#xc5b4;&#xc918;&#xc57c; &#xd55c;&#xb2e4;."/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Constraints>
@@ -132,7 +173,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="201" max="-2" attributes="0"/>
                                   <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="207" max="32767" attributes="0"/>
+                                  <EmptySpace pref="133" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                         </DimensionLayout>
@@ -178,6 +219,49 @@
                 </Container>
               </SubComponents>
             </Container>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="jPanel3">
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+          <BorderConstraints direction="Last"/>
+        </Constraint>
+      </Constraints>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="0"/>
+        <Property name="rows" type="int" value="1"/>
+      </Layout>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="jPanel4">
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="373" max="-2" attributes="0"/>
+                      <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="434" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jButton3" alignment="1" min="-2" max="-2" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JButton" name="jButton3">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#xc800;&#xc7a5;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
       </SubComponents>
