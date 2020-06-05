@@ -170,7 +170,7 @@ public class CoupangPartnersNpRocketFreshProductList extends javax.swing.JFrame 
 
                 jSplitPane1.setRightComponent(jSplitPane2);
 
-                jTabbedPane1.addTab("로켓프레시,로켓직구", jSplitPane1);
+                jTabbedPane1.addTab("로켓프레시", jSplitPane1);
 
                 jPanel1.add(jTabbedPane1);
 

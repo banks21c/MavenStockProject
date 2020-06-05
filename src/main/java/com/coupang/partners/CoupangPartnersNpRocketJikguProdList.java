@@ -5,6 +5,7 @@
  */
 package com.coupang.partners;
 
+import html.parsing.stock.StockUtil;
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -357,7 +358,7 @@ public class CoupangPartnersNpRocketJikguProdList extends javax.swing.JFrame {
 	    sb1.append("</body>\r\n");
 	    sb1.append("</html>\r\n");
 	    newsTextArea1.setText(sb1.toString());
-	    String fileName = "";
+	    strTitle = StockUtil.getTitleForFileName(strTitle);
 	    fileName = userHome + File.separator + "documents" + File.separator + strDate + "_"+strTitle+".html";
 	    //	    FileUtil.fileWrite(fileName, Jsoup.parse(sb1.toString()).html());
 	    FileUtil.fileWrite(fileName, sb1.toString());

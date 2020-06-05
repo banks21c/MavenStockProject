@@ -5,6 +5,7 @@
  */
 package com.coupang.partners;
 
+import html.parsing.stock.StockUtil;
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -22,7 +23,6 @@ import java.util.Locale;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JRadioButton;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -30,28 +30,16 @@ import org.jsoup.select.Elements;
  *
  * @author banks
  */
-public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
+public class CoupangPartnersNpRocketJikguProductList extends javax.swing.JFrame {
 
-	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersNpRocketProductList.class);
+	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersNpRocketJikguProductList.class);
 	final static String userHome = System.getProperty("user.home");
-	private String strUrl = "https://www.coupang.com/np/subscriptiondelivery";
-	private String strShortenedUrl = "https://coupa.ng/bDqBl0";
-
-	/**
-	 * https://www.coupang.com/np/goldbox에서 링크를 생성하면
-	 * https://partners.coupang.com/#affiliate/ws/best/goldbox에서 링크를 생성하는것보다
-	 * vendorItemId,traid가 더 붙는다.
-	 */
+	private String strUrl = "https://www.coupang.com/np/coupangglobal";
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 	String strDate = sdf.format(new Date());
 	SimpleDateFormat sdf0 = new SimpleDateFormat("[yyyy-MM-dd]", Locale.KOREAN);
 	String strYmdBlacket = sdf0.format(new Date());
-
-	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREAN);
-	String strYmdhms = sdf1.format(new Date());
-
 	String fileName;
-	URI uri = null;
 	URL url = null;
 	String strProtocol = null;
 	String strHost = null;
@@ -64,17 +52,11 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
 	String rocketWowBannerHtml = "<a href='https://coupa.ng/bDpYjk' target='_blank'><img src='https://ads-partners.coupang.com/banners/248630?subId=&traceId=V0-301-bae0f72e5e59e45f-I248630&w=728&h=90' alt=''></a>";
 	String rocketFreshBannerHtml = "<a href='https://coupa.ng/bDpYlr' target='_blank'><img src='https://ads-partners.coupang.com/banners/248367?subId=&traceId=V0-301-371ae01f4226dec2-I248367&w=728&h=90' alt=''></a>";
 	String rocketJikguBannerHtml = "<a href='https://coupa.ng/bDpXLQ' target='_blank'><img src='https://ads-partners.coupang.com/banners/248642?subId=&traceId=V0-301-50c6c2b97fba9aee-I248642&w=728&h=90' alt=''></a>";
-	String fixedDeliveryBannerHtml = "<a href='https://coupa.ng/bDqBl0' target='_blank'><img src='https://image7.coupangcdn.com/image/displayitem/displayitem_d9cff975-232b-415d-950c-edc800a1e93d.png' alt='기본배너'></a>";
-//	String rocketDeliveryBannerHtml = "<a href='https://coupa.ng/bDsYSW'> <img src='https://image6.coupangcdn.com/image/bannerunit/bannerunit_6de3ea0e-47c0-4a0e-a823-e04806eed4b0.jpg' alt=''> </a>";
-	String rocketDeliveryBannerHtml = "<a href='https://coupa.ng/bDsYSW'> <img src='https://static.coupangcdn.com/ca/cmg_paperboy/image/1565948764070/0819%28%EC%9B%94%29-C0-Left.jpg' alt=''> </a>";
-
-	String strTitle = "로켓배송";
-	String topBanner = rocketDeliveryBannerHtml;
 
 	/**
 	 * Creates new form NewJFrame1
 	 */
-	public CoupangPartnersNpRocketProductList() {
+	public CoupangPartnersNpRocketJikguProductList() {
 		initComponents();
 		initList();
 	}
@@ -114,10 +96,6 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
 
                 buttonGroup1 = new javax.swing.ButtonGroup();
                 jPanel7 = new javax.swing.JPanel();
-                jRadioButton1 = new javax.swing.JRadioButton();
-                jRadioButton2 = new javax.swing.JRadioButton();
-                jRadioButton3 = new javax.swing.JRadioButton();
-                jLabel1 = new javax.swing.JLabel();
                 jPanel1 = new javax.swing.JPanel();
                 jTabbedPane1 = new javax.swing.JTabbedPane();
                 jSplitPane1 = new javax.swing.JSplitPane();
@@ -128,48 +106,13 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
                 jButton1 = new javax.swing.JButton();
                 jScrollPane4 = new javax.swing.JScrollPane();
                 newsTextArea1 = new javax.swing.JTextArea();
-                jPanel3 = new javax.swing.JPanel();
-                jButton2 = new javax.swing.JButton();
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                setTitle("쿠팡 로켓");
+                setTitle("웹페이지 추출");
                 setMinimumSize(new java.awt.Dimension(800, 500));
                 setSize(new java.awt.Dimension(1000, 600));
 
-                jPanel7.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
-
-                buttonGroup1.add(jRadioButton1);
-                jRadioButton1.setSelected(true);
-                jRadioButton1.setText("로켓배송");
-                jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton1ActionPerformed(evt);
-                        }
-                });
-                jPanel7.add(jRadioButton1);
-
-                buttonGroup1.add(jRadioButton2);
-                jRadioButton2.setText("로켓프레시");
-                jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton2ActionPerformed(evt);
-                        }
-                });
-                jPanel7.add(jRadioButton2);
-
-                buttonGroup1.add(jRadioButton3);
-                jRadioButton3.setText("로켓직구");
-                jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton3ActionPerformed(evt);
-                        }
-                });
-                jPanel7.add(jRadioButton3);
-
-                jLabel1.setForeground(new java.awt.Color(255, 0, 0));
-                jLabel1.setText("div class=\"newcx-list\"");
-                jPanel7.add(jLabel1);
-
+                jPanel7.setLayout(new java.awt.BorderLayout());
                 getContentPane().add(jPanel7, java.awt.BorderLayout.NORTH);
 
                 jPanel1.setLayout(new java.awt.GridLayout(1, 2));
@@ -186,7 +129,7 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
 
                 jSplitPane2.setDividerLocation(150);
 
-                jButton1.setText("변환,추출,저장 =>");
+                jButton1.setText("Create Coupang Link =>");
                 jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
                                 jButton1MouseClicked(evt);
@@ -203,16 +146,16 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
                 jPanel2Layout.setHorizontalGroup(
                         jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap()
                                 .addComponent(jButton1)
-                                .addContainerGap())
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 );
                 jPanel2Layout.setVerticalGroup(
                         jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(172, 172, 172)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(139, Short.MAX_VALUE))
+                                .addGap(201, 201, 201)
+                                .addComponent(jButton1)
+                                .addContainerGap(207, Short.MAX_VALUE))
                 );
 
                 jSplitPane2.setLeftComponent(jPanel2);
@@ -227,21 +170,11 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
 
                 jSplitPane1.setRightComponent(jSplitPane2);
 
-                jTabbedPane1.addTab("상품 목록 소스 입력", jSplitPane1);
+                jTabbedPane1.addTab("로켓직구", jSplitPane1);
 
                 jPanel1.add(jTabbedPane1);
 
                 getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
-
-                jButton2.setText("저장");
-                jButton2.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton2ActionPerformed(evt);
-                        }
-                });
-                jPanel3.add(jButton2);
-
-                getContentPane().add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
                 pack();
         }// </editor-fold>//GEN-END:initComponents
@@ -251,29 +184,37 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
 	    Document doc = Jsoup.parse(htmlSource);
 	    doc.select("button").remove();
 
+	    SimpleDateFormat sdf0 = new SimpleDateFormat("[yyyy-MM-dd]", Locale.KOREAN);
+	    String strYmdBlacket = sdf0.format(new Date());
+
+	    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREAN);
+	    String strYmdhms = sdf1.format(new Date());
+
+	    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
+	    String strDate = sdf2.format(new Date());
+
 	    Elements allElements = doc.getAllElements();
 	    for (Element el : allElements) {
 		    String strClass = el.attr("class");
 		    strClass = strClass.replace("-", "_");
 		    el.attr("class", strClass);
 	    }
-	    logger.debug("strTitle:" + strTitle);
-	    if (strTitle.equals("로켓배송")) {
-		    //https://www.coupang.com/np/campaigns/82
-		    topBanner = rocketDeliveryBannerHtml;
-
-	    } else if (strTitle.equals("로켓프레시")) {
-		    //https://www.coupang.com/np/categories/393760
-		    topBanner = rocketFreshBannerHtml;
-	    } else if (strTitle.equals("로켓직구")) {
-		    //https://www.coupang.com/np/coupangglobal
-		    topBanner = rocketJikguBannerHtml;
+	    Elements h3Els = doc.select("h3");
+	    String strTitle;
+	    if (h3Els.size() > 0) {
+		    strTitle = h3Els.first().text();
+		    if(strTitle.contains("(")){
+			    strTitle = strTitle.substring(0,strTitle.indexOf("("));
+		    }
+	    } else {
+		    strTitle = "로켓직구";
 	    }
+
 	    StringBuilder sb1 = new StringBuilder();
 	    //<a href="https://coupa.ng/bDgoXJ" target="_blank"><img src="https://static.coupangcdn.com/image/affiliate/banner/226ebd857435cd57616247dd0c3d2b46@2x.jpg" alt="트리트룸 시그니처 샴푸 화이트머스크향, 1077ml, 2개" width="120" height="240"></a>
 	    sb1.append("<html>\r\n");
 	    sb1.append("<body>\r\n");
-	    sb1.append(topBanner + "\r\n");
+	    sb1.append(rocketJikguBannerHtml+"\r\n");
 	    sb1.append("<h1>").append(strYmdBlacket).append(" ").append(strTitle).append("</h1>\r\n");
 	    sb1.append("<div style='display:inline-block'>\r\n");
 	    sb1.append("<ul style='list-style:none;padding-left:0;'>\r\n");
@@ -281,30 +222,12 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
 	    Element productListEl = doc.select("#productList").first();
 	    //아이템 목록
 	    Elements itemEls = productListEl.select("li.baby_product");
-
-	    String discountRateColor;
-	    String originalPriceColor;
-	    String salePriceColor;
-
 	    for (int j = 0; j < itemEls.size(); j++) {
 		    Element itemEl = itemEls.get(j);
 		    if (itemEl.text().equals("")) {
 			    continue;
 		    }
 		    logger.debug("itemEl:" + itemEl);
-
-		    String strOutOfStockHtml = "";
-		    Elements outOfStockEls = itemEl.select(".baby_product .out_of_stock");
-		    if (outOfStockEls.size() > 0) {
-			    strOutOfStockHtml = outOfStockEls.get(0).outerHtml();
-			    discountRateColor = "#ccc";
-			    originalPriceColor = "#ccc";
-			    salePriceColor = "#ccc";
-		    } else {
-			    discountRateColor = "red";
-			    originalPriceColor = "#111";
-			    salePriceColor = "#ae0000";
-		    }
 
 		    Element aEl = itemEl.select("a").first();
 		    String aHref = aEl.attr("href");
@@ -332,51 +255,22 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
 			    }
 			    logger.debug("strPath:" + strPath);
 		    } catch (MalformedURLException ex) {
-			    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+			    Logger.getLogger(CoupangPartnersNpGoldBoxPromotionList.class.getName()).log(Level.SEVERE, null, ex);
 		    }
 
-		    //쿠팡홈(default)
-		    //https://www.coupang.com
 		    String src = "1139000";
 		    String spec = "10799999";
-		    String addtag = "900";
-		    String ctag = "HOME";//SNS
+		    String addtag = "700";
+		    String ctag = "JIKGU";
 		    String lptag = "AF5310383";
 		    String itime = strYmdhms;
-		    String pageType = "HOME";//SNS
-		    String pageValue = "HOME";//SNS
-		    String wPcid = "37582846489673457545846";//변경됨
+		    String pageType = "JIKGU";
+		    String pageValue = "JIKGU";
+		    String wPcid = "23841246090749215819859";
 		    String wRef = "blog.naver.com";
 		    String wTime = strYmdhms;
 		    String redirect = "landing";
 		    String isAddedCart = "";
-
-		    if (strTitle.equals("로켓배송")) {
-			    //https://www.coupang.com/np/campaigns/82
-			    addtag = "700";
-			    ctag = "ROCKETDELIVERY";//SNS
-			    pageType = "ROCKETDELIVERY";//SNS
-			    pageValue = "ROCKETDELIVERY";//SNS
-
-		    } else if (strTitle.equals("로켓프레시")) {
-			    //https://www.coupang.com/np/categories/393760
-			    addtag = "311";
-			    ctag = "396399";//SNS
-			    pageType = "LIST";//SNS
-			    pageValue = "396399";//SNS	
-		    } else if (strTitle.equals("로켓직구")) {
-			    //https://www.coupang.com/np/coupangglobal
-			    addtag = "700";
-			    ctag = "JIKGU";//SNS
-			    pageType = "JIKGU";//SNS
-			    pageValue = "JIKGU";//SNS
-		    } else if (strTitle.equals("골드박스")) {
-			    //https://www.coupang.com/np/goldbox
-			    addtag = "400";
-			    ctag = productId;//SNS
-			    pageType = "PRODUCT";//SNS
-			    pageValue = productId;//SNS
-		    }
 
 		    aHref += "&src=" + src;
 		    aHref += "&spec=" + spec;
@@ -398,15 +292,12 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
 		    String strCoupickImg = "";
 		    String strRocketFreshImg = "";
 		    String strJikguImg = "";
-		    String strRocketDeliveryImg = "";
-		    String strFixedDeliveryImg = "";
-
 		    for (Element imgEl : imgEls) {
 			    imgEl.removeAttr("data-src");
 
-			    logger.debug("imgEl1:[" + imgEl + "]");
+			    logger.debug("imgEl1:[" + imgEl+"]");
 			    String imgSrc = imgEl.attr("src");
-			    logger.debug("imgSrc:[" + imgSrc + "]");
+			    logger.debug("imgSrc:[" + imgSrc+"]");
 			    if (imgSrc.startsWith("//")) {
 				    imgEl.attr("src", "http:" + imgSrc);
 			    }
@@ -415,57 +306,29 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
 				    logger.debug("strJikguImg:" + strJikguImg);
 			    }
 			    if (imgSrc.contains("coupick")) {
-				    imgEl.attr("style", "width:68px;height:20px");
 				    strCoupickImg = imgEl.outerHtml();
 			    }
 			    if (imgSrc.contains("rocket-fresh")) {
 				    strRocketFreshImg = imgEl.outerHtml();
 			    }
-			    if (imgSrc.contains("rocket_logo")) {
-				    strRocketDeliveryImg = imgEl.outerHtml();
-			    }
-			    if (imgSrc.contains("subscription")) {
-				    strFixedDeliveryImg = imgEl.outerHtml();
-			    }
-			    logger.debug("imgEl2:[" + imgEl + "]");
-		    }
-		    itemEl.select("img").first().attr("style", "width:212px;height:212px");
-		    String strPrdtImg = itemEl.select("img").first().outerHtml();
 
+			    logger.debug("imgEl2:[" + imgEl+"]");
+		    }
+		    itemEl.select("img").first().attr("style","width:212px;height:212px");
+		    String strPrdtImg = itemEl.select("img").first().outerHtml();
 		    logger.debug("strPrdtImg:" + strPrdtImg);
 		    logger.debug("strCoupickImg:" + strCoupickImg);
 		    logger.debug("strRocketFreshImg:" + strRocketFreshImg);
 		    logger.debug("strJikguImg:" + strJikguImg);
-		    logger.debug("strRocketDeliveryImg:" + strRocketDeliveryImg);
-		    logger.debug("strFixedDeliveryImg:" + strFixedDeliveryImg);
-
 		    String strProdName = itemEl.select(".baby_product .name").text();
-		    Elements priceWrapEls = itemEl.select(".baby_product .price_area .price_wrap");
-		    Element priceWrapEl1 = itemEl.select(".baby_product .price_area .price_wrap").first();
-		    String strDiscountRate = priceWrapEl1.select(".price .price_info .discount_percentage").text();
-		    String strBasePrice = priceWrapEl1.select(".price .price_info .base_price").text();
-		    String strSalePrice1 = priceWrapEl1.select(".price .sale .price_value").text();
-		    String strDeliveryHtml = priceWrapEl1.select(".delivery").outerHtml();
-
-		    String strSalePrice2 = "";
-		    String strFixedDeliveryDiscountRate = "";
-		    if (priceWrapEls.size() > 1) {
-			    Element priceWrapEl2 = itemEl.select(".baby_product .price_area .price_wrap").get(1);
-			    strSalePrice2 = priceWrapEl2.select(".price .sale .price_value").text();
-			    Elements fixedDeliveryDcRateEls = priceWrapEl2.select(".price .sale .discount_subscription");
-			    if (fixedDeliveryDcRateEls.size() > 0) {
-				    Element fixedDeliveryDcRateEl = priceWrapEl2.select(".price .sale .discount_subscription").first();
-				    fixedDeliveryDcRateEl.attr("style", "position: relative;width: 52px;height: 14px;background: url(http://static.coupangcdn.com/image/badges/subscription/subscription_save@2x.png) no-repeat;background-size: auto 14px;color: #fff;font-family: apple sd gothic neo,malgun gothic,nanumgothic,dotum,sans-serif;text-indent: 0;text-align: center;font-size: 10px;line-height: 14px;font-weight: bold;vertical-align: top;");
-				    strFixedDeliveryDiscountRate = fixedDeliveryDcRateEl.outerHtml();
-			    }
-		    }
+		    String strDiscountRate = itemEl.select(".baby_product .price_area .discount_percentage").text();
+		    String strBasePrice = itemEl.select(".baby_product .price_area .base_price").text();
+		    String strSalePrice = itemEl.select(".baby_product .price_area .sale").text();
 
 		    logger.debug("strProdName:" + strProdName);
 		    logger.debug("strDiscountRate:" + strDiscountRate);
 		    logger.debug("strBasePrice:" + strBasePrice);
-		    logger.debug("strSalePrice1:" + strSalePrice1);
-		    logger.debug("strSalePrice2:" + strSalePrice2);
-		    logger.debug("strOutOfStockHtml:" + strOutOfStockHtml);
+		    logger.debug("strSalePrice:" + strSalePrice);
 
 		    sb1.append("<li style='height:390px;float:left;background-color: #fff; box-shadow: none; border: 1px solid #dfe1e5; border-radius: 8px; overflow: hidden; margin: 0 0 6px 0;margin-right:8px;margin-top:1px;'>\r\n");
 		    sb1.append("<div>\r\n");
@@ -473,21 +336,13 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
 		    sb1.append(strPrdtImg).append("<br/>\r\n");
 		    sb1.append(strCoupickImg).append("<br/>\r\n");
 		    sb1.append("<div style='text-align:center;width:212px;font-size:12px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;'>").append(strProdName).append("</div>\r\n");
-
-		    sb1.append("<div style='text-align:center;color:").append(discountRateColor).append(";font-weight:bold;font-size:20px;'>").append(strDiscountRate).append("</div>\r\n");
-		    sb1.append("<div style='text-align:center;color:").append(originalPriceColor).append(";font-weight:bold;font-size:18px;text-decoration:line-through;'>").append(strBasePrice).append("</div>\r\n");
+		    sb1.append("<div style='text-align:center;color:red;font-weight:bold;font-size:20px;'>").append(strDiscountRate).append("</div>\r\n");
+		    sb1.append("<div style='text-align:center;color:#111;font-weight:bold;font-size:18px;text-decoration:line-through;'>").append(strBasePrice).append("</div>\r\n");
 		    sb1.append("</a>\r\n");
-		    sb1.append("<div style='text-align:center;color:").append(salePriceColor).append(";font-weight:bold;font-size:20px;'>\r\n");
-		    sb1.append(strSalePrice1).append("\r\n");
-		    sb1.append(strRocketDeliveryImg).append("\r\n");
-		    sb1.append(strDeliveryHtml).append("\r\n");
-		    sb1.append(strSalePrice2).append("\r\n");
-		    sb1.append(strFixedDeliveryImg).append("\r\n");
-		    sb1.append(strFixedDeliveryDiscountRate).append("\r\n");
-
+		    sb1.append("<div style='text-align:center;color:#ae0000;font-weight:bold;font-size:20px;'>\r\n");
+		    sb1.append(strSalePrice+"\r\n");
 		    sb1.append("<a href='https://coupa.ng/bDpNJi' target='_blank'>").append(strRocketFreshImg).append("</a>\r\n");
 		    sb1.append("<a href='https://coupa.ng/bDpTHD' target='_blank'>").append(strJikguImg).append("</a>\r\n");
-		    sb1.append(strOutOfStockHtml).append("\r\n");
 		    sb1.append("</div>\r\n");
 		    sb1.append("</div>\r\n");
 		    sb1.append("</li>\r\n");
@@ -503,37 +358,11 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
 	    sb1.append("</body>\r\n");
 	    sb1.append("</html>\r\n");
 	    newsTextArea1.setText(sb1.toString());
-	    fileName = userHome + File.separator + "documents" + File.separator + strDate + "_" + strTitle + ".html";
+	    strTitle = StockUtil.getTitleForFileName(strTitle);
+	    fileName = userHome + File.separator + "documents" + File.separator + strDate + "_"+strTitle+".html";
 	    //	    FileUtil.fileWrite(fileName, Jsoup.parse(sb1.toString()).html());
 	    FileUtil.fileWrite(fileName, sb1.toString());
     }//GEN-LAST:event_jButton1MouseClicked
-
-        private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		strTitle = selectedOption;
-		System.out.println(selectedOption);
-        }//GEN-LAST:event_jRadioButton1ActionPerformed
-
-        private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		strTitle = selectedOption;
-		System.out.println(selectedOption);
-        }//GEN-LAST:event_jRadioButton2ActionPerformed
-
-        private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		strTitle = selectedOption;
-		System.out.println(selectedOption);
-        }//GEN-LAST:event_jRadioButton3ActionPerformed
-
-        private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-		fileName = userHome + File.separator + "documents" + File.separator + strDate + "_" + strTitle + ".html";
-//	    FileUtil.fileWrite(fileName, Jsoup.parse(sb1.toString()).html());
-		FileUtil.fileWrite(fileName, newsTextArea1.getText());
-        }//GEN-LAST:event_jButton2ActionPerformed
 
 	private void urlTfActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_urlTfActionPerformed
 
@@ -590,7 +419,7 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
 				}
 			}
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(CoupangPartnersNpRocketProductList.class.getName()).log(java.util.logging.Level.SEVERE, null,
+			java.util.logging.Logger.getLogger(CoupangPartnersNpRocketJikguProductList.class.getName()).log(java.util.logging.Level.SEVERE, null,
 				ex);
 		}
 		// </editor-fold>
@@ -8807,7 +8636,7 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new CoupangPartnersNpRocketProductList().setVisible(true);
+				new CoupangPartnersNpRocketJikguProductList().setVisible(true);
 			}
 		});
 	}
@@ -8815,15 +8644,9 @@ public class CoupangPartnersNpRocketProductList extends javax.swing.JFrame {
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.ButtonGroup buttonGroup1;
         private javax.swing.JButton jButton1;
-        private javax.swing.JButton jButton2;
-        private javax.swing.JLabel jLabel1;
         private javax.swing.JPanel jPanel1;
         private javax.swing.JPanel jPanel2;
-        private javax.swing.JPanel jPanel3;
         private javax.swing.JPanel jPanel7;
-        private javax.swing.JRadioButton jRadioButton1;
-        private javax.swing.JRadioButton jRadioButton2;
-        private javax.swing.JRadioButton jRadioButton3;
         private javax.swing.JScrollPane jScrollPane1;
         private javax.swing.JScrollPane jScrollPane4;
         private javax.swing.JSplitPane jSplitPane1;
