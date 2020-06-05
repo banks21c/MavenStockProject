@@ -38,13 +38,13 @@ public class ComListedOnTheUS_TipranksCom extends News {
 
 //public static final String SERVER_URI = "https://www.nyse.com/listings_directory/stock";
 	public static final String SERVER_URI = "https://www.nyse.com/api/quotes/filter";
-	//S&P 500
+	// S&P 500
 	String sAndP500 = "https://kr.investing.com/equities/StocksFilter?noconstruct=1&smlID=595&sid=&tabletype=price&index_id=166";
-	//나스닥 100
+	// 나스닥 100
 	String nasdaq100 = "https://kr.investing.com/equities/StocksFilter?noconstruct=1&smlID=595&sid=&tabletype=price&index_id=20";
-	//나스닥 종합지수
+	// 나스닥 종합지수
 	String nasdaqTotal = "https://kr.investing.com/equities/StocksFilter?noconstruct=1&smlID=595&sid=&tabletype=price&index_id=14958";
-	//다우존스
+	// 다우존스
 	String dowJones = "https://kr.investing.com/equities/StocksFilter?noconstruct=1&smlID=595&sid=&tabletype=price&index_id=169";
 
 	private static final Logger logger = LoggerFactory.getLogger(CompaniesListedOnTheNYSE_V3.class);
@@ -57,22 +57,22 @@ public class ComListedOnTheUS_TipranksCom extends News {
 	}
 
 	ComListedOnTheUS_TipranksCom() {
-		//S&P 500
+		// S&P 500
 		List<StockVO> sAndP500List = getUsStockList(sAndP500, "sAndP500");
 		Collections.sort(sAndP500List, new DividendRateDescCompare());
-		writeUsStockList(sAndP500List, "dowJones");
+		writeUsStockList(sAndP500List, "sAndP500");
 		logger.debug("sAndP500List.size:" + sAndP500List.size());
-		//나스닥 100
+		// 나스닥 100
 		List<StockVO> nasdaq100List = getUsStockList(nasdaq100, "nasdaq100");
 		Collections.sort(nasdaq100List, new DividendRateDescCompare());
-		writeUsStockList(nasdaq100List, "dowJones");
+		writeUsStockList(nasdaq100List, "nasdaq100");
 		logger.debug("nasdaq100List.size:" + nasdaq100List.size());
-		//나스닥 종합지수
+		// 나스닥 종합지수
 		List<StockVO> nasdaqTotalList = getUsStockList(nasdaqTotal, "nasdaqTotal");
 		Collections.sort(nasdaqTotalList, new DividendRateDescCompare());
-		writeUsStockList(nasdaqTotalList, "dowJones");
+		writeUsStockList(nasdaqTotalList, "nasdaqTotal");
 		logger.debug("nasdaqTotalList.size:" + nasdaqTotalList.size());
-		//다우존스
+		// 다우존스
 		List<StockVO> dowJonesList = getUsStockList(dowJones, "dowJones");
 		logger.debug("dowJonesList.size:" + dowJonesList.size());
 		Collections.sort(dowJonesList, new DividendRateDescCompare());
@@ -141,6 +141,15 @@ public class ComListedOnTheUS_TipranksCom extends News {
 //						stockName = a.text();
 //						krInvUrl = a.attr("href");
 //
+//						// 로봇으로 인식되는 것을 방지하기 위해 sleep을 준다.
+//						try {
+//							logger.debug("잠을 잡니다.");
+//							Thread.sleep(1000);
+//							logger.debug("잠을 깹니다.");
+//						} catch (InterruptedException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
 //						Document krInvUrlDoc = Jsoup.connect(krInvUrl).get();
 //						logger.debug("-----------------------");
 ////						logger.debug(krInvUrlDoc.select(".overviewDataTable").html());
@@ -165,6 +174,7 @@ public class ComListedOnTheUS_TipranksCom extends News {
 //					}
 //					if (j == 2) {
 //						curPrice = tdEl.text();
+//						logger.debug("curPrice:" + curPrice);
 //					}
 //					j++;
 //				}
@@ -175,17 +185,17 @@ public class ComListedOnTheUS_TipranksCom extends News {
 ////			String tableHtml = tableElmt.outerHtml();
 ////			logger.debug(tableHtml);
 //			doc = Jsoup.parse(sb.toString());
-//			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_" + gubun + "_List_.html";
+//			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_" + gubun
+//					+ "_List_.html";
 //			logger.debug("fileName :" + fileName);
 //			FileUtil.fileWrite(fileName, doc.html());
 //		} catch (IOException ex) {
-//			java.util.logging.Logger.getLogger(ComListedOnTheUS_KrInvestingCom.class.getName()).log(Level.SEVERE, null, ex);
+//			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 //		}
 //		return sb;
 //	}
 
 	public List<StockVO> getUsStockList(String url, String gubun) {
-		StringBuilder sb = new StringBuilder();
 		List<StockVO> stockList = new ArrayList<StockVO>();
 		try {
 			Document doc;
@@ -200,24 +210,29 @@ public class ComListedOnTheUS_TipranksCom extends News {
 			Element tableEl = doc.select("#cross_rate_markets_stocks_1").get(0);
 			Elements trEls = tableEl.select("tbody tr");
 
+			int i = 0;
 			for (Element trEl : trEls) {
+				logger.debug((i + 1) + ".trEl:" + trEl);
 				StockVO svo = new StockVO();
-				Elements tdEls = trEl.select("td");
-				int j = 0;
 				String curPrice = "";
 				String stockName = "";
 				String krInvUrl = "";
 				String eps = "";
 				String dividends = "";
 				String dividendRate = "";
+
+				int j = 0;
+				Elements tdEls = trEl.select("td");
 				for (Element tdEl : tdEls) {
-					logger.debug("tdEl:" + tdEl);
+					logger.debug((j + 1) + ".tdEl:" + tdEl);
 					if (j == 1) {
 						Element a = tdEl.select("a").get(0);
 						stockName = a.attr("title");
 						stockName = a.text();
+						logger.debug((i + 1) + ".stockName:" + stockName);
 						svo.setStockName(stockName);
 						krInvUrl = a.attr("href");
+						logger.debug("krInvUrl:" + krInvUrl);
 						svo.setUrl(krInvUrl);
 
 						Document krInvUrlDoc = Jsoup.connect(krInvUrl).get();
@@ -249,14 +264,16 @@ public class ComListedOnTheUS_TipranksCom extends News {
 					}
 					if (j == 2) {
 						curPrice = tdEl.text();
+						logger.debug("curPrice:" + curPrice);
 						svo.setCurPrice(curPrice);
 					}
 					j++;
 				}
 				stockList.add(svo);
+				i++;
 			}
 		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(ComListedOnTheUS_KrInvestingCom_V1.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 		return stockList;
 	}
@@ -294,7 +311,8 @@ public class ComListedOnTheUS_TipranksCom extends News {
 //			String tableHtml = tableElmt.outerHtml();
 //			logger.debug(tableHtml);
 		doc = Jsoup.parse(sb.toString());
-		fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_" + gubun + "_List_.html";
+		fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_" + gubun
+				+ "_List_.html";
 		logger.debug("fileName :" + fileName);
 		FileUtil.fileWrite(fileName, doc.html());
 		logger.debug("file write finished");
@@ -306,13 +324,11 @@ public class ComListedOnTheUS_TipranksCom extends News {
 		try {
 			List<Map> nyseList = new ArrayList<Map>();
 			int maxResultsPerPage = 10;
-			NewAuthPayload authPayload = new NewAuthPayload("EQUITY", 1, "NORMALIZED_TICKER", "ASC", maxResultsPerPage, "");
+			NewAuthPayload authPayload = new NewAuthPayload("EQUITY", 1, "NORMALIZED_TICKER", "ASC", maxResultsPerPage,
+					"");
 			for (int pageNo = 1; pageNo <= 1; pageNo++) {
 				authPayload.setPageNumber(pageNo);
-				Response response1 = given()
-					.body(authPayload)
-					.contentType("application/json")
-					.post(SERVER_URI);
+				Response response1 = given().body(authPayload).contentType("application/json").post(SERVER_URI);
 				String body = response1.getBody().print();
 //				logger.debug("body1:" + body);
 
@@ -375,12 +391,15 @@ public class ComListedOnTheUS_TipranksCom extends News {
 					if (spanEls.size() > 0) {
 						spanEl = doc.select(".globalStock #container .schChartTitle .detail li.per span").get(0);
 						String incOrDec = spanEl.attr("class");
-						varyRatio = doc.select(".globalStock #container .schChartTitle .detail li.per span > span").get(0).text();
+						varyRatio = doc.select(".globalStock #container .schChartTitle .detail li.per span > span")
+								.get(0).text();
 						varyRatio = varyRatio.replace("(", "");
 						varyRatio = varyRatio.replace(")", "");
 						varyRatio = StringUtils.defaultString(varyRatio);
 						svo.setVaryRatio(varyRatio);
-						Element varys = doc.select(".globalStock #container .schChartTitle .detail li.per span." + incOrDec).get(0);
+						Element varys = doc
+								.select(".globalStock #container .schChartTitle .detail li.per span." + incOrDec)
+								.get(0);
 						varys.select("span").remove();
 						varyPrice = StringUtils.defaultString(varys.text());
 						svo.setVaryPrice(varyPrice);
@@ -461,29 +480,35 @@ public class ComListedOnTheUS_TipranksCom extends News {
 				StockVO svo = stockList.get(i);
 				sb.append("<tr>\r\n");
 				sb.append("	<td>" + (i + 1) + "</td>\r\n");
-				sb.append("	<td><a href='" + svo.getUrl() + "' target='_new'>" + svo.getSymbolExchangeTicker() + "</a></td>\r\n");
-				sb.append("	<td><a href='https://www.google.com/search?q=" + svo.getSymbolExchangeTicker() + " " + svo.getInstrumentName() + " 주가&oq=" + svo.getSymbolExchangeTicker() + " " + svo.getInstrumentName() + " 주가" + "' target='_new'>" + svo.getInstrumentName() + "</a></td>\r\n");
+				sb.append("	<td><a href='" + svo.getUrl() + "' target='_new'>" + svo.getSymbolExchangeTicker()
+						+ "</a></td>\r\n");
+				sb.append("	<td><a href='https://www.google.com/search?q=" + svo.getSymbolExchangeTicker() + " "
+						+ svo.getInstrumentName() + " 주가&oq=" + svo.getSymbolExchangeTicker() + " "
+						+ svo.getInstrumentName() + " 주가" + "' target='_new'>" + svo.getInstrumentName()
+						+ "</a></td>\r\n");
 				sb.append("	<td>" + svo.getCurPrice() + "</td>\r\n");
 				sb.append("	<td>" + StringUtils.defaultString(svo.getVaryPrice()) + "</td>\r\n");
 				sb.append("	<td>" + StringUtils.defaultString(svo.getVaryRatio()) + "</td>\r\n");
 				sb.append("	<td>" + StringUtils.defaultString(svo.getDividends()) + "</td>\r\n");
 				sb.append("	<td>" + StringUtils.defaultString(svo.getDividendRate(), "0") + "%</td>\r\n");
 				sb.append("</tr>\r\n");
-				//1개마다 파일로 저장한다.
+				// 1개마다 파일로 저장한다.
 				remainCount = (i + 1) % maxResultsPerPage;
 				if (remainCount == 0) {
 					thousandCount++;
 					sb.append("</table>\r\n");
-					fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + (thousandCount * maxResultsPerPage) + ".html";
+					fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
+							+ (thousandCount * maxResultsPerPage) + ".html";
 					logger.debug("fileName :" + fileName);
 
 					FileUtil.fileWrite(fileName, sb.toString());
 					sb = getNewStringBufferWithHeader();
 				}
 			}
-			//1000개로 몇개 쓰고 남은 것은 여기에서 파일로 저장한다.
+			// 1000개로 몇개 쓰고 남은 것은 여기에서 파일로 저장한다.
 			sb.append("</table>\r\n");
-			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + remainCount + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
+					+ remainCount + ".html";
 			FileUtil.fileWrite(fileName, sb.toString());
 			logger.debug("downloadTest1 finished");
 
@@ -509,14 +534,12 @@ public class ComListedOnTheUS_TipranksCom extends News {
 			List<Map> nyseList = new ArrayList<Map>();
 //			int maxResultsPerPage = 100;
 			int maxResultsPerPage = 1000;
-			NewAuthPayload authPayload = new NewAuthPayload("EQUITY", 1, "NORMALIZED_TICKER", "ASC", maxResultsPerPage, "");
+			NewAuthPayload authPayload = new NewAuthPayload("EQUITY", 1, "NORMALIZED_TICKER", "ASC", maxResultsPerPage,
+					"");
 //			for (int pageNo = 1; pageNo <= 64; pageNo++) {
 			for (int pageNo = 1; pageNo <= 7; pageNo++) {
 				authPayload.setPageNumber(pageNo);
-				Response response1 = given()
-					.body(authPayload)
-					.contentType("application/json")
-					.post(SERVER_URI);
+				Response response1 = given().body(authPayload).contentType("application/json").post(SERVER_URI);
 				String body = response1.getBody().print();
 //				logger.debug("body1:" + body);
 
@@ -579,12 +602,15 @@ public class ComListedOnTheUS_TipranksCom extends News {
 					if (spanEls.size() > 0) {
 						spanEl = doc.select(".globalStock #container .schChartTitle .detail li.per span").get(0);
 						String incOrDec = spanEl.attr("class");
-						varyRatio = doc.select(".globalStock #container .schChartTitle .detail li.per span > span").get(0).text();
+						varyRatio = doc.select(".globalStock #container .schChartTitle .detail li.per span > span")
+								.get(0).text();
 						varyRatio = varyRatio.replace("(", "");
 						varyRatio = varyRatio.replace(")", "");
 						varyRatio = StringUtils.defaultString(varyRatio);
 						svo.setVaryRatio(varyRatio);
-						Element varys = doc.select(".globalStock #container .schChartTitle .detail li.per span." + incOrDec).get(0);
+						Element varys = doc
+								.select(".globalStock #container .schChartTitle .detail li.per span." + incOrDec)
+								.get(0);
 						varys.select("span").remove();
 						varyPrice = StringUtils.defaultString(varys.text());
 						svo.setVaryPrice(varyPrice);
@@ -610,6 +636,7 @@ public class ComListedOnTheUS_TipranksCom extends News {
 								logger.debug("volume:" + totalNumberOfStock);
 							} else if (title.equals("주당배당금")) {
 								dividends = th.parent().child(1).text();
+								dividends = dividends.replace("달러", "$");
 								svo.setDividends(StringUtils.defaultString(dividends));
 								logger.debug("dividends:" + dividends);
 							} else if (title.equals("배당수익률")) {
@@ -632,10 +659,12 @@ public class ComListedOnTheUS_TipranksCom extends News {
 								logger.debug("ROE:" + roe);
 							} else if (title.equals("주당순이익 EPS")) {
 								eps = th.parent().child(1).text();
+								eps = eps.replace("달러", "$");
 								svo.setEps(eps);
 								logger.debug("EPS:" + eps);
 							} else if (title.equals("주당순자산 BPS")) {
 								bps = th.parent().child(1).text();
+								bps = bps.replace("달러", "$");
 								svo.setBps(bps);
 								logger.debug("BPS:" + bps);
 							}
@@ -653,27 +682,32 @@ public class ComListedOnTheUS_TipranksCom extends News {
 				sb.append("<tr>\r\n");
 				sb.append("	<td>" + (i + 1) + "</td>\r\n");
 				sb.append("	<td><a href='" + url + "' target='_new'>" + symbolExchangeTicker + "</a></td>\r\n");
-				sb.append("	<td><a href='https://www.google.com/search?q=" + svo.getSymbolExchangeTicker() + " " + svo.getInstrumentName() + " 주가&oq=" + svo.getSymbolExchangeTicker() + " " + svo.getInstrumentName() + " 주가" + "' target='_new'>" + svo.getInstrumentName() + "</a></td>\r\n");
+				sb.append("	<td><a href='https://www.google.com/search?q=" + svo.getSymbolExchangeTicker() + " "
+						+ svo.getInstrumentName() + " 주가&oq=" + svo.getSymbolExchangeTicker() + " "
+						+ svo.getInstrumentName() + " 주가" + "' target='_new'>" + svo.getInstrumentName()
+						+ "</a></td>\r\n");
 				sb.append("	<td>" + curPrice + "</td>\r\n");
 				sb.append("	<td>" + varyPrice + "</td>\r\n");
 				sb.append("	<td>" + varyRatio + "</td>\r\n");
 				sb.append("	<td>" + dividends + "</td>\r\n");
 				sb.append("	<td>" + dividendRate + "</td>\r\n");
 				sb.append("</tr>\r\n");
-				//1000개마다 파일로 저장한다.
+				// 1000개마다 파일로 저장한다.
 				remainCount = (i + 1) % maxResultsPerPage;
 				if (remainCount == 0) {
 					thousandCount++;
 					sb.append("</table>\r\n");
-					fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + (thousandCount * 1000) + ".html";
+					fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
+							+ (thousandCount * 1000) + ".html";
 					FileUtil.fileWrite(fileName, sb.toString());
 					sb = getNewStringBufferWithHeader();
 				}
 				stockList.add(svo);
 			}
-			//1000개로 몇개 쓰고 남은 것은 여기에서 파일로 저장한다.
+			// 1000개로 몇개 쓰고 남은 것은 여기에서 파일로 저장한다.
 			sb.append("</table>\r\n");
-			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE" + "_" + "List" + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE" + "_"
+					+ "List" + ".html";
 			FileUtil.fileWrite(fileName, sb.toString());
 			logger.debug("downloadTest1 finished");
 
@@ -699,14 +733,12 @@ public class ComListedOnTheUS_TipranksCom extends News {
 			List<Map> nyseList = new ArrayList<Map>();
 //			int maxResultsPerPage = 100;
 			int maxResultsPerPage = 1000;
-			NewAuthPayload authPayload = new NewAuthPayload("EQUITY", 1, "NORMALIZED_TICKER", "ASC", maxResultsPerPage, "");
+			NewAuthPayload authPayload = new NewAuthPayload("EQUITY", 1, "NORMALIZED_TICKER", "ASC", maxResultsPerPage,
+					"");
 //			for (int pageNo = 1; pageNo <= 64; pageNo++) {
 			for (int pageNo = 1; pageNo <= 7; pageNo++) {
 				authPayload.setPageNumber(pageNo);
-				Response response1 = given()
-					.body(authPayload)
-					.contentType("application/json")
-					.post(SERVER_URI);
+				Response response1 = given().body(authPayload).contentType("application/json").post(SERVER_URI);
 				String body = response1.getBody().print();
 //				logger.debug("body1:" + body);
 
@@ -771,12 +803,15 @@ public class ComListedOnTheUS_TipranksCom extends News {
 					if (spanEls.size() > 0) {
 						spanEl = doc.select(".globalStock #container .schChartTitle .detail li.per span").get(0);
 						String incOrDec = spanEl.attr("class");
-						varyRatio = doc.select(".globalStock #container .schChartTitle .detail li.per span > span").get(0).text();
+						varyRatio = doc.select(".globalStock #container .schChartTitle .detail li.per span > span")
+								.get(0).text();
 						varyRatio = varyRatio.replace("(", "");
 						varyRatio = varyRatio.replace(")", "");
 						varyRatio = StringUtils.defaultString(varyRatio);
 						svo.setVaryRatio(varyRatio);
-						Element varys = doc.select(".globalStock #container .schChartTitle .detail li.per span." + incOrDec).get(0);
+						Element varys = doc
+								.select(".globalStock #container .schChartTitle .detail li.per span." + incOrDec)
+								.get(0);
 						varys.select("span").remove();
 						varyPrice = StringUtils.defaultString(varys.text());
 						svo.setVaryPrice(varyPrice);
@@ -858,29 +893,35 @@ public class ComListedOnTheUS_TipranksCom extends News {
 				StockVO svo = stockList.get(i);
 				sb.append("<tr>\r\n");
 				sb.append("	<td>" + (i + 1) + "</td>\r\n");
-				sb.append("	<td><a href='" + svo.getUrl() + "' target='_new'>" + svo.getSymbolExchangeTicker() + "</a></td>\r\n");
-				sb.append("	<td><a href='https://www.google.com/search?q=" + svo.getSymbolExchangeTicker() + " " + svo.getInstrumentName() + " 주가&oq=" + svo.getSymbolExchangeTicker() + " " + svo.getInstrumentName() + " 주가" + "' target='_new'>" + svo.getInstrumentName() + "</a></td>\r\n");
+				sb.append("	<td><a href='" + svo.getUrl() + "' target='_new'>" + svo.getSymbolExchangeTicker()
+						+ "</a></td>\r\n");
+				sb.append("	<td><a href='https://www.google.com/search?q=" + svo.getSymbolExchangeTicker() + " "
+						+ svo.getInstrumentName() + " 주가&oq=" + svo.getSymbolExchangeTicker() + " "
+						+ svo.getInstrumentName() + " 주가" + "' target='_new'>" + svo.getInstrumentName()
+						+ "</a></td>\r\n");
 				sb.append("	<td>" + svo.getCurPrice() + "</td>\r\n");
 				sb.append("	<td>" + StringUtils.defaultString(svo.getVaryPrice()) + "</td>\r\n");
 				sb.append("	<td>" + StringUtils.defaultString(svo.getVaryRatio()) + "</td>\r\n");
 				sb.append("	<td>" + StringUtils.defaultString(svo.getDividends()) + "</td>\r\n");
 				sb.append("	<td>" + StringUtils.defaultString(svo.getDividendRate(), "0") + "%</td>\r\n");
 				sb.append("</tr>\r\n");
-				//1000개마다 파일로 저장한다.
+				// 1000개마다 파일로 저장한다.
 				remainCount = (i + 1) % maxResultsPerPage;
 				if (remainCount == 0) {
 					thousandCount++;
 					sb.append("</table>\r\n");
-					fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + (thousandCount * maxResultsPerPage) + ".html";
+					fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
+							+ (thousandCount * maxResultsPerPage) + ".html";
 					logger.debug("fileName :" + fileName);
 
 					FileUtil.fileWrite(fileName, sb.toString());
 					sb = getNewStringBufferWithHeader();
 				}
 			}
-			//1000개로 몇개 쓰고 남은 것은 여기에서 파일로 저장한다.
+			// 1000개로 몇개 쓰고 남은 것은 여기에서 파일로 저장한다.
 			sb.append("</table>\r\n");
-			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + remainCount + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
+					+ remainCount + ".html";
 			FileUtil.fileWrite(fileName, sb.toString());
 			logger.debug("downloadTest1 finished");
 

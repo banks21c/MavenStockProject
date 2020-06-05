@@ -47,7 +47,7 @@ public class ComListedOnTheUS_KrInvestingCom_V2 extends News {
 	// 다우존스
 	String dowJones = "https://kr.investing.com/equities/StocksFilter?noconstruct=1&smlID=595&sid=&tabletype=price&index_id=169";
 
-	private static final Logger logger = LoggerFactory.getLogger(CompaniesListedOnTheNYSE_V2.class);
+	private static final Logger logger = LoggerFactory.getLogger(ComListedOnTheUS_KrInvestingCom_V2.class);
 	final static String userHome = System.getProperty("user.home");
 	static String strCurrentDate = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.ss.SSS", Locale.KOREAN).format(new Date());
 	String fileName = "";
@@ -190,8 +190,7 @@ public class ComListedOnTheUS_KrInvestingCom_V2 extends News {
 			logger.debug("fileName :" + fileName);
 			FileUtil.fileWrite(fileName, doc.html());
 		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(ComListedOnTheUS_KrInvestingCom_V1.class.getName()).log(Level.SEVERE,
-					null, ex);
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 		return sb;
 	}
@@ -274,8 +273,7 @@ public class ComListedOnTheUS_KrInvestingCom_V2 extends News {
 				i++;
 			}
 		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(ComListedOnTheUS_KrInvestingCom_V1.class.getName()).log(Level.SEVERE,
-					null, ex);
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 		return stockList;
 	}
