@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.coupang.partners;
 
 import java.awt.Desktop;
@@ -29,9 +24,10 @@ import org.jsoup.select.Elements;
  *
  * @author banks
  */
-public class CoupangPartnersGoldBox extends javax.swing.JFrame {
+public class CoupangPartnersGoldBoxJFrame extends javax.swing.JFrame {
 
-	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersGoldBox.class);
+	private static final long serialVersionUID = 8369567087448497477L;
+	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersGoldBoxJFrame.class);
 	final static String userHome = System.getProperty("user.home");
 	String strUrl = "https://partners.coupang.com/#affiliate/ws/best/goldbox";
 	private String strShortenedUrl = "https://coupa.ng/bDrZz6";
@@ -62,7 +58,7 @@ public class CoupangPartnersGoldBox extends javax.swing.JFrame {
 	/**
 	 * Creates new form NewJFrame1
 	 */
-	public CoupangPartnersGoldBox() {
+	public CoupangPartnersGoldBoxJFrame() {
 		initComponents();
 		initList();
 	}
@@ -102,7 +98,7 @@ public class CoupangPartnersGoldBox extends javax.swing.JFrame {
 			docHtml = docHtml.replace("\"/", "\"" + strProtocol + "://" + strHost + "/");
 //			newsTextArea.setText(docHtml);
 		} catch (IOException ex) {
-			Logger.getLogger(CoupangPartnersGoldBox.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(CoupangPartnersGoldBoxJFrame.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -414,7 +410,7 @@ public class CoupangPartnersGoldBox extends javax.swing.JFrame {
 				}
 			}
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(CoupangPartnersGoldBox.class.getName()).log(java.util.logging.Level.SEVERE, null,
+			java.util.logging.Logger.getLogger(CoupangPartnersGoldBoxJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null,
 				ex);
 		}
 		// </editor-fold>
@@ -695,7 +691,7 @@ public class CoupangPartnersGoldBox extends javax.swing.JFrame {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new CoupangPartnersGoldBox().setVisible(true);
+				new CoupangPartnersGoldBoxJFrame().setVisible(true);
 			}
 		});
 	}
