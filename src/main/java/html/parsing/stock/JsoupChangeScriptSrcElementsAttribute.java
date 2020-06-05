@@ -21,11 +21,9 @@ public class JsoupChangeScriptSrcElementsAttribute {
 
         for (Element script : scripts) {
             System.out.println("script ===> " + script);
-            String strScriptType = script.attr("type");
             String strScriptSrc = script.attr("src");
-            System.out.println("strScriptType ===> " + strScriptType);
             System.out.println("strScriptSrc ===> " + strScriptSrc);
-            if (strScriptType != null && (strScriptType.equals("text/javascript") && !strScriptSrc.equals(""))) {
+            if (!strScriptSrc.equals("")) {
                 String downloadLink = "";
                 if (strScriptSrc.startsWith("//")) {
                 	script.attr("src", protocol+":"+ strScriptSrc);
@@ -53,6 +51,7 @@ public class JsoupChangeScriptSrcElementsAttribute {
                 }
                 System.out.println("downloadLink:" + downloadLink);
                 if (!downloadLink.equals("")) {
+                	//downloadLink에 있는 파일을 다운로드합니다.
                     //FileDownloader.downloadFile2(downloadLink);
                 }
             }
