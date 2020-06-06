@@ -31,6 +31,7 @@ import org.jsoup.select.Elements;
  */
 public class CoupangPartnersNpRocketFresh extends javax.swing.JFrame {
 
+	private static final long serialVersionUID = -5677954177196698917L;
 	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersNpRocketFresh.class);
 	final static String userHome = System.getProperty("user.home");
 	private String strUrl = "https://www.coupang.com/np/categories/393760";
