@@ -6,7 +6,6 @@
 package com.coupang.partners;
 
 import java.awt.Desktop;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URI;
 import org.jsoup.Jsoup;
@@ -46,9 +45,11 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 	final static String userHome = System.getProperty("user.home");
 	private String strUrl = "https://www.coupang.com/np/goldbox";
 	private String strShortenedUrl = "https://coupa.ng/bDr4Tx";
-
-	String productListIdOrClassName = ".promotion_list";
-	String productItemIdOrClassName = ".highlight_product";
+	
+	String strTitle = "로켓배송";
+	String productDivIdOrClassName = "div.newcx_list";
+	String productListIdOrClassName = "ul.promotion_list";
+	String productItemIdOrClassName = "li.highlight_product";
 
 //	String ulOrDiv = "ul";
 //	String liOrDiv = "li";
@@ -56,7 +57,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 	String liOrDiv = "";
 	String boxWidthStyle = "width:214px;";
 	String boxHeightStyle = "height:450px;";
-
+	
 	String imgWidthStyle = "width:212px;";
 	String imgHeightStyle = "height:212px;";
 
@@ -69,11 +70,29 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 	String strDate = sdf.format(new Date());
 	SimpleDateFormat sdf0 = new SimpleDateFormat("[yyyy-MM-dd]", Locale.KOREAN);
 	String strYmdBlacket = sdf0.format(new Date());
-
+	
 	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREAN);
 	String strYmdhms = sdf1.format(new Date());
 
-	String fileName;
+	// 쿠팡홈(default)
+	// https://www.coupang.com
+	String strSrc = "1139000";
+	String strSpec = "10799999";
+	String strAddtag = "900";
+	String strCtag = "HOME";// 변동
+	String strLptag = "AF5310383";
+	String strItime = strYmdhms;
+	String strPageType = "HOME";
+	String strPageValue = "HOME";// 변동
+	String strWPcid = "37582846489673457545846";// 변동?
+	String strWRef = "blog.naver.com";
+	String strWTime = strYmdhms;
+	String strRedirect = "landing";
+	String strIsAddedCart = "";
+	
+	String strCategoryName = "";
+	
+	String strFileName;
 	URI uri = null;
 	URL url = null;
 	String strProtocol = null;
@@ -100,8 +119,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 	String rocketDeliveryBannerHtml = "<a href='https://coupa.ng/bDsYSW'> <img src='https://static.coupangcdn.com/ca/cmg_paperboy/image/1565948764070/0819%28%EC%9B%94%29-C0-Left.jpg' alt=''> </a>";
 	// 기획전
 	String exhibitionBannerHtml = "<a href='#'> <img src='http://img1a.coupangcdn.com/image/promotion/promotion_title.png' alt=''> </a>";
-
-	String strTitle = "로켓배송";
+	
 	String topBanner = rocketDeliveryBannerHtml;
 
 	/**
@@ -111,7 +129,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		initComponents();
 		initList();
 	}
-
+	
 	private void initList() {
 		try {
 			url = new URL(strUrl);
@@ -124,7 +142,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-
+	
 	private static void open(URI uri) {
 		if (Desktop.isDesktopSupported()) {
 			try {
@@ -156,31 +174,32 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 jRadioButton2 = new javax.swing.JRadioButton();
                 jRadioButton3 = new javax.swing.JRadioButton();
                 jRadioButton4 = new javax.swing.JRadioButton();
-                jRadioButton14 = new javax.swing.JRadioButton();
                 jRadioButton5 = new javax.swing.JRadioButton();
+                jRadioButton6 = new javax.swing.JRadioButton();
                 jPanel13 = new javax.swing.JPanel();
                 jLabel4 = new javax.swing.JLabel();
-                jRadioButton15 = new javax.swing.JRadioButton();
-                jRadioButton16 = new javax.swing.JRadioButton();
-                jRadioButton17 = new javax.swing.JRadioButton();
-                jRadioButton21 = new javax.swing.JRadioButton();
-                jRadioButton18 = new javax.swing.JRadioButton();
+                jRadioButton7 = new javax.swing.JRadioButton();
+                jRadioButton8 = new javax.swing.JRadioButton();
+                jRadioButton22 = new javax.swing.JRadioButton();
+                jRadioButton9 = new javax.swing.JRadioButton();
+                jRadioButton10 = new javax.swing.JRadioButton();
+                jRadioButton11 = new javax.swing.JRadioButton();
                 jTextField3 = new javax.swing.JTextField();
                 jPanel8 = new javax.swing.JPanel();
                 jLabel1 = new javax.swing.JLabel();
-                jRadioButton6 = new javax.swing.JRadioButton();
-                jRadioButton7 = new javax.swing.JRadioButton();
-                jRadioButton8 = new javax.swing.JRadioButton();
-                jRadioButton19 = new javax.swing.JRadioButton();
-                jRadioButton9 = new javax.swing.JRadioButton();
+                jRadioButton12 = new javax.swing.JRadioButton();
+                jRadioButton13 = new javax.swing.JRadioButton();
+                jRadioButton14 = new javax.swing.JRadioButton();
+                jRadioButton15 = new javax.swing.JRadioButton();
+                jRadioButton16 = new javax.swing.JRadioButton();
                 jTextField1 = new javax.swing.JTextField();
                 jPanel10 = new javax.swing.JPanel();
                 jLabel2 = new javax.swing.JLabel();
-                jRadioButton10 = new javax.swing.JRadioButton();
-                jRadioButton11 = new javax.swing.JRadioButton();
-                jRadioButton12 = new javax.swing.JRadioButton();
+                jRadioButton17 = new javax.swing.JRadioButton();
+                jRadioButton18 = new javax.swing.JRadioButton();
+                jRadioButton19 = new javax.swing.JRadioButton();
                 jRadioButton20 = new javax.swing.JRadioButton();
-                jRadioButton13 = new javax.swing.JRadioButton();
+                jRadioButton21 = new javax.swing.JRadioButton();
                 jTextField2 = new javax.swing.JTextField();
                 jPanel5 = new javax.swing.JPanel();
                 jLabel3 = new javax.swing.JLabel();
@@ -199,16 +218,16 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 jSplitPane3 = new javax.swing.JSplitPane();
                 jSplitPane4 = new javax.swing.JSplitPane();
                 jPanel6 = new javax.swing.JPanel();
-                jButton2 = new javax.swing.JButton();
+                jButton3 = new javax.swing.JButton();
                 jPanel11 = new javax.swing.JPanel();
                 jButton4 = new javax.swing.JButton();
                 jPanel12 = new javax.swing.JPanel();
-                jButton3 = new javax.swing.JButton();
+                jButton2 = new javax.swing.JButton();
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
                 setTitle("웹페이지 추출");
                 setMinimumSize(new java.awt.Dimension(800, 400));
-                setPreferredSize(new java.awt.Dimension(688, 300));
+                setPreferredSize(new java.awt.Dimension(888, 300));
                 setSize(new java.awt.Dimension(1000, 400));
 
                 jPanel9.setLayout(new java.awt.GridLayout(5, 1));
@@ -252,23 +271,23 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 });
                 jPanel7.add(jRadioButton4);
 
-                buttonGroup1.add(jRadioButton14);
-                jRadioButton14.setText("정기배송");
-                jRadioButton14.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton14ActionPerformed(evt);
-                        }
-                });
-                jPanel7.add(jRadioButton14);
-
                 buttonGroup1.add(jRadioButton5);
-                jRadioButton5.setText("기획전");
+                jRadioButton5.setText("정기배송");
                 jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 jRadioButton5ActionPerformed(evt);
                         }
                 });
                 jPanel7.add(jRadioButton5);
+
+                buttonGroup1.add(jRadioButton6);
+                jRadioButton6.setText("기획전");
+                jRadioButton6.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jRadioButton6ActionPerformed(evt);
+                        }
+                });
+                jPanel7.add(jRadioButton6);
 
                 jPanel9.add(jPanel7);
 
@@ -277,46 +296,60 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 jLabel4.setText("div id/class");
                 jPanel13.add(jLabel4);
 
-                buttonGroup4.add(jRadioButton15);
-                jRadioButton15.setSelected(true);
-                jRadioButton15.setText("div.newcx_list");
-                jRadioButton15.addActionListener(new java.awt.event.ActionListener() {
+                buttonGroup2.add(jRadioButton7);
+                jRadioButton7.setSelected(true);
+                jRadioButton7.setText("div.newcx_list");
+                jRadioButton7.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton15ActionPerformed(evt);
+                                jRadioButton7ActionPerformed(evt);
                         }
                 });
-                jPanel13.add(jRadioButton15);
+                jPanel13.add(jRadioButton7);
 
-                buttonGroup4.add(jRadioButton16);
-                jRadioButton16.setText("div#contents");
-                jRadioButton16.addActionListener(new java.awt.event.ActionListener() {
+                buttonGroup2.add(jRadioButton8);
+                jRadioButton8.setText("div#contents");
+                jRadioButton8.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton16ActionPerformed(evt);
+                                jRadioButton8ActionPerformed(evt);
                         }
                 });
-                jPanel13.add(jRadioButton16);
+                jPanel13.add(jRadioButton8);
 
-                buttonGroup4.add(jRadioButton17);
-                jRadioButton17.setText("div.exhibitions_list");
-                jRadioButton17.addActionListener(new java.awt.event.ActionListener() {
+                buttonGroup2.add(jRadioButton22);
+                jRadioButton22.setText("div#products");
+                jRadioButton22.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton17ActionPerformed(evt);
+                                jRadioButton22ActionPerformed(evt);
                         }
                 });
-                jPanel13.add(jRadioButton17);
+                jPanel13.add(jRadioButton22);
 
-                buttonGroup4.add(jRadioButton21);
-                jRadioButton21.setText("div");
-                jPanel13.add(jRadioButton21);
-
-                buttonGroup4.add(jRadioButton18);
-                jRadioButton18.setText("기타");
-                jRadioButton18.addActionListener(new java.awt.event.ActionListener() {
+                buttonGroup2.add(jRadioButton9);
+                jRadioButton9.setText("div.exhibitions_list");
+                jRadioButton9.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton18ActionPerformed(evt);
+                                jRadioButton9ActionPerformed(evt);
                         }
                 });
-                jPanel13.add(jRadioButton18);
+                jPanel13.add(jRadioButton9);
+
+                buttonGroup2.add(jRadioButton10);
+                jRadioButton10.setText("div");
+                jRadioButton10.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jRadioButton10ActionPerformed(evt);
+                        }
+                });
+                jPanel13.add(jRadioButton10);
+
+                buttonGroup2.add(jRadioButton11);
+                jRadioButton11.setText("기타");
+                jRadioButton11.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jRadioButton11ActionPerformed(evt);
+                        }
+                });
+                jPanel13.add(jRadioButton11);
 
                 jTextField3.setPreferredSize(new java.awt.Dimension(200, 21));
                 jPanel13.add(jTextField3);
@@ -328,46 +361,51 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 jLabel1.setText("ul id/class");
                 jPanel8.add(jLabel1);
 
-                buttonGroup2.add(jRadioButton6);
-                jRadioButton6.setText("ul.promotion_list");
-                jRadioButton6.addActionListener(new java.awt.event.ActionListener() {
+                buttonGroup3.add(jRadioButton12);
+                jRadioButton12.setText("ul.promotion_list");
+                jRadioButton12.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton6ActionPerformed(evt);
+                                jRadioButton12ActionPerformed(evt);
                         }
                 });
-                jPanel8.add(jRadioButton6);
+                jPanel8.add(jRadioButton12);
 
-                buttonGroup2.add(jRadioButton7);
-                jRadioButton7.setSelected(true);
-                jRadioButton7.setText("ul#productList");
-                jRadioButton7.addActionListener(new java.awt.event.ActionListener() {
+                buttonGroup3.add(jRadioButton13);
+                jRadioButton13.setSelected(true);
+                jRadioButton13.setText("ul#productList");
+                jRadioButton13.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton7ActionPerformed(evt);
+                                jRadioButton13ActionPerformed(evt);
                         }
                 });
-                jPanel8.add(jRadioButton7);
+                jPanel8.add(jRadioButton13);
 
-                buttonGroup2.add(jRadioButton8);
-                jRadioButton8.setText("ul#products");
-                jRadioButton8.addActionListener(new java.awt.event.ActionListener() {
+                buttonGroup3.add(jRadioButton14);
+                jRadioButton14.setText("ul#products");
+                jRadioButton14.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton8ActionPerformed(evt);
+                                jRadioButton14ActionPerformed(evt);
                         }
                 });
-                jPanel8.add(jRadioButton8);
+                jPanel8.add(jRadioButton14);
 
-                buttonGroup2.add(jRadioButton19);
-                jRadioButton19.setText("ul");
-                jPanel8.add(jRadioButton19);
-
-                buttonGroup2.add(jRadioButton9);
-                jRadioButton9.setText("기타");
-                jRadioButton9.addActionListener(new java.awt.event.ActionListener() {
+                buttonGroup3.add(jRadioButton15);
+                jRadioButton15.setText("ul");
+                jRadioButton15.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton9ActionPerformed(evt);
+                                jRadioButton15ActionPerformed(evt);
                         }
                 });
-                jPanel8.add(jRadioButton9);
+                jPanel8.add(jRadioButton15);
+
+                buttonGroup3.add(jRadioButton16);
+                jRadioButton16.setText("기타");
+                jRadioButton16.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jRadioButton16ActionPerformed(evt);
+                        }
+                });
+                jPanel8.add(jRadioButton16);
 
                 jTextField1.setPreferredSize(new java.awt.Dimension(200, 21));
                 jPanel8.add(jTextField1);
@@ -379,46 +417,51 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 jLabel2.setText("li id/class");
                 jPanel10.add(jLabel2);
 
-                buttonGroup3.add(jRadioButton10);
-                jRadioButton10.setText("li.highlight_product");
-                jRadioButton10.addActionListener(new java.awt.event.ActionListener() {
+                buttonGroup4.add(jRadioButton17);
+                jRadioButton17.setText("li.highlight_product");
+                jRadioButton17.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton10ActionPerformed(evt);
+                                jRadioButton17ActionPerformed(evt);
                         }
                 });
-                jPanel10.add(jRadioButton10);
+                jPanel10.add(jRadioButton17);
 
-                buttonGroup3.add(jRadioButton11);
-                jRadioButton11.setText("li.search_product");
-                jRadioButton11.addActionListener(new java.awt.event.ActionListener() {
+                buttonGroup4.add(jRadioButton18);
+                jRadioButton18.setText("li.search_product");
+                jRadioButton18.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton11ActionPerformed(evt);
+                                jRadioButton18ActionPerformed(evt);
                         }
                 });
-                jPanel10.add(jRadioButton11);
+                jPanel10.add(jRadioButton18);
 
-                buttonGroup3.add(jRadioButton12);
-                jRadioButton12.setSelected(true);
-                jRadioButton12.setText("li.baby_product");
-                jRadioButton12.addActionListener(new java.awt.event.ActionListener() {
+                buttonGroup4.add(jRadioButton19);
+                jRadioButton19.setSelected(true);
+                jRadioButton19.setText("li.baby_product");
+                jRadioButton19.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton12ActionPerformed(evt);
+                                jRadioButton19ActionPerformed(evt);
                         }
                 });
-                jPanel10.add(jRadioButton12);
+                jPanel10.add(jRadioButton19);
 
-                buttonGroup3.add(jRadioButton20);
+                buttonGroup4.add(jRadioButton20);
                 jRadioButton20.setText("li");
+                jRadioButton20.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jRadioButton20ActionPerformed(evt);
+                        }
+                });
                 jPanel10.add(jRadioButton20);
 
-                buttonGroup3.add(jRadioButton13);
-                jRadioButton13.setText("기타");
-                jRadioButton13.addActionListener(new java.awt.event.ActionListener() {
+                buttonGroup4.add(jRadioButton21);
+                jRadioButton21.setText("기타");
+                jRadioButton21.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jRadioButton13ActionPerformed(evt);
+                                jRadioButton21ActionPerformed(evt);
                         }
                 });
-                jPanel10.add(jRadioButton13);
+                jPanel10.add(jRadioButton21);
 
                 jTextField2.setPreferredSize(new java.awt.Dimension(200, 21));
                 jPanel10.add(jTextField2);
@@ -427,7 +470,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 
                 jPanel5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-                jLabel3.setText(".promotion_list/.highlight_product, #productList/.baby_product, #products/.baby_product");
+                jLabel3.setText("로켓 #productList/.baby_product, 골드박스 .promotion_list/.highlight_product, 기획전 #products/.baby_product, 검색 #productList/.search_product");
                 jPanel5.add(jLabel3);
 
                 jPanel9.add(jPanel5);
@@ -449,11 +492,6 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 jSplitPane2.setDividerLocation(150);
 
                 jButton1.setText("변환,추출,저장 =>");
-                jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jButton1MouseClicked(evt);
-                        }
-                });
                 jButton1.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 jButton1ActionPerformed(evt);
@@ -489,13 +527,13 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 
                 jSplitPane4.setDividerLocation(150);
 
-                jButton2.setText("저장");
-                jButton2.addActionListener(new java.awt.event.ActionListener() {
+                jButton3.setText("저장");
+                jButton3.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton2ActionPerformed(evt);
+                                jButton3ActionPerformed(evt);
                         }
                 });
-                jPanel6.add(jButton2);
+                jPanel6.add(jButton3);
 
                 jSplitPane4.setLeftComponent(jPanel6);
 
@@ -511,13 +549,13 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 
                 jSplitPane3.setRightComponent(jSplitPane4);
 
-                jButton3.setText("삭제");
-                jButton3.addActionListener(new java.awt.event.ActionListener() {
+                jButton2.setText("삭제");
+                jButton2.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton3ActionPerformed(evt);
+                                jButton2ActionPerformed(evt);
                         }
                 });
-                jPanel12.add(jButton3);
+                jPanel12.add(jButton2);
 
                 jSplitPane3.setLeftComponent(jPanel12);
 
@@ -530,42 +568,176 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 pack();
         }// </editor-fold>//GEN-END:initComponents
 
-        private void jRadioButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton14ActionPerformed
+        private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
 		// TODO add your handling code here:
 		JRadioButton radioButton = (JRadioButton) evt.getSource();
 		String selectedOption = radioButton.getText();
 		strTitle = selectedOption;
 		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+        private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		strTitle = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton2ActionPerformed
+
+        private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		strTitle = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton3ActionPerformed
+
+        private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		strTitle = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton4ActionPerformed
+
+        private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton5ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		strTitle = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton5ActionPerformed
+
+        private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton6ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productDivIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton6ActionPerformed
+
+        private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton7ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productDivIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton7ActionPerformed
+
+        private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton8ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productDivIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton8ActionPerformed
+
+        private void jRadioButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton9ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productDivIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton9ActionPerformed
+
+        private void jRadioButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton10ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productDivIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton10ActionPerformed
+
+        private void jRadioButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton11ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productDivIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton11ActionPerformed
+
+        private void jRadioButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton12ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productListIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton12ActionPerformed
+
+        private void jRadioButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton13ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productListIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton13ActionPerformed
+
+        private void jRadioButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton14ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productListIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
         }//GEN-LAST:event_jRadioButton14ActionPerformed
 
         private void jRadioButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton15ActionPerformed
 		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productListIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
         }//GEN-LAST:event_jRadioButton15ActionPerformed
 
         private void jRadioButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton16ActionPerformed
 		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productListIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
         }//GEN-LAST:event_jRadioButton16ActionPerformed
 
         private void jRadioButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton17ActionPerformed
 		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productItemIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
         }//GEN-LAST:event_jRadioButton17ActionPerformed
 
         private void jRadioButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton18ActionPerformed
 		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productItemIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
         }//GEN-LAST:event_jRadioButton18ActionPerformed
 
-	public String getSelectedButtonText(ButtonGroup buttonGroup) {
-		for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
-			AbstractButton button = buttons.nextElement();
+        private void jRadioButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton19ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productItemIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton19ActionPerformed
 
-			if (button.isSelected()) {
-				return button.getText();
-			}
-		}
-		return null;
-	}
+        private void jRadioButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton20ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productItemIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton20ActionPerformed
 
-	private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jButton1MouseClicked
+        private void jRadioButton21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton21ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productItemIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton21ActionPerformed
+
+        private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+		// TODO add your handling code here:
 //동작안함
 //	    String actionCommand1 = buttonGroup1.getSelection().getActionCommand();
 //	    String actionCommand2 = buttonGroup2.getSelection().getActionCommand();
@@ -574,19 +746,23 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		String actionCommand1 = getSelectedButtonText(buttonGroup1);
 		String actionCommand2 = getSelectedButtonText(buttonGroup2);
 		String actionCommand3 = getSelectedButtonText(buttonGroup3);
-
+		String actionCommand4 = getSelectedButtonText(buttonGroup4);
+		
 		logger.debug("actionCommand1:" + actionCommand1);
 		logger.debug("actionCommand2:" + actionCommand2);
 		logger.debug("actionCommand3:" + actionCommand3);
-
-		productListIdOrClassName = actionCommand2;
-		productItemIdOrClassName = actionCommand3;
-
+		logger.debug("actionCommand4:" + actionCommand4);
+		
+		strTitle = actionCommand1;
+		productDivIdOrClassName = actionCommand2;
+		productListIdOrClassName = actionCommand3;
+		productItemIdOrClassName = actionCommand4;
+		
 		if (strTitle.equals("골드박스")) {
 			ulOrDiv = "div";
 			liOrDiv = "div";
 		}
-
+		
 		String htmlSource = newsTextArea1.getText();
 		Document doc = Jsoup.parse(htmlSource);
 		doc.select("button").remove();
@@ -594,23 +770,23 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		// 네이버 블로그에서 dl,dt,dd,del 태그가 안먹어서 변경한다.
 		Elements dlEls = doc.select("dl");
 		dlEls.tagName("div");
-
+		
 		Elements dtEls = doc.select("dt");
 		dtEls.tagName("div");
-
+		
 		Elements ddEls = doc.select("dd");
 		ddEls.tagName("div");
-
+		
 		Elements delEls = doc.select("del");
 		delEls.attr("style", "text-decoration:line-through;");
 		delEls.tagName("div");
-
+		
 		Elements allElements = doc.getAllElements();
 		for (Element el : allElements) {
 			String strClass = el.attr("class");
 			strClass = strClass.replace("-", "_");
 			el.attr("class", strClass);
-
+			
 			Attributes attrs = el.attributes();
 			List<Attribute> attrList = attrs.asList();
 			for (Attribute attr : attrList) {
@@ -621,11 +797,17 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 				}
 			}
 		}
-
+		
+		doc.select("#product-list-paging").remove();
+		
+		Elements aEls = doc.select("a");
+		// a링크를 풀 경로로 변경
+		setProductItemALink(aEls);
+		
 		Elements imgEls = doc.select("img");
-		// a링크와 img링크를 풀 경로로 변경
-		setProductItemALinkAndImgLink(imgEls);
-
+		// img링크를 풀 경로로 변경
+		setProductItemImgLink(imgEls);
+		
 		logger.debug("strTitle:" + strTitle);
 		if (strTitle.equals("로켓배송")) {
 			// https://www.coupang.com/np/campaigns/82
@@ -634,6 +816,11 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			boxHeightStyle = "height:450px;";
 			imgWidthStyle = "width:212px;";
 			imgHeightStyle = "height:212px;";
+			
+			strAddtag = "700";
+			strCtag = "ROCKETDELIVERY";
+			strPageType = "ROCKETDELIVERY";
+			strPageValue = "ROCKETDELIVERY";
 		} else if (strTitle.equals("로켓프레시")) {
 			// https://www.coupang.com/np/categories/393760
 			topBanner = rocketFreshBannerHtml;
@@ -641,6 +828,11 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			boxHeightStyle = "height:450px;";
 			imgWidthStyle = "width:212px;";
 			imgHeightStyle = "height:212px;";
+			
+			strAddtag = "311";
+			strCtag = "396399";
+			strPageType = "LIST";
+			strPageValue = "396399";
 		} else if (strTitle.equals("로켓직구")) {
 			// https://www.coupang.com/np/coupangglobal
 			topBanner = rocketJikguBannerHtml;
@@ -648,12 +840,20 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			boxHeightStyle = "height:450px;";
 			imgWidthStyle = "width:212px;";
 			imgHeightStyle = "height:212px;";
+			
+			strAddtag = "700";
+			strCtag = "JIKGU";
+			strPageType = "JIKGU";
+			strPageValue = "JIKGU";
 		} else if (strTitle.equals("골드박스")) {
 			// https://www.coupang.com/np/goldbox
 			topBanner = goldboxBannerHtml;
 			boxWidthStyle = "width:214px;";
 			boxHeightStyle = "height:450px;";
 			imgWidthStyle = "width:212px;";
+			
+			strAddtag = "400";
+			strPageType = "PRODUCT";
 			imgHeightStyle = "height:212px;";
 		} else if (strTitle.equals("정기배송")) {
 			// https://www.coupang.com/np/goldbox
@@ -664,45 +864,88 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			imgHeightStyle = "height:212px;";
 		} else if (strTitle.equals("기획전")) {
 			topBanner = exhibitionBannerHtml;
-			boxWidthStyle = "width:312px;";
-			boxHeightStyle = "height:150px;";
-			imgWidthStyle = "width:310px;";
-			imgHeightStyle = "height:148px;";
+			if (productDivIdOrClassName.equals("div#products")) {
+				boxWidthStyle = "width:214px;";
+				boxHeightStyle = "height:450px;";
+				imgWidthStyle = "width:212px;";
+				imgHeightStyle = "height:212px;";
+			} else {//div#exhibitions_list
+				boxWidthStyle = "width:312px;";
+				boxHeightStyle = "height:150px;";
+				imgWidthStyle = "width:310px;";
+				imgHeightStyle = "height:148px;";
+			}
+			
+			strAddtag = "400";
+			strPageType = "PRODUCT";
 		}
 		logger.debug("productListIdOrClassName:" + productListIdOrClassName);
 		logger.debug("productItemIdOrClassName:" + productItemIdOrClassName);
-		Elements categoryNameEls = doc.select(".promotion_category .category_name");
-		String strCategoryNames = "";
-//	    int categoryNameCnt = 0;
-//	    for (Element categoryNameEl : categoryNameEls) {
-//		    String categoryName = categoryNameEl.text();
-//		    //이름에 /가 들어가 있을 경우 파일명을 쓸때 오류가 나므로 &로 변경해준다.
-//		    categoryName = categoryName.replace("/", "&");
-//		    strCategoryNames += categoryName;
-//		    if (categoryNameCnt != categoryNameEls.size() - 1) {
-//			    strCategoryNames += ",";
-//		    }
-//		    categoryNameCnt++;
-//	    }
-		if (categoryNameEls.size() > 0) {
-			strCategoryNames = categoryNameEls.get(0).text();
-		}
 
-		logger.debug("strCategoryNames1:" + strCategoryNames);
-		if (strCategoryNames.equals("")) {
-			strCategoryNames = strTitle;
+		//상품 목록 타이틀 세팅 후 삭제
+		if (strTitle.equals("로켓배송") || strTitle.equals("로켓프레시") || strTitle.equals("로켓직구")) {
+			Elements productListTitleEls = doc.select(".newcx_main_category_header .newcx_product_list_title");
+			if (productListTitleEls.size() > 0) {
+				Elements productTotalCountEls = doc.select(".newcx_main_category_header .newcx_product_list_title .newcx_product_total_count");
+				if (productTotalCountEls.size() > 0) {
+					productTotalCountEls.remove();
+//					doc.select(".newcx_main_category_header .newcx_product_list_title newcx_product_total_count").remove();
+				}
+				strCategoryName = productListTitleEls.get(0).text();
+			}
+			//상품 리스트 타이틀 삭제
+			productListTitleEls.remove();
+		} else if (strTitle.equals("기획전")) {
+			Elements categoryNameEls = doc.select(".promotion_category .category_name");
+			if (categoryNameEls.size() > 0) {
+				strCategoryName = categoryNameEls.get(0).text();
+			}
+			//상품 리스트 타이틀 삭제
+			categoryNameEls.remove();
 		}
-		logger.debug("strCategoryNames2:" + strCategoryNames);
-
+		logger.debug("strCategoryName1:" + strCategoryName);
+		if (strCategoryName.equals("")) {
+			strCategoryName = strTitle;
+		}
+		logger.debug("strCategoryNames2:" + strCategoryName);
+		
+		if (doc.select(".search_query_result p.hit_count").size() > 0) {
+			logger.debug("인기 검색어 결과입니다.");
+			strCategoryName = doc.select(".search_query_result p.hit_count strong").first().text();
+		}
+		
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("<html>\r\n");
 		sb1.append("<body>\r\n");
 		sb1.append(topBanner).append("\r\n");
-		sb1.append("<h1>").append(strYmdBlacket).append(" ").append(strCategoryNames).append("</h1>\r\n");
+		sb1.append("<h1>").append(strYmdBlacket).append(" ").append(strCategoryName).append("</h1>\r\n");
 		sb1.append("<div style='display:inline-block'>\r\n");
 
-//	    Elements listSectionProductListEls = doc.select("div.list_section div#productList");
-		Elements divProductListEls = doc.select("div" + productListIdOrClassName);
+		//캐시백 배지 style
+		Elements rewardCashBadges = doc.select(".reward_cash_badge__inr");
+		if (rewardCashBadges.size() > 0) {
+			rewardCashBadges.attr("style", "box-sizing: border-box;display: inline-block;padding: 0 8px;height: 20px;border-radius: 10px;border: solid 1px #ccc;background-color: #fff;");
+		}
+		doc.select(".reward_cash_badge__inr").attr("style", "box-sizing: border-box;display: inline-block;padding: 0 8px;height: 20px;border-radius: 10px;border: solid 1px #ccc;background-color: #fff;");
+
+		//캐시백 텍스트 style
+		Elements rewardCashTxt = doc.select(".reward_cash_badge .reward_cash_txt");
+		if (rewardCashTxt.size() > 0) {
+			rewardCashTxt.attr("style", "display: inline-block;vertical-align: top;color: #333;font-size: 12px");
+		}
+		doc.select(".reward_cash_badge .reward_cash_txt").attr("style", "display: inline-block;vertical-align: top;color: #333;font-size: 12px");
+
+		//배송 강조 style
+		doc.select(".baby_product .price_area .delivery .emphasis").attr("style", "font-size:14px;letter-spacing:0;color: #00891A;");
+		doc.select(".baby_product .price_area .delivery .emphasis em").tagName("span");
+
+		//단위가 style
+		doc.select(".baby_product .price_area .unit_price").attr("style", "display: inline-block;font-size: 11px;color: #ae0000;margin-top: 2px;margin-bottom: 2px;");
+		//원가,기본가 style
+		doc.select(".baby_product .price_area .base_price").attr("style", "color:#888;text-decoration:line-through;font-size:12px;");
+		
+		logger.debug("productDivIdOrClassName + productListIdOrClassName:" + productDivIdOrClassName + " " + productListIdOrClassName);
+		Elements divProductListEls = doc.select(productDivIdOrClassName + " " + productListIdOrClassName);
 		logger.debug("divProductListEls.size:" + divProductListEls.size());
 		Element divProductListEl = null;
 		Elements promotionCategoryEls = null;
@@ -764,19 +1007,19 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 				discountSubscriptionEls.attr("style",
 					"position: relative;width: 52px;height: 14px;color: #fff;background-color:#ff9900;font-family: apple sd gothic neo,malgun gothic,'맑은 고딕',nanumgothic,'나눔고딕',dotum,'돋움',sans-serif;text-indent: 0;text-align: center;font-size: 10px;line-height: 14px;font-weight: bold;vertical-align: top;");
 				discountSubscriptionEls.tagName("div");
-
+				
 				Element el = new Element("div");
 				el.attr("style",
 					"width: 0;height: 0;border-top: 7px solid transparent;border-right: 12px solid #ff9900;border-bottom: 7px solid transparent;");
-
+				
 				Elements subscriptionBadgeInfoEls = productItemEls.select(".subscription_badge_info");
 				subscriptionBadgeInfoEls.tagName("div");
 				subscriptionBadgeInfoEls.attr("style", "display:flex");
-
+				
 				Elements subscriptionBadgeEls = productItemEls.select(".subscription_badge");
 				subscriptionBadgeEls.attr("style", "float:left;");
 				subscriptionBadgeEls.tagName("div");
-
+				
 				subscriptionBadgeEls.after(el.outerHtml());
 
 				// 세일가격을 빨간색으로 표기
@@ -784,12 +1027,10 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 				saleEls.attr("style",
 					"display: block;font-size: 15px;font-weight:bold;line-height:20px;color: #ae0000;");
 				saleEls.tagName("div");
-
+				
 				Elements unitPriceEls = productItemEls.select(productItemIdOrClassName + " .price-area .unit-price");
 				unitPriceEls.tagName("div");
-
-				// a링크와 img링크를 풀 경로로 변경
-				setProductItemALinkAndImgLink(productItemEls);
+				
 			}
 		} else {
 			// 연관검색어 삭제
@@ -817,6 +1058,23 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			if (productItemEls.size() <= 0) {
 				return;
 			}
+			
+			if (productItemIdOrClassName.equals("li.search_product")) {
+				for (Element productItemEl : productItemEls) {
+					
+					Elements adBadgeEls = productItemEl.select(".search_product .descriptions_inner .ad_badge");
+					if (adBadgeEls.size() > 0) {
+						logger.debug("광고상품 발견");
+						productItemEl.remove();
+					}
+					Elements numberEls = productItemEl.select(".search_product span.number");
+					if (numberEls.size() > 0) {
+						numberEls.attr("style", "overflow: hidden;display: block;position: relative;left: 6px;top: 5px;width: 30px;height: 30px;text-indent: 0.5em;z-index: 2;color:#fff;background-color:#f00;");
+						productItemEl.insertChildren(0, numberEls);
+						
+					}
+				}
+			}
 			productItemEls.attr("style",
 				"list-style:none;" + boxWidthStyle + boxHeightStyle + "float:left;background-color: #fff; box-shadow: none; border: 1px solid #dfe1e5; border-radius: 8px; overflow: hidden; margin: 0 0 6px 0;margin-right:8px;margin-top:1px;");
 
@@ -840,43 +1098,41 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			discountSubscriptionEls.attr("style",
 				"position: relative;width: 52px;height: 14px;color: #fff;background-color:#ff9900;font-family: apple sd gothic neo,malgun gothic,'맑은 고딕',nanumgothic,'나눔고딕',dotum,'돋움',sans-serif;text-indent: 0;text-align: center;font-size: 10px;line-height: 14px;font-weight: bold;vertical-align: top;");
 			discountSubscriptionEls.tagName("div");
-
+			
 			Element el = new Element("div");
 			el.attr("style",
 				"width: 0;height: 0;border-top: 7px solid transparent;border-right: 12px solid #ff9900;border-bottom: 7px solid transparent;");
-
+			
 			Elements subscriptionBadgeInfoEls = productItemEls.select(".subscription_badge_info");
 			subscriptionBadgeInfoEls.tagName("div");
 			subscriptionBadgeInfoEls.attr("style", "display:flex");
-
+			
 			Elements subscriptionBadgeEls = productItemEls.select(".subscription_badge");
 			subscriptionBadgeEls.attr("style", "float:left;");
 			subscriptionBadgeEls.tagName("div");
-
+			
 			subscriptionBadgeEls.after(el.outerHtml());
 
 			// 세일가격을 빨간색으로 표기
 			Elements saleEls1 = productItemEls.select(productItemIdOrClassName + " .price_area .sale");
 			saleEls1.attr("style", "display: block;font-size: 15px;font-weight:bold;line-height:20px;color: #ae0000;");
 			saleEls1.tagName("div");
-
+			
 			Elements saleEls2 = productItemEls.select(productItemIdOrClassName + " .price-area .sale .price-value");
 			saleEls2.attr("style",
 				"font-family: 'Tahoma';display: block;font-size: 15px;font-weight:bold;line-height:20px;color: #ae0000;");
 			saleEls2.tagName("div");
-
+			
 			Elements unitPriceEls = productItemEls.select(productItemIdOrClassName + " .price-area .unit-price");
 			unitPriceEls.tagName("div");
-
-			// a링크와 img링크를 풀 경로로 변경
-			setProductItemALinkAndImgLink(productItemEls);
+			
 		}
-
+		
 		sb1.append(divProductListEls.outerHtml());
 		sb1.append("</div>\r\n");
-
+		
 		sb1.append("<div><br/></div>\r\n");
-
+		
 		sb1.append("<div>\r\n");
 		sb1.append("※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음<br>\r\n");
 		sb1.append("</div>\r\n");
@@ -885,15 +1141,53 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
 		newsTextArea2.setText(sb1.toString());
-		fileName = userHome + File.separator + "documents" + File.separator + strDate + "_" + strCategoryNames
+		strFileName = userHome + File.separator + "documents" + File.separator + strDate + "_" + strCategoryName
 			+ ".html";
 //	    FileUtil.fileWrite(fileName, Jsoup.parse(sb1.toString()).html());
-		FileUtil.fileWrite(fileName, sb1.toString());
-	}// GEN-LAST:event_jButton1MouseClicked
+		FileUtil.fileWrite(strFileName, sb1.toString());
+        }//GEN-LAST:event_jButton1ActionPerformed
 
-	public void setProductItemALinkAndImgLink(Elements els) {
-		for (int j = 0; j < els.size(); j++) {
-			Element el = els.get(j);
+        private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+		// TODO add your handling code here:
+		newsTextArea1.setText("");
+        }//GEN-LAST:event_jButton2ActionPerformed
+
+        private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+		// TODO add your handling code here:
+		String s = newsTextArea2.getText();
+		strFileName = userHome + File.separator + "documents" + File.separator + strDate + "_" + strCategoryName
+			+ ".html";
+//	    FileUtil.fileWrite(fileName, Jsoup.parse(sb1.toString()).html());
+		FileUtil.fileWrite(strFileName, s);
+        }//GEN-LAST:event_jButton3ActionPerformed
+
+        private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+		// TODO add your handling code here:
+		newsTextArea2.setText("");
+        }//GEN-LAST:event_jButton4ActionPerformed
+
+        private void jRadioButton22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton22ActionPerformed
+		// TODO add your handling code here:
+		JRadioButton radioButton = (JRadioButton) evt.getSource();
+		String selectedOption = radioButton.getText();
+		productDivIdOrClassName = selectedOption;
+		System.out.println(selectedOption);
+        }//GEN-LAST:event_jRadioButton22ActionPerformed
+	
+	public String getSelectedButtonText(ButtonGroup buttonGroup) {
+		for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
+			AbstractButton button = buttons.nextElement();
+			
+			if (button.isSelected()) {
+				return button.getText();
+			}
+		}
+		return null;
+	}
+	
+	public void setProductItemALink(Elements itemEls) {
+		for (int j = 0; j < itemEls.size(); j++) {
+			Element el = itemEls.get(j);
 			logger.debug("el:" + el);
 //			if (el.text().equals("")) {
 //				continue;
@@ -904,10 +1198,10 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 				continue;
 			}
 			Element aEl = aEls.first();
-			aEl.attr("target","_new");
+			aEl.attr("target", "_new");
 			aEl.attr("style", "text-decoration:none");
 			String aHref = aEl.attr("href");
-
+			
 			if (aHref.startsWith("//")) {
 				aHref = strProtocol + ":" + aHref;
 				aEl.attr("href", aHref);
@@ -915,7 +1209,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 				aHref = strProtocol + "://" + strHost + aHref;
 				aEl.attr("href", aHref);
 			}
-
+			
 			String productId = "";
 			try {
 				url = new URL(aHref);
@@ -928,246 +1222,92 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			} catch (MalformedURLException ex) {
 				Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 			}
-
-			// 쿠팡홈(default)
-			// https://www.coupang.com
-			String src = "1139000";
-			String spec = "10799999";
-			String addtag = "900";
-			String ctag = "HOME";// SNS
-			String lptag = "AF5310383";
-			String itime = strYmdhms;
-			String pageType = "HOME";// SNS
-			String pageValue = "HOME";// SNS
-			String wPcid = "37582846489673457545846";// 변경됨
-			String wRef = "blog.naver.com";
-			String wTime = strYmdhms;
-			String redirect = "landing";
-			String isAddedCart = "";
-
-			if (strTitle.equals("로켓배송")) {
-				// https://www.coupang.com/np/campaigns/82
-				addtag = "700";
-				ctag = "ROCKETDELIVERY";// SNS
-				pageType = "ROCKETDELIVERY";// SNS
-				pageValue = "ROCKETDELIVERY";// SNS
-
-			} else if (strTitle.equals("로켓프레시")) {
-				// https://www.coupang.com/np/categories/393760
-				addtag = "311";
-				ctag = "396399";// SNS
-				pageType = "LIST";// SNS
-				pageValue = "396399";// SNS
-			} else if (strTitle.equals("로켓직구")) {
-				// https://www.coupang.com/np/coupangglobal
-				addtag = "700";
-				ctag = "JIKGU";// SNS
-				pageType = "JIKGU";// SNS
-				pageValue = "JIKGU";// SNS
-			} else if (strTitle.equals("골드박스")) {
-				// https://www.coupang.com/np/goldbox
-				addtag = "400";
-				ctag = productId;// SNS
-				pageType = "PRODUCT";// SNS
-				pageValue = productId;// SNS
+			//골드박스,기획전일 경우에는 ctag와 pageValue에 상품ID가 세팅된다.
+			if (strTitle.equals("골드박스")) {
+				strCtag = productId;
+				strPageValue = productId;
 			} else if (strTitle.equals("기획전")) {
-				addtag = "400";
-				ctag = productId;// SNS
-				pageType = "PRODUCT";// SNS
-				pageValue = productId;// SNS
-				wPcid = "7135076110561979832301";
+				strCtag = productId;
+				strPageValue = productId;
 			}
 			if (!aHref.contains("?")) {
 				aHref += "?";
 			}
-			aHref += "&src=" + src;
-			aHref += "&spec=" + spec;
-			aHref += "&addtag=" + addtag;
-			aHref += "&ctag=" + ctag;
-			aHref += "&lptag=" + lptag;
-			aHref += "&itime=" + itime;
-			aHref += "&pageType=" + pageType;
-			aHref += "&pageValue=" + pageValue;
-			aHref += "&wPcid=" + wPcid;
-			aHref += "&wRef=" + wRef;
-			aHref += "&wTime=" + wTime;
-			aHref += "&redirect=" + redirect;
-			aHref += "&isAddedCart=" + isAddedCart;
+			aHref += "&src=" + strSrc;
+			aHref += "&spec=" + strSpec;
+			aHref += "&addtag=" + strAddtag;
+			aHref += "&ctag=" + strCtag;
+			aHref += "&lptag=" + strLptag;
+			aHref += "&itime=" + strItime;
+			aHref += "&pageType=" + strPageType;
+			aHref += "&pageValue=" + strPageValue;
+			aHref += "&wPcid=" + strWPcid;
+			aHref += "&wRef=" + strWRef;
+			aHref += "&wTime=" + strWTime;
+			aHref += "&redirect=" + strRedirect;
+			aHref += "&isAddedCart=" + strIsAddedCart;
 			aEl.attr("href", aHref);
-
-			Elements imgEls = el.select("img");
-			logger.debug("imgEls1:" + imgEls);
-			for (Element imgEl : imgEls) {
-				imgEl.removeAttr("data-src");
-				imgEl.removeAttr("onerror");
-
-				String imgSrc = imgEl.attr("src");
-				if (imgSrc.startsWith("//")) {
-					imgEl.attr("src", "http:" + imgSrc);
-				}
-				if (imgSrc.contains("global")) {
-				}
-				if (imgSrc.contains("coupick")) {
-					imgEl.attr("style", "width:68px;height:20px");
-				}
-				if (imgSrc.contains("rocket-fresh")) {
-				}
-				if (imgSrc.contains("rocket_logo")) {
-				}
-				if (imgSrc.contains("subscription")) {
-				}
-				if (imgSrc.contains("rocketwow")) {
-					imgEl.attr("style", "width:63px;height:16px");
-				}
-			}
-			logger.debug("imgEls2:" + imgEls);
-
-			Element imgEl = imgEls.select("img").first();
-			imgEl.attr("style", imgWidthStyle + imgHeightStyle);
-
+			
 		}
-		logger.debug("els:" + els);
-		logger.debug("els:" + els);
 	}
-
-	private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton1ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		strTitle = selectedOption;
-		System.out.println(selectedOption);
-	}// GEN-LAST:event_jRadioButton1ActionPerformed
-
-	private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton2ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		strTitle = selectedOption;
-		System.out.println(selectedOption);
-	}// GEN-LAST:event_jRadioButton2ActionPerformed
-
-	private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton3ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		strTitle = selectedOption;
-		System.out.println(selectedOption);
-	}// GEN-LAST:event_jRadioButton3ActionPerformed
-
-	private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton4ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		strTitle = selectedOption;
-		System.out.println(selectedOption);
-	}// GEN-LAST:event_jRadioButton4ActionPerformed
-
-	private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton6ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		productListIdOrClassName = selectedOption;
-		System.out.println(selectedOption);
-	}// GEN-LAST:event_jRadioButton6ActionPerformed
-
-	private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton7ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		productListIdOrClassName = selectedOption;
-		System.out.println(selectedOption);
-	}// GEN-LAST:event_jRadioButton7ActionPerformed
-
-	private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton8ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		productListIdOrClassName = selectedOption;
-		System.out.println(selectedOption);
-	}// GEN-LAST:event_jRadioButton8ActionPerformed
-
-	private void jRadioButton9ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton9ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		productListIdOrClassName = "";
-		System.out.println(selectedOption);
-	}// GEN-LAST:event_jRadioButton9ActionPerformed
-
-	private void jRadioButton10ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton10ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		productItemIdOrClassName = selectedOption;
-		System.out.println(selectedOption);
-	}// GEN-LAST:event_jRadioButton10ActionPerformed
-
-	private void jRadioButton11ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton11ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		productItemIdOrClassName = selectedOption;
-		System.out.println(selectedOption);
-	}// GEN-LAST:event_jRadioButton11ActionPerformed
-
-	private void jRadioButton12ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton12ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		productItemIdOrClassName = selectedOption;
-		System.out.println(selectedOption);
-	}// GEN-LAST:event_jRadioButton12ActionPerformed
-
-	private void jRadioButton13ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton13ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		productItemIdOrClassName = "";
-		System.out.println(selectedOption);
-	}// GEN-LAST:event_jRadioButton13ActionPerformed
-
-	private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton5ActionPerformed
-		JRadioButton radioButton = (JRadioButton) evt.getSource();
-		String selectedOption = radioButton.getText();
-		strTitle = selectedOption;
-		System.out.println(selectedOption);
-	}// GEN-LAST:event_jRadioButton5ActionPerformed
-
-	private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-		fileName = userHome + File.separator + "documents" + File.separator + strDate + "_" + strTitle + ".html";
-		// FileUtil.fileWrite(fileName, Jsoup.parse(sb1.toString()).html());
-		FileUtil.fileWrite(fileName, newsTextArea2.getText());
-	}// GEN-LAST:event_jButton2ActionPerformed
-
-	private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
-		// TODO add your handling code here:
-		newsTextArea2.setText("");
-	}// GEN-LAST:event_jButton4ActionPerformed
-
-	private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
-		// TODO add your handling code here:
-		newsTextArea1.setText("");
-	}// GEN-LAST:event_jButton3ActionPerformed
-
-	private void urlTfActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_urlTfActionPerformed
-
-	}// GEN-LAST:event_urlTfActionPerformed
-
-	private void urlTfKeyReleased(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_urlTfKeyReleased
-		if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-			// SwingUtilities.getWindowAncestor(evt.getComponent()).dispose();
+	
+	public void setProductItemImgLink(Elements imgEls) {
+		logger.debug("imgEls1:" + imgEls);
+		String strCoupickImg = "";
+		String strRocketFreshImg = "";
+		String strJikguImg = "";
+		String strRocketDeliveryImg = "";
+		String strFixedDeliveryImg = "";
+		String strRocketWowImg = "";
+		
+		for (Element imgEl : imgEls) {
+			imgEl.removeAttr("data-src");
+			imgEl.removeAttr("onerror");
+			
+			String imgSrc = imgEl.attr("src");
+			if (imgSrc.startsWith("//")) {
+				imgEl.attr("src", "http:" + imgSrc);
+			}
+			if (imgSrc.contains("global")) {
+				imgEl.attr("style", "width:64px;height:20px");
+				strJikguImg = imgEl.outerHtml();
+			}
+			if (imgSrc.contains("coupick")) {
+				imgEl.attr("style", "width:68px;height:20px");
+				strCoupickImg = imgEl.outerHtml();
+			}
+			if (imgSrc.contains("rocket-fresh")) {
+				imgEl.attr("style", "width:72px;height:16px");
+				strRocketFreshImg = imgEl.outerHtml();
+			}
+			if (imgSrc.contains("rocket_logo")) {
+				imgEl.attr("style", "width:64px;height:20px");
+				strRocketDeliveryImg = imgEl.outerHtml();
+			}
+			if (imgSrc.contains("subscription")) {
+				imgEl.attr("style", "width:64px;height:20px");
+				strFixedDeliveryImg = imgEl.outerHtml();
+			}
+			if (imgSrc.contains("rocketwow")) {
+				imgEl.attr("style", "width:63px;height:16px");
+				strRocketWowImg = imgEl.outerHtml();
+			}
+			if (imgSrc.contains("cashback")) {
+				imgEl.attr("style", "width:14px;height:14px");
+				strRocketWowImg = imgEl.outerHtml();
+			}
+			
+			logger.debug("strCoupickImg:" + strCoupickImg);
+			logger.debug("strRocketFreshImg:" + strRocketFreshImg);
+			logger.debug("strJikguImg:" + strJikguImg);
+			logger.debug("strRocketDeliveryImg:" + strRocketDeliveryImg);
+			logger.debug("strFixedDeliveryImg:" + strFixedDeliveryImg);
+			logger.debug("strRocketWowImg:" + strRocketWowImg);
 		}
-	}// GEN-LAST:event_urlTfKeyReleased
-
-	/*
-	 * // private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt)
-	 * {// GEN-FIRST:event_jRadioButton2ActionPerformed // // TODO add your handling
-	 * code here: // }// GEN-LAST:event_jRadioButton2ActionPerformed // // private
-	 * void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//
-	 * GEN-FIRST:event_jRadioButton1ActionPerformed // // TODO add your handling
-	 * code here: // }// GEN-LAST:event_jRadioButton1ActionPerformed // // private
-	 * void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//
-	 * GEN-FIRST:event_jRadioButton3ActionPerformed // // TODO add your handling
-	 * code here: // }// GEN-LAST:event_jRadioButton3ActionPerformed // // private
-	 * void jRadioButton10ActionPerformed(java.awt.event.ActionEvent evt) {//
-	 * GEN-FIRST:event_jRadioButton10ActionPerformed // // TODO add your handling
-	 * code here: // }// GEN-LAST:event_jRadioButton10ActionPerformed // // private
-	 * void jRadioButton11ActionPerformed(java.awt.event.ActionEvent evt) {//
-	 * GEN-FIRST:event_jRadioButton11ActionPerformed // // TODO add your handling
-	 * code here: // }// GEN-LAST:event_jRadioButton11ActionPerformed
-	 */
-	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-		// TODO add your handling code here:
-		String html = newsTextArea1.getText();
-	}// GEN-LAST:event_jButton1ActionPerformed
+		logger.debug("imgEls2:" + imgEls);
+		imgEls.select("img").first().attr("style", imgWidthStyle + imgHeightStyle);
+		
+	}
 
 	/**
 	 * @param args the command line arguments
@@ -17644,6 +17784,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
         private javax.swing.JRadioButton jRadioButton2;
         private javax.swing.JRadioButton jRadioButton20;
         private javax.swing.JRadioButton jRadioButton21;
+        private javax.swing.JRadioButton jRadioButton22;
         private javax.swing.JRadioButton jRadioButton3;
         private javax.swing.JRadioButton jRadioButton4;
         private javax.swing.JRadioButton jRadioButton5;
