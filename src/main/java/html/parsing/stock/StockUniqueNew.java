@@ -498,11 +498,11 @@ public class StockUniqueNew extends Thread {
 				fRatio = Float.parseFloat(varyRatio.substring(1, varyRatio.indexOf("%")));
 				if (fRatio >= upDownStdNo) {
 					if (specialLetter.equals("+") || specialLetter.equals("▲")) {
-						stock.setStockGubun(specialLetter+upDownStdNo+"%이상▲");
+						stock.setStockGubun(specialLetter+upDownStdNo+"%이상");
 						stock.setLineUp(13);
 						over5PerUpStockList.add(stock);
 					} else if (specialLetter.equals("-") || specialLetter.equals("▼")) {
-						stock.setStockGubun(specialLetter+upDownStdNo+"%이상▼");
+						stock.setStockGubun(specialLetter+upDownStdNo+"%이상");
 						stock.setLineUp(23);
 						over5PerDownStockList.add(stock);
 					}
