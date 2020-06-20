@@ -119,7 +119,7 @@ public class MNewsPimCom extends News {
             strContent = strContent.replaceAll("</figure>", "</div>");
             strContent = strContent.replaceAll("<figcaption>", "<div>");
             strContent = strContent.replaceAll("</figcaption>", "</div>");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             Element copyRightElement = doc.select(".viewfooter p").first().child(0);
             System.out.println("copyRightElement:" + copyRightElement);

@@ -251,7 +251,7 @@ public class WwwSeoulCoKr extends javax.swing.JFrame {
             Elements contents = doc.select(".v_article");
             String strContent = contents.outerHtml();
             System.out.println("strContent:" + strContent);
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = "";
 

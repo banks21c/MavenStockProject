@@ -224,7 +224,7 @@ public class NewsYonhapnews extends javax.swing.JFrame {
                 strContent = doc.select(".article").outerHtml();
             }
             System.out.println("strContent:" + strContent);
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             //String copyright = content.select(".adrs .cprgt").outerHtml();
             //content.select(".adrs").remove();

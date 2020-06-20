@@ -251,7 +251,7 @@ public class WwwMediausCoKr extends javax.swing.JFrame {
             String textBody = contents.outerHtml();
             String strContent = textBody;
             System.out.println("strContent:" + strContent);
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = doc.select(".copyright").outerHtml();
 

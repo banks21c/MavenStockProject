@@ -228,7 +228,7 @@ public class WebCrawler20191230 extends javax.swing.JFrame {
 			}
 
 			strContent = temp.toString();
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			sb1.append(strContent);
 			sb1.append("</div>\r\n");

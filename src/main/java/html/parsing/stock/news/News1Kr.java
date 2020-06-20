@@ -131,7 +131,7 @@ public class News1Kr extends News {
             strContent = strContent.replaceAll("<figcaption>", "<div>");
             strContent = strContent.replaceAll("</figcaption>", "</div>");
             strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = "";
             System.out.println("copyright:" + copyright);

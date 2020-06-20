@@ -275,7 +275,7 @@ public class ViewAsiaeCoKr extends javax.swing.JFrame {
 
 			String strContent = contentEls.html();
 			System.out.println("strContent:" + strContent);
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			String copyright = "";
 

@@ -138,7 +138,7 @@ public class NewsScrapingTemplate extends javax.swing.JFrame {
             printable.select("footer").remove();
 
             String strContent = printable.html();
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");

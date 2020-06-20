@@ -312,7 +312,7 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 			String strContent = contentEls.html();
 			strContent = strContent.replace("src=\"//", "src=\""+protocol+"://");
 			
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			String copyright = "";
 

@@ -253,7 +253,7 @@ public class WwwMtCoKr extends javax.swing.JFrame {
 			String copyright = article.select(".copyright").outerHtml();
 			strContent = strContent+copyright;
 			
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");

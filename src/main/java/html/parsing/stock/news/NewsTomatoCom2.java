@@ -307,7 +307,7 @@ public class NewsTomatoCom2 extends javax.swing.JFrame {
             }
             strContent = strContent.replaceAll("<div>[\r\n]*[ ]*&nbsp;[\r\n]*[ ]*</div>", "<br/>");
             System.out.println("strContent:[" + strContent + "]");
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = doc.select(".desc").html();
 

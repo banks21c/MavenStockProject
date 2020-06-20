@@ -262,7 +262,7 @@ public class WwwMkCoKrPremium extends javax.swing.JFrame {
 //			String strContent = doc.select(".view_txt").html();
 			String strContent = doc.select("#Content .left_content .art_txt").html();
 			System.out.println("strContent:" + strContent);
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			String copyright = "";
 

@@ -135,7 +135,7 @@ public class WwwMediatodayCoKr extends News {
 
             System.out.println("articleHtml:" + articleHtml);
             String strContent = articleHtml.replaceAll("640px", "548px");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String strCopyright = doc.select(".arl_view_copywriter").outerHtml();
             System.out.println("strCopyright:" + strCopyright);

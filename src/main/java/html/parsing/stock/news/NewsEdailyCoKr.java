@@ -145,7 +145,7 @@ public class NewsEdailyCoKr extends News {
             strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
             strContent = strContent.replaceAll("figure", "div");
             strContent = strContent.replaceAll("figcaption", "div");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
             //Elements copyRightElement = doc.select(".txt_copyright");
             //String copyRight = copyRightElement.text();
             sb1.append("<html lang='ko'>\r\n");

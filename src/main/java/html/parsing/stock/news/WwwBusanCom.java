@@ -107,7 +107,7 @@ public class WwwBusanCom extends News {
             System.out.println("article:[" + article + "]");
             String strContent = article.html();
             System.out.println("content:[" + strContent + "]");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyRight = "";
 

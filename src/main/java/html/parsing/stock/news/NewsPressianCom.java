@@ -120,7 +120,7 @@ public class NewsPressianCom extends News {
             strContent = strContent.replaceAll("</figure>", "</div>");
             strContent = strContent.replaceAll("<figcaption>", "<div>");
             strContent = strContent.replaceAll("</figcaption>", "</div>");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String moreInfo = doc.select(".more_info").outerHtml();
 

@@ -100,7 +100,7 @@ public class NewsStyleM extends News {
             textBodyDoc.select("div").get(0).attr("style", "font-size:11pt");
             textBodyDoc.select(".lmbox1").attr("style", "font-size:10pt;color:gray;");
             String strContent = textBodyDoc.html();
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = content.select(".copyright").outerHtml();
 

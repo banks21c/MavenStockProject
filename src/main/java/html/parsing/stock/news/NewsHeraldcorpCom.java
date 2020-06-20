@@ -125,7 +125,7 @@ public class NewsHeraldcorpCom extends News {
 			logger.debug("img:" + img);
 			String strContent = doc.select("#articleText").outerHtml();
 			//strContent = StockUtil.makeStockLinkString(strContent);
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 			logger.debug("strContent:" + strContent);
 
 			String copyright = "";

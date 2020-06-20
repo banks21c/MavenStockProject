@@ -285,7 +285,7 @@ public class NewsHerald extends News {
             String strContent = article.html().replaceAll("640px", "548px");
             strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
             strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             Element time = doc.select(".view_top .ellipsis").get(0);
             time.select("em").remove();

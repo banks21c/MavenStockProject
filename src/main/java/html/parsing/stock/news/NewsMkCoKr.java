@@ -291,7 +291,7 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 			if(strContent == null || strContent.trim().equals("")) {
 				strContent = doc.select(".read_txt").html();
 			}
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			String copyright = "";
 

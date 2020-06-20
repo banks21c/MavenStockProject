@@ -105,7 +105,7 @@ public class NewsAutodaily extends News {
             String strContent = doc.select(".article-veiw-body").html();
 
             System.out.println("strContent:" + strContent);
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = doc.select(".arl_view_copywriter").outerHtml();
             System.out.println("copyright:" + copyright);

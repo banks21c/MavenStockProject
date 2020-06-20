@@ -143,7 +143,7 @@ public class EstateMkCoKr extends News {
             // strContent = strContent.replaceAll("<figcaption class=\"caption\">", "");
             // strContent = strContent.replaceAll("</figcaption>", "<br>");
             strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");

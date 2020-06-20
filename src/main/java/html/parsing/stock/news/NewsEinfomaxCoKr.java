@@ -131,7 +131,7 @@ public class NewsEinfomaxCoKr extends News {
             System.out.println("article2:" + article);
 
             String strContent = article.html();
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");

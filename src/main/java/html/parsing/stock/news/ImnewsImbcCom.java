@@ -121,7 +121,7 @@ public class ImnewsImbcCom extends News {
             		strContent= contentEl.outerHtml();
             	}
             }
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
             System.out.println("content:" + strContent);
 
             Elements divs = doc.select(".news_cont .news_img");

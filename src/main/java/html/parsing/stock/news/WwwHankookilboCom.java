@@ -117,7 +117,7 @@ public class WwwHankookilboCom extends News {
             String strContent = articleHtml.replaceAll("640px", "548px");
             strContent = strContent.replaceAll("<p></p>", "<br><br><p>");
             strContent = strContent.replaceAll("</article>", "</article><br>");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             sb1.append("<!DOCTYPE html>\r\n");
             sb1.append("<html lang='ko'>\r\n");

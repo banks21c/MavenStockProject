@@ -105,7 +105,7 @@ public class WwwHanitvCom extends News {
             String img = doc.select("#imgVodThumbnail").outerHtml();
             System.out.println("img:" + img);
             String strContent = doc.select(".inner_newstext").outerHtml();
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = "";
             System.out.println("copyright:" + copyright);

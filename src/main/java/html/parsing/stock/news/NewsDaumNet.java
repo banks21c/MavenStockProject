@@ -121,7 +121,7 @@ public class NewsDaumNet extends News {
             strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
             strContent = strContent.replaceAll("figure", "div");
             strContent = strContent.replaceAll("figcaption", "div");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             Element copyRightElement = doc.select(".wrap_viewrelate .txt_copy").first();
             String copyRight = "";

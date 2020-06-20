@@ -255,7 +255,7 @@ public class VipMkCoKr extends javax.swing.JFrame {
 	    strConts.select(".con_txt_new").remove();
             String strContent = strConts.outerHtml();
             System.out.println("strContent:" + strContent);
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = "";
 

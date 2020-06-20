@@ -144,7 +144,7 @@ public class WwwYnaCoKr extends News {
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
 			// System.out.println("strContent:[" + strContent + "]strContent");
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			String copyright = article.select(".txt-copyright").html();
 			System.out.println("copyright:" + copyright);

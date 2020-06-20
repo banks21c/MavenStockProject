@@ -287,7 +287,7 @@ public class WwwSedailyCom extends javax.swing.JFrame {
 			textBodyDoc.select(".lmbox1").attr("style", "font-size:10pt;color:gray;");
 			String strContent = textBodyDoc.html();
 			System.out.println("strContent:" + strContent);
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			Elements copyrightEls = doc.select(".copyright");
 			String copyright = "";

@@ -135,7 +135,7 @@ public class NewsKmibCoKr extends News {
             String articleHtml = article.outerHtml();
             System.out.println("articleHtml:" + articleHtml);
             String strContent = articleHtml.replaceAll("640px", "548px");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = doc.select(".pop_prt_foot").outerHtml();
             System.out.println("copyright:" + copyright);

@@ -310,7 +310,7 @@ public class WwwOhmynewsCoKr extends javax.swing.JFrame {
             }
             String strContent = sb.toString() + textBody;
             System.out.println("strContent:" + strContent);
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = doc.select(".copyright").outerHtml();
 

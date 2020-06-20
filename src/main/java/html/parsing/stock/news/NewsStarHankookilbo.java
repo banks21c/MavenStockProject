@@ -107,7 +107,7 @@ public class NewsStarHankookilbo extends News {
             String strContent = article.outerHtml();
             System.out.println("strContent:" + strContent);
             strContent = strContent.replaceAll("640px", "548px");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = doc.select(".copy span").outerHtml();
             System.out.println("copyright:" + copyright);

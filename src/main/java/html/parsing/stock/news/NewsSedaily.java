@@ -122,7 +122,7 @@ public class NewsSedaily extends News {
             strContent = strContent.replaceAll("</figure>", "</div>");
             strContent = strContent.replaceAll("<figcaption>", "<div>");
             strContent = strContent.replaceAll("</figcaption>", "</div>");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             Element copyRightElement = doc.select(".txt_copyright").first();
             String copyRight = copyRightElement.text();

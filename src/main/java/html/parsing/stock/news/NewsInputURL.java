@@ -108,7 +108,7 @@ public class NewsInputURL extends News {
 
 			String strContent = doc.html();
 
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			String copyright = "";
 

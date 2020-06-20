@@ -121,7 +121,7 @@ public class WwwHuffingtonpostKr extends News {
 
             String strContent = articleDoc.select("#mainentrycontent").outerHtml();
             System.out.println("content:" + strContent);
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = doc.select(".copyright").outerHtml();
             System.out.println("copyright:" + copyright);

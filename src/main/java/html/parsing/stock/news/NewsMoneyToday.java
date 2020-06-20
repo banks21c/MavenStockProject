@@ -247,7 +247,7 @@ public class NewsMoneyToday extends javax.swing.JFrame {
             textBodyDoc.select(".lmbox1").attr("style", "font-size:10pt;color:gray;");
             String strContent = textBodyDoc.html();
             System.out.println("strContent:" + strContent);
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = article.select(".copyright").outerHtml();
 

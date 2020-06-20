@@ -121,7 +121,7 @@ public class NewsKbsCoKr extends News {
             String strContent2 = doc.select(".det-news .detail-body").outerHtml();
             strContent = strContent1 + strContent2;
             
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             String copyright = "";
             System.out.println("copyright:" + copyright);

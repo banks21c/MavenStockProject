@@ -109,7 +109,7 @@ public class WwwWikitreeCoKr extends News {
             System.out.println("copyright:" + copyright);
 
             String strContent = articleHtml.replaceAll("640px", "548px");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+            strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");

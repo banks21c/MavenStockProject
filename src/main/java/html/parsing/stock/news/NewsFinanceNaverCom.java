@@ -150,7 +150,7 @@ public class NewsFinanceNaverCom extends News {
 			// strContent = strContent.replaceAll("<figcaption class=\"caption\">", "");
 			// strContent = strContent.replaceAll("</figcaption>", "<br>");
 			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
-			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			Elements copyRightElements = doc.select(".news_copyright");
 			Element copyRightElement = null;
