@@ -313,22 +313,22 @@ public class AllStockForeignRetainRatio {
             sb1.append("\t<h2>" + strYMD + title + "</h2>");
             sb1.append("<table>\r\n");
             sb1.append("<tr>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
             // sb1.append("<td
-            // style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
+            // style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
             // sb1.append("<td
-            // style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
+            // style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
             // sb1.append("<td
-            // style='background:#669900;color:#ffffff;text-align:center;'>등락률</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>보유주수</td>\r\n");
+            // style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락률</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유주수</td>\r\n");
             if (gubun.equals("ratio")) {
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유율</td>\r\n");
             } else if (gubun.equals("amount")) {
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>보유금액(백만)</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유금액(백만)</td>\r\n");
             } else if (gubun.equals("all")) {
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>보유금액(백만)</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유율</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유금액(백만)</td>\r\n");
             }
             sb1.append("</tr>\r\n");
 

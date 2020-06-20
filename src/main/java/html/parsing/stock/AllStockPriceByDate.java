@@ -424,30 +424,30 @@ public class AllStockPriceByDate extends Thread {
                 + "</font><font color='gray'> 보합:" + steadyCount + "</font></h4>");
         sb1.append("<table>\r\n");
         sb1.append("<tr>\r\n");
-        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
-        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
+        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
+        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
         // if(gubun.equals("상승율")){
         // sb1.append("<td
-        // style='background:#669900;color:#ffffff;text-align:center;'>상승율</td>\r\n");
+        // style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>상승율</td>\r\n");
         // }else if(gubun.equals("하락율")){
         // sb1.append("<td
-        // style='background:#669900;color:#ffffff;text-align:center;'>하락율</td>\r\n");
+        // style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>하락율</td>\r\n");
         // }else if(gubun.equals("거래량")){
         // sb1.append("<td
-        // style='background:#669900;color:#ffffff;text-align:center;'>등락율</td>\r\n");
+        // style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락율</td>\r\n");
         // sb1.append("<td
-        // style='background:#669900;color:#ffffff;text-align:center;'>거래량</td>\r\n");
+        // style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래량</td>\r\n");
         // }else if(gubun.equals("거래대금")){
         // sb1.append("<td
-        // style='background:#669900;color:#ffffff;text-align:center;'>등락율</td>\r\n");
+        // style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락율</td>\r\n");
         // sb1.append("<td
-        // style='background:#669900;color:#ffffff;text-align:center;'>거래대금(백만)</td>\r\n");
+        // style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
         // }
-        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>등락율</td>\r\n");
-        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래량</td>\r\n");
-        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래대금(백만)</td>\r\n");
+        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락율</td>\r\n");
+        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래량</td>\r\n");
+        sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
         sb1.append("</tr>\r\n");
         int cnt = 1;
         for (StockVO s : list) {

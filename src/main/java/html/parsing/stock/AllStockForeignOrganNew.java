@@ -614,13 +614,13 @@ public class AllStockForeignOrganNew {
 			sb1.append("<h3>" + key + " 종목 TOP " + EXTRACT_COUNT + "</h3>\r\n");
 			sb1.append("<table>\r\n");
 			sb1.append("<tr>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>등락률</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래량</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래대금(만원)</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락률</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래량</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(만원)</td>\r\n");
 			sb1.append("</tr>\r\n");
 
 			int cnt = 1;
@@ -709,13 +709,13 @@ public class AllStockForeignOrganNew {
 		sb1.append("\t<font size=5>" + strYMD + title + "</font>");
 		sb1.append("<table>\r\n");
 		sb1.append("<tr>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>등락률</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래량</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래대금(만원)</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락률</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래량</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(만원)</td>\r\n");
 		sb1.append("</tr>\r\n");
 
 		int cnt = 1;

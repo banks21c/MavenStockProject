@@ -136,13 +136,13 @@ public class AllStockHomepage {
             sb1.append("\t<font size=5>" + strYMD + title + "</font>");
             sb1.append("<table>\r\n");
             sb1.append("<tr>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
             // sb1.append("<td
-            // style='background:#669900;color:#ffffff;text-align:center;'>종목코드</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>홈페이지</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>대표전화</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>주담전화</td>\r\n");
+            // style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목코드</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>홈페이지</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>대표전화</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>주담전화</td>\r\n");
             sb1.append("</tr>\r\n");
 
             int cnt = 1;
@@ -358,10 +358,10 @@ public class AllStockHomepage {
             sb1.append("\t<font size=5>" + strYMD + title + "</font>");
             sb1.append("<table>\r\n");
             sb1.append("<tr>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>설립일</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>상장일</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>설립일</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>상장일</td>\r\n");
             sb1.append("</tr>\r\n");
 
             int cnt = 1;

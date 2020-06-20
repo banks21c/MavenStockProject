@@ -326,9 +326,9 @@ public class AllStockForeignOrganMaxPriceCount extends Thread {
             sb1.append("\t<font size=5>" + strYear + "년 " + title + "</font>");
             sb1.append("<table>\r\n");
             sb1.append("<tr>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>상한일수</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>상한일수</td>\r\n");
             sb1.append("</tr>");
 
             int cnt = 1;

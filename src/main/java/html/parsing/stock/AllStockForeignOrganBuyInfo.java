@@ -486,20 +486,20 @@ public class AllStockForeignOrganBuyInfo {
             sb1.append("\t<font size=5>" + strYMD + " " + title + "</font>");
             sb1.append("<table>\r\n");
             sb1.append("<tr>\r\n");
-            sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-            sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
-            sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-            sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
+            sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+            sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+            sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
+            sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
             if (isForeign) {
-                sb1.append("<td colspan='3' style='background:#669900;color:#ffffff;text-align:center;'>외인</td>\r\n");
+                sb1.append("<td colspan='3' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인</td>\r\n");
             } else {
-                sb1.append("<td colspan='3' style='background:#669900;color:#ffffff;text-align:center;'>기관</td>\r\n");
+                sb1.append("<td colspan='3' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관</td>\r\n");
             }
             sb1.append("</tr>");
             sb1.append("<tr>");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>연속매수일수</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래량</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>외인거래금액<br>(만원)</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>연속매수일수</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래량</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인거래금액<br>(만원)</td>\r\n");
             sb1.append("</tr>");
 
             int cnt = 1;
