@@ -167,11 +167,23 @@ public class StockUnique_ReadTxtFile extends Thread {
 
 	@Override
 	public void run() {
+		long start = System.currentTimeMillis();
 		logger.debug("start run...");
 		//날짜정보 조회
 		getDateInfo("005930");
 		execute1();
 		execute2();
+		
+		long end = System.currentTimeMillis();
+		long timeElapsed = end - start;
+		logger.debug("실행시간 : " + (end - start) / 1000 + "초");
+
+		int second = (int) timeElapsed / 1000 % 60;
+		int minute = (int) timeElapsed / (1000 * 60) % 60;
+		int hour = (int) timeElapsed / (1000 * 60 * 60);
+
+		logger.debug("실행시간 : " + hour + " 시간 " + minute + " 분 " + second + " 초");
+		
 		logger.debug("end run...");
 	}
 
