@@ -34,18 +34,12 @@ public class CoupangPartnersNpGoldBoxPromotionList extends javax.swing.JFrame {
 	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersNpGoldBoxPromotionList.class);
 	final static String userHome = System.getProperty("user.home");
 	private String strUrl = "https://www.coupang.com/np/goldbox";
-	private String strShortenedUrl = "https://coupa.ng/bDr4Tx";
+	private String strUrl2 = "https://partners.coupang.com/#affiliate/ws/best/goldbox";
 	//goldbox url
 	private String strLongUrl = "https://www.coupang.com/np/goldbox?src=1139000&spec=10799999&addtag=312&ctag=GOLDBOX&lptag=AF5310383&itime=20200601094030&pageType=GOLDBOX&pageValue=GOLDBOX&wPcid=2398922199897153466293&wRef=&wTime=20200601094030&redirect=landing";
 	//product url
 	private String strLongUrl2 = "https://www.coupang.com/vp/products/224871754?itemId=709396592&src=1139000&spec=10799999&addtag=400&ctag=224871754&lptag=AF5310383&itime=20200601094843&pageType=PRODUCT&pageValue=224871754&wPcid=2398922199897153466293&wRef=&wTime=20200601094843&redirect=landing&isAddedCart=";
-	/**
-	 * https://www.coupang.com/np/goldbox에서 링크를 생성하면
-	 * https://partners.coupang.com/#affiliate/ws/best/goldbox에서 링크를 생성하는것보다
-	 * vendorItemId,traid가 더 붙는다.
-	 */
 	private String strLongUrl3 = "https://www.coupang.com/vp/products/1441249843?itemId=2485163126&vendorItemId=70478421760&traid=gold_box&src=1139000&spec=10799999&addtag=400&ctag=1441249843&lptag=AF5310383&itime=20200601094435&pageType=PRODUCT&pageValue=1441249843&wPcid=23841246090749215819859&wRef=&wTime=20200601094435&redirect=landing&isAddedCart=";
-
 	URI uri = null;
 //https://www.coupang.com/np/goldbox?src=1139000
 //&spec=10799999
@@ -224,7 +218,6 @@ public class CoupangPartnersNpGoldBoxPromotionList extends javax.swing.JFrame {
 	    logger.debug("strTitle:" + strTitle);
 
 	    StringBuilder sb1 = new StringBuilder();
-	    //<a href="https://coupa.ng/bDgoXJ" target="_blank"><img src="https://static.coupangcdn.com/image/affiliate/banner/226ebd857435cd57616247dd0c3d2b46@2x.jpg" alt="트리트룸 시그니처 샴푸 화이트머스크향, 1077ml, 2개" width="120" height="240"></a>
 	    sb1.append("<html>\r\n");
 	    sb1.append("<body>\r\n");
 	    sb1.append(goldboxBannerHtml + "\r\n");
