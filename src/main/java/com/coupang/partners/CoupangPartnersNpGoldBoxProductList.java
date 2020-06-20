@@ -6,6 +6,7 @@
 package com.coupang.partners;
 
 import java.awt.Desktop;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URI;
 import org.jsoup.Jsoup;
@@ -28,10 +29,9 @@ import org.jsoup.select.Elements;
  *
  * @author banks
  */
-public class CoupangPartnersNpGoldBoxPromotionList extends javax.swing.JFrame {
+public class CoupangPartnersNpGoldBoxProductList extends javax.swing.JFrame {
 
-	private static final long serialVersionUID = -5765801186250963427L;
-	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersNpGoldBoxPromotionList.class);
+	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersNpGoldBoxProductList.class);
 	final static String userHome = System.getProperty("user.home");
 	private String strUrl = "https://www.coupang.com/np/goldbox";
 	private String strShortenedUrl = "https://coupa.ng/bDr4Tx";
@@ -39,13 +39,6 @@ public class CoupangPartnersNpGoldBoxPromotionList extends javax.swing.JFrame {
 	private String strLongUrl = "https://www.coupang.com/np/goldbox?src=1139000&spec=10799999&addtag=312&ctag=GOLDBOX&lptag=AF5310383&itime=20200601094030&pageType=GOLDBOX&pageValue=GOLDBOX&wPcid=2398922199897153466293&wRef=&wTime=20200601094030&redirect=landing";
 	//product url
 	private String strLongUrl2 = "https://www.coupang.com/vp/products/224871754?itemId=709396592&src=1139000&spec=10799999&addtag=400&ctag=224871754&lptag=AF5310383&itime=20200601094843&pageType=PRODUCT&pageValue=224871754&wPcid=2398922199897153466293&wRef=&wTime=20200601094843&redirect=landing&isAddedCart=";
-	/**
-	 * https://www.coupang.com/np/goldbox에서 링크를 생성하면
-	 * https://partners.coupang.com/#affiliate/ws/best/goldbox에서 링크를 생성하는것보다
-	 * vendorItemId,traid가 더 붙는다.
-	 */
-	private String strLongUrl3 = "https://www.coupang.com/vp/products/1441249843?itemId=2485163126&vendorItemId=70478421760&traid=gold_box&src=1139000&spec=10799999&addtag=400&ctag=1441249843&lptag=AF5310383&itime=20200601094435&pageType=PRODUCT&pageValue=1441249843&wPcid=23841246090749215819859&wRef=&wTime=20200601094435&redirect=landing&isAddedCart=";
-
 	URI uri = null;
 //https://www.coupang.com/np/goldbox?src=1139000
 //&spec=10799999
@@ -85,7 +78,7 @@ public class CoupangPartnersNpGoldBoxPromotionList extends javax.swing.JFrame {
 	/**
 	 * Creates new form NewJFrame1
 	 */
-	public CoupangPartnersNpGoldBoxPromotionList() {
+	public CoupangPartnersNpGoldBoxProductList() {
 		initComponents();
 		initList();
 	}
@@ -199,7 +192,7 @@ public class CoupangPartnersNpGoldBoxPromotionList extends javax.swing.JFrame {
 
                 jSplitPane1.setRightComponent(jSplitPane2);
 
-                jTabbedPane1.addTab("골드박스", jSplitPane1);
+                jTabbedPane1.addTab("소스입력", jSplitPane1);
 
                 jPanel1.add(jTabbedPane1);
 
@@ -220,25 +213,58 @@ public class CoupangPartnersNpGoldBoxPromotionList extends javax.swing.JFrame {
 		    el.attr("class", strClass);
 	    }
 
-	    String strTitle = "WOW 회원전용 매일 오전7시부터 골드박스 1일 특가";
+	    String strTitle = doc.select("h1 .mr1em").text();
 	    logger.debug("strTitle:" + strTitle);
 
-	    StringBuilder sb1 = new StringBuilder();
-	    //<a href="https://coupa.ng/bDgoXJ" target="_blank"><img src="https://static.coupangcdn.com/image/affiliate/banner/226ebd857435cd57616247dd0c3d2b46@2x.jpg" alt="트리트룸 시그니처 샴푸 화이트머스크향, 1077ml, 2개" width="120" height="240"></a>
+	    doc.select(".delivery_badge").remove();
+
+	    StringBuffer sb1 = new StringBuffer();
+	    Element e1 = doc.select(".product_list").get(0);
 	    sb1.append("<html>\r\n");
 	    sb1.append("<body>\r\n");
 	    sb1.append(goldboxBannerHtml + "\r\n");
 	    sb1.append("<h1>").append(strYmdBlacket).append(" ").append(strTitle).append("</h1>\r\n");
 	    sb1.append("<div style='display:inline-block'>\r\n");
 	    sb1.append("<ul style='list-style:none;padding-left:0;'>\r\n");
-	    //아이템 목록들
-	    Element promotionListEl = doc.select(".promotion_list").first();
-	    //아이템 목록
-	    Elements itemEls = promotionListEl.select(".highlight_product");
-	    Elements itemEls2 = promotionListEl.select(".promotion_product");
+	    Elements rowEls = e1.select(".product_row");
+	    for (int i = 0; i < rowEls.size(); i++) {
+		    Element rowEl = rowEls.get(i);
 
-	    sb1.append(getItemList(itemEls,".highlight_product"));
-	    sb1.append(getItemList(itemEls2,".promotion_product"));
+		    Elements itemEls = rowEl.select(".product_item");
+		    for (int j = 0; j < itemEls.size(); j++) {
+			    Element itemEl = itemEls.get(j);
+			    if (itemEl.text().equals("")) {
+				    continue;
+			    }
+			    logger.debug("itemEl:" + itemEl);
+			    String strImg = itemEl.select("img").outerHtml();
+			    String strProdName = itemEl.select(".product_meta .product_description .LinesEllipsis").text();
+			    Elements discountEls = itemEl.select(".product_meta .product_price .discount");
+			    Element discountEl = null;
+			    String strCoupangPrice = "";
+			    String strDiscountRate = "";
+			    if (discountEls.size() > 0) {
+				    discountEl = itemEl.select(".product_meta .product_price .discount").get(0);
+				    logger.debug("discountEl:" + discountEl);
+				    Element coupangPriceEl = discountEl.select("span").get(0);
+				    logger.debug("coupangPriceEl:" + coupangPriceEl);
+				    strCoupangPrice = coupangPriceEl.text();
+				    discountEl.select("span").remove();
+				    strDiscountRate = discountEl.text();
+			    }
+			    String strSalePrice = itemEl.select(".product_meta .product_price .sale_price").text();
+
+			    sb1.append("<li style='height:390px;float:left;background-color: #fff; box-shadow: none; border: 1px solid #dfe1e5; border-radius: 8px; overflow: hidden; margin: 0 0 6px 0;margin-right:8px;margin-top:1px;'>\r\n");
+			    sb1.append("<a href='CoupangShortenedURL' target='_blank' style='text-decoration:none'>\r\n");
+			    sb1.append(strImg + "<br/>\r\n");
+			    sb1.append("<div style='text-align:center;width:212px;font-size:12px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;'>" + strProdName + "</div>\r\n");
+			    sb1.append("<div style='text-align:center;color:red;font-weight:bold;font-size:20px;'>" + strDiscountRate + "</div>\r\n");
+			    sb1.append("<div style='text-align:center;color:#111;font-weight:bold;font-size:18px;text-decoration:line-through;'>" + strCoupangPrice + "</div>\r\n");
+			    sb1.append("<div style='text-align:center;color:#ae0000;font-weight:bold;font-size:20px;'>" + strSalePrice + "</div>\r\n");
+			    sb1.append("</a>\r\n");
+			    sb1.append("</li>\r\n");
+		    }
+	    }
 	    sb1.append("</ul>\r\n");
 	    sb1.append("</div>\r\n");
 	    sb1.append("<div><br/></div>\r\n");
@@ -248,162 +274,48 @@ public class CoupangPartnersNpGoldBoxPromotionList extends javax.swing.JFrame {
 	    sb1.append("- 특가 상품 하나만 잘 사면 로켓와우 회원 결제 비용이 아깝지 않습니다.<br><br>\r\n");
 	    sb1.append("※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음<br>\r\n");
 	    sb1.append("</div>\r\n");
-	    sb1.append(coupangBannerHtml);
 	    sb1.append("<br/><br/><br/>\r\n");
 	    sb1.append("</body>\r\n");
 	    sb1.append("</html>\r\n");
 	    newsTextArea1.setText(sb1.toString());
+	    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
+	    String strDate = sdf.format(new Date());
 	    String fileName = "";
-	    fileName = userHome + File.separator + "documents" + File.separator + strDate + "_" + strTitle + ".html";
+	    fileName = userHome + File.separator + "documents" + File.separator + strDate + "_coupang.partners.html";
 //	    FileUtil.fileWrite(fileName, Jsoup.parse(sb1.toString()).html());
 	    FileUtil.fileWrite(fileName, sb1.toString());
     }//GEN-LAST:event_jButton1MouseClicked
 
-	public StringBuilder getItemList(Elements itemEls,String itemClassName) {
+	private void urlTfActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_urlTfActionPerformed
 
-		String discountRateColor;
-		String orginalPriceColor;
-		String salePriceColor;
-		StringBuilder sb = new StringBuilder();
+	}// GEN-LAST:event_urlTfActionPerformed
 
-		for (int j = 0; j < itemEls.size(); j++) {
-
-			Element itemEl = itemEls.get(j);
-			if (itemEl.text().equals("")) {
-				continue;
-			}
-			logger.debug("itemEl:" + itemEl);
-
-			Elements soldOutEls = itemEl.select(".product_sold_out");
-			logger.debug("soldOutEls:" + soldOutEls);
-			logger.debug("soldOutEls.size:" + soldOutEls.size());
-			if (soldOutEls.size() > 0) {
-				soldOutEls.select("div").first().attr("style", "position: ;right: 20px;top: 20px;width: 48px;height: 48px;background-color: #ae0000;border-radius: 50%;color: #fff;text-align: center;");
-				soldOutEls.select("div span").first().attr("style", "display: inline-block;margin-top: 15px;font-size: 14px;line-height: 18px;font-weight: bold;");
-				discountRateColor = "#ccc";
-				orginalPriceColor = "#ccc";
-				salePriceColor = "#ccc";
-			} else {
-				discountRateColor = "red";
-				orginalPriceColor = "#111";
-				salePriceColor = "#ae0000";
-			}
-
-			Element aEl = itemEl.select("a").first();
-			String aHref = aEl.attr("href");
-			logger.debug("aHref1:" + aHref);
-
-			if (aHref.startsWith("//")) {
-				aHref = strProtocol + ":" + aHref;
-				aEl.attr("href", aHref);
-			} else if (aHref.startsWith("/")) {
-				aHref = strProtocol + "://" + strHost + aHref;
-				aEl.attr("href", aHref);
-			}
-			String strA = aEl.text();
-
-			String productId = "";
-			try {
-				url = new URL(aHref);
-				strPath = url.getPath();
-				strQuery = url.getQuery();
-				logger.debug("strQuery:" + strQuery);
-				strRef = url.getRef();
-				logger.debug("strRef:" + strRef);
-				if (strPath.contains("/")) {
-					productId = strPath.substring(strPath.lastIndexOf("/") + 1);
-				}
-				logger.debug("strPath:" + strPath);
-			} catch (MalformedURLException ex) {
-				Logger.getLogger(CoupangPartnersNpGoldBoxPromotionList.class.getName()).log(Level.SEVERE, null, ex);
-			}
-
-			String src = "1139000";
-			String spec = "10799999";
-			String addtag = "400";
-			String ctag = productId;
-			String lptag = "AF5310383";
-			String itime = strYmdhms;
-			String pageType = "PRODUCT";
-			String pageValue = productId;
-			String wPcid = "23841246090749215819859";
-			String wRef = "blog.naver.com";
-			String wTime = strYmdhms;
-			String redirect = "landing";
-			String isAddedCart = "";
-
-			aHref += "&src=" + src;
-			aHref += "&spec=" + spec;
-			aHref += "&addtag=" + addtag;
-			aHref += "&ctag=" + ctag;
-			aHref += "&lptag=" + lptag;
-			aHref += "&itime=" + itime;
-			aHref += "&pageType=" + pageType;
-			aHref += "&pageValue=" + pageValue;
-			aHref += "&wPcid=" + wPcid;
-			aHref += "&wRef=" + wRef;
-			aHref += "&wTime=" + wTime;
-			aHref += "&redirect=" + redirect;
-			aHref += "&isAddedCart=" + isAddedCart;
-			logger.debug("aHref2:" + aHref);
-//	    aEl.attr("href", aHref);
-
-			Elements imgEls = itemEl.select("img");
-			for (Element imgEl : imgEls) {
-				String strImgSrc = imgEl.attr("src");
-				if (strImgSrc.startsWith("//")) {
-					strImgSrc = strProtocol + ":" + strImgSrc;
-				}
-				imgEl.attr("src", strImgSrc);
-			}
-
-			Elements prdtImgEls = itemEl.select(itemClassName+"__image img");
-			Element prdtImgEl;
-			String strPrdtImg = "";
-			if (prdtImgEls.size() > 0) {
-				prdtImgEl = prdtImgEls.first();
-				prdtImgEl.attr("style", "width:212px;height:212px");
-				strPrdtImg = prdtImgEl.outerHtml();
-			}
-
-			Elements prdtBadgeImgEls = itemEl.select(itemClassName+"__badge");
-			Element prdtBadgeImgEl;
-			String strBadgeImg = "";
-			if (prdtBadgeImgEls.size() > 0) {
-				prdtBadgeImgEl = prdtBadgeImgEls.first();
-				prdtBadgeImgEl.attr("style", "width:80px;height:20px");
-				strBadgeImg = prdtBadgeImgEl.outerHtml();
-			}
-
-			String strProdName = itemEl.select(itemClassName+"__name").text();
-			String strDiscountRate = itemEl.select(".product_discount_rate__number").text() + "%";
-			String strBasePrice = itemEl.select(itemClassName+"__original_price").text();
-			String strSalePrice = itemEl.select(itemClassName+"__sale_price").text();
-
-			logger.debug("strProdName:" + strProdName);
-			logger.debug("strDiscountRate:" + strDiscountRate);
-			logger.debug("strBasePrice:" + strBasePrice);
-			logger.debug("strSalePrice:" + strSalePrice);
-
-			sb.append("<li style='height:390px;float:left;background-color: #fff; box-shadow: none; border: 1px solid #dfe1e5; border-radius: 8px; overflow: hidden; margin: 0 0 6px 0;margin-right:8px;margin-top:1px;'>\r\n");
-			sb.append("<div>\r\n");
-			sb.append("<a href='").append(aHref).append("' target='_blank' style='text-decoration:none'>\r\n");
-			sb.append(strPrdtImg).append("<br/>\r\n");
-			sb.append("<div style=''>").append(strBadgeImg).append("</div>\r\n");
-			sb.append("<div style='text-align:center;width:212px;font-size:12px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;'>").append(strProdName).append("</div>\r\n");
-
-			sb.append("<div style='text-align:center;color:").append(discountRateColor).append(";font-weight:bold;font-size:20px;'>").append(strDiscountRate).append("</div>\r\n");
-			sb.append("<div style='text-align:center;color:").append(orginalPriceColor).append(";font-weight:bold;font-size:18px;text-decoration:line-through;'>").append(strBasePrice).append("</div>\r\n");
-			sb.append("<div style='text-align:center;color:").append(salePriceColor).append(";font-weight:bold;font-size:20px;'>").append(strSalePrice).append("</div>\r\n");
-			sb.append("<div style='text-align:center;color:").append(salePriceColor).append(";font-weight:bold;font-size:14px;'>").append("로켓와우회원가").append("</div>\r\n");
-			sb.append(soldOutEls).append("\r\n");
-			sb.append("</a>\r\n");
-			sb.append("</div>\r\n");
-			sb.append("</li>\r\n");
+	private void urlTfKeyReleased(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_urlTfKeyReleased
+		if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+			// SwingUtilities.getWindowAncestor(evt.getComponent()).dispose();
 		}
-		return sb;
-	}
-
+	}// GEN-LAST:event_urlTfKeyReleased
+/*
+//	private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton2ActionPerformed
+//		// TODO add your handling code here:
+//	}// GEN-LAST:event_jRadioButton2ActionPerformed
+//
+//	private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton1ActionPerformed
+//		// TODO add your handling code here:
+//	}// GEN-LAST:event_jRadioButton1ActionPerformed
+//
+//	private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton3ActionPerformed
+//		// TODO add your handling code here:
+//	}// GEN-LAST:event_jRadioButton3ActionPerformed
+//
+//	private void jRadioButton10ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton10ActionPerformed
+//		// TODO add your handling code here:
+//	}// GEN-LAST:event_jRadioButton10ActionPerformed
+//
+//	private void jRadioButton11ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton11ActionPerformed
+//		// TODO add your handling code here:
+//	}// GEN-LAST:event_jRadioButton11ActionPerformed
+	 */
 	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
 		// TODO add your handling code here:
 		String html = newsTextArea.getText();
@@ -429,7 +341,7 @@ public class CoupangPartnersNpGoldBoxPromotionList extends javax.swing.JFrame {
 				}
 			}
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(CoupangPartnersNpGoldBoxPromotionList.class.getName()).log(java.util.logging.Level.SEVERE, null,
+			java.util.logging.Logger.getLogger(CoupangPartnersNpGoldBoxProductList.class.getName()).log(java.util.logging.Level.SEVERE, null,
 				ex);
 		}
 		// </editor-fold>
@@ -4550,7 +4462,7 @@ public class CoupangPartnersNpGoldBoxPromotionList extends javax.swing.JFrame {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new CoupangPartnersNpGoldBoxPromotionList().setVisible(true);
+				new CoupangPartnersNpGoldBoxProductList().setVisible(true);
 			}
 		});
 	}

@@ -29,6 +29,7 @@ import javax.swing.JRadioButton;
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 /**
@@ -42,10 +43,10 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 	 */
 	private static final long serialVersionUID = 1341726937516862047L;
 	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersNpPromotionListAsIs.class);
-	final static String userHome = System.getProperty("user.home");
+	final static String USER_HOME = System.getProperty("user.home");
 	private String strUrl = "https://www.coupang.com/np/goldbox";
 	private String strShortenedUrl = "https://coupa.ng/bDr4Tx";
-	
+
 	String strTitle = "로켓배송";
 	String productDivIdOrClassName = "div.newcx_list";
 	String productListIdOrClassName = "ul.promotion_list";
@@ -57,7 +58,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 	String liOrDiv = "";
 	String boxWidthStyle = "width:214px;";
 	String boxHeightStyle = "height:450px;";
-	
+
 	String imgWidthStyle = "width:212px;";
 	String imgHeightStyle = "height:212px;";
 
@@ -70,7 +71,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 	String strDate = sdf.format(new Date());
 	SimpleDateFormat sdf0 = new SimpleDateFormat("[yyyy-MM-dd]", Locale.KOREAN);
 	String strYmdBlacket = sdf0.format(new Date());
-	
+
 	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREAN);
 	String strYmdhms = sdf1.format(new Date());
 
@@ -89,9 +90,9 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 	String strWTime = strYmdhms;
 	String strRedirect = "landing";
 	String strIsAddedCart = "";
-	
+
 	String strCategoryName = "";
-	
+
 	String strFileName;
 	URI uri = null;
 	URL url = null;
@@ -119,7 +120,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 	String rocketDeliveryBannerHtml = "<a href='https://coupa.ng/bDsYSW'> <img src='https://static.coupangcdn.com/ca/cmg_paperboy/image/1565948764070/0819%28%EC%9B%94%29-C0-Left.jpg' alt=''> </a>";
 	// 기획전
 	String exhibitionBannerHtml = "<a href='#'> <img src='http://img1a.coupangcdn.com/image/promotion/promotion_title.png' alt=''> </a>";
-	
+
 	String topBanner = rocketDeliveryBannerHtml;
 
 	/**
@@ -129,7 +130,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		initComponents();
 		initList();
 	}
-	
+
 	private void initList() {
 		try {
 			url = new URL(strUrl);
@@ -142,7 +143,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-	
+
 	private static void open(URI uri) {
 		if (Desktop.isDesktopSupported()) {
 			try {
@@ -184,7 +185,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 jRadioButton9 = new javax.swing.JRadioButton();
                 jRadioButton10 = new javax.swing.JRadioButton();
                 jRadioButton11 = new javax.swing.JRadioButton();
-                jTextField3 = new javax.swing.JTextField();
+                jTextField1 = new javax.swing.JTextField();
                 jPanel8 = new javax.swing.JPanel();
                 jLabel1 = new javax.swing.JLabel();
                 jRadioButton12 = new javax.swing.JRadioButton();
@@ -192,7 +193,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 jRadioButton14 = new javax.swing.JRadioButton();
                 jRadioButton15 = new javax.swing.JRadioButton();
                 jRadioButton16 = new javax.swing.JRadioButton();
-                jTextField1 = new javax.swing.JTextField();
+                jTextField2 = new javax.swing.JTextField();
                 jPanel10 = new javax.swing.JPanel();
                 jLabel2 = new javax.swing.JLabel();
                 jRadioButton17 = new javax.swing.JRadioButton();
@@ -200,7 +201,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 jRadioButton19 = new javax.swing.JRadioButton();
                 jRadioButton20 = new javax.swing.JRadioButton();
                 jRadioButton21 = new javax.swing.JRadioButton();
-                jTextField2 = new javax.swing.JTextField();
+                jTextField3 = new javax.swing.JTextField();
                 jPanel5 = new javax.swing.JPanel();
                 jLabel3 = new javax.swing.JLabel();
                 jPanel1 = new javax.swing.JPanel();
@@ -351,8 +352,8 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 });
                 jPanel13.add(jRadioButton11);
 
-                jTextField3.setPreferredSize(new java.awt.Dimension(200, 21));
-                jPanel13.add(jTextField3);
+                jTextField1.setPreferredSize(new java.awt.Dimension(200, 21));
+                jPanel13.add(jTextField1);
 
                 jPanel9.add(jPanel13);
 
@@ -362,7 +363,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 jPanel8.add(jLabel1);
 
                 buttonGroup3.add(jRadioButton12);
-                jRadioButton12.setText("ul.promotion_list");
+                jRadioButton12.setText("div.promotion_list");
                 jRadioButton12.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 jRadioButton12ActionPerformed(evt);
@@ -407,8 +408,8 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 });
                 jPanel8.add(jRadioButton16);
 
-                jTextField1.setPreferredSize(new java.awt.Dimension(200, 21));
-                jPanel8.add(jTextField1);
+                jTextField2.setPreferredSize(new java.awt.Dimension(200, 21));
+                jPanel8.add(jTextField2);
 
                 jPanel9.add(jPanel8);
 
@@ -418,7 +419,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 jPanel10.add(jLabel2);
 
                 buttonGroup4.add(jRadioButton17);
-                jRadioButton17.setText("li.highlight_product");
+                jRadioButton17.setText("div.highlight_product");
                 jRadioButton17.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 jRadioButton17ActionPerformed(evt);
@@ -463,8 +464,8 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
                 });
                 jPanel10.add(jRadioButton21);
 
-                jTextField2.setPreferredSize(new java.awt.Dimension(200, 21));
-                jPanel10.add(jTextField2);
+                jTextField3.setPreferredSize(new java.awt.Dimension(200, 21));
+                jPanel10.add(jTextField3);
 
                 jPanel9.add(jPanel10);
 
@@ -652,7 +653,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		// TODO add your handling code here:
 		JRadioButton radioButton = (JRadioButton) evt.getSource();
 		String selectedOption = radioButton.getText();
-		productDivIdOrClassName = selectedOption;
+		productDivIdOrClassName = "";
 		System.out.println(selectedOption);
         }//GEN-LAST:event_jRadioButton11ActionPerformed
 
@@ -692,7 +693,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		// TODO add your handling code here:
 		JRadioButton radioButton = (JRadioButton) evt.getSource();
 		String selectedOption = radioButton.getText();
-		productListIdOrClassName = selectedOption;
+		productListIdOrClassName = "";
 		System.out.println(selectedOption);
         }//GEN-LAST:event_jRadioButton16ActionPerformed
 
@@ -732,7 +733,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		// TODO add your handling code here:
 		JRadioButton radioButton = (JRadioButton) evt.getSource();
 		String selectedOption = radioButton.getText();
-		productItemIdOrClassName = selectedOption;
+		productItemIdOrClassName = "";
 		System.out.println(selectedOption);
         }//GEN-LAST:event_jRadioButton21ActionPerformed
 
@@ -747,22 +748,27 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		String actionCommand2 = getSelectedButtonText(buttonGroup2);
 		String actionCommand3 = getSelectedButtonText(buttonGroup3);
 		String actionCommand4 = getSelectedButtonText(buttonGroup4);
-		
+
 		logger.debug("actionCommand1:" + actionCommand1);
 		logger.debug("actionCommand2:" + actionCommand2);
 		logger.debug("actionCommand3:" + actionCommand3);
 		logger.debug("actionCommand4:" + actionCommand4);
-		
+
+		if (actionCommand2.equals("기타")) {
+			actionCommand2 = jTextField1.getText();
+		}
+		if (actionCommand3.equals("기타")) {
+			actionCommand3 = jTextField2.getText();
+		}
+		if (actionCommand4.equals("기타")) {
+			actionCommand4 = jTextField3.getText();
+		}
+
 		strTitle = actionCommand1;
 		productDivIdOrClassName = actionCommand2;
 		productListIdOrClassName = actionCommand3;
 		productItemIdOrClassName = actionCommand4;
-		
-		if (strTitle.equals("골드박스")) {
-			ulOrDiv = "div";
-			liOrDiv = "div";
-		}
-		
+
 		String htmlSource = newsTextArea1.getText();
 		Document doc = Jsoup.parse(htmlSource);
 		doc.select("button").remove();
@@ -770,44 +776,44 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		// 네이버 블로그에서 dl,dt,dd,del 태그가 안먹어서 변경한다.
 		Elements dlEls = doc.select("dl");
 		dlEls.tagName("div");
-		
+
 		Elements dtEls = doc.select("dt");
 		dtEls.tagName("div");
-		
+
 		Elements ddEls = doc.select("dd");
 		ddEls.tagName("div");
-		
+
 		Elements delEls = doc.select("del");
 		delEls.attr("style", "text-decoration:line-through;");
 		delEls.tagName("div");
-		
+
 		Elements allElements = doc.getAllElements();
 		for (Element el : allElements) {
 			String strClass = el.attr("class");
 			strClass = strClass.replace("-", "_");
 			el.attr("class", strClass);
-			
+
 			Attributes attrs = el.attributes();
 			List<Attribute> attrList = attrs.asList();
 			for (Attribute attr : attrList) {
 				String attrKey = attr.getKey();
 				if (attrKey.startsWith("data-")) {
-					logger.debug("data- attrKey:" + attrKey);
+//					logger.debug("data- attrKey:" + attrKey);
 					el.removeAttr(attrKey);
 				}
 			}
 		}
-		
+
 		doc.select("#product-list-paging").remove();
-		
+
 		Elements aEls = doc.select("a");
 		// a링크를 풀 경로로 변경
 		setProductItemALink(aEls);
-		
+
 		Elements imgEls = doc.select("img");
 		// img링크를 풀 경로로 변경
 		setProductItemImgLink(imgEls);
-		
+
 		logger.debug("strTitle:" + strTitle);
 		if (strTitle.equals("로켓배송")) {
 			// https://www.coupang.com/np/campaigns/82
@@ -816,7 +822,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			boxHeightStyle = "height:450px;";
 			imgWidthStyle = "width:212px;";
 			imgHeightStyle = "height:212px;";
-			
+
 			strAddtag = "700";
 			strCtag = "ROCKETDELIVERY";
 			strPageType = "ROCKETDELIVERY";
@@ -828,7 +834,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			boxHeightStyle = "height:450px;";
 			imgWidthStyle = "width:212px;";
 			imgHeightStyle = "height:212px;";
-			
+
 			strAddtag = "311";
 			strCtag = "396399";
 			strPageType = "LIST";
@@ -840,7 +846,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			boxHeightStyle = "height:450px;";
 			imgWidthStyle = "width:212px;";
 			imgHeightStyle = "height:212px;";
-			
+
 			strAddtag = "700";
 			strCtag = "JIKGU";
 			strPageType = "JIKGU";
@@ -848,13 +854,17 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		} else if (strTitle.equals("골드박스")) {
 			// https://www.coupang.com/np/goldbox
 			topBanner = goldboxBannerHtml;
-			boxWidthStyle = "width:214px;";
-			boxHeightStyle = "height:450px;";
-			imgWidthStyle = "width:212px;";
-			
+//			boxWidthStyle = "width:214px;";
+//			boxHeightStyle = "height:450px;";
+//			imgWidthStyle = "width:212px;";
+//			imgHeightStyle = "height:212px;";
+			boxWidthStyle = "width:443px;";
+			boxHeightStyle = "height:192px;";
+			imgWidthStyle = "width:184px;";
+			imgHeightStyle = "height:184px;";
+
 			strAddtag = "400";
 			strPageType = "PRODUCT";
-			imgHeightStyle = "height:212px;";
 		} else if (strTitle.equals("정기배송")) {
 			// https://www.coupang.com/np/goldbox
 			topBanner = goldboxBannerHtml;
@@ -875,7 +885,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 				imgWidthStyle = "width:310px;";
 				imgHeightStyle = "height:148px;";
 			}
-			
+
 			strAddtag = "400";
 			strPageType = "PRODUCT";
 		}
@@ -908,12 +918,12 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			strCategoryName = strTitle;
 		}
 		logger.debug("strCategoryNames2:" + strCategoryName);
-		
+
 		if (doc.select(".search_query_result p.hit_count").size() > 0) {
 			logger.debug("인기 검색어 결과입니다.");
 			strCategoryName = doc.select(".search_query_result p.hit_count strong").first().text();
 		}
-		
+
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("<html>\r\n");
 		sb1.append("<body>\r\n");
@@ -943,7 +953,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		doc.select(".baby_product .price_area .unit_price").attr("style", "display: inline-block;font-size: 11px;color: #ae0000;margin-top: 2px;margin-bottom: 2px;");
 		//원가,기본가 style
 		doc.select(".baby_product .price_area .base_price").attr("style", "color:#888;text-decoration:line-through;font-size:12px;");
-		
+
 		logger.debug("productDivIdOrClassName + productListIdOrClassName:" + productDivIdOrClassName + " " + productListIdOrClassName);
 		Elements divProductListEls = doc.select(productDivIdOrClassName + " " + productListIdOrClassName);
 		logger.debug("divProductListEls.size:" + divProductListEls.size());
@@ -982,55 +992,57 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 				if (productListEls.size() <= 0) {
 					continue;
 				}
-				Element productListEl = productListEls.get(0);
-				productListEl.attr("style", "list-style:none;padding-left:0;display:inline-block;");
-				// 아이템 목록
-				logger.debug("liOrDiv + productItemIdOrClassName:" + liOrDiv + productItemIdOrClassName);
-				Elements productItemEls = productListEl.select(liOrDiv + productItemIdOrClassName);
-				logger.debug("productItemEls.size:" + productItemEls.size());
-				if (productItemEls.size() <= 0) {
-					continue;
+				//상품목록 카테고리가 여러개라서 UL이 여러개 일 수 있다.
+				for (Element productListEl : productListEls) {
+					productListEl.attr("style", "list-style:none;padding-left:0;display:inline-block;");
+					// 아이템 목록
+					logger.debug("liOrDiv + productItemIdOrClassName:" + liOrDiv + productItemIdOrClassName);
+					Elements productItemEls = productListEl.select(liOrDiv + productItemIdOrClassName);
+					logger.debug("productItemEls.size:" + productItemEls.size());
+					if (productItemEls.size() <= 0) {
+						continue;
+					}
+					productItemEls.attr("style",
+						"list-style:none;" + boxWidthStyle + boxHeightStyle + "float:left;background-color: #fff; box-shadow: none; border: 1px solid #dfe1e5; border-radius: 8px; overflow: hidden; margin: 0 0 6px 0;margin-right:8px;margin-top:1px;");
+
+					// 할인율 스타일
+					Elements discountPercentageEls = productItemEls.select(".discount_percentage");
+					logger.debug("discountPercentageEls.size:" + discountPercentageEls.size());
+					discountPercentageEls.attr("style",
+						"color:red;background-color:#ffff00;font-size:14px;font-weight:bold;text-align:center;");
+					discountPercentageEls.tagName("div");// span to div
+
+					// 정기배송 할인율 스타일
+					Elements discountSubscriptionEls = productItemEls
+						.select(productItemIdOrClassName + " .price_area .discount_subscription");
+					discountSubscriptionEls.attr("style",
+						"position: relative;width: 52px;height: 14px;color: #fff;background-color:#ff9900;font-family: apple sd gothic neo,malgun gothic,'맑은 고딕',nanumgothic,'나눔고딕',dotum,'돋움',sans-serif;text-indent: 0;text-align: center;font-size: 10px;line-height: 14px;font-weight: bold;vertical-align: top;");
+					discountSubscriptionEls.tagName("div");
+
+					Element el = new Element("div");
+					el.attr("style",
+						"width: 0;height: 0;border-top: 7px solid transparent;border-right: 12px solid #ff9900;border-bottom: 7px solid transparent;");
+
+					Elements subscriptionBadgeInfoEls = productItemEls.select(".subscription_badge_info");
+					subscriptionBadgeInfoEls.tagName("div");
+					subscriptionBadgeInfoEls.attr("style", "display:flex");
+
+					Elements subscriptionBadgeEls = productItemEls.select(".subscription_badge");
+					subscriptionBadgeEls.attr("style", "float:left;");
+					subscriptionBadgeEls.tagName("div");
+
+					subscriptionBadgeEls.after(el.outerHtml());
+
+					// 세일가격을 빨간색으로 표기
+					Elements saleEls = productItemEls.select(productItemIdOrClassName + " .price_area .sale");
+					saleEls.attr("style",
+						"display: block;font-size: 15px;font-weight:bold;line-height:20px;color: #ae0000;");
+					saleEls.tagName("div");
+
+					Elements unitPriceEls = productItemEls.select(productItemIdOrClassName + " .price-area .unit-price");
+					unitPriceEls.tagName("div");
 				}
-				productItemEls.attr("style",
-					"list-style:none;" + boxWidthStyle + boxHeightStyle + "float:left;background-color: #fff; box-shadow: none; border: 1px solid #dfe1e5; border-radius: 8px; overflow: hidden; margin: 0 0 6px 0;margin-right:8px;margin-top:1px;");
 
-				// 할인율 스타일
-				Elements discountPercentageEls = productItemEls.select(".discount_percentage");
-				logger.debug("discountPercentageEls.size:" + discountPercentageEls.size());
-				discountPercentageEls.attr("style",
-					"color:red;background-color:#ffff00;font-size:14px;font-weight:bold;text-align:center;");
-				discountPercentageEls.tagName("div");// span to div
-
-				// 정기배송 할인율 스타일
-				Elements discountSubscriptionEls = productItemEls
-					.select(productItemIdOrClassName + " .price_area .discount_subscription");
-				discountSubscriptionEls.attr("style",
-					"position: relative;width: 52px;height: 14px;color: #fff;background-color:#ff9900;font-family: apple sd gothic neo,malgun gothic,'맑은 고딕',nanumgothic,'나눔고딕',dotum,'돋움',sans-serif;text-indent: 0;text-align: center;font-size: 10px;line-height: 14px;font-weight: bold;vertical-align: top;");
-				discountSubscriptionEls.tagName("div");
-				
-				Element el = new Element("div");
-				el.attr("style",
-					"width: 0;height: 0;border-top: 7px solid transparent;border-right: 12px solid #ff9900;border-bottom: 7px solid transparent;");
-				
-				Elements subscriptionBadgeInfoEls = productItemEls.select(".subscription_badge_info");
-				subscriptionBadgeInfoEls.tagName("div");
-				subscriptionBadgeInfoEls.attr("style", "display:flex");
-				
-				Elements subscriptionBadgeEls = productItemEls.select(".subscription_badge");
-				subscriptionBadgeEls.attr("style", "float:left;");
-				subscriptionBadgeEls.tagName("div");
-				
-				subscriptionBadgeEls.after(el.outerHtml());
-
-				// 세일가격을 빨간색으로 표기
-				Elements saleEls = productItemEls.select(productItemIdOrClassName + " .price_area .sale");
-				saleEls.attr("style",
-					"display: block;font-size: 15px;font-weight:bold;line-height:20px;color: #ae0000;");
-				saleEls.tagName("div");
-				
-				Elements unitPriceEls = productItemEls.select(productItemIdOrClassName + " .price-area .unit-price");
-				unitPriceEls.tagName("div");
-				
 			}
 		} else {
 			// 연관검색어 삭제
@@ -1045,6 +1057,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			logger.debug("divProductListEl start===========\r\n");
 			logger.debug(divProductListEl + "\r\n");
 			logger.debug("divProductListEl end===========\r\n");
+			logger.debug("ulOrDiv + productListIdOrClassName:" + ulOrDiv + productListIdOrClassName);
 			Elements productListEls = divProductListEl.select(ulOrDiv + productListIdOrClassName);
 			logger.debug("productListEls.size:" + productListEls.size());
 			if (productListEls.size() <= 0) {
@@ -1058,10 +1071,10 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			if (productItemEls.size() <= 0) {
 				return;
 			}
-			
+
 			if (productItemIdOrClassName.equals("li.search_product")) {
 				for (Element productItemEl : productItemEls) {
-					
+
 					Elements adBadgeEls = productItemEl.select(".search_product .descriptions_inner .ad_badge");
 					if (adBadgeEls.size() > 0) {
 						logger.debug("광고상품 발견");
@@ -1071,7 +1084,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 					if (numberEls.size() > 0) {
 						numberEls.attr("style", "overflow: hidden;display: block;position: relative;left: 6px;top: 5px;width: 30px;height: 30px;text-indent: 0.5em;z-index: 2;color:#fff;background-color:#f00;");
 						productItemEl.insertChildren(0, numberEls);
-						
+
 					}
 				}
 			}
@@ -1098,41 +1111,41 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			discountSubscriptionEls.attr("style",
 				"position: relative;width: 52px;height: 14px;color: #fff;background-color:#ff9900;font-family: apple sd gothic neo,malgun gothic,'맑은 고딕',nanumgothic,'나눔고딕',dotum,'돋움',sans-serif;text-indent: 0;text-align: center;font-size: 10px;line-height: 14px;font-weight: bold;vertical-align: top;");
 			discountSubscriptionEls.tagName("div");
-			
+
 			Element el = new Element("div");
 			el.attr("style",
 				"width: 0;height: 0;border-top: 7px solid transparent;border-right: 12px solid #ff9900;border-bottom: 7px solid transparent;");
-			
+
 			Elements subscriptionBadgeInfoEls = productItemEls.select(".subscription_badge_info");
 			subscriptionBadgeInfoEls.tagName("div");
 			subscriptionBadgeInfoEls.attr("style", "display:flex");
-			
+
 			Elements subscriptionBadgeEls = productItemEls.select(".subscription_badge");
 			subscriptionBadgeEls.attr("style", "float:left;");
 			subscriptionBadgeEls.tagName("div");
-			
+
 			subscriptionBadgeEls.after(el.outerHtml());
 
 			// 세일가격을 빨간색으로 표기
 			Elements saleEls1 = productItemEls.select(productItemIdOrClassName + " .price_area .sale");
 			saleEls1.attr("style", "display: block;font-size: 15px;font-weight:bold;line-height:20px;color: #ae0000;");
 			saleEls1.tagName("div");
-			
+
 			Elements saleEls2 = productItemEls.select(productItemIdOrClassName + " .price-area .sale .price-value");
 			saleEls2.attr("style",
 				"font-family: 'Tahoma';display: block;font-size: 15px;font-weight:bold;line-height:20px;color: #ae0000;");
 			saleEls2.tagName("div");
-			
+
 			Elements unitPriceEls = productItemEls.select(productItemIdOrClassName + " .price-area .unit-price");
 			unitPriceEls.tagName("div");
-			
+
 		}
-		
+
 		sb1.append(divProductListEls.outerHtml());
 		sb1.append("</div>\r\n");
-		
+
 		sb1.append("<div><br/></div>\r\n");
-		
+
 		sb1.append("<div>\r\n");
 		sb1.append("※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음<br>\r\n");
 		sb1.append("</div>\r\n");
@@ -1141,7 +1154,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
 		newsTextArea2.setText(sb1.toString());
-		strFileName = userHome + File.separator + "documents" + File.separator + strDate + "_" + strCategoryName
+		strFileName = USER_HOME + File.separator + "documents" + File.separator + strDate + "_" + strCategoryName
 			+ ".html";
 //	    FileUtil.fileWrite(fileName, Jsoup.parse(sb1.toString()).html());
 		FileUtil.fileWrite(strFileName, sb1.toString());
@@ -1155,7 +1168,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
         private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 		// TODO add your handling code here:
 		String s = newsTextArea2.getText();
-		strFileName = userHome + File.separator + "documents" + File.separator + strDate + "_" + strCategoryName
+		strFileName = USER_HOME + File.separator + "documents" + File.separator + strDate + "_" + strCategoryName
 			+ ".html";
 //	    FileUtil.fileWrite(fileName, Jsoup.parse(sb1.toString()).html());
 		FileUtil.fileWrite(strFileName, s);
@@ -1173,18 +1186,18 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		productDivIdOrClassName = selectedOption;
 		System.out.println(selectedOption);
         }//GEN-LAST:event_jRadioButton22ActionPerformed
-	
+
 	public String getSelectedButtonText(ButtonGroup buttonGroup) {
 		for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
 			AbstractButton button = buttons.nextElement();
-			
+
 			if (button.isSelected()) {
 				return button.getText();
 			}
 		}
 		return null;
 	}
-	
+
 	public void setProductItemALink(Elements itemEls) {
 		for (int j = 0; j < itemEls.size(); j++) {
 			Element el = itemEls.get(j);
@@ -1201,7 +1214,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			aEl.attr("target", "_new");
 			aEl.attr("style", "text-decoration:none");
 			String aHref = aEl.attr("href");
-			
+
 			if (aHref.startsWith("//")) {
 				aHref = strProtocol + ":" + aHref;
 				aEl.attr("href", aHref);
@@ -1209,7 +1222,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 				aHref = strProtocol + "://" + strHost + aHref;
 				aEl.attr("href", aHref);
 			}
-			
+
 			String productId = "";
 			try {
 				url = new URL(aHref);
@@ -1247,10 +1260,10 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			aHref += "&redirect=" + strRedirect;
 			aHref += "&isAddedCart=" + strIsAddedCart;
 			aEl.attr("href", aHref);
-			
+
 		}
 	}
-	
+
 	public void setProductItemImgLink(Elements imgEls) {
 		logger.debug("imgEls1:" + imgEls);
 		String strCoupickImg = "";
@@ -1259,11 +1272,13 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 		String strRocketDeliveryImg = "";
 		String strFixedDeliveryImg = "";
 		String strRocketWowImg = "";
-		
+
 		for (Element imgEl : imgEls) {
 			imgEl.removeAttr("data-src");
 			imgEl.removeAttr("onerror");
-			
+			imgEl.removeAttr("width");
+			imgEl.removeAttr("height");
+
 			String imgSrc = imgEl.attr("src");
 			if (imgSrc.startsWith("//")) {
 				imgEl.attr("src", "http:" + imgSrc);
@@ -1296,7 +1311,16 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 				imgEl.attr("style", "width:14px;height:14px");
 				strRocketWowImg = imgEl.outerHtml();
 			}
-			
+			if (strTitle.equals("골드박스")) {
+				Node parentNode = imgEl.parentNode();
+				String className = parentNode.attr("class");
+				logger.debug("className:" + className);
+				if (className.equals("highlight_product__image")) {
+					parentNode.attr("style", "float:left");
+					imgEl.attr("style", "width:184px;height:184px");
+				}
+			}
+
 			logger.debug("strCoupickImg:" + strCoupickImg);
 			logger.debug("strRocketFreshImg:" + strRocketFreshImg);
 			logger.debug("strJikguImg:" + strJikguImg);
@@ -1304,9 +1328,7 @@ public class CoupangPartnersNpPromotionListAsIs extends javax.swing.JFrame {
 			logger.debug("strFixedDeliveryImg:" + strFixedDeliveryImg);
 			logger.debug("strRocketWowImg:" + strRocketWowImg);
 		}
-		logger.debug("imgEls2:" + imgEls);
-		imgEls.select("img").first().attr("style", imgWidthStyle + imgHeightStyle);
-		
+
 	}
 
 	/**
