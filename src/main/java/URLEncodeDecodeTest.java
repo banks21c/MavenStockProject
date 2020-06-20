@@ -35,6 +35,8 @@ public class URLEncodeDecodeTest extends News {
 			logger.debug("dowJonesDecoder :" + dowJonesDecoder);
 			dowJonesEncoder = URLEncoder.encode(dowJones);
 			logger.debug("dowJonesEncoder0 :" + dowJonesEncoder);
+			dowJonesEncoder = URLEncoder.encode(" ");
+			logger.debug("blank :" + dowJonesEncoder);
 			dowJonesEncoder = URLEncoder.encode(dowJones, "KSC5601");
 			logger.debug("dowJonesEncoder1 :" + dowJonesEncoder);
 			dowJonesEncoder = URLEncoder.encode(dowJones, "UTF8");
