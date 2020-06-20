@@ -1,9 +1,5 @@
 package html.parsing.stock.javafx;
 
-import html.parsing.stock.StockVO;
-import html.parsing.stock.util.FileUtil;
-import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,14 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import javafx.stage.Stage;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -31,10 +20,21 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AllStockDisplayBoardFinanceDaumNetApp extends Application {
+import html.parsing.stock.StockVO;
+import html.parsing.stock.util.FileUtil;
+import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+
+public class AllStockDisplayBoardSaveStockListApp extends Application {
 
 	final static String userHome = System.getProperty("user.home");
-	private static Logger logger = LoggerFactory.getLogger(AllStockDisplayBoardFinanceDaumNetApp.class);
+	private static Logger logger = LoggerFactory.getLogger(AllStockDisplayBoardSaveStockListApp.class);
 
 	List<StockVO> kospiUniqueStockList = new ArrayList<>();
 	List<StockVO> kosdaqUniqueStockList = new ArrayList<>();
