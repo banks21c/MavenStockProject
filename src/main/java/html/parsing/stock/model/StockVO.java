@@ -1,4 +1,4 @@
-package html.parsing.stock;
+package html.parsing.stock.model;
 
 import java.util.Map;
 import java.util.Vector;

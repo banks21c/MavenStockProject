@@ -25,7 +25,7 @@ import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
 public class NewsNaverCom extends News {

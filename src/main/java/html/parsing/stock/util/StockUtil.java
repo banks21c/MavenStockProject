@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package html.parsing.stock;
+package html.parsing.stock.util;
 
+import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -51,7 +52,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 
-import html.parsing.stock.DataSort.StockNameLengthDescCompare;
+import html.parsing.stock.util.DataSort.StockNameLengthDescCompare;
 import java.util.regex.Pattern;
 
 /**
@@ -990,7 +991,6 @@ public class StockUtil {
 			headers.put("Origin", "http://203.235.1.50");
 			headers.put("Referer", "http://203.235.1.50/corpgeneral/corpList.do?method=loadInitPage");
 			headers.put("Upgrade-Insecure-Requests", "1");
-//			headers.put("User-Agent", USER_AGENT);
 			headers.put("User-Agent",
 				"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36");
 			headers.put("User-Agent", USER_AGENT);
@@ -1861,14 +1861,13 @@ public class StockUtil {
 	public static Document getUrlDocument(String url) {
 		Document doc = null;
 		try {
-			String userAgent = USER_AGENT;
 			// This will get you the response.
 			Connection.Response res = Jsoup.connect(url).method(Connection.Method.POST).followRedirects(false)
-				.userAgent(userAgent).execute();
+				.userAgent(USER_AGENT).execute();
 			// This will get you cookies
 			Map<String, String> loginCookies = res.cookies();
 			// And this is the easiest way I've found to remain in session
-			doc = Jsoup.connect(url).cookies(loginCookies).userAgent(userAgent).get();
+			doc = Jsoup.connect(url).cookies(loginCookies).userAgent(USER_AGENT).get();
 		} catch (IOException ex) {
 			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
 		}
@@ -2079,10 +2078,9 @@ public class StockUtil {
 		String nhnSiseDayUrl = "https://finance.naver.com/item/sise_day.nhn?code=" + stockCode + "&page=" + pageNo;
 		logger.debug("nhnSiseDayUrl : " + nhnSiseDayUrl);
 
-//		String userAgent = USER_AGENT;
 //		// This will get you the response.
 //		Connection.Response res = Jsoup.connect(nhnSiseDayUrl).method(Connection.Method.POST).followRedirects(false)
-//				.userAgent(userAgent).execute();
+//				.userAgent(USER_AGENT).execute();
 //		// This will get you cookies
 //		Map<String, String> loginCookies = res.cookies();
 //		// And this is the easiest way I've found to remain in session
@@ -2743,7 +2741,7 @@ public class StockUtil {
 	 *
 	 * @throws Exception
 	 */
-	static StringBuffer sendPost(String url, String charsetName) throws Exception {
+	public static StringBuffer sendPost(String url, String charsetName) throws Exception {
 		logger.debug("sendPost url : " + url);
 		logger.debug("sendPost charsetName : " + charsetName);
 

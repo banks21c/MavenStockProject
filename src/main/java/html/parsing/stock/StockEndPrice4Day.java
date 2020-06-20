@@ -1,5 +1,6 @@
 package html.parsing.stock;
 
+import html.parsing.stock.util.StockUtil;
 import java.io.IOException;
 import java.util.Map;
 

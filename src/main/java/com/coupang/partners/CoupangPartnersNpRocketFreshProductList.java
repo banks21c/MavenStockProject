@@ -5,7 +5,7 @@
  */
 package com.coupang.partners;
 
-import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.StockUtil;
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.io.IOException;

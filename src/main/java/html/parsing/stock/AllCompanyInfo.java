@@ -1,5 +1,8 @@
 package html.parsing.stock;
 
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
+import html.parsing.stock.model.StockVO;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -20,14 +23,14 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.DataSort.BizTypePerDescCompare;
-import html.parsing.stock.DataSort.BpsDescCompare;
-import html.parsing.stock.DataSort.DividendRateDescCompare;
-import html.parsing.stock.DataSort.EpsDescCompare;
-import html.parsing.stock.DataSort.PbrDescCompare;
-import html.parsing.stock.DataSort.PerDescCompare;
-import html.parsing.stock.DataSort.RoeDescCompare;
-import html.parsing.stock.DataSort.StockNameAscCompare;
+import html.parsing.stock.util.DataSort.BizTypePerDescCompare;
+import html.parsing.stock.util.DataSort.BpsDescCompare;
+import html.parsing.stock.util.DataSort.DividendRateDescCompare;
+import html.parsing.stock.util.DataSort.EpsDescCompare;
+import html.parsing.stock.util.DataSort.PbrDescCompare;
+import html.parsing.stock.util.DataSort.PerDescCompare;
+import html.parsing.stock.util.DataSort.RoeDescCompare;
+import html.parsing.stock.util.DataSort.StockNameAscCompare;
 
 public class AllCompanyInfo {
 

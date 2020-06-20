@@ -1,5 +1,6 @@
 package html.parsing.stock;
 
+import html.parsing.stock.util.StockUtil;
 import java.awt.event.KeyEvent;
 import java.io.File;
 

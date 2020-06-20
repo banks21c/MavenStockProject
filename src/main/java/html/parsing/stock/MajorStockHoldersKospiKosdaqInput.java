@@ -1,5 +1,7 @@
 package html.parsing.stock;
 
+import html.parsing.stock.util.StockUtil;
+import html.parsing.stock.model.StockVO;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -20,9 +22,9 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.DataSort.RetainAmountDescCompare;
-import html.parsing.stock.DataSort.RetainRatioDescCompare;
-import html.parsing.stock.DataSort.VaryRatioDescCompare;
+import html.parsing.stock.util.DataSort.RetainAmountDescCompare;
+import html.parsing.stock.util.DataSort.RetainRatioDescCompare;
+import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
 import html.parsing.stock.model.MajorStockHolderVO;
 import html.parsing.stock.util.FileUtil;
 

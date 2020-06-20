@@ -1,5 +1,6 @@
 package html.parsing.stock;
 
+import html.parsing.stock.model.StockVO;
 import java.lang.reflect.Field;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;

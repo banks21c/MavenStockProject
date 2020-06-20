@@ -24,11 +24,11 @@ import org.jsoup.nodes.Document;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.ClassForNameExample;
-import html.parsing.stock.DataSort.CompanyNameAscCompare;
-import html.parsing.stock.DataSort.StockNameAscCompare2;
-import html.parsing.stock.GlobalVariables;
-import html.parsing.stock.StockUtil;
-import html.parsing.stock.StockVO;
+import html.parsing.stock.util.DataSort.CompanyNameAscCompare;
+import html.parsing.stock.util.DataSort.StockNameAscCompare2;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.model.FortuneRankedComVO;
 import html.parsing.stock.util.FileUtil;
 import java.io.File;

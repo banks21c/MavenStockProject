@@ -26,7 +26,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.StockUtil;
+import html.parsing.stock.util.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
 public class NewsTomatoCom extends javax.swing.JFrame {

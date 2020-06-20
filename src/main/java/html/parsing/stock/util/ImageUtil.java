@@ -33,16 +33,18 @@ import ij.ImageStack;
 import ij.io.Opener;
 import ij.process.ImageProcessor;
 import ij.process.StackProcessor;
+import java.net.MalformedURLException;
 
 /**
  *
  * @author parsing-25
  */
 public class ImageUtil {
+
 	private static final Logger logger = LoggerFactory.getLogger(ImageUtil.class);
 
 	public static String imageConvertCropAndResize(String fileAbsolutePath, String fileSaveAsNameSuffix, int reWidth,
-			int reHeight) {
+		int reHeight) {
 
 		String saveAsFilePath = null;
 
@@ -84,15 +86,12 @@ public class ImageUtil {
 //            logger.debug("imp.getHeight() : " + imp.getHeight());
 //            logger.debug("cropWidth : " + cropWidth);
 //            logger.debug("cropHeight : " + cropHeight);
-
 //            ImageStack croppedStack = sp.crop(x, y, cropWidth, cropHeight);            
 //            imp.setStack(null, croppedStack);
-
 			logger.debug("imp.getWidth(): " + imp.getWidth());
 			logger.debug("imp.getHeight(): " + imp.getHeight());
 
 			// sp = new StackProcessor(imp.getStack(), imp.getProcessor());
-
 			ImageStack resizedStack = sp.resize(reWidth, reHeight, true);
 			imp.setStack(null, resizedStack);
 			StringBuffer filePath = new StringBuffer(fileAbsolutePath);
@@ -110,7 +109,7 @@ public class ImageUtil {
 	}
 
 	public static ByteArrayInputStream decodeBase64StringToByteArrayInputStream(String base64String)
-			throws IOException {
+		throws IOException {
 		if (base64String.startsWith("\"data:image")) {
 			base64String = base64String.substring(base64String.indexOf(',') + 1, base64String.length() - 1);
 		} else if (base64String.startsWith("data:image")) {
@@ -122,7 +121,7 @@ public class ImageUtil {
 	}
 
 	public static ByteArrayInputStream convertBase64StringToByteArrayInputStream(String base64String)
-			throws IOException {
+		throws IOException {
 		Base64UtilDecoder decoder = Base64Util.getDecoder();
 		if (base64String.startsWith("\"data:image")) {
 			base64String = base64String.substring(base64String.indexOf(',') + 1, base64String.length() - 1);
@@ -148,7 +147,7 @@ public class ImageUtil {
 	}
 
 	public static boolean convertBase64StringToImageFile(String base64String, String dirName, String fileName)
-			throws IOException {
+		throws IOException {
 		Base64UtilDecoder decoder = Base64Util.getDecoder();
 		if (base64String.startsWith("\"data:image")) {
 			base64String = base64String.substring(base64String.indexOf(',') + 1, base64String.length() - 1);
@@ -324,6 +323,44 @@ public class ImageUtil {
 		System.out.println("image download finished");
 	}
 
+	public static BufferedImage getImage(String src) {
+		if (src == null || src.equals("")) {
+			return null;
+		}
+		if (src.indexOf("?") != -1) {
+			src = src.substring(0, src.indexOf("?"));
+		}
+		URL url;
+		BufferedImage srcImg = null;
+		BufferedImage destImg = null;
+		try {
+			url = new URL(src);
+			srcImg = ImageIO.read(url);
+			int width = srcImg.getWidth();
+			int height = srcImg.getHeight();
+			System.out.println("width1:" + width);
+			System.out.println("height1:" + height);
+			if (width > height && width > 548) {
+				height = (548 * height) / width;
+				width = 548;
+
+				destImg = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
+				Graphics2D g = destImg.createGraphics();
+				g.drawImage(srcImg, 0, 0, width, height, null);
+			}
+			width = destImg.getWidth();
+			height = destImg.getHeight();
+			System.out.println("width2:" + width);
+			System.out.println("height2:" + height);
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return destImg;
+	}
+
 	public static BufferedImage getImageInfoFromUrl(String imgUrl) throws IOException {
 		if (imgUrl.equals("")) {
 			return null;
@@ -365,7 +402,7 @@ public class ImageUtil {
 
 	/**
 	 * url에서 이미지 정보를 읽어와서 width와 height에 대한 style을 만들어 return한다.
-	 * 
+	 *
 	 * @param imgUrl
 	 * @return
 	 * @throws IOException
@@ -393,9 +430,10 @@ public class ImageUtil {
 	}
 
 	/**
-	 * url에서 이미지 정보를 읽어와서 width와 height를 org.jsoup.nodes.Element에 style 속성값에 세팅한다.
-	 * 
-	 * @param img    org.jsoup.nodes.Element
+	 * url에서 이미지 정보를 읽어와서 width와 height를 org.jsoup.nodes.Element에 style 속성값에
+	 * 세팅한다.
+	 *
+	 * @param img org.jsoup.nodes.Element
 	 * @param imgUrl
 	 * @return
 	 * @throws IOException

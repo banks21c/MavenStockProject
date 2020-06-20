@@ -19,11 +19,11 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.DataSort.DividendRateDescCompare;
-import html.parsing.stock.DataSort.VaryRatioDescCompare;
-import html.parsing.stock.GlobalVariables;
-import html.parsing.stock.StockUtil;
-import html.parsing.stock.StockVO;
+import html.parsing.stock.util.DataSort.DividendRateDescCompare;
+import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.FileUtil;
 
 public class KoreaStockDividends extends Thread {

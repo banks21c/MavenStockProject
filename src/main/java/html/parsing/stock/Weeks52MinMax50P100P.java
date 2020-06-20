@@ -1,5 +1,8 @@
 package html.parsing.stock;
 
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
+import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,10 +25,10 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.DataSort.MaxCurAscCompare;
-import html.parsing.stock.DataSort.MinCurDescCompare;
-import html.parsing.stock.DataSort.MinMaxDescCompare;
-import html.parsing.stock.DataSort.YearStartCurDescCompare;
+import html.parsing.stock.util.DataSort.MaxCurAscCompare;
+import html.parsing.stock.util.DataSort.MinCurDescCompare;
+import html.parsing.stock.util.DataSort.MinMaxDescCompare;
+import html.parsing.stock.util.DataSort.YearStartCurDescCompare;
 
 public class Weeks52MinMax50P100P {
 

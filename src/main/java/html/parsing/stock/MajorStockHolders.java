@@ -1,5 +1,7 @@
 package html.parsing.stock;
 
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;

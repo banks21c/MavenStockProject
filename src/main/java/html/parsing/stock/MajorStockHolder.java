@@ -1,5 +1,7 @@
 package html.parsing.stock;
 
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,8 +24,8 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.DataSort.RetainAmountDescCompare;
-import html.parsing.stock.DataSort.RetainRatioDescCompare;
+import html.parsing.stock.util.DataSort.RetainAmountDescCompare;
+import html.parsing.stock.util.DataSort.RetainRatioDescCompare;
 
 public class MajorStockHolder {
 

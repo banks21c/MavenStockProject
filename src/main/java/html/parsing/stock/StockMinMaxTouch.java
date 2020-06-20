@@ -3,6 +3,8 @@ package html.parsing.stock;
 /**
  * 상,하한가 제외 상한가, 하한가를 터치했으나 유지하지 못한 종목을 추출 저가, 고가와 현재가의 차이가 15%이상인 종목을 추출
  */
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,7 +27,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.DataSort.LineUpAscCompare;
+import html.parsing.stock.util.DataSort.LineUpAscCompare;
 
 public class StockMinMaxTouch {
 

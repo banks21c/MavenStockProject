@@ -2,7 +2,6 @@ package html.parsing.stock.model;
 
 import java.util.List;
 
-import html.parsing.stock.StockVO;
 
 public class ResultVO {
 

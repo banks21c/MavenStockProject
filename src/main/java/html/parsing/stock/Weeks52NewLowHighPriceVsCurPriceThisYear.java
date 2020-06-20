@@ -1,5 +1,8 @@
 package html.parsing.stock;
 
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
+import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,9 +34,9 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.DataSort.NameAscCompare;
-import html.parsing.stock.DataSort.SpecificDayVsCurPriceUpDownRatioAscCompare;
-import html.parsing.stock.DataSort.SpecificDayVsCurPriceUpDownRatioDescCompare;
+import html.parsing.stock.util.DataSort.NameAscCompare;
+import html.parsing.stock.util.DataSort.SpecificDayVsCurPriceUpDownRatioAscCompare;
+import html.parsing.stock.util.DataSort.SpecificDayVsCurPriceUpDownRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
 
 public class Weeks52NewLowHighPriceVsCurPriceThisYear extends Thread {

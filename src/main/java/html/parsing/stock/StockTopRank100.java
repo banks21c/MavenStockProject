@@ -1,5 +1,7 @@
 package html.parsing.stock;
 
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,10 +24,10 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.DataSort.TradingAmountDescCompare;
-import html.parsing.stock.DataSort.TradingVolumeDescCompare;
-import html.parsing.stock.DataSort.VaryRatioAscCompare;
-import html.parsing.stock.DataSort.VaryRatioDescCompare;
+import html.parsing.stock.util.DataSort.TradingAmountDescCompare;
+import html.parsing.stock.util.DataSort.TradingVolumeDescCompare;
+import html.parsing.stock.util.DataSort.VaryRatioAscCompare;
+import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
 
 public class StockTopRank100 {
 

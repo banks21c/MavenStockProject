@@ -1,7 +1,7 @@
 package html.parsing.stock.dividends;
 
-import html.parsing.stock.DataSort.DividendRateDescCompare;
-import html.parsing.stock.StockVO;
+import html.parsing.stock.util.DataSort.DividendRateDescCompare;
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.FileUtil;
 import java.io.IOException;
 import java.util.ArrayList;

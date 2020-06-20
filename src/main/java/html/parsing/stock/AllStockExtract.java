@@ -1,5 +1,8 @@
 package html.parsing.stock;
 
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
+import html.parsing.stock.model.StockVO;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;

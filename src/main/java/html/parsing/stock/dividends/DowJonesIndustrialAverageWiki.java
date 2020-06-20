@@ -19,12 +19,12 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.DataSort.DividendRateDescCompare;
+import html.parsing.stock.util.DataSort.DividendRateDescCompare;
 import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.StockVO;
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.news.News;
 import html.parsing.stock.util.FileUtil;
 

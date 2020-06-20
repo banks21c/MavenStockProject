@@ -1,5 +1,7 @@
 package html.parsing.stock;
 
+import html.parsing.stock.util.StockUtil;
+
 public class SpecificDay {
 
 	public static void main(String[] args) throws Exception {

@@ -1,5 +1,8 @@
 package html.parsing.stock;
 
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
+import html.parsing.stock.model.StockVO;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -22,8 +25,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.DataSort.RetainAmountDescCompare;
-import html.parsing.stock.DataSort.SpecificDayVsCurPriceUpDownRatioDescCompare;
+import html.parsing.stock.util.DataSort.RetainAmountDescCompare;
+import html.parsing.stock.util.DataSort.SpecificDayVsCurPriceUpDownRatioDescCompare;
 import html.parsing.stock.model.MajorStockHolderVO;
 import html.parsing.stock.util.FileUtil;
 

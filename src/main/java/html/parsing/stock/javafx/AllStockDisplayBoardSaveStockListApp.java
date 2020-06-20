@@ -20,7 +20,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.StockVO;
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.FileUtil;
 import javafx.application.Application;
 import javafx.event.EventHandler;

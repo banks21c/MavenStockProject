@@ -23,7 +23,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import html.parsing.stock.GlobalVariables;
+import html.parsing.stock.util.GlobalVariables;
 
 public class HTMLParserExample2 {
 
