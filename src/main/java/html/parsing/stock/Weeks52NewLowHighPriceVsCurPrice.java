@@ -563,15 +563,15 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 
 		sb1.append("<table>\r\n");
 		sb1.append("<tr>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>등락율</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최저가</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최고가</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>최저가 대비 상승율</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>최고가 대비 하락율</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락율</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 최저가</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 최고가</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>최저가 대비 상승율</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>최고가 대비 하락율</td>\r\n");
 		sb1.append("</tr>\r\n");
 
 		int cnt = 1;
@@ -667,17 +667,17 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 			sb1.append("\t<h2>").append(key).append("</h2>");
 			sb1.append("<table>\r\n");
 			sb1.append("<tr>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>등락율</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락율</td>\r\n");
 			if (key.contains("신저가")) {
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>신저가</td>\r\n");
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최저가</td>\r\n");
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>신저가</td>\r\n");
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 최저가</td>\r\n");
 			} else if (key.contains("신고가")) {
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>신고가</td>\r\n");
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최고가</td>\r\n");
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>신고가</td>\r\n");
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 최고가</td>\r\n");
 			}
 			sb1.append("</tr>\r\n");
 

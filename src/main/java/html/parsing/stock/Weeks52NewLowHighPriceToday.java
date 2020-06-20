@@ -31,7 +31,7 @@ import html.parsing.stock.util.FileUtil;
 
 public class Weeks52NewLowHighPriceToday extends Thread {
 
-	final static String userHome = System.getProperty("user.home");
+	final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = null;
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -182,7 +182,7 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 
 	public void readFile(String kospidaq, String fileName) {
 
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
@@ -421,17 +421,17 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 			sb1.append("\t<h2>").append(strYmdDashBracket).append(" ").append(title).append("</h2>");
 			sb1.append("<table>\r\n");
 			sb1.append("<tr>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>등락율</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락율</td>\r\n");
 			if (gubun.equals("LOW")) {
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>저가</td>\r\n");
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최저가</td>\r\n");
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>저가</td>\r\n");
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 최저가</td>\r\n");
 			} else if (gubun.equals("HIGH")) {
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>고가</td>\r\n");
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 최고가</td>\r\n");
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>고가</td>\r\n");
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 최고가</td>\r\n");
 			}
 			sb1.append("</tr>\r\n");
 
@@ -518,7 +518,7 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 			logger.debug(sb1.toString());
-			fileName = userHome + "\\documents\\" + strYmdDashBracket + " " + strHms + "_" + title.replaceAll(" ", "_")
+			fileName = USER_HOME + "\\documents\\" + strYmdDashBracket + " " + strHms + "_" + title.replaceAll(" ", "_")
 					+ ".html";
 			logger.debug("fileName==>" + fileName);
 			FileUtil.fileWrite(fileName, sb1.toString());
@@ -640,7 +640,7 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 			String strDate = sdf.format(new Date());
 
-			FileWriter fw = new FileWriter(userHome + "\\documents\\NewsTest." + strDate + ".html");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\NewsTest." + strDate + ".html");
 			StringBuilder sb1 = new StringBuilder();
 
 			for (StockVO vo : allStockList) {

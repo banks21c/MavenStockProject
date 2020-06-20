@@ -329,34 +329,34 @@ public class Weeks52MinMax {
             sb1.append("\t<font size=4>" + strYMD + title + "</font>");
             sb1.append("<table>\r\n");
             sb1.append("<tr>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
 
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
             if (gubun.equals("ALL")) {
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 저가</td>\r\n");
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 고가</td>\r\n");
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 저가</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 고가</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일가</td>\r\n");
 
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 저vs현td>\r\n");
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 고vs현</td>\r\n");
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 저vs고</td>\r\n");
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>년초 대비</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 저vs현td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 고vs현</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 저vs고</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>년초 대비</td>\r\n");
             } else if (gubun.equals("MIN_CUR")) {
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 저가</td>\r\n");
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 저vs현</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 저가</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 저vs현</td>\r\n");
             } else if (gubun.equals("MAX_CUR")) {
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 고가</td>\r\n");
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 고vs현</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 고가</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 고vs현</td>\r\n");
             } else if (gubun.equals("MIN_MAX")) {
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 저가</td>\r\n");
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 고가</td>\r\n");
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>52주 저vs고</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 저가</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 고가</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>52주 저vs고</td>\r\n");
             } else if (gubun.equals("START_CUR")) {
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가</td>\r\n");
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>년초vs현</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일가</td>\r\n");
+                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>년초vs현</td>\r\n");
             }
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>비고</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>비고</td>\r\n");
             sb1.append("</tr>\r\n");
 
             int cnt = 1;
