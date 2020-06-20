@@ -281,8 +281,8 @@ public class StockUtil {
 			String strStockName;
 			while ((line = br.readLine()) != null) {
 				System.out.println("line:" + line);
-				if (line.matches("[0-9]*[ \t]")) {
-					String separator = "[ \t]*";
+				if (line.matches("[0-9]*[ \t].*")) {
+					String separator = "\t";
 					String lineArray[] = line.split(Pattern.quote(separator));
 					logger.debug("lineArray.length:"+lineArray.length);
 //					String lineArray[] = line.split("[ \t]*");
@@ -290,6 +290,8 @@ public class StockUtil {
 						svo = new StockVO();
 						strStockCode = lineArray[0];
 						strStockName = lineArray[1];
+						logger.debug("stockCode:"+strStockCode);
+						logger.debug("stockName:"+strStockName);
 						svo.setStockCode(strStockCode);
 						svo.setStockName(strStockName);
 						stockList.add(svo);
