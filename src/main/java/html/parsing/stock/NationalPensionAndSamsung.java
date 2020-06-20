@@ -557,21 +557,21 @@ public class NationalPensionAndSamsung {
 
 		sb1.append("<table>\r\n");
 		sb1.append("<tr>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>현재가(원)</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일가(원)</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 比<br/>등락율</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가(원)</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일가(원)</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比<br/>등락율</td>\r\n");
 		if (!inputWordIsSameAsMajorStockHolders) {
-			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
+			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>주요주주</td>\r\n");
 		}
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>보유율</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유주식수</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유율</td>\r\n");
 		sb1.append(
-				"	<td style='background:#669900;color:#ffffff;text-align:center;'>현재총금액(" + moneyUnit + ")</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 <br/>총금액(" + moneyUnit
+				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재총금액(" + moneyUnit + ")</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 <br/>총금액(" + moneyUnit
 				+ ")</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;'>기준일 比 <br/>총액차(" + moneyUnit
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比 <br/>총액차(" + moneyUnit
 				+ ")</td>\r\n");
 		sb1.append("</tr>\r\n");
 
