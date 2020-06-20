@@ -102,11 +102,9 @@ public class FinanceDaumNet extends News {
                 timeElement = doc.select(".finance .head .infoView p").get(1);
                 timeElement.select("em").remove();
                 strDate = timeElement.text();
-                if (strDate.startsWith("입력 ")) {
-                    strDate = strDate.substring("입력 ".length());
-                }
+		strDate = strDate.replace("입력","").trim();
+
                 System.out.println("strDate:" + strDate);
-                strFileNameDate = strDate;
 
                 strFileNameDate = StockUtil.getDateForFileName(strDate);
                 System.out.println("strFileNameDate:" + strFileNameDate);
@@ -134,13 +132,7 @@ public class FinanceDaumNet extends News {
             strContent = strContent.replaceAll("figcaption", "div");
             strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
-            Element copyRightElement = doc.select(".wrap_viewrelate .txt_copy").first();
             String copyRight = "";
-            if (copyRightElement != null) {
-                copyRight = copyRightElement.text();
-            } else {
-                copyRight = doc.select(".copyright_view .txt_copyright").first().text();
-            }
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
@@ -152,11 +144,11 @@ public class FinanceDaumNet extends News {
 
             sb1.append("<div style='width:548px'>\r\n");
 
-            sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-            sb1.append("<h2>[" + strDate + "] " + strTitle + "</h2>\n");
-            sb1.append("<span style='font-size:12px'>" + writer + "</span><br>\n");
-            sb1.append("<span style='font-size:12px'>" + strDate + "</span><br><br>\n");
-            sb1.append(strContent + "\n");
+            sb1.append("<h3> 기사주소:[<a href='").append(url).append("' target='_sub'>").append(url).append("</a>] </h3>\n");
+            sb1.append("<h2>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
+            sb1.append("<span style='font-size:12px'>").append(writer).append("</span><br>\n");
+            sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
+            sb1.append(strContent).append("\n");
             sb1.append(copyRight);
             sb1.append("</div>\r\n");
             sb1.append("</body>\r\n");

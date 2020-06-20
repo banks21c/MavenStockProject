@@ -270,15 +270,15 @@ public class KoreaStockDividends extends Thread {
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("<table>\r\n");
 		sb1.append("<tr>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>번호</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>현재가(원)</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>EPS</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>BPS</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>PER</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>업종PER</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>PBR</td>\r\n");
-		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>현금배당수익률(%)</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가(원)</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>EPS</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>BPS</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>PER</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>업종PER</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>PBR</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현금배당수익률(%)</td>\r\n");
 		sb1.append("</tr>\r\n");
 
 		int cnt = 1;

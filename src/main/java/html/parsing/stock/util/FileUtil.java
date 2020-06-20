@@ -91,6 +91,7 @@ public class FileUtil {
 				java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}
-		java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.INFO, null, "파일 쓰기 완료");
+		java.util.logging.Logger.getLogger(FileUtil.class.getName()).log(Level.INFO, "파일 쓰기 완료", "NO PARAM");
+		System.out.println(fileName+" 파일을 저장하였습니다.");
 	}
 }

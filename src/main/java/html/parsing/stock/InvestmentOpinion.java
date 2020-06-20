@@ -267,7 +267,7 @@ public class InvestmentOpinion {
             sb1.append("\t<font size=5>" + strYMD + title + "</font>");
             sb1.append("<table>\r\n");
             sb1.append("<tr>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>번호</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>No.</td>\r\n");
             sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>종목명</td>\r\n");
             sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>현재가</td>\r\n");
             sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>투자의견</td>\r\n");
