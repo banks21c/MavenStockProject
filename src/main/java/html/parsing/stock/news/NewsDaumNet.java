@@ -93,11 +93,9 @@ public class NewsDaumNet extends News {
                 timeElement = doc.select(".head_view .info_view .txt_info").get(1);
                 timeElement.select("em").remove();
                 strDate = timeElement.text();
-                if (strDate.startsWith("입력 ")) {
-                    strDate = strDate.substring("입력 ".length());
-                }
+		strDate = strDate.replace("입력","").trim();
+
                 System.out.println("strDate:" + strDate);
-                strFileNameDate = strDate;
 
                 strFileNameDate = StockUtil.getDateForFileName(strDate);
                 System.out.println("strFileNameDate:" + strFileNameDate);

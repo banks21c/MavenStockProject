@@ -117,21 +117,17 @@ public class WwwHankyungCom extends News {
 				Element timeElement = timeElements.get(0);
 				timeElement.select("em").remove();
 				strDate = timeElement.text();
-				if (strDate.startsWith("입력 ")) {
-					strDate = strDate.substring("입력 ".length());
-				}
+		strDate = strDate.replace("입력","").trim();
+
 				System.out.println("strDate:" + strDate);
-				strFileNameDate = strDate;
 			} else {
 				timeElements = doc.select(".date-published .num");
 				Element timeElement = timeElements.get(0);
 				timeElement.select("em").remove();
 				strDate = timeElement.text();
-				if (strDate.startsWith("입력 ")) {
-					strDate = strDate.substring("입력 ".length());
-				}
+		strDate = strDate.replace("입력","").trim();
+
 				System.out.println("strDate:" + strDate);
-				strFileNameDate = strDate;
 			}
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
 			System.out.println("strFileNameDate:" + strFileNameDate);
@@ -215,40 +211,6 @@ public class WwwHankyungCom extends News {
 			System.out.println("추출완료");
 		}
 		return sb1;
-	}
-
-	public static BufferedImage getImage(String src) {
-		URL url;
-		BufferedImage srcImg = null;
-		BufferedImage destImg = null;
-		try {
-			url = new URL(src);
-			srcImg = ImageIO.read(url);
-			int width = srcImg.getWidth();
-			int height = srcImg.getHeight();
-			System.out.println("width1:" + width);
-			System.out.println("height1:" + height);
-			if (width > height && width > 548) {
-				height = (548 * height) / width;
-				width = 548;
-
-				destImg = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
-				Graphics2D g = destImg.createGraphics();
-				g.drawImage(srcImg, 0, 0, width, height, null);
-			}
-			width = destImg.getWidth();
-			height = destImg.getHeight();
-			System.out.println("width2:" + width);
-			System.out.println("height2:" + height);
-
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return destImg;
 	}
 
 }

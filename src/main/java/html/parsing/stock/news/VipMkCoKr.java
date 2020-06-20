@@ -1,8 +1,14 @@
 package html.parsing.stock.news;
 
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +19,6 @@ import javax.swing.JOptionPane;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,19 +30,18 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
-public class NewsOhmyTV extends javax.swing.JFrame {
+public class VipMkCoKr extends javax.swing.JFrame {
 
-    private static Logger logger = LoggerFactory.getLogger(NewsOhmyTV.class);
+    private static Logger logger = LoggerFactory.getLogger(VipMkCoKr.class);
     final static String userHome = System.getProperty("user.home");
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
 
-    // String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
-    // Locale.KOREAN).format(new Date());
-    static String strYMD = "";
+    static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.ss.SSS", Locale.KOREAN).format(new Date());
     static String strDate = null;
     static String strTitle = null;
+    static String strSubTitle = null;
 
     DecimalFormat df = new DecimalFormat("###.##");
 
@@ -50,13 +54,13 @@ public class NewsOhmyTV extends javax.swing.JFrame {
     private javax.swing.JPanel executeResultPnl;
     private static javax.swing.JLabel executeResultLbl;
 
-    NewsOhmyTV(int i) {
+    VipMkCoKr(int i) {
 
 
         String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
-            url = "http://www.sedaily.com/NewsView/1RVOCVY2MC";
+            url = "http://vip.mk.co.kr/newSt/news/news_view.php?p_page=&sCode=122&t_uid=22&c_uid=136511&topGubun=";
         }
         createHTMLFile(url);
     }
@@ -81,12 +85,12 @@ public class NewsOhmyTV extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
 			public void run() {
-                new WwwOhmynewsCoKr().setVisible(true);
+                new VipMkCoKr().setVisible(true);
             }
         });
     }
 
-    public NewsOhmyTV() {
+    public VipMkCoKr() {
 
         initComponents();
     }
@@ -163,7 +167,7 @@ public class NewsOhmyTV extends javax.swing.JFrame {
 
     private void executeBtnActionPerformed(java.awt.event.ActionEvent evt) {
         String url = urlTf.getText();
-        if (url != null && !url.equals("")) {
+        if (url != "") {
             createHTMLFile(url);
         }
     }
@@ -188,7 +192,6 @@ public class NewsOhmyTV extends javax.swing.JFrame {
     }
 
     public static StringBuilder createHTMLFile(String url) {
-
         News gurl = new News();
         gurl.getURL(url);
         String protocol = gurl.getProtocol();
@@ -197,57 +200,64 @@ public class NewsOhmyTV extends javax.swing.JFrame {
         String protocolHost = gurl.getProtocolHost();
 
         StringBuilder sb1 = new StringBuilder();
-        Document doc;
+        Document doc = null;
         String strTitleForFileName;
+        FileWriter fw;
         try {
-            doc = Jsoup.connect(url).get();
-            doc.select("script").remove();
-            doc.select(".btn_info").remove();
+            System.out.println("url:" + url);
+            doc = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0")
+                    .header("Accept-Language", "en")
+                    .header("Accept-Encoding", "gzip,deflate,sdch").get();
+            System.out.println("doc:[" + doc + "]");
 
             JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
             JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
             JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
             JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 
-            Elements title = doc.select(".newstitle a");
+            doc.select("iframe").remove();
+            doc.select("script").remove();
+
+            String fileName2 = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
+            System.out.println("fileName2:" + fileName2);
+            Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
+            bw.write(doc.html());
+            bw.close();
+
+            Elements title = doc.select("div#Titless");
             System.out.println("title:" + strTitle);
-            strTitle = title.get(0).text();
+            if (title != null && title.size() > 0) {
+                strTitle = title.get(0).text();
+            }
             System.out.println("title:" + strTitle);
             strTitleForFileName = strTitle;
             strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
             System.out.println("strTitleForFileName:" + strTitleForFileName);
 
-            Elements author = doc.select("#v-left-scroll-in .view_top ul li").eq(0);
-            System.out.println("author:[" + author + "]");
-            String author1 = doc.select("#v-left-scroll-in .view_top ul li").get(0).text();
-            System.out.println("author1:[" + author1 + "]");
+            Elements subTitle = doc.select("h2.sub_title1");
+            String strSubTitle = "";
+            if (subTitle.size() > 0) {
+                strSubTitle = subTitle.outerHtml();
+            }
 
-            String authorAndTime = doc.select("#v-left-scroll-in .view_top ul").outerHtml();
-            System.out.println("authorAndTime:[" + authorAndTime + "]");
+            String strAuthor = doc.select(".author").html();
+            System.out.println("strAuthor:[" + strAuthor + "]");
 
-            Elements writeDateTime = doc.select("#v-left-scroll-in .view_top ul li").eq(1);
-            System.out.println("writeDateTime:[" + writeDateTime + "]");
-            String strDate = doc.select("#v-left-scroll-in .view_top ul li").get(1).text();
+            String strDate = title.get(0).parent().nextElementSibling().text();
             System.out.println("strDate:[" + strDate + "]");
+
             String strFileNameDate = strDate;
             strFileNameDate = StockUtil.getDateForFileName(strDate);
             System.out.println("strFileNameDate:" + strFileNameDate);
 
-            StringBuilder sb = new StringBuilder();
-            Elements youtubes = doc.select(".vod");
-            if (youtubes != null && youtubes.size() > 0) {
-                for (Element youtube : youtubes) {
-                    String strYoutubeHtml = youtube.html();
-                    sb.append(strYoutubeHtml);
-                }
-            }
-            Element content = doc.select(".txt_view").get(0);
-            String textBody = content.outerHtml();
-            String strContent = sb.toString() + textBody;
+            Elements strConts = doc.select("div#Conts");
+	    strConts.select(".con_txt_new").remove();
+            String strContent = strConts.outerHtml();
             System.out.println("strContent:" + strContent);
 			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
-            String copyright = content.select(".copyright").outerHtml();
+            String copyright = "";
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
@@ -260,8 +270,9 @@ public class NewsOhmyTV extends javax.swing.JFrame {
             sb1.append("<div style='width:548px'>\r\n");
 
             sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-            sb1.append("[" + strDate + "]" + strTitle + "<br>\r\n");
-            sb1.append(authorAndTime + "<br>\r\n");
+            sb1.append("<h1>[" + strDate + "]" + strTitle + "</h1><br>\r\n");
+            sb1.append(strSubTitle + "<br>\r\n");
+            sb1.append(strAuthor + "<br>\r\n");
             sb1.append(strContent + "<br>\r\n");
             sb1.append(copyright + "<br>\r\n");
 
@@ -284,6 +295,7 @@ public class NewsOhmyTV extends javax.swing.JFrame {
             FileUtil.fileWrite(fileName, sb1.toString());
 
         } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             System.out.println("추출완료");
             if (executeResultLbl != null) {

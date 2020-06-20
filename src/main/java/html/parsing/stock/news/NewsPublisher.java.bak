@@ -1,0 +1,230 @@
+package html.parsing.stock.news;
+
+/**
+ *
+ * @author David
+ */
+enum NewsPublisher {
+	// 상수("연결할 문자")
+NewsEinfomaxCoKr                          	NewsEinfomaxCoKr("news.einfomax.co.kr"),
+WwwTheBellCoKr                            	wwwthebellcokr("www.thebell.co.kr"),
+WwwHidocCoKr                              	wwwhidoccokr("www.hidoc.co.kr"),
+WwwDtCoKr                                 	wwwdtcokr("www.dt.co.kr"),
+WwwKoreaKr                                	wwwkoreakr("www.korea.kr"),
+WwwMtCoKr                                 	wwwmtcokr("www.mt.co.kr"),
+NewsMtCoKr                                	newsmtcokr("news.mt.co.kr"),
+MoneysMtCoKr                              	moneysmtcokr("moneys.mt.co.kr"),
+NewsSisain                                	wwwsisaincom("www.sisain.com"),
+NewsKmibCoKr                              	WwwKmibCoKr("www.kmib.co.kr"),
+NewsKmibCoKr                              	NewsKmibCoKr("news.kmib.co.kr"),
+NewsJoinsCom                              	joongangjoinscom("joongang.joins.com"),
+NewsJoinsCom                              	newsjoinscom("news.joins.com"),
+NewsJtbcJoinsCom                          	newsjtbcjoinscom("news.jtbc.joins.com"),
+BizChosunCom                              	bizchosuncom("biz.chosun.com"),
+WwwChosunCom                              	wwwchosuncom("www.chosun.com"),
+NewsChosunCom                             	newschosuncom("news.chosun.com"),
+HealthChosunCom                           	HealthChosunCom("health.chosun.com"),
+MonthlyChosunCom                          	MonthlyChosunCom("monthly.chosun.com"),
+WwwHankookilboCom                           	wwwhankookilbocom("www.hankookilbo.com"),
+StarHankookilboCom                         	starhankookilbocom("star.hankookilbo.com"),
+WwwHuffingtonpostKr                       	wwwhuffingtonpostkr("www.huffingtonpost.kr"),
+NewsDaumNet                               	mediadaumnet("news.daum.net"),
+NewsNaverCom                              	newsnavercom("news.naver.com"),
+FinanceNaverCom				               	financenavercom("finance.naver.com"),
+WwwYonhapnewsCoKr                           yonhapnews("www.yonhapnews.co.kr"),
+WwwNocutNewsCoKr                            nocutnews("www.nocutnews.co.kr"),
+WwwHankyungCom                            	wwwhankyungcom("www.hankyung.com"),
+NewsHankyungCom                           	newshankyungcom("news.hankyung.com"),
+MarketinsightHankyungCom                  	MarketinsightHankyungCom("marketinsight.hankyung.com"),
+WwwYtnCoKr                                  wwwytncokr("www.ytn.co.kr"),
+WwwYnaCoKr                                	wwwynacokr("www.yna.co.kr"),
+WwwWikitreeCoKr                            	wwwwikitreecokr("www.wikitree.co.kr"),
+WwwEdailyCoKr                              	wwwedailycokr("www.edaily.co.kr"),
+WwwSedailyCom                            	wwwsedailycom("www.sedaily.com"),
+MSedailyCom                               	MSedailyCom("m.sedaily.com"),
+WwwSentvCoKr                              	wwwsentvcokr("www.sentv.co.kr"),
+SnaptimeEdailyCoKr                        	SnaptimeEdailyCoKr("snaptime.edaily.co.kr"),
+WwwEtodayCoKr                            	wwwetodaycokr("www.etoday.co.kr"),
+WwwNewsisCom                             	wwwnewsiscom("www.newsis.com"),
+NewsisCom                                 	newsiscom("newsis.com"),
+NewsPressian                              	wwwpressiancom("www.pressian.com"),
+NewsSbsCoKr                               	newssbscokr("news.sbs.co.kr"),
+WwwFnnewsCom                              	wwwfnnewscom("www.fnnews.com"),
+MFnnewsCom                                	mfnnewscom("m.fnnews.com"),
+ImnewsImbcCom                             	ImnewsImbcCom("imnews.imbc.com"),
+WwwItoozaCom                               	wwwitoozacom("www.itooza.com"),
+WwwMediatodayCoKr                          	mediatoday("www.mediatoday.co.kr"),
+WwwAsiatodayCoKr                           	asiatoday("www.asiatoday.co.kr"),
+WwwOhmynewsCoKr                            	wwwohmynewscom("www.ohmynews.com"),
+WwwMediausCoKr                             	wwwmediauscokr("www.mediaus.co.kr"),
+WwwSeoulCoKr                               	wwwseoulcokr("www.seoul.co.kr"),
+WwwMunhwaCom                               	wwwmunhwacom("www.munhwa.com"),
+WwwAsiaeCoKr                              	WwwAsiaeCoKr("www.asiae.co.kr"),
+StockAsiaeCoKr                            	StockAsiaeCoKr("stock.asiae.co.kr"),
+ViewAsiaeCoKr                             	ViewAsiaeCoKr("view.asiae.co.kr"),
+WwwMkCoKr                                 	wwwmkcokr("www.mk.co.kr"),
+WwwMkCoKrPremium                         	wwwmkcokrpremium("www.mk.co.kr/premium"),
+NewsMkCoKr                                	newsmkcokr("news.mk.co.kr"),
+VipMkCoKr                             		vipmkcokr("vip.mk.co.kr"),
+EstateMkCoKr                              	estatemkcokr("estate.mk.co.kr"),
+NewsKbsCoKr                               	newskbscokr("news.kbs.co.kr"),
+BizHeraldcorpCom                      		bizheraldcorpcom("biz.heraldcorp.com"),
+NewsHeraldcorpCom                         	newsheraldcorpcom("news.heraldcorp.com"),
+WwwHaniCoKr                              	wwwhanicokr("www.hani.co.kr"),
+WwwHanitvCom                              	wwwhanitvcom("www.hanitv.com"),
+NewsTomatoCom                             	newstomatocom("www.newstomato.com"),
+WwwKhanCoKr                               	wwwkhancokr("www.khan.co.kr"),
+BizKhanCoKr                           		bizkhancokr("biz.khan.co.kr"),
+NewsKhanCoKr                              	newskhancokr("news.khan.co.kr"),
+Ttalgi21KhanKr                            	Ttalgi21KhanKr("ttalgi21.khan.kr"),
+NewsAutodaily                             	autodailycokr("www.autodaily.co.kr"),
+MNewsPimCom                               	mnewspimcom("m.newspim.com"),
+WwwNewspimCom                             	wwwnewspimcom("www.newspim.com"),
+PaxnetMonetaCoKr                          	paxnetmonetacokr("paxnet.moneta.co.kr"),
+WwwPaxnetCoKr                             	wwwpaxnetcokr("www.paxnet.co.kr"),
+FinanceDaumNet                            	financedaumnet("finance.daum.net"),
+News1Kr                                   	news1kr("news1.kr"),
+WwwDongaCom                               	wwwdongacom("www.donga.com"),
+NewsDongaCom                              	newsdongacom("news.donga.com"),
+WwwSegyeCom                               	wwwsegyecom("www.segye.com"),
+NewsenCom                                 	wwwnewsencom("www.newsen.com"),
+WwwKinewsNet                              	wwwkinewsnet("www.kinews.net"),
+NewsWowtvCoKr                             	NewsWowtvCoKr("news.wowtv.co.kr"),
+WwwWowtvCoKr                              	WwwWowtvCoKr("www.wowtv.co.kr"),
+HngYnaCoKr                                	HngYnaCoKr("hng.yna.co.kr"),
+WwwSiksinhotCom                           	WwwSiksinhotCom("www.siksinhot.com"),
+WwwDailianCoKr                            	WwwDailianCoKr("www.dailian.co.kr"),
+BizNewdailyCoKr                           	BizNewdailyCoKr("biz.newdaily.co.kr"),
+NewsNewswayCoKr                           	NewsNewswayCoKr("news.newsway.co.kr"),
+KrInvestingCom                            	KrInvestingCom("kr.investing.com"),
+WwwPharmnewsCom                           	WwwPharmnewsCom("www.pharmnews.com"),
+WwwIlyoseoulCoKr                          	WwwIlyoseoulCoKr("www.ilyoseoul.co.kr")
+	;
+
+	final private String name;
+	final private String[] publisherKeys = {
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	};
+
+	private NewsPublisher(String name) { //enum에서 생성자 같은 역할
+		this.name = name;
+	}
+
+	public String getName() { // 문자를 받아오는 함수
+		return name;
+	}
+
+	public String getPublisherKey(int idx) {
+		return publisherKeys[idx];
+	}
+
+	public static void main(String args[]) {
+		for (NewsPublisher np : NewsPublisher.values()) {
+			String newsPublisherDomain = np.getName();
+			int idx = np.ordinal();
+			System.out.println("idx:" + idx + " newsPublisherDomain:" + newsPublisherDomain);
+			String newsCompany = np.getPublisherKey(idx);
+			System.out.println("newsCompany:" + newsCompany+"\t"+np.toString());
+			System.out.println("np.name:" + np.name());
+		}
+	}
+}

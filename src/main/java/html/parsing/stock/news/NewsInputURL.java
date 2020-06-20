@@ -143,9 +143,6 @@ public class NewsInputURL extends News {
 			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
-			FileUtil.fileWrite(fileName, sb1.toString());
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

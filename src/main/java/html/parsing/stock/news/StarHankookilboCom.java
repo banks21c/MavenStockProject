@@ -1,22 +1,17 @@
 package html.parsing.stock.news;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +23,9 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
-public class NewsNaverCom extends News {
+public class StarHankookilboCom extends News {
 
-    private static Logger logger = LoggerFactory.getLogger(NewsNaverCom.class);
+    private static Logger logger = LoggerFactory.getLogger(StarHankookilboCom.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -47,33 +42,33 @@ public class NewsNaverCom extends News {
      * @param args
      */
     public static void main(String[] args) {
-        new NewsNaverCom(1);
+        new StarHankookilboCom(1);
     }
 
-    NewsNaverCom() {
+    StarHankookilboCom() {
 
     }
 
-    NewsNaverCom(int i) {
+    StarHankookilboCom(int i) {
 
 
         String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
-            url = "http://news.naver.com/main/read.nhn?mode=LSD&mid=shm&sid1=101&oid=008&aid=0003999234";
+            url = "https://www.hankookilbo.com/News/Read/201701210457609652";
         }
         createHTMLFile(url);
     }
 
     public static StringBuilder createHTMLFile(String url) {
-        getURL(url);
-
         StringBuilder sb1 = new StringBuilder();
         Document doc;
         String strTitleForFileName = "";
         String strFileNameDate = "";
         try {
             doc = Jsoup.connect(url).get();
+            System.out.println("doc:" + doc);
+
             doc.select("iframe").remove();
             doc.select("script").remove();
 
@@ -82,57 +77,40 @@ public class NewsNaverCom extends News {
             JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
             JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 
-            strTitle = doc.select("#articleTitle").html();
+            strTitle = doc.select(".news-title").text();
             System.out.println("title:" + strTitle);
             strTitleForFileName = strTitle;
             strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
             System.out.println("strTitleForFileName:" + strTitleForFileName);
 
-            strDate = doc.select(".article_info .t11").get(0).text();
+            System.out.println("time html:" + doc.select(".news-date .ng-binding"));
+            Element timeElement = doc.select(".news-date").get(0);
+            System.out.println("time html:" + timeElement);
+            // strDate =
+            // timeElement.childNode(0).toString().substring(timeElement.childNode(0).toString().indexOf(":")
+            // + 1).trim();
+            strDate = timeElement.text().replaceAll("등록 : ", "");
             System.out.println("strDate:" + strDate);
-            String[] strDates = strDate.split("\\|");
-            strDate = strDates[0].trim();
-            System.out.println("time html:" + strDate);
             strFileNameDate = strDate;
-            strFileNameDate = strFileNameDate.replaceAll("\\.", "-");
+
             strFileNameDate = StockUtil.getDateForFileName(strDate);
-            strFileNameDate = strFileNameDate.split(" ")[0];
             System.out.println("strFileNameDate:" + strFileNameDate);
 
-            // String author = doc.select(".news_title_author a").text();
-            // System.out.println("author:" + author);
-            Elements article = doc.select("#articleBodyContents");
+            String dateTime = doc.select(".news-date-container").html();
+            System.out.println("dateTime:" + dateTime);
 
-            article.select(".img_desc").before("<br>");
+            String author = doc.select(".news-writer").get(0).html();
+            System.out.println("author:" + author);
 
-            article.select("figure").removeAttr("class");
-            article.select("figcaption").removeAttr("class");
-            article.select(".footer_btnwrap").remove();
-            article.select(".hashtag").remove();
-            article.select(".ad").remove();
-            article.select("#BpromotionBanner").remove();
-            System.out.println(article.select("figure img"));
-            article.select("figure img").removeAttr("style");
-            article.select("figure img").attr("style", "cursor:pointer;width:548px;height:365px");
-            article.select("figure").tagName("div");
-            article.select("figcaption").tagName("div");
-            // System.out.println("article:" + article);
-
+            Elements article = doc.select(".news-detail-content");
             article.attr("style", "width:548px");
-            String articleHtml = article.outerHtml();
-            System.out.println("articleHtml:[" + articleHtml + "]articleHtml");
-
-            String copyright = doc.select(".copy_2011 .csource").outerHtml();
-            System.out.println("copyright:" + copyright);
-
-            String strContent = articleHtml.replaceAll("640px", "548px");
-            strContent = strContent.replaceAll("<br> <br>", "\n<br>\n<br>");
-            // strContent = strContent.replaceAll("<figure class=\"article_image\">", "");
-            // strContent = strContent.replaceAll("</figure>", "<br>");
-            // strContent = strContent.replaceAll("<figcaption class=\"caption\">", "");
-            // strContent = strContent.replaceAll("</figcaption>", "<br>");
-            strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
+            String strContent = article.outerHtml();
+            System.out.println("strContent:" + strContent);
+            strContent = strContent.replaceAll("640px", "548px");
             strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+
+            String copyright = doc.select(".news-writer").get(1).html();
+            System.out.println("copyright:" + copyright);
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
@@ -144,12 +122,13 @@ public class NewsNaverCom extends News {
 
             sb1.append("<div style='width:548px'>\r\n");
 
-            doc.select(".news_date").remove();
-
             sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-            sb1.append("<h2>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
-            sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
-            sb1.append(strContent).append("<br><br>\n");
+            sb1.append("<h2>[" + strDate + "] " + strTitle + "</h2>\n");
+            sb1.append("<span style='font-size:12px'>" + dateTime + "</span><br><br>\n");
+            sb1.append("<span style='font-size:12px'>" + author + "</span><br><br>\n");
+            sb1.append(strContent + "<br><br>\n");
+            sb1.append("저작권자 © 한국일보 무단전재 및 재배포 금지<br><br>\n");
+            sb1.append("Copyright ⓒ The Hankook-Ilbo All rights reserved<br><br>\n");
             System.out.println("sb.toString:" + sb1.toString());
             sb1.append("</div>\r\n");
             sb1.append("</body>\r\n");

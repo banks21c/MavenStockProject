@@ -5,6 +5,7 @@
  */
 package html.parsing.stock.news;
 
+import html.parsing.stock.ClassForNameExample;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -22,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  *
@@ -694,68 +697,43 @@ public class NewsReader extends javax.swing.JFrame {
     }
 
     private void createHTMLFile(String url, String newsCompany) {
+        if(url.equals("")) return;
         System.out.println("url:" + url);
+        newsCompany = "";
+        int idx = 0;
         for (NewsPublisher np : NewsPublisher.values()) {
             String newsPublisherDomain = np.getName();
-            System.out.println("newsPublisherDomain:" + newsPublisherDomain);
-            if (url.startsWith(newsPublisherDomain)) {
-                System.out.println("주소가 일치합니다.");
+            idx = np.ordinal();
+            if (url.contains(newsPublisherDomain)) {
+                System.out.println("idx:" + idx + " newsPublisherDomain:" + newsPublisherDomain);
+                System.out.println("주소가 일치합니다. idx:" + idx);
+                newsCompany = np.toString();
+                System.out.println("newsCompany2:" + newsCompany);
+                break;
             }
         }
         StringBuilder sb = new StringBuilder();
-        if (newsCompany.equals("MT")) {
-            sb = NewsMoneyToday.createHTMLFile(url);
-        } else if (newsCompany.equals("SSI")) {
-            sb = NewsSisain.createHTMLFile(url);
-        } else if (newsCompany.equals("KMIB")) {
-            sb = NewsKmib.createHTMLFile(url);
-        } else if (newsCompany.equals("KHSM")) {
-        } else if (newsCompany.equals("HKR")) {
-            sb = NewsHankyoreh.createHTMLFile(url);
-        } else if (newsCompany.equals("JAIB")) {
-            sb = NewsJoinsCom.createHTMLFile(url);
-        } else if (newsCompany.equals("CHOSUNBIZ")) {
-            sb = BizChosunCom.createHTMLFile(url);
-        } else if (newsCompany.equals("CSIB")) {
-            sb = NewsChosun.createHTMLFile(url);
-        } else if (newsCompany.equals("HKIB")) {
-            sb = NewsHankookilbo.createHTMLFile(url);
-        } else if (newsCompany.equals("HPTP")) {
-            sb = NewsHuffingtonpost1.createHTMLFile(url);
-        } else if (newsCompany.equals("DAUM")) {
-            sb = NewsDaumNet.createHTMLFile(url);
-        } else if (newsCompany.equals("NAVER")) {
-            sb = NewsNaverCom.createHTMLFile(url);
-        } else if (newsCompany.equals("YHN")) {
-            sb = NewsYonhap.createHTMLFile(url);
-        } else if (newsCompany.equals("NCN")) {
-            sb = NewsNocutNews.createHTMLFile(url);
-        } else if (newsCompany.equals("HKE")) {
-            sb = WwwHankyungCom.createHTMLFile(url);
-        } else if (newsCompany.equals("SHK")) {
-            sb = NewsStarHankook.createHTMLFile(url);
-        } else if (newsCompany.equals("YTN")) {
-            sb = NewsYTN.createHTMLFile(url);
-        } else if (newsCompany.equals("EDAILY")) {
-            sb = NewsEdaily.createHTMLFile(url);
-        } else if (newsCompany.equals("WIKITREE")) {
-            sb = NewsWikitree.createHTMLFile(url);
-        } else if (newsCompany.equals("JTBC")) {
-            sb = NewsJTBC.createHTMLFile(url);
-        } else if (newsCompany.equals("SEDAILY")) {
-            sb = NewsSedailyCom.createHTMLFile(url);
-        } else if (newsCompany.equals("ETODAY")) {
-            sb = NewsEtodayCoKr.createHTMLFile(url);
-        } else if (newsCompany.equals("NEWSIS")) {
-            sb = NewsNewsisCom.createHTMLFile(url);
-        } else if (newsCompany.equals("PRESSIAN")) {
-            sb = NewsPressian.createHTMLFile(url);
-        } else if (newsCompany.equals("SBS")) {
-            sb = NewsSbsCoKr.createHTMLFile(url);
-        } else if (newsCompany.equals("FNNEWS")) {
-            sb = NewsFnnews.createHTMLFile(url);
+
+        if (newsCompany.equals("")) {
+            textFieldPopupMenuPanel1.getTextField().setText("");
+            newsTextArea.setText("");
+            jEditorPane1.setText("");
+            return;
         }
-        System.out.println(sb.toString());
+
+        Class<?> c;
+        try {
+            c = Class.forName("html.parsing.stock.news." + newsCompany);
+            System.out.println("Class Name:" + c.getName());
+            System.out.println("url:" + url);
+            //c.getDeclaredMethods()[0].invoke(object, Object... MethodArgs  );
+            Method method = c.getDeclaredMethod("createHTMLFile", String.class);
+            sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.INFO, sb.toString());
+        } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
+            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         Document htmlDoc = Jsoup.parse(sb.toString());
         newsTextArea.setText(htmlDoc.html());
 

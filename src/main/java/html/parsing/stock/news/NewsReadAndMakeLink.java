@@ -267,7 +267,7 @@ public class NewsReadAndMakeLink extends javax.swing.JFrame {
             if (url.contains(newsPublisherDomain)) {
                 System.out.println("idx:" + idx + " newsPublisherDomain:" + newsPublisherDomain);
                 System.out.println("주소가 일치합니다. idx:" + idx);
-                newsCompany = np.getPublisherKey(idx);
+                newsCompany = np.toString();
                 System.out.println("newsCompany2:" + newsCompany);
                 break;
             }
@@ -276,7 +276,7 @@ public class NewsReadAndMakeLink extends javax.swing.JFrame {
 
         StringBuilder sb = new StringBuilder();
         if (newsCompany.equals("BUSAN")) {
-            sb = NewsBusan.createHTMLFile(url);
+            sb = WwwBusanCom.createHTMLFile(url);
         } else if (newsCompany.equals("WwwHanitvCom")) {
             sb = WwwHanitvCom.createHTMLFile(url);
         }

@@ -55,7 +55,7 @@ public class NewsStarHankookilbo extends News {
         String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
-            url = "http://hankookilbo.com/v/a9ca292c10774e6888c1523adc3dac0d";
+            url = "https://www.hankookilbo.com/News/Read/201701210457609652";
         }
         createHTMLFile(url);
     }
@@ -69,6 +69,8 @@ public class NewsStarHankookilbo extends News {
         String strFileNameDate = "";
         try {
             doc = Jsoup.connect(url).get();
+            System.out.println("doc:" + doc);
+
             doc.select("iframe").remove();
             doc.select("script").remove();
 

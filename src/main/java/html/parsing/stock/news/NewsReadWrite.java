@@ -529,7 +529,7 @@ public class NewsReadWrite extends javax.swing.JFrame {
                 if (newsCompany.equals("MT")) {
                     sb = NewsMoneyToday.createHTMLFile(url);
                 } else if (newsCompany.equals("SSI")) {
-                    sb = NewsSisain.createHTMLFile(url);
+                    sb = WwwSisainCoKr.createHTMLFile(url);
                 } else if (newsCompany.equals("KMIB")) {
                     sb = NewsKmib.createHTMLFile(url);
                 } else if (newsCompany.equals("KHSM")) {
@@ -540,23 +540,23 @@ public class NewsReadWrite extends javax.swing.JFrame {
                 } else if (newsCompany.equals("CSIB")) {
                     sb = NewsChosun.createHTMLFile(url);
                 } else if (newsCompany.equals("HKIB")) {
-                    sb = NewsHankookilbo.createHTMLFile(url);
+                    sb = WwwHankookilboCom.createHTMLFile(url);
                 } else if (newsCompany.equals("HPTP")) {
-                    sb = NewsHuffingtonpost1.createHTMLFile(url);
+                    sb = WwwHuffingtonpostKr.createHTMLFile(url);
                 } else if (newsCompany.equals("DAUM")) {
                     sb = NewsDaumNet.createHTMLFile(url);
                 } else if (newsCompany.equals("NAVER")) {
                     sb = NewsNaverCom.createHTMLFile(url);
                 } else if (newsCompany.equals("YHN")) {
-                    sb = NewsYonhap.createHTMLFile(url);
+                    sb = WwwYonhapnewsCoKr.createHTMLFile(url);
                 } else if (newsCompany.equals("HKE")) {
                     sb = WwwHankyungCom.createHTMLFile(url);
                 } else if (newsCompany.equals("SHK")) {
-                    sb = NewsStarHankook.createHTMLFile(url);
+                    sb = StarHankookilboCom.createHTMLFile(url);
                 } else if (newsCompany.equals("YTN")) {
-                    sb = NewsYTN.createHTMLFile(url);
+                    sb = WwwYtnCoKr.createHTMLFile(url);
                 } else if (newsCompany.equals("EDAILY")) {
-                    sb = NewsYTN.createHTMLFile(url);
+                    sb = WwwYtnCoKr.createHTMLFile(url);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "저장할 주소를 입력하여 주세요.");

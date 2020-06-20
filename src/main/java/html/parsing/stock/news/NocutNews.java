@@ -47,7 +47,7 @@ public class NocutNews extends News {
      * @param args
      */
     public static void main(String[] args) {
-        new NewsNocutNews(1);
+        new WwwNocutNewsCoKr(1);
     }
 
     NocutNews() {

@@ -12,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,9 +22,9 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
-public class NewsMediaDaumNet extends News {
+public class WwwHuffingtonpostKr extends News {
 
-    private static Logger logger = LoggerFactory.getLogger(NewsMediaDaumNet.class);
+    private static Logger logger = LoggerFactory.getLogger(WwwHuffingtonpostKr.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -42,41 +41,42 @@ public class NewsMediaDaumNet extends News {
      * @param args
      */
     public static void main(String[] args) {
-        new NewsMediaDaumNet(1);
+        new WwwHuffingtonpostKr(1);
     }
 
-    NewsMediaDaumNet() {
+    WwwHuffingtonpostKr() {
 
     }
 
-    NewsMediaDaumNet(int i) {
+    WwwHuffingtonpostKr(int i) {
 
 
         String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
-            url = "http://v.media.daum.net/v/20180326212000787?f=m";
+            url = "http://www.huffingtonpost.kr/2017/04/19/story_n_16090016.html";
         }
-        if (url != null && !url.equals("")) {
-            createHTMLFile(url);
-        }
+        createHTMLFile(url);
     }
 
     public static StringBuilder createHTMLFile(String url) {
-        System.out.println("url:" + url);
+        StringBuilder sb1 = new StringBuilder();
         getURL(url);
 
-        StringBuilder sb1 = new StringBuilder();
         Document doc;
         String strTitleForFileName = "";
         String strFileNameDate = "";
         try {
             doc = Jsoup.connect(url).get();
+            System.out.println("doc:" + doc);
             doc.select("iframe").remove();
             doc.select("script").remove();
-
-            strTitle = doc.select(".head_view .tit_view").text();
-            System.out.println("title:" + strTitle);
+            strTitle = doc.select("strTitle").text();
+            System.out.println("title1:" + strTitle);
+            strTitle = doc.select(".strTitle").text();
+            System.out.println("title2:" + strTitle);
+            strTitle = doc.select(".entry .strTitle").text();
+            System.out.println("title3:" + strTitle);
             strTitleForFileName = strTitle;
             strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
             System.out.println("strTitleForFileName:" + strTitleForFileName);
@@ -86,65 +86,58 @@ public class NewsMediaDaumNet extends News {
             JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
             JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 
-            Element writerElement = doc.select(".head_view .info_view .txt_info").get(0);
-            String writer = writerElement.text();
+            strDate = doc.select(".posted time").text();
 
-            Element timeElement = doc.select(".head_view .info_view .txt_info").get(1);
-            timeElement.select("em").remove();
-            strDate = timeElement.text();
-		strDate = strDate.replace("입력","").trim();
-
-            System.out.println("strDate:" + strDate);
+            strFileNameDate = strDate;
 
             strFileNameDate = StockUtil.getDateForFileName(strDate);
             System.out.println("strFileNameDate:" + strFileNameDate);
-
-            Elements article = doc.select(".news_view .article_view");
-            System.out.println("article:" + article);
-            article.select(".image-area").after("<br><br>");
-
-            String style = article.select("#mArticle").attr("style");
-            System.out.println("style:" + style);
-
-            article.removeAttr("style");
-            article.removeAttr("class");
-            article.attr("style", "width:548px");
-
-            // article.select("img").attr("style", "width:548px");
-            article.select(".txt_caption.default_figure").attr("style", "width:548px");
-
-            // System.out.println("imageArea:"+article.select(".image-area"));
-            String strContent = article.html().replaceAll("640px", "548px");
-            strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
-            strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
-            strContent = strContent.replaceAll("<figure>", "<div>");
-            strContent = strContent.replaceAll("</figure>", "</div>");
-            strContent = strContent.replaceAll("<figcaption>", "<div>");
-            strContent = strContent.replaceAll("</figcaption>", "</div>");
-            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
-
-            Element copyRightElement = doc.select(".wrap_viewrelate .txt_copy").first();
-            String copyRight = "";
-            if (copyRightElement != null) {
-                copyRight = copyRightElement.text();
-            }
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
             //sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
             sb1.append("</head>\r\n");
             sb1.append("<body>\r\n");
-
-            sb1.append(StockUtil.getMyCommentBox());
-
             sb1.append("<div style='width:548px'>\r\n");
+
+            Element timeElement = doc.select(".posted time").get(0);
+            System.out.println("time html:" + timeElement);
+
+            String dateTime = timeElement.html();
+            System.out.println("dateTime:" + dateTime);
+
+            String author = doc.select(".author span a").text();
+            author = "작성자 " + author;
+            System.out.println("author:" + author);
+
+            String main_visual_html = doc.select(".main-visual").outerHtml();
+            System.out.println("main_visual_html :" + main_visual_html);
+
+            String article = doc.select("#mainentrycontent").outerHtml();
+            Document articleDoc = Jsoup.parse(article);
+            articleDoc.select("script").remove();
+            articleDoc.select(".hp-slideshow-wrapper").remove();
+            articleDoc.select(".float_left").remove();
+
+            String strContent = articleDoc.select("#mainentrycontent").outerHtml();
+            System.out.println("content:" + strContent);
+            strContent = StockUtil.makeStockLinkStringByExcel(strContent);
+
+            String copyright = doc.select(".copyright").outerHtml();
+            System.out.println("copyright:" + copyright);
+
+            strDate = timeElement.childNode(0).toString()
+                    .substring(timeElement.childNode(0).toString().indexOf(":") + 1).trim();
+            System.out.println("strDate:" + strDate);
 
             sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
             sb1.append("<h2>[" + strDate + "] " + strTitle + "</h2>\n");
-            sb1.append("<span style='font-size:12px'>" + writer + "</span><br>\n");
-            sb1.append("<span style='font-size:12px'>" + strDate + "</span><br><br>\n");
-            sb1.append(strContent + "\n");
-            sb1.append(copyRight);
+            sb1.append("<span style='font-size:12px'>" + dateTime + "</span><br><br>\n");
+            sb1.append("<span style='font-size:12px'>" + author + "</span><br><br>\n");
+            sb1.append(main_visual_html + "\n");
+            sb1.append(strContent + "<br><br>\n");
+            sb1.append(copyright + "\n");
+
             sb1.append("</div>\r\n");
             sb1.append("</body>\r\n");
             sb1.append("</html>\r\n");

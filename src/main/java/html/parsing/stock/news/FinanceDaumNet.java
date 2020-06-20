@@ -75,11 +75,11 @@ public class FinanceDaumNet extends News {
         String strFileNameDate = "";
         try {
             doc = Jsoup.connect(url).get();
-            System.out.println("doc" + doc);
+            System.out.println("doc:" + doc);
             doc.select("iframe").remove();
             doc.select("script").remove();
 
-            System.out.println("title1" + doc.select(".finance"));
+            System.out.println("title1:" + doc.select(".finance"));
             System.out.println("title2:" + doc.select(".finance .head"));
             System.out.println("title3:" + doc.select(".finance .head .titView"));
             strTitle = doc.select(".finance .head .titView h5").text();
@@ -106,11 +106,9 @@ public class FinanceDaumNet extends News {
                 timeElement = doc.select(".finance .head .infoView p").get(1);
                 timeElement.select("em").remove();
                 strDate = timeElement.text();
-                if (strDate.startsWith("입력 ")) {
-                    strDate = strDate.substring("입력 ".length());
-                }
+		strDate = strDate.replace("입력","").trim();
+
                 System.out.println("strDate:" + strDate);
-                strFileNameDate = strDate;
 
                 strFileNameDate = StockUtil.getDateForFileName(strDate);
                 System.out.println("strFileNameDate:" + strFileNameDate);
@@ -138,13 +136,7 @@ public class FinanceDaumNet extends News {
             strContent = strContent.replaceAll("figcaption", "div");
             strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
-            Element copyRightElement = doc.select(".wrap_viewrelate .txt_copy").first();
             String copyright = "";
-            if (copyRightElement != null) {
-                copyright = copyRightElement.text();
-            } else {
-                copyright = doc.select(".copyright_view .txt_copyright").first().text();
-            }
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");

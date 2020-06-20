@@ -1,12 +1,19 @@
 package html.parsing.stock.news;
 
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
@@ -25,17 +32,15 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.StockUtil;
 import html.parsing.stock.util.FileUtil;
 
-public class NewsOhmyTV extends javax.swing.JFrame {
+public class WwwOhmynewsCoKr extends javax.swing.JFrame {
 
-    private static Logger logger = LoggerFactory.getLogger(NewsOhmyTV.class);
+    private static Logger logger = LoggerFactory.getLogger(WwwOhmynewsCoKr.class);
     final static String userHome = System.getProperty("user.home");
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
 
-    // String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
-    // Locale.KOREAN).format(new Date());
-    static String strYMD = "";
+    static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.ss.SSS", Locale.KOREAN).format(new Date());
     static String strDate = null;
     static String strTitle = null;
 
@@ -50,13 +55,13 @@ public class NewsOhmyTV extends javax.swing.JFrame {
     private javax.swing.JPanel executeResultPnl;
     private static javax.swing.JLabel executeResultLbl;
 
-    NewsOhmyTV(int i) {
+    WwwOhmynewsCoKr(int i) {
 
 
         String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
         System.out.println("url:[" + url + "]");
         if (StringUtils.defaultString(url).equals("")) {
-            url = "http://www.sedaily.com/NewsView/1RVOCVY2MC";
+            url = "http://www.ohmynews.com/NWS_Web/View/mov_pg.aspx#ME000088968";
         }
         createHTMLFile(url);
     }
@@ -86,7 +91,7 @@ public class NewsOhmyTV extends javax.swing.JFrame {
         });
     }
 
-    public NewsOhmyTV() {
+    public WwwOhmynewsCoKr() {
 
         initComponents();
     }
@@ -197,38 +202,77 @@ public class NewsOhmyTV extends javax.swing.JFrame {
         String protocolHost = gurl.getProtocolHost();
 
         StringBuilder sb1 = new StringBuilder();
-        Document doc;
+        Document doc = null;
         String strTitleForFileName;
+        FileWriter fw;
         try {
             doc = Jsoup.connect(url).get();
-            doc.select("script").remove();
-            doc.select(".btn_info").remove();
 
             JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
             JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
             JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
             JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 
+            String fileName2 = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
+            System.out.println("fileName2:" + fileName2);
+            Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
+            bw.write(doc.html());
+            bw.close();
+
             Elements title = doc.select(".newstitle a");
             System.out.println("title:" + strTitle);
-            strTitle = title.get(0).text();
+            if (title != null && title.size() > 0) {
+                strTitle = title.get(0).text();
+            } else {
+                title = doc.select(".tit_subject");
+                if (title.isEmpty()) {
+                    title = doc.select(".St_tit_subject");
+                }
+                strTitle = title.get(0).text();
+            }
             System.out.println("title:" + strTitle);
             strTitleForFileName = strTitle;
             strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
             System.out.println("strTitleForFileName:" + strTitleForFileName);
 
-            Elements author = doc.select("#v-left-scroll-in .view_top ul li").eq(0);
+            Elements lis = doc.select("#v-left-scroll-in .view_top ul li");
+            Elements author = lis.eq(0);
             System.out.println("author:[" + author + "]");
-            String author1 = doc.select("#v-left-scroll-in .view_top ul li").get(0).text();
+            String author1 = "";
+            if (lis.size() > 0) {
+                author1 = lis.get(0).text();
+                System.out.println("author1:[" + author1 + "]");
+            }
             System.out.println("author1:[" + author1 + "]");
 
             String authorAndTime = doc.select("#v-left-scroll-in .view_top ul").outerHtml();
             System.out.println("authorAndTime:[" + authorAndTime + "]");
 
-            Elements writeDateTime = doc.select("#v-left-scroll-in .view_top ul li").eq(1);
-            System.out.println("writeDateTime:[" + writeDateTime + "]");
-            String strDate = doc.select("#v-left-scroll-in .view_top ul li").get(1).text();
-            System.out.println("strDate:[" + strDate + "]");
+            Elements infoData = doc.select(".info_data div");
+            System.out.println("infoData:[" + infoData + "]");
+            String strDate = "";
+            String strAuthor = "";
+            if (infoData.size() > 0) {
+                Element dateElement = infoData.get(0);
+                System.out.println("~~~~~[" + dateElement.childNode(0) + "]");
+                dateElement.select("span").remove();
+                strDate = dateElement.childNode(0).toString().trim();
+                System.out.println("strDate:[" + strDate + "]");
+                strAuthor = infoData.get(1).text();
+                System.out.println("strAuthor:[" + strAuthor + "]");
+            } else {
+                strDate = doc.select(".txt_time").text();
+            }
+            if (strDate == null || strDate.equals("")) {
+                String dates = doc.select(".St_info_data div").get(0).text();
+                System.out.println("dates====>" + dates);
+                StringTokenizer st = new StringTokenizer(dates, "l");
+                if (st.hasMoreTokens()) {
+                    strDate = st.nextToken();
+                }
+                System.out.println("strDate====>" + strDate);
+            }
+
             String strFileNameDate = strDate;
             strFileNameDate = StockUtil.getDateForFileName(strDate);
             System.out.println("strFileNameDate:" + strFileNameDate);
@@ -241,13 +285,34 @@ public class NewsOhmyTV extends javax.swing.JFrame {
                     sb.append(strYoutubeHtml);
                 }
             }
-            Element content = doc.select(".txt_view").get(0);
-            String textBody = content.outerHtml();
+            Elements contents = doc.select(".txt_view");
+            Elements content = null;
+            String textBody = "";
+            if (contents.size() > 0) {
+                content = doc.select(".txt_view");
+                System.out.println("content:[" + content + "]");
+                textBody = content.get(0).outerHtml();
+            } else {
+                content = doc.select(".article_view");
+                if (content.isEmpty()) {
+                    content = doc.select(".at_contents");
+                    content.select("#content_wrap").remove();
+                    content.select("script").remove();
+                    content.select("#footer_area").remove();
+                    content.select(".sns_scroll").remove();
+                    content.select(".add_scroll").remove();
+                    content.select("div.add_scroll_rt").remove();
+                    content.select("div.add_footer").remove();
+                    content.select(".btn_top").remove();
+                    content.select(".atc_btns").remove();
+                }
+                textBody = content.get(0).outerHtml();
+            }
             String strContent = sb.toString() + textBody;
             System.out.println("strContent:" + strContent);
 			strContent = StockUtil.makeStockLinkStringByExcel(strContent);
 
-            String copyright = content.select(".copyright").outerHtml();
+            String copyright = doc.select(".copyright").outerHtml();
 
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
@@ -284,6 +349,7 @@ public class NewsOhmyTV extends javax.swing.JFrame {
             FileUtil.fileWrite(fileName, sb1.toString());
 
         } catch (IOException e) {
+            e.printStackTrace();
         } finally {
             System.out.println("추출완료");
             if (executeResultLbl != null) {
