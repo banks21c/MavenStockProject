@@ -499,7 +499,7 @@ public class StockMajorHoldersInput {
             sb1.append("<p><span style=\"font-size: 14pt;\"><b>").append(strYMD).append(title).append("</b></span></p>");
             sb1.append("<table>\r\n");
             sb1.append("<tr>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>번호</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>No.</td>\r\n");
             sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>종목명</td>\r\n");
             sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>현재가</td>\r\n");
             sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>전일비</td>\r\n");

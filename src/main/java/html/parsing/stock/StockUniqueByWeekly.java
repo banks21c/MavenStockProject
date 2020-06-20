@@ -691,14 +691,14 @@ public class StockUniqueByWeekly {
             sb1.append("\t<h2>" + monday + " ~ " + friday + " " + title + "</h2>");
             sb1.append("<table>\r\n");
             sb1.append("<tr>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>날짜</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>구분</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>종목명</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>전일대비</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>등락률</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래량</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>거래대금(백만)</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>날짜</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>구분</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락률</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래량</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
             sb1.append("</tr>\r\n");
 
             for (StockVO s : list) {

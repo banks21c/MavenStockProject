@@ -364,13 +364,13 @@ public class StockSort {
             sb1.append("\t<font size=5>" + strYMD + title + "</font>");
             sb1.append("<table>\r\n");
             sb1.append("<tr>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>援щ�</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>醫�紐⑸�</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>���ш�</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>���쇰��鍮�</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>�깅�쎈�</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>嫄곕����</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;'>嫄곕����湲�(諛깅�)</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>援щ�</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>醫�紐⑸�</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>���ш�</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>���쇰��鍮�</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>�깅�쎈�</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>嫄곕����</td>\r\n");
+            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>嫄곕����湲�(諛깅�)</td>\r\n");
             sb1.append("</tr>\r\n");
 
             for (StockVO s : list) {
