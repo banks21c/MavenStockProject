@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import html.parsing.stock.DataSort.VaryRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
 
-public class StockUnique_ReadTxtFile extends Thread {
+public class StockUnique_ReadTxtFile_Thread extends Thread {
 
 	final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = null;
@@ -58,13 +58,8 @@ public class StockUnique_ReadTxtFile extends Thread {
 	String strStockCode = "011170";
 	String strStockName = "롯데케미칼";
 
-	List<StockVO> kospiStockList = new ArrayList<>();
-	List<StockVO> kosdaqStockList = new ArrayList<>();
-
-	List<StockVO> kospiUniqueStockList = new ArrayList<>();
-	List<StockVO> kosdaqUniqueStockList = new ArrayList<>();
-
-	List<StockVO> allStockList = new ArrayList<>();
+	List<StockVO> stockList = new ArrayList<>();
+	List<StockVO> uniqueStockList = new ArrayList<>();
 
 	List<StockVO> topStockList = new ArrayList<>();
 	List<StockVO> bottomStockList = new ArrayList<>();
@@ -85,11 +80,11 @@ public class StockUnique_ReadTxtFile extends Thread {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-//		new StockUnique_ReadTxtFile("kospi").test();
-		new StockUnique_ReadTxtFile("kospi").start();
+//		new StockUnique_ReadTxtFile_Thread("kospi").test();
+		new StockUnique_ReadTxtFile_Thread("kospi").start();
 	}
 
-	StockUnique_ReadTxtFile(String marketGubun) {
+	StockUnique_ReadTxtFile_Thread(String marketGubun) {
 		Class thisClass = this.getClass();
 		logger = LoggerFactory.getLogger(thisClass);
 		this.marketGubun = marketGubun;
@@ -101,27 +96,12 @@ public class StockUnique_ReadTxtFile extends Thread {
 
 		readOne("011160", "두산건설");
 //		listSort();
-		addToKosdaqAllStockList();
-		Collections.sort(kosdaqUniqueStockList, new VaryRatioDescCompare());
-		writeFile(kosdaqUniqueStockList, "코스닥");
+		addToAllStockList();
+		Collections.sort(uniqueStockList, new VaryRatioDescCompare());
+		writeFile(uniqueStockList, "코스닥");
 
 	}
-
-	void clearList() {
-		allStockList.clear();
-		kosdaqUniqueStockList.clear();
-		kospiUniqueStockList.clear();
-
-		topStockList.clear();
-		bottomStockList.clear();
-		topTouchStockList.clear();
-		bottomTouchStockList.clear();
-		upDownStockList.clear();
-		downUpStockList.clear();
-		over5PerUpStockList.clear();
-		over5PerDownStockList.clear();
-	}
-
+	
 	void listSort() {
 		Collections.sort(topStockList, new VaryRatioDescCompare());
 		Collections.sort(bottomStockList, new VaryRatioDescCompare());
@@ -134,36 +114,23 @@ public class StockUnique_ReadTxtFile extends Thread {
 	}
 
 	void addToAllStockList() {
-		allStockList.addAll(topStockList);
-		allStockList.addAll(bottomStockList);
-		allStockList.addAll(topTouchStockList);
-		allStockList.addAll(bottomTouchStockList);
-		allStockList.addAll(upDownStockList);
-		allStockList.addAll(downUpStockList);
-		allStockList.addAll(over5PerUpStockList);
-		allStockList.addAll(over5PerDownStockList);
-	}
+		logger.debug("topStockList.size():" + topStockList.size());
+		logger.debug("bottomStockList.size():" + bottomStockList.size());
+		logger.debug("topTouchStockList.size():" + topTouchStockList.size());
+		logger.debug("bottomTouchStockList.size():" + bottomTouchStockList.size());
+		logger.debug("upDownStockList.size():" + upDownStockList.size());
+		logger.debug("downUpStockList.size():" + downUpStockList.size());
+		logger.debug("over5PerUpStockList.size():" + over5PerUpStockList.size());
+		logger.debug("over5PerDownStockList.size():" + over5PerDownStockList.size());
 
-	void addToKospiAllStockList() {
-		kospiUniqueStockList.addAll(topStockList);
-		kospiUniqueStockList.addAll(bottomStockList);
-		kospiUniqueStockList.addAll(topTouchStockList);
-		kospiUniqueStockList.addAll(bottomTouchStockList);
-		kospiUniqueStockList.addAll(upDownStockList);
-		kospiUniqueStockList.addAll(downUpStockList);
-		kospiUniqueStockList.addAll(over5PerUpStockList);
-		kospiUniqueStockList.addAll(over5PerDownStockList);
-	}
-
-	void addToKosdaqAllStockList() {
-		kosdaqUniqueStockList.addAll(topStockList);
-		kosdaqUniqueStockList.addAll(bottomStockList);
-		kosdaqUniqueStockList.addAll(topTouchStockList);
-		kosdaqUniqueStockList.addAll(bottomTouchStockList);
-		kosdaqUniqueStockList.addAll(upDownStockList);
-		kosdaqUniqueStockList.addAll(downUpStockList);
-		kosdaqUniqueStockList.addAll(over5PerUpStockList);
-		kosdaqUniqueStockList.addAll(over5PerDownStockList);
+		uniqueStockList.addAll(topStockList);
+		uniqueStockList.addAll(bottomStockList);
+		uniqueStockList.addAll(topTouchStockList);
+		uniqueStockList.addAll(bottomTouchStockList);
+		uniqueStockList.addAll(upDownStockList);
+		uniqueStockList.addAll(downUpStockList);
+		uniqueStockList.addAll(over5PerUpStockList);
+		uniqueStockList.addAll(over5PerDownStockList);
 	}
 
 	@Override
@@ -172,8 +139,9 @@ public class StockUnique_ReadTxtFile extends Thread {
 		logger.debug("start run...");
 		// 날짜정보 조회
 		getDateInfo("005930");
-		execute1();
-		execute2();
+		execute();
+//		execute1();
+//		execute2();
 
 		long end = System.currentTimeMillis();
 		long timeElapsed = end - start;
@@ -183,7 +151,7 @@ public class StockUnique_ReadTxtFile extends Thread {
 		int minute = (int) timeElapsed / (1000 * 60) % 60;
 		int hour = (int) timeElapsed / (1000 * 60 * 60);
 
-		logger.debug("실행시간 : " + hour + " 시간 " + minute + " 분 " + second + " 초");
+		logger.debug(marketGubun + " 실행시간 : " + hour + " 시간 " + minute + " 분 " + second + " 초");
 
 		logger.debug("end run...");
 	}
@@ -219,44 +187,29 @@ public class StockUnique_ReadTxtFile extends Thread {
 		}
 	}
 
-	public void execute1() {
-		String kospiFileName = GlobalVariables.KOSPI_LIST_TXT;
+	public void execute() {
+		String txtFileName = "";
+		if (marketGubun.equals("kospi")) {
+			txtFileName = GlobalVariables.KOSPI_LIST_TXT;
+		} else {
+			txtFileName = GlobalVariables.KOSDAQ_LIST_TXT;
+		}
 
-		kospiStockList = StockUtil.readStockCodeNameListFromTxtFile(kospiFileName);
-		logger.debug("kospiStockList.size() :" + kospiStockList.size());
+		stockList = StockUtil.readStockCodeNameListFromTxtFile(txtFileName);
+		logger.debug("stockList.size() :" + stockList.size());
 
-		for (int i = 0; i < kospiStockList.size(); i++) {
-			StockVO svo = kospiStockList.get(i);
+		for (int i = 0; i < stockList.size(); i++) {
+			StockVO svo = stockList.get(i);
 			String strStockCode = svo.getStockCode();
 			String strStockName = svo.getStockName();
 			logger.debug(strStockCode + ":" + strStockName);
 			getStockInfo(strStockCode, strStockName);
 		}
-//		listSort();
-//		addToAllStockList();
-		addToKospiAllStockList();
-		Collections.sort(kospiUniqueStockList, new VaryRatioDescCompare());
-		writeFile(kospiUniqueStockList, "코스피 특징주");
-		clearList();
-	}
+		addToAllStockList();
+		logger.debug("uniqueStockList.size:" + uniqueStockList.size());
+		Collections.sort(uniqueStockList, new VaryRatioDescCompare());
+		writeFile(uniqueStockList, marketGubun + " 특징주");
 
-	public void execute2() {
-		String kosdaqFileName = GlobalVariables.KOSDAQ_LIST_TXT;
-		kosdaqStockList = StockUtil.readStockCodeNameListFromTxtFile(kosdaqFileName);
-		logger.debug("kosdaqStockList.size() :" + kosdaqStockList.size());
-		for (int i = 0; i < kosdaqStockList.size(); i++) {
-			StockVO svo = kosdaqStockList.get(i);
-			String strStockCode = svo.getStockCode();
-			String strStockName = svo.getStockName();
-			logger.debug(strStockCode + ":" + strStockName);
-			getStockInfo(strStockCode, strStockName);
-		}
-//		listSort();
-//		addToAllStockList();
-		addToKosdaqAllStockList();
-		Collections.sort(kosdaqUniqueStockList, new VaryRatioDescCompare());
-		writeFile(kosdaqUniqueStockList, "코스닥 특징주");
-		clearList();
 	}
 
 	public void readOne(String stockCode, String stockName) {

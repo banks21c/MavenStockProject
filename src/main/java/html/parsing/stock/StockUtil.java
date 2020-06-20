@@ -269,7 +269,7 @@ public class StockUtil {
 		return kosdaqStockList;
 	}
 
-	public static List<StockVO> readKospiKosdaqStockCodeNameListFromTxtFile(String stockListTxtFileName) {
+	public static List<StockVO> readStockCodeNameListFromTxtFile(String stockListTxtFileName) {
 		List<StockVO> stockList = new ArrayList<>();
 		try {
 			FileInputStream fileInputStream = new FileInputStream(new File(stockListTxtFileName));
@@ -284,14 +284,11 @@ public class StockUtil {
 				if (line.matches("[0-9]*[ \t].*")) {
 					String separator = "\t";
 					String lineArray[] = line.split(Pattern.quote(separator));
-					logger.debug("lineArray.length:"+lineArray.length);
 //					String lineArray[] = line.split("[ \t]*");
 					if (lineArray.length >= 2) {
 						svo = new StockVO();
 						strStockCode = lineArray[0];
 						strStockName = lineArray[1];
-						logger.debug("stockCode:"+strStockCode);
-						logger.debug("stockName:"+strStockName);
 						svo.setStockCode(strStockCode);
 						svo.setStockName(strStockName);
 						stockList.add(svo);

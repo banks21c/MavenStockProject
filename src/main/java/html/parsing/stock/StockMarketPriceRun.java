@@ -12,7 +12,7 @@ package html.parsing.stock;
 public class StockMarketPriceRun {
     public static void main(String args[]){
 //        new StockMarketPrice().extractAll();
-        new StockUniqueNew().start();
+        new StockUnique_ReadTxtFile_ThreadCall();
         new Weeks52NewLowHighPriceTodayOneFile().start();
         new AllStockPlusMinusDivide().start();
         new AllStockPlusMinusDivide100().start();
