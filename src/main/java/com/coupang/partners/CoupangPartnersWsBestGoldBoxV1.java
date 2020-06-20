@@ -29,16 +29,18 @@ import org.jsoup.select.Elements;
  *
  * @author banks
  */
-public class CoupangPartnersNpGoldBoxProductList extends javax.swing.JFrame {
+public class CoupangPartnersWsBestGoldBoxV1 extends javax.swing.JFrame {
 
-	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersNpGoldBoxProductList.class);
+	private static final long serialVersionUID = -6026389413072142477L;
+	private static org.slf4j.Logger logger = LoggerFactory.getLogger(CoupangPartnersWsBestGoldBoxV1.class);
 	final static String userHome = System.getProperty("user.home");
 	private String strUrl = "https://www.coupang.com/np/goldbox";
-	private String strShortenedUrl = "https://coupa.ng/bDr4Tx";
+	private String strUrl2 = "https://partners.coupang.com/#affiliate/ws/best/goldbox";
 	//goldbox url
 	private String strLongUrl = "https://www.coupang.com/np/goldbox?src=1139000&spec=10799999&addtag=312&ctag=GOLDBOX&lptag=AF5310383&itime=20200601094030&pageType=GOLDBOX&pageValue=GOLDBOX&wPcid=2398922199897153466293&wRef=&wTime=20200601094030&redirect=landing";
 	//product url
 	private String strLongUrl2 = "https://www.coupang.com/vp/products/224871754?itemId=709396592&src=1139000&spec=10799999&addtag=400&ctag=224871754&lptag=AF5310383&itime=20200601094843&pageType=PRODUCT&pageValue=224871754&wPcid=2398922199897153466293&wRef=&wTime=20200601094843&redirect=landing&isAddedCart=";
+	private String strLongUrl3 = "https://www.coupang.com/vp/products/1441249843?itemId=2485163126&vendorItemId=70478421760&traid=gold_box&src=1139000&spec=10799999&addtag=400&ctag=1441249843&lptag=AF5310383&itime=20200601094435&pageType=PRODUCT&pageValue=1441249843&wPcid=23841246090749215819859&wRef=&wTime=20200601094435&redirect=landing&isAddedCart=";
 	URI uri = null;
 //https://www.coupang.com/np/goldbox?src=1139000
 //&spec=10799999
@@ -78,7 +80,7 @@ public class CoupangPartnersNpGoldBoxProductList extends javax.swing.JFrame {
 	/**
 	 * Creates new form NewJFrame1
 	 */
-	public CoupangPartnersNpGoldBoxProductList() {
+	public CoupangPartnersWsBestGoldBoxV1() {
 		initComponents();
 		initList();
 	}
@@ -341,7 +343,7 @@ public class CoupangPartnersNpGoldBoxProductList extends javax.swing.JFrame {
 				}
 			}
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(CoupangPartnersNpGoldBoxProductList.class.getName()).log(java.util.logging.Level.SEVERE, null,
+			java.util.logging.Logger.getLogger(CoupangPartnersWsBestGoldBoxV1.class.getName()).log(java.util.logging.Level.SEVERE, null,
 				ex);
 		}
 		// </editor-fold>
@@ -4462,7 +4464,7 @@ public class CoupangPartnersNpGoldBoxProductList extends javax.swing.JFrame {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new CoupangPartnersNpGoldBoxProductList().setVisible(true);
+				new CoupangPartnersWsBestGoldBoxV1().setVisible(true);
 			}
 		});
 	}
