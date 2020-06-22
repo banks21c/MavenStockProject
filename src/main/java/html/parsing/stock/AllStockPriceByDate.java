@@ -36,7 +36,7 @@ import html.parsing.stock.util.FileUtil;
 public class AllStockPriceByDate extends Thread {
 
     final static String userHome = System.getProperty("user.home");
-    private static Logger logger1 = LoggerFactory.getLogger(Weeks52NewLowHighPriceToday.class);
+    private static Logger logger1 = LoggerFactory.getLogger(AllStockPriceByDate.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);

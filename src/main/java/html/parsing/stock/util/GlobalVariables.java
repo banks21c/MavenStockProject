@@ -17,6 +17,6 @@ public class GlobalVariables {
 //    public static final String kosdaqFileName = "./kosdaq.xls";
     public static final String kospiFileName = "./kospi.xlsx";
     public static final String kosdaqFileName = "./kosdaq.xlsx";
-    public static final String KOSPI_LIST_TXT = "./kospi_list.txt";
-    public static final String KOSDAQ_LIST_TXT = "./kosdaq_list.txt";
+    public static final String KOSPI_LIST_TXT = "kospi_list.txt";
+    public static final String KOSDAQ_LIST_TXT = "kosdaq_list.txt";
 }

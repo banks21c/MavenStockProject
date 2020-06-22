@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
@@ -33,6 +34,7 @@ import java.util.logging.Level;
 import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.PropertyConfigurator;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -301,6 +303,56 @@ public class StockUtil {
 			logger.debug("1.ex.getMessage :" + ex.getMessage());
 		}
 		return stockList;
+	}
+
+	public static void readStockCodeNameListFromTxtFile(List<StockVO> stockList, String stockListTxtFileName) {
+		try {
+
+			// jar를 실행하였을 경우는 jar와 동일 경로
+			// ide에서 실행하였을 경우에는 프로젝트 경로
+			// 프로젝트 경로에 있는 파일들은 jar파일에 묶이지 않는다.
+			System.out.println(". AbsolutePath:" + new File(".").getAbsolutePath());
+			File f = new File("./"+stockListTxtFileName);
+			System.out.println("f.exists():" + f.exists());
+			InputStream inputStream = null;
+			if (f.exists()) {
+				inputStream = new FileInputStream(f);
+				System.out.println("inputStream1: " + inputStream);
+			} else {
+				// classes root 경로
+				inputStream = StockUtil.class.getResourceAsStream("/"+stockListTxtFileName);
+				System.out.println("inputStream2: " + inputStream);
+				System.out.println("class 경로 read " + stockListTxtFileName + " Resource");
+			}
+			
+			if (inputStream != null) {
+				InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF8");
+				BufferedReader br = new BufferedReader(inputStreamReader);
+				String line = "";
+				StockVO svo;
+				String strStockCode;
+				String strStockName;
+				while ((line = br.readLine()) != null) {
+					System.out.println("line:" + line);
+					if (line.matches("[0-9]*[ \t].*")) {
+						String separator = "\t";
+						String lineArray[] = line.split(Pattern.quote(separator));
+//					String lineArray[] = line.split("[ \t]*");
+						if (lineArray.length >= 2) {
+							svo = new StockVO();
+							strStockCode = lineArray[0];
+							strStockName = lineArray[1];
+							svo.setStockCode(strStockCode);
+							svo.setStockName(strStockName);
+							svo.setStockNameLength(strStockName.length());
+							stockList.add(svo);
+						}
+					}
+				}
+			}
+		} catch (Exception ex) {
+			logger.debug("1.ex.getMessage :" + ex.getMessage());
+		}
 	}
 
 	public static List<StockVO> readKospiStockCodeNameListFromExcel() throws Exception {

@@ -32,7 +32,7 @@ public class AllStockForeignOrganSellInfo {
 
     final static String userHome = System.getProperty("user.home");
     static java.util.logging.Logger logger1 = java.util.logging.Logger.getLogger("AllStockForeignOrganSellInfo");
-    private static final Logger logger2 = LoggerFactory.getLogger(Weeks52NewLowHighPriceToday.class);
+    private static final Logger logger2 = LoggerFactory.getLogger(AllStockForeignOrganSellInfo.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
