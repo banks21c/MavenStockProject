@@ -114,8 +114,8 @@ public class NationalPension {
 //		kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
 		logger.debug("kospiStockList.size2 :" + kospiStockList.size());
 
-		kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
-		kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+		kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("stockMkt");
+		kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
 		logger.debug("kospiStockList.size2 :" + kospiStockList.size());
 		logger.debug("kosdaqStockList.size2 :" + kosdaqStockList.size());
 

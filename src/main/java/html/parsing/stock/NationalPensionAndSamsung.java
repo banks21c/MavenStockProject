@@ -117,7 +117,7 @@ public class NationalPensionAndSamsung {
 			logger.debug("kospiStockList.size1 :" + kospiStockList.size());
 		} catch (Exception ex) {
 			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
+			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("stockMkt");
 			logger.debug("kospiStockList.size2 :" + kospiStockList.size());
 		}
 

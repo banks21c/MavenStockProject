@@ -40,8 +40,8 @@ public class FindStock {
     FindStock() {
 
         // 모든 주식 정보를 조회한다.
-        kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
-        kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+        kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("stockMkt");
+        kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
         logger.debug("kospiStockList.size :" + kospiStockList.size());
         logger.debug("kosdaqStockList.size :" + kosdaqStockList.size());
         logger.debug("____________________________________________");

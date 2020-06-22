@@ -69,9 +69,9 @@ public class NewsReaderNoRadio extends javax.swing.JFrame {
 			Collections.sort(kosdaqStockList, new StockNameAscCompare2());
 		} catch (Exception e) {
 			try {
-				StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
+				StockUtil.getStockCodeNameListFromKindKrxCoKr("stockMkt");
 				Collections.sort(kospiStockList, new StockNameAscCompare2());
-				StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+				StockUtil.getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
 				Collections.sort(kosdaqStockList, new StockNameAscCompare2());
 			} catch (Exception e1) {
 				e1.printStackTrace();

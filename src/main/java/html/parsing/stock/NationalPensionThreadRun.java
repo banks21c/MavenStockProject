@@ -117,7 +117,7 @@ public class NationalPensionThreadRun {
 			logger.debug("strMarketGubun :" + strMarketGubun);
 			logger.debug("krxMarketGubun :" + krxMarketGubun);
 
-			stockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(stockList, krxMarketGubun);
+			stockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(krxMarketGubun);
 			logger.debug("stockList.size2 :" + stockList.size());
 
 			stockList = getAllStockInfo(stockList);

@@ -167,8 +167,8 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 		} catch (Exception ex) {
 			java.util.logging.Logger.getLogger(StockWeeks52NewLowHighPriceTodayOneFile.class.getName())
 					.log(Level.SEVERE, null, ex);
-			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
-			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("stockMkt");
+			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
 			logger.debug("kospiStockList.size2 :" + kospiStockList.size());
 		}
 

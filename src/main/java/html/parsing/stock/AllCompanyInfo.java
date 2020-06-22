@@ -83,8 +83,8 @@ public class AllCompanyInfo {
 		} catch (Exception ex) {
 			java.util.logging.Logger.getLogger(AllCompanyInfo.class.getName()).log(Level.SEVERE, null,
 					ex);
-			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
-			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("stockMkt");
+			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
 			logger.debug("kospiStockList.size2 :" + kospiStockList.size());
 		}
 

@@ -103,8 +103,7 @@ public class StockPlusMinusDivideNew100 extends Thread {
 	}
 
 	StockPlusMinusDivideNew100() {
-		Class thisClass = this.getClass();
-		logger = LoggerFactory.getLogger(thisClass);
+		logger = LoggerFactory.getLogger(this.getClass());
 		iExtractCount = 100;
 	}
 
@@ -130,7 +129,7 @@ public class StockPlusMinusDivideNew100 extends Thread {
 	public void getDateInfo(String stockCode) {
 		try {
 			// 종합정보
-			Document doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + stockCode).get();
+			Document doc = Jsoup.connect(TOTAL_INFO_URL + stockCode).get();
 			// logger.debug("doc:"+doc);
 
 			Elements dates = doc.select(".date");
@@ -155,7 +154,7 @@ public class StockPlusMinusDivideNew100 extends Thread {
 			logger.debug("iYmd:[" + iYmd + "]");
 			logger.debug("strYmdDash:[" + strYmdDash + "]");
 		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(StockPlusMinusDivideNew100.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -188,7 +187,7 @@ public class StockPlusMinusDivideNew100 extends Thread {
 			kospiAllStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
 			logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());
 		} catch (Exception e) {
-			kospiAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiAllStockList, "stockMkt");
+			kospiAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("stockMkt");
 			logger.debug("kospiAllStockList.size2 :" + kospiAllStockList.size());
 		}
 		StockVO svo4Date = kospiAllStockList.get(0);
@@ -231,7 +230,7 @@ public class StockPlusMinusDivideNew100 extends Thread {
 			kosdaqAllStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
 			logger.debug("kosdaqAllStockList.size1 :" + kosdaqAllStockList.size());
 		} catch (Exception e) {
-			kosdaqAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqAllStockList, "kosdaqMkt");
+			kosdaqAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
 			logger.debug("kosdaqAllStockList.size2 :" + kosdaqAllStockList.size());
 		}
 		kosdaqAllStockList = getAllStockInfo(kosdaqAllStockList);
@@ -258,7 +257,7 @@ public class StockPlusMinusDivideNew100 extends Thread {
 		sBuilder.append(info8);
 
 		writeFile(sBuilder, "코스닥 시세");
-
+		logger.debug("file write finished");
 	}
 
 	public List<StockVO> readOne(String stockCode) {
@@ -325,7 +324,7 @@ public class StockPlusMinusDivideNew100 extends Thread {
 		stock.setStockCode(code);
 		try {
 			// 종합정보
-			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + code).get();
+			doc = Jsoup.connect(TOTAL_INFO_URL + code).get();
 
 			Elements new_totalinfos = doc.select(".new_totalinfo");
 
@@ -505,6 +504,7 @@ public class StockPlusMinusDivideNew100 extends Thread {
 		fileName += ".html";
 
 		FileUtil.fileWrite(fileName, sb1.toString());
+		logger.debug(fileName + " write finished");
 	}
 
 	public StringBuilder getStockInformation(List<StockVO> list, String title, String gubun) {
@@ -543,7 +543,7 @@ public class StockPlusMinusDivideNew100 extends Thread {
 		int cnt = 1;
 		for (StockVO s : list) {
 			String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
-			System.out.println("specialLetter+++>" + specialLetter);
+			logger.debug(gubun + " specialLetter+++>" + specialLetter);
 			if (gubun.equals("상승율")) {
 				// 1.상승율
 				if (specialLetter.equals("▼") || specialLetter.equals("↓")) {
@@ -556,13 +556,14 @@ public class StockPlusMinusDivideNew100 extends Thread {
 				}
 			}
 			sb1.append("<tr>\r\n");
-			String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
+			String url = TOTAL_INFO_URL + s.getStockCode();
 			sb1.append("<td>" + cnt + "</td>\r\n");
 			sb1.append("<td><a href='" + url + "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
 
 			String varyPrice = s.getVaryPrice();
 
-			System.out.println("varyPrice+++>" + varyPrice);
+			logger.debug(gubun + " varyPrice+++>" + varyPrice);
+			logger.debug(gubun + " 변동가격:" + specialLetter + varyPrice);
 
 			if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲") || specialLetter.startsWith("+")) {
 				sb1.append("<td style='text-align:right;color:red'>" + StringUtils.defaultIfEmpty(s.getCurPrice(), "")

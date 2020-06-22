@@ -124,7 +124,7 @@ public class KoreaStockDividends extends Thread {
 			kospiAllStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
 			logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());
 		} catch (Exception e) {
-			kospiAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiAllStockList, "stockMkt");
+			kospiAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("stockMkt");
 			logger.debug("kospiAllStockList.size2 :" + kospiAllStockList.size());
 		}
 
@@ -141,7 +141,7 @@ public class KoreaStockDividends extends Thread {
 			kosdaqAllStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
 			logger.debug("kosdaqAllStockList.size1 :" + kosdaqAllStockList.size());
 		} catch (Exception e) {
-			kosdaqAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqAllStockList, "kosdaqMkt");
+			kosdaqAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
 			logger.debug("kosdaqAllStockList.size2 :" + kosdaqAllStockList.size());
 		}
 

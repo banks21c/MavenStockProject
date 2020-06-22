@@ -37,7 +37,8 @@ import html.parsing.stock.util.FileUtil;
 
 public class StockPlusMinusDivide extends Thread {
 
-	final static String userHome = System.getProperty("user.home");
+	private final static String TOTAL_INFO_URL = "http://finance.naver.com/item/main.nhn?code=";
+	final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(StockPlusMinusDivide.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -68,7 +69,6 @@ public class StockPlusMinusDivide extends Thread {
 	int steadyCount = 0;
 
 	static int iExtractCount = -1;
-	private final String totalInfoUrl = "http://finance.naver.com/item/main.nhn?code=";
 
 	/**
 	 * @param args
@@ -95,6 +95,7 @@ public class StockPlusMinusDivide extends Thread {
 
 	StockPlusMinusDivide() {
 		logger = LoggerFactory.getLogger(this.getClass());
+		iExtractCount = -1;
 	}
 
 	@Override
@@ -119,7 +120,7 @@ public class StockPlusMinusDivide extends Thread {
 	public void getDateInfo(String stockCode) {
 		try {
 			// 종합정보
-			Document doc = Jsoup.connect(totalInfoUrl + stockCode).get();
+			Document doc = Jsoup.connect(TOTAL_INFO_URL + stockCode).get();
 			// logger.debug("doc:"+doc);
 
 			Elements dates = doc.select(".date");
@@ -176,7 +177,7 @@ public class StockPlusMinusDivide extends Thread {
 			kospiAllStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
 			logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());
 		} catch (Exception e) {
-			kospiAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiAllStockList, "stockMkt");
+			kospiAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("stockMkt");
 			logger.debug("kospiAllStockList.size2 :" + kospiAllStockList.size());
 		}
 		StockVO svo4Date = kospiAllStockList.get(0);
@@ -231,7 +232,7 @@ public class StockPlusMinusDivide extends Thread {
 			kosdaqAllStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
 			logger.debug("kosdaqAllStockList.size1 :" + kosdaqAllStockList.size());
 		} catch (Exception e) {
-			kosdaqAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqAllStockList, "kosdaqMkt");
+			kosdaqAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
 			logger.debug("kosdaqAllStockList.size2 :" + kosdaqAllStockList.size());
 		}
 		kosdaqAllStockList = sUtil.getAllStockInfo(kosdaqAllStockList);
@@ -289,7 +290,7 @@ public class StockPlusMinusDivide extends Thread {
 			stockList = StockUtil.getAllStockListFromExcel(marketFileName);
 			logger.debug("stockList.size1 :" + stockList.size());
 		} catch (Exception e) {
-			stockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(stockList, krxMarketGubun);
+			stockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(krxMarketGubun);
 			logger.debug("stockList.size2 :" + stockList.size());
 		}
 		StockVO svo4Date = stockList.get(0);
@@ -359,7 +360,7 @@ public class StockPlusMinusDivide extends Thread {
 	public List<StockVO> getAllStockInfo(String kospidaq, String fileName) {
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
@@ -398,7 +399,7 @@ public class StockPlusMinusDivide extends Thread {
 		stock.setStockCode(code);
 		try {
 			// 종합정보
-			doc = Jsoup.connect(totalInfoUrl + code).get();
+			doc = Jsoup.connect(TOTAL_INFO_URL + code).get();
 
 			Elements new_totalinfos = doc.select(".new_totalinfo");
 
@@ -571,7 +572,7 @@ public class StockPlusMinusDivide extends Thread {
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
 		title = title.replace(" ", "_");
-		String fileName = userHome + "\\documents\\" + strYmdDashBracket + "_" + strHms + "_" + title;
+		String fileName = USER_HOME + "\\documents\\" + strYmdDashBracket + "_" + strHms + "_" + title;
 		if (iExtractCount != -1) {
 			fileName += iExtractCount;
 		}
@@ -636,7 +637,7 @@ public class StockPlusMinusDivide extends Thread {
 				}
 			}
 			sb1.append("<tr>\r\n");
-			String url = totalInfoUrl + s.getStockCode();
+			String url = TOTAL_INFO_URL + s.getStockCode();
 			sb1.append("<td>" + cnt + "</td>\r\n");
 			sb1.append("<td><a href='" + url + "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
 
@@ -923,7 +924,7 @@ public class StockPlusMinusDivide extends Thread {
 
 			System.out.println(sb1.toString());
 
-			String fileName = userHome + "\\documents\\NewsTest." + strDate + ".html";
+			String fileName = USER_HOME + "\\documents\\NewsTest." + strDate + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 		} catch (Exception e) {
 			e.printStackTrace();

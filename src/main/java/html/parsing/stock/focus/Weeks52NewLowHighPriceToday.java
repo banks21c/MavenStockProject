@@ -127,7 +127,7 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 			logger.debug("kospiStockList.size1 :" + kospiStockList.size());
 		} catch (Exception ex) {
             java.util.logging.Logger.getLogger(Weeks52NewLowHighPriceToday.class.getName()).log(Level.SEVERE, null, ex);
-			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
+			kospiStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("stockMkt");
 			logger.debug("kospiStockList.size2 :" + kospiStockList.size());
 		}
 		for (int i = 0; i < kospiStockList.size(); i++) {
@@ -156,7 +156,7 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 			logger.debug("kosdaqStockList1 :" + kosdaqStockList);
 		} catch (Exception ex) {
 			java.util.logging.Logger.getLogger(Weeks52NewLowHighPriceToday.class.getName()).log(Level.SEVERE, null, ex);
-			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+			kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
 			logger.debug("kosdaqStockList2 :" + kosdaqStockList);
 		}
 		logger.debug("kosdaqStockList.size :" + kosdaqStockList.size());
