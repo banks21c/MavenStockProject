@@ -28,16 +28,14 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.util.DataSort.TradingAmountDescCompare;
-import html.parsing.stock.util.DataSort.TradingVolumeDescCompare;
-import html.parsing.stock.util.DataSort.VaryRatioAscCompare;
-import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
+import html.parsing.stock.util.DataSort.SpecificDayEndPriceVsCurPriceUpDownRatioRatioAscCompare;
+import html.parsing.stock.util.DataSort.SpecificDayEndPriceVsCurPriceUpDownRatioRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
 
-public class AllStockPlusMinusDivideExtended extends Thread {
+public class StockPlusMinusDivideEx extends Thread {
 
 	final static String userHome = System.getProperty("user.home");
-	private static Logger logger = LoggerFactory.getLogger(AllStockPlusMinusDivideExtended.class);
+	private static Logger logger = LoggerFactory.getLogger(StockPlusMinusDivideEx.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -98,7 +96,7 @@ public class AllStockPlusMinusDivideExtended extends Thread {
 		long startTime = System.currentTimeMillis();
 
 //		AllStockPlusMinusDivide list1 = new AllStockPlusMinusDivide(1);
-		AllStockPlusMinusDivideExtended list1 = new AllStockPlusMinusDivideExtended();
+		StockPlusMinusDivideEx list1 = new StockPlusMinusDivideEx();
 		list1.start();
 
 		long endTime = System.currentTimeMillis();
@@ -107,7 +105,7 @@ public class AllStockPlusMinusDivideExtended extends Thread {
 		System.out.println("main method call finished.");
 	}
 
-	AllStockPlusMinusDivideExtended() {
+	StockPlusMinusDivideEx() {
 		
 		logger = LoggerFactory.getLogger(this.getClass());
 	}
@@ -117,7 +115,7 @@ public class AllStockPlusMinusDivideExtended extends Thread {
 		execute();
 	}
 
-	AllStockPlusMinusDivideExtended(int i) {
+	StockPlusMinusDivideEx(int i) {
 		List<StockVO> kospiStockList = readOne("123890", "한국자산신탁");
 //      List<StockVO> kospiStockList = readOne("032980");
 		StringBuilder info1 = getStockInformation(kospiStockList, "코스피", "상승율");
@@ -159,7 +157,7 @@ public class AllStockPlusMinusDivideExtended extends Thread {
 			logger.debug("iYmd:[" + iYmd + "]");
 			logger.debug("strYmdDash:[" + strYmdDash + "]");
 		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(AllStockPlusMinusDivide100.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -198,25 +196,15 @@ public class AllStockPlusMinusDivideExtended extends Thread {
 		steadyCount = sUtil.getSteadyCount();
 
 		sBuilder = new StringBuilder();
-		// 1.상승율순 정렬
-		Collections.sort(kospiAllStockList, new VaryRatioDescCompare());
-		StringBuilder info1 = getStockInformation(kospiAllStockList, "코스피", "상승율");
-		writeFile(info1, "코스피 상승율");
+		// 1.기준일 대비 상승율순 정렬
+		Collections.sort(kospiAllStockList, new SpecificDayEndPriceVsCurPriceUpDownRatioRatioDescCompare());
+		StringBuilder info1 = getStockInformation(kospiAllStockList, "코스피", "기준일 대비 상승율");
+		writeFile(info1, "코스피 기준일 대비 등락율(상승율순)");
 
-		// 2.하락율순 정렬
-		Collections.sort(kospiAllStockList, new VaryRatioAscCompare());
-		StringBuilder info2 = getStockInformation(kospiAllStockList, "코스피", "하락율");
-		writeFile(info2, "코스피 하락율");
-
-		// 3.거래량 정렬
-		Collections.sort(kospiAllStockList, new TradingVolumeDescCompare());
-		StringBuilder info3 = getStockInformation(kospiAllStockList, "코스피", "거래량");
-		writeFile(info3, "코스피 거래량");
-
-		// 4.거래대금순 정렬
-		Collections.sort(kospiAllStockList, new TradingAmountDescCompare());
-		StringBuilder info4 = getStockInformation(kospiAllStockList, "코스피", "거래대금");
-		writeFile(info4, "코스피 거래대금");
+		// 2.기준일 대비 하락율순 정렬
+		Collections.sort(kospiAllStockList, new SpecificDayEndPriceVsCurPriceUpDownRatioRatioAscCompare());
+		StringBuilder info2 = getStockInformation(kospiAllStockList, "코스피", "기준일 대비 하락율");
+		writeFile(info2, "코스피 기준일 대비 등락율(하락율순)");
 
 		sUtil.setTopCount(0);
 		sUtil.setUpCount(0);
@@ -244,25 +232,15 @@ public class AllStockPlusMinusDivideExtended extends Thread {
 		downCount = sUtil.getDownCount();
 		steadyCount = sUtil.getSteadyCount();
 
-		// 1.상승율순 정렬
-		Collections.sort(kosdaqAllStockList, new VaryRatioDescCompare());
-		StringBuilder info5 = getStockInformation(kosdaqAllStockList, "코스닥", "상승율");
-		writeFile(info5, "코스닥 상승율");
+		// 1.기준일 대비 상승율순 정렬
+		Collections.sort(kosdaqAllStockList, new SpecificDayEndPriceVsCurPriceUpDownRatioRatioDescCompare());
+		StringBuilder info5 = getStockInformation(kosdaqAllStockList, "코스닥", "기준일 대비 상승율");
+		writeFile(info5, "코스닥 기준일 대비 등락율(상승율순)");
 
-		// 2.하락율순 정렬
-		Collections.sort(kosdaqAllStockList, new VaryRatioAscCompare());
-		StringBuilder info6 = getStockInformation(kosdaqAllStockList, "코스닥", "하락율");
-		writeFile(info6, "코스닥 하락율");
-
-		// 3.거래량 정렬
-		Collections.sort(kosdaqAllStockList, new TradingVolumeDescCompare());
-		StringBuilder info7 = getStockInformation(kosdaqAllStockList, "코스닥", "거래량");
-		writeFile(info7, "코스닥 거래량");
-
-		// 4.거래대금순 정렬
-		Collections.sort(kosdaqAllStockList, new TradingAmountDescCompare());
-		StringBuilder info8 = getStockInformation(kosdaqAllStockList, "코스닥", "거래대금");
-		writeFile(info8, "코스닥 거래대금");
+		// 2.기준일 대비 하락율순 정렬
+		Collections.sort(kosdaqAllStockList, new SpecificDayEndPriceVsCurPriceUpDownRatioRatioAscCompare());
+		StringBuilder info6 = getStockInformation(kosdaqAllStockList, "코스닥", "기준일 대비 하락율");
+		writeFile(info6, "코스닥 기준일 대비 등락율(하락율순)");
 
 	}
 
@@ -498,9 +476,10 @@ public class AllStockPlusMinusDivideExtended extends Thread {
 		sb1.append("</head>\r\n");
 		sb1.append("<body>\r\n");
 		sb1.append("\t<h2>" + strYmdDashBracket + " " + title + "</h2>");
-		sb1.append("<h4><font color='red'>상한가:" + topCount + "</font><font color='red'> 상승:" + upCount
-			+ "</font><font color='blue'> 하한가:" + bottomCount + "</font><font color='blue'> 하락:" + downCount
-			+ "</font><font color='gray'> 보합:" + steadyCount + "</font></h4>");
+		sb1.append("\t<h2>기준일 :" + baseDay +"</h2>");
+//		sb1.append("<h4><font color='red'>상한가:" + topCount + "</font><font color='red'> 상승:" + upCount
+//			+ "</font><font color='blue'> 하한가:" + bottomCount + "</font><font color='blue'> 하락:" + downCount
+//			+ "</font><font color='gray'> 보합:" + steadyCount + "</font></h4>");
 		sb1.append(sb.toString());
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
@@ -549,17 +528,6 @@ public class AllStockPlusMinusDivideExtended extends Thread {
 			if (svo != null) {
 				String specialLetter = StringUtils.defaultIfEmpty(svo.getSpecialLetter(), "");
 				System.out.println("specialLetter+++>" + specialLetter);
-				if (gubun.equals("상승율")) {
-					// 1.상승율
-					if (specialLetter.equals("▼") || specialLetter.equals("↓")) {
-						continue;
-					}
-				} else if (gubun.equals("하락율")) {
-					// 2.하락율
-					if (specialLetter.equals("▲") || specialLetter.equals("↑")) {
-						continue;
-					}
-				}
 				sb1.append("<tr>\r\n");
 				String url = "http://finance.naver.com/item/main.nhn?code=" + svo.getStockCode();
 				sb1.append("<td>" + cnt + "</td>\r\n");

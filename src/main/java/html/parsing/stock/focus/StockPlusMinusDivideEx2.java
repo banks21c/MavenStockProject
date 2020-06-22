@@ -32,10 +32,10 @@ import html.parsing.stock.util.DataSort.SpecificDayEndPriceVsCurPriceUpDownRatio
 import html.parsing.stock.util.DataSort.SpecificDayEndPriceVsCurPriceUpDownRatioRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
 
-public class AllStockPlusMinusDivideEx2 extends Thread {
+public class StockPlusMinusDivideEx2 extends Thread {
 
 	final static String userHome = System.getProperty("user.home");
-	private static Logger logger = LoggerFactory.getLogger(AllStockPlusMinusDivideEx2.class);
+	private static Logger logger = LoggerFactory.getLogger(StockPlusMinusDivideEx2.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -96,7 +96,7 @@ public class AllStockPlusMinusDivideEx2 extends Thread {
 		long startTime = System.currentTimeMillis();
 
 //		AllStockPlusMinusDivide list1 = new AllStockPlusMinusDivide(1);
-		AllStockPlusMinusDivideEx2 list1 = new AllStockPlusMinusDivideEx2();
+		StockPlusMinusDivideEx2 list1 = new StockPlusMinusDivideEx2();
 		list1.start();
 
 		long endTime = System.currentTimeMillis();
@@ -105,7 +105,7 @@ public class AllStockPlusMinusDivideEx2 extends Thread {
 		System.out.println("main method call finished.");
 	}
 
-	AllStockPlusMinusDivideEx2() {
+	StockPlusMinusDivideEx2() {
 		
 		logger = LoggerFactory.getLogger(this.getClass());
 	}
@@ -115,7 +115,7 @@ public class AllStockPlusMinusDivideEx2 extends Thread {
 		execute();
 	}
 
-	AllStockPlusMinusDivideEx2(int i) {
+	StockPlusMinusDivideEx2(int i) {
 		List<StockVO> kospiStockList = readOne("123890", "한국자산신탁");
 //      List<StockVO> kospiStockList = readOne("032980");
 		StringBuilder info1 = getStockInformation(kospiStockList, "코스피", "상승율");
@@ -157,7 +157,7 @@ public class AllStockPlusMinusDivideEx2 extends Thread {
 			logger.debug("iYmd:[" + iYmd + "]");
 			logger.debug("strYmdDash:[" + strYmdDash + "]");
 		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(AllStockPlusMinusDivide100.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
