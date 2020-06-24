@@ -20,16 +20,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.util.DataSort.DividendRateDescCompare;
-import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
 import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.StockUtil;
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.FileUtil;
 
-public class KoreaStockDividends extends Thread {
+public class KoreaStockDividendsThread extends Thread {
 
-	final static String userHome = System.getProperty("user.home");
-	private static Logger logger = LoggerFactory.getLogger(KoreaStockDividends.class);
+	final static String USER_HOME = System.getProperty("user.home");
+	private static Logger logger = LoggerFactory.getLogger(KoreaStockDividendsThread.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -65,6 +64,7 @@ public class KoreaStockDividends extends Thread {
 	private final String naverItemAnalysisUrl = "https://finance.naver.com/item/coinfo.nhn?code=";
 	// 기업현황
 	private final String naverEntStatUrl = "https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd=";
+	String marketType = "";
 
 	/**
 	 * @param args
@@ -81,7 +81,7 @@ public class KoreaStockDividends extends Thread {
 		}
 
 //		KoreaStockDividends list1 = new KoreaStockDividends(-1);
-		KoreaStockDividends list1 = new KoreaStockDividends();
+		KoreaStockDividendsThread list1 = new KoreaStockDividendsThread();
 		list1.start();
 
 		long endTime = System.currentTimeMillis();
@@ -90,67 +90,44 @@ public class KoreaStockDividends extends Thread {
 		System.out.println("main method call finished.");
 	}
 
-	KoreaStockDividends() {
+	KoreaStockDividendsThread() {
 		logger = LoggerFactory.getLogger(this.getClass());
 	}
 
-	@Override
-	public void run() {
-		execute();
+	KoreaStockDividendsThread(String marketType) {
+		logger = LoggerFactory.getLogger(this.getClass());
+		this.marketType = marketType;
 	}
 
-	KoreaStockDividends(int i) {
+	KoreaStockDividendsThread(int i) {
 		//효성화학
 //		List<StockVO> kospiAllStockDividendsInfoList = readOne("298000","효성화학");
-		
-		List<StockVO> kospiAllStockDividendsInfoList = readOne("204210","모두투어리츠");
 
-		// 코스피 배당수익률순 정렬
-		Collections.sort(kospiAllStockDividendsInfoList, new DividendRateDescCompare());
-		StringBuilder info1 = getStockInformation(kospiAllStockDividendsInfoList, "코스피", "배당수익률");
-		writeFile(info1, "코스피 배당수익률");		
-	}
-
-	public void execute() {
-		logger.debug(this.getClass().getSimpleName() + " .execute started");
-		System.out.println(this.getClass().getSimpleName() + " .execute started");
-
-		// 모든 주식 정보를 조회한다.
-		// 코스피
-		List<StockVO> kospiAllStockList = new ArrayList<StockVO>();
-		List<StockVO> kospiAllStockDividendsInfoList = new ArrayList<StockVO>();
-		List<StockVO> kosdaqAllStockDividendsInfoList = new ArrayList<StockVO>();
-		try {
-			kospiAllStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
-			logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());
-		} catch (Exception e) {
-			kospiAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("stockMkt");
-			logger.debug("kospiAllStockList.size2 :" + kospiAllStockList.size());
-		}
-
-		kospiAllStockDividendsInfoList = getStockPerInfoList(kospiAllStockList);
+		List<StockVO> kospiAllStockDividendsInfoList = readOne("204210", "모두투어리츠");
 
 		// 코스피 배당수익률순 정렬
 		Collections.sort(kospiAllStockDividendsInfoList, new DividendRateDescCompare());
 		StringBuilder info1 = getStockInformation(kospiAllStockDividendsInfoList, "코스피", "배당수익률");
 		writeFile(info1, "코스피 배당수익률");
+	}
 
-		// 코스닥
-		List<StockVO> kosdaqAllStockList = new ArrayList<StockVO>();
-		try {
-			kosdaqAllStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
-			logger.debug("kosdaqAllStockList.size1 :" + kosdaqAllStockList.size());
-		} catch (Exception e) {
-			kosdaqAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
-			logger.debug("kosdaqAllStockList.size2 :" + kosdaqAllStockList.size());
-		}
+	@Override
+	public void run() {
+		logger.debug(this.getClass().getSimpleName() + " .execute started");
+		System.out.println(this.getClass().getSimpleName() + " .execute started");
 
-		kosdaqAllStockDividendsInfoList = getStockPerInfoList(kosdaqAllStockList);
+		// 모든 주식 정보를 조회한다.
+		// 코스피
+		List<StockVO> allStockList = new ArrayList<StockVO>();
+		allStockList = StockUtil.readStockCodeNameList(marketType);
+		logger.debug("allStockList.size1 :" + allStockList.size());
 
-		// 코스닥 배당수익률순 정렬
-		Collections.sort(kosdaqAllStockDividendsInfoList, new DividendRateDescCompare());
-		StringBuilder info6 = getStockInformation(kosdaqAllStockDividendsInfoList, "코스닥", "배당수익률");
-		writeFile(info6, "코스닥 배당수익률");
+		List<StockVO> stockDividendsInfoList = getStockPerInfoList(allStockList);
+
+		// 배당수익률순 정렬
+		Collections.sort(stockDividendsInfoList, new DividendRateDescCompare());
+		StringBuilder info1 = getStockInformation(stockDividendsInfoList, marketType, "배당수익률");
+		writeFile(info1, marketType + " 배당수익률");
 
 	}
 
@@ -161,7 +138,7 @@ public class KoreaStockDividends extends Thread {
 			String stockName = svo.getStockName();
 			logger.debug("stockCode1:" + stockCode);
 			logger.debug("stockName1:" + stockName);
-			svo = getStockInfo(stockCode,stockName);
+			svo = getStockInfo(stockCode, stockName);
 			logger.debug("stockCode2:" + svo.getStockCode());
 			logger.debug("stockName2:" + svo.getStockName());
 			list.add(svo);
@@ -169,17 +146,17 @@ public class KoreaStockDividends extends Thread {
 		return list;
 	}
 
-	public List<StockVO> readOne(String stockCode,String stockName) {
+	public List<StockVO> readOne(String stockCode, String stockName) {
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
-		StockVO stock = getStockInfo(stockCode,stockName);
+		StockVO stock = getStockInfo(stockCode, stockName);
 		if (stock != null) {
 			stocks.add(stock);
 		}
 		return stocks;
 	}
 
-	public StockVO getStockInfo(String stockCode,String stockName) {
+	public StockVO getStockInfo(String stockCode, String stockName) {
 		String curPrice = "";
 		StockVO svo = new StockVO();
 		svo.setStockCode(stockCode);
@@ -204,8 +181,8 @@ public class KoreaStockDividends extends Thread {
 				dt.select("b").remove();
 				String indexKey = dt.text();
 				String indexValue = newDt.select("b").text();
-				logger.debug("indexKey:"+indexKey);
-				logger.debug("indexValue:"+indexValue);
+				logger.debug("indexKey:" + indexKey);
+				logger.debug("indexValue:" + indexValue);
 				if (indexKey.equals("EPS")) {
 					svo.setEps(indexValue);
 				} else if (indexKey.equals("BPS")) {
@@ -219,7 +196,7 @@ public class KoreaStockDividends extends Thread {
 				} else if (indexKey.equals("현금배당수익률")) {
 					indexValue = indexValue.replace("%", "");
 					float fDividendRate = 0;
-					if(!indexValue.equals("")) {
+					if (!indexValue.equals("")) {
 						fDividendRate = Float.parseFloat(indexValue);
 						svo.setfDividendRate(fDividendRate);
 					}
@@ -250,13 +227,13 @@ public class KoreaStockDividends extends Thread {
 			sb1.append("\t<h2>").append(title).append("TOP ").append(iExtractCount).append("</h2>");
 		} else {
 			sb1.append("\t<h2>").append(title).append("</h2>");
-		}		
+		}
 		sb1.append("\t<h5>작성일 :" + strYmdDash + "</h5>");
 		sb1.append(sb.toString());
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
 		title = title.replace(" ", "_");
-		String fileName = userHome + "\\documents\\" + strYmdDashBracket + "_" + strHms + "_" + title;
+		String fileName = USER_HOME + "\\documents\\" + strYmdDashBracket + "_" + strHms + "_" + title;
 		if (iExtractCount != -1) {
 			fileName += iExtractCount;
 		}
@@ -285,9 +262,9 @@ public class KoreaStockDividends extends Thread {
 		for (StockVO s : list) {
 			String stockCode = s.getStockCode();
 			String stockName = s.getStockName();
-			if(stockCode.equals("")||stockName.equals("")) {
-				logger.debug("stockCode:"+stockCode);
-				logger.debug("stockName:"+stockName);
+			if (stockCode.equals("") || stockName.equals("")) {
+				logger.debug("stockCode:" + stockCode);
+				logger.debug("stockName:" + stockName);
 				continue;
 			}
 			sb1.append("<tr>\r\n");

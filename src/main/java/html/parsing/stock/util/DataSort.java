@@ -171,15 +171,15 @@ public class DataSort {
      * @author banks
      *
      */
-    public static class SpecificDayEndPriceVsCurPriceUpDownRatioRatioAscCompare implements Comparator<StockVO> {
+    public static class ChosenDayEndPriceVsCurPriceUpDownRatioRatioAscCompare implements Comparator<StockVO> {
 
         /**
          * 오름차순(ASC)
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() < arg1.getSpecificDayEndPriceVsCurPriceUpDownRatio() ? -1
-                    : arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() > arg1.getSpecificDayEndPriceVsCurPriceUpDownRatio() ? 1 : 0;
+            return arg0.getChosenDayEndPriceVsCurPriceUpDownRatio() < arg1.getChosenDayEndPriceVsCurPriceUpDownRatio() ? -1
+                    : arg0.getChosenDayEndPriceVsCurPriceUpDownRatio() > arg1.getChosenDayEndPriceVsCurPriceUpDownRatio() ? 1 : 0;
         }
 
     }
@@ -190,7 +190,7 @@ public class DataSort {
      * @author banks
      *
      */
-    public static class SpecificDayEndPriceVsCurPriceUpDownRatioRatioDescCompare implements Comparator<StockVO> {
+    public static class ChosenDayEndPriceVsCurPriceUpDownRatioRatioDescCompare implements Comparator<StockVO> {
 
         /**
          * 내림차순(DESC)
@@ -199,8 +199,8 @@ public class DataSort {
         public int compare(StockVO arg0, StockVO arg1) {
             int ret = 0;
             if (arg0 != null) {
-                ret = arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() > arg1.getSpecificDayEndPriceVsCurPriceUpDownRatio() ? -1
-                        : arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() < arg1.getSpecificDayEndPriceVsCurPriceUpDownRatio() ? 1 : 0;
+                ret = arg0.getChosenDayEndPriceVsCurPriceUpDownRatio() > arg1.getChosenDayEndPriceVsCurPriceUpDownRatio() ? -1
+                        : arg0.getChosenDayEndPriceVsCurPriceUpDownRatio() < arg1.getChosenDayEndPriceVsCurPriceUpDownRatio() ? 1 : 0;
             }
             return ret;
         }
@@ -1148,7 +1148,7 @@ public class DataSort {
      * @author banks
      *
      */
-    public static class SpecificDayVsCurPriceUpDownRatioAscCompare implements Comparator<StockVO> {
+    public static class ChosenDayVsCurPriceUpDownRatioAscCompare implements Comparator<StockVO> {
 
         /**
          * 오름차순(ASC)
@@ -1157,10 +1157,10 @@ public class DataSort {
         public int compare(StockVO arg0, StockVO arg1) {
             int ret = 0;
             if (arg0 != null) {
-                ret = arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() < arg1
-                        .getSpecificDayEndPriceVsCurPriceUpDownRatio() ? -1
-                                : arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() > arg1
-                                .getSpecificDayEndPriceVsCurPriceUpDownRatio() ? 1 : 0;
+                ret = arg0.getChosenDayEndPriceVsCurPriceUpDownRatio() < arg1
+                        .getChosenDayEndPriceVsCurPriceUpDownRatio() ? -1
+                                : arg0.getChosenDayEndPriceVsCurPriceUpDownRatio() > arg1
+                                .getChosenDayEndPriceVsCurPriceUpDownRatio() ? 1 : 0;
             }
             return ret;
         }
@@ -1173,7 +1173,7 @@ public class DataSort {
      * @author banks
      *
      */
-    public static class SpecificDayVsCurPriceUpDownRatioDescCompare implements Comparator<StockVO> {
+    public static class ChosenDayVsCurPriceUpDownRatioDescCompare implements Comparator<StockVO> {
 
         /**
          * 내림차순(DESC)
@@ -1182,8 +1182,8 @@ public class DataSort {
         public int compare(StockVO arg0, StockVO arg1) {
             int ret = 0;
             if (arg0 != null) {
-                ret = arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() > arg1.getSpecificDayEndPriceVsCurPriceUpDownRatio() ? -1
-                        : arg0.getSpecificDayEndPriceVsCurPriceUpDownRatio() < arg1.getSpecificDayEndPriceVsCurPriceUpDownRatio()
+                ret = arg0.getChosenDayEndPriceVsCurPriceUpDownRatio() > arg1.getChosenDayEndPriceVsCurPriceUpDownRatio() ? -1
+                        : arg0.getChosenDayEndPriceVsCurPriceUpDownRatio() < arg1.getChosenDayEndPriceVsCurPriceUpDownRatio()
                         ? 1
                         : 0;
             }

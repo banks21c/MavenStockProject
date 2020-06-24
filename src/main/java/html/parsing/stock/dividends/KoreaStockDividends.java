@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.util.DataSort.DividendRateDescCompare;
-import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
 import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.StockUtil;
 import html.parsing.stock.model.StockVO;
@@ -28,7 +27,7 @@ import html.parsing.stock.util.FileUtil;
 
 public class KoreaStockDividends extends Thread {
 
-	final static String userHome = System.getProperty("user.home");
+	final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(KoreaStockDividends.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -256,7 +255,7 @@ public class KoreaStockDividends extends Thread {
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
 		title = title.replace(" ", "_");
-		String fileName = userHome + "\\documents\\" + strYmdDashBracket + "_" + strHms + "_" + title;
+		String fileName = USER_HOME + "\\documents\\" + strYmdDashBracket + "_" + strHms + "_" + title;
 		if (iExtractCount != -1) {
 			fileName += iExtractCount;
 		}
