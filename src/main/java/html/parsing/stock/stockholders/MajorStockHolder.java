@@ -1,0 +1,367 @@
+package html.parsing.stock.stockholders;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.focus.StockPlusMinusDivide100;
+import html.parsing.stock.model.StockVO;
+import html.parsing.stock.util.DataSort.RetainAmountDescCompare;
+import html.parsing.stock.util.DataSort.RetainRatioDescCompare;
+import html.parsing.stock.util.StockUtil;
+
+public class MajorStockHolder {
+
+	final static String USER_HOME = System.getProperty("user.home");
+	private static Logger logger = LoggerFactory.getLogger(MajorStockHolder.class);
+	private final static String TOTAL_INFO_URL = "http://finance.naver.com/item/main.nhn?code=";
+
+	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
+	int iYear = Integer.parseInt(strYear);
+
+	String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ", Locale.KOREAN).format(new Date());
+	private String strYmdDashBracket;
+	private String strYmdDash;
+	private int iYmd;
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new MajorStockHolder(1);
+	}
+
+	MajorStockHolder() {
+
+		// S-Oil우
+		List<StockVO> kospiStockList = readOne("010955");
+		writeFile(kospiStockList, "코스피");
+		// cj e&m
+		List<StockVO> kosdaqStockList = readOne("130960");
+		writeFile(kosdaqStockList, "코스닥");
+	}
+
+	MajorStockHolder(int i) {
+		// 모든 주식 정보를 조회한다.
+		// 코스피
+		List<StockVO> kospiAllStockList = new ArrayList<StockVO>();
+		kospiAllStockList = StockUtil.readStockCodeNameList("kospi");
+		logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());
+		StockVO svo4Date = kospiAllStockList.get(0);
+		getDateInfo(svo4Date.getStockCode());
+
+		kospiAllStockList = StockUtil.getAllStockInfo(kospiAllStockList);
+		System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
+
+		// 코스닥
+		List<StockVO> kosdaqAllStockList = new ArrayList<StockVO>();
+		kosdaqAllStockList = StockUtil.readStockCodeNameList("kosdaq");
+		logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());		
+		kosdaqAllStockList = StockUtil.getAllStockInfo(kosdaqAllStockList);
+		System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
+
+		Collections.sort(kospiAllStockList, new RetainRatioDescCompare());
+		Collections.sort(kosdaqAllStockList, new RetainRatioDescCompare());
+
+		writeFile(kospiAllStockList, "코스피 국민연금 보유율순");
+		writeFile(kosdaqAllStockList, "코스닥 국민연금 보유율순");
+
+		Collections.sort(kospiAllStockList, new RetainAmountDescCompare());
+		Collections.sort(kosdaqAllStockList, new RetainAmountDescCompare());
+
+		writeFile(kospiAllStockList, "코스피 국민연금 보유금액순");
+		writeFile(kosdaqAllStockList, "코스닥 국민연금 보유금액순");
+
+	}
+
+	public void getDateInfo(String stockCode) {
+		try {
+			// 종합정보
+			Document doc = Jsoup.connect(TOTAL_INFO_URL + stockCode).get();
+			// logger.debug("doc:"+doc);
+
+			Elements dates = doc.select(".date");
+			logger.debug("dates:" + dates);
+			if (dates != null) {
+				logger.debug("dates.size:" + dates.size());
+				if (dates.size() > 0) {
+					Element date = dates.get(0);
+					strYmdDash = date.ownText();
+					strYmdDash = date.childNode(0).toString().trim();
+					String strYmd4Int = strYmdDash.replaceAll("\\.", "");
+					if (strYmd4Int.length() > 8) {
+						strYmd4Int = strYmd4Int.substring(0, 8);
+					}
+					iYmd = Integer.parseInt(strYmd4Int);
+
+					strYmdDash = strYmdDash.replaceAll("\\.", "-");
+					strYmdDash = strYmdDash.replaceAll(":", "-");
+					strYmdDashBracket = "[" + strYmdDash + "]";
+				}
+			}
+			logger.debug("iYmd:[" + iYmd + "]");
+			logger.debug("strYmdDash:[" + strYmdDash + "]");
+		} catch (IOException ex) {
+			java.util.logging.Logger.getLogger(StockPlusMinusDivide100.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	public static List<StockVO> readOne(String stockCode) {
+		List<StockVO> stocks = new ArrayList<StockVO>();
+
+		int cnt = 1;
+		StockVO stock = getStockHompage(cnt, stockCode, "");
+		if (stock != null) {
+			stocks.add(stock);
+		}
+		return stocks;
+	}
+
+	static long totalAmount = 0;
+
+	public static List<StockVO> getAllStockInfo(String kospidaq, String fileName) {
+		List<StockVO> stocks = new ArrayList<StockVO>();
+
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
+
+			String read = null;
+			String stockCode = null;
+			String stockName = null;
+			int cnt = 1;
+			while ((read = reader.readLine()) != null) {
+				cnt++;
+				System.out.println(cnt + "." + read);
+				stockCode = read.split("\t")[0];
+				stockName = read.split("\t")[1];
+
+				if (stockCode.length() != 6) {
+					continue;
+				}
+
+				StockVO stock = getStockHompage(cnt, stockCode, stockName);
+				if (stock != null) {
+					stocks.add(stock);
+					totalAmount += stock.getlRetainAmount();
+				}
+			}
+			reader.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} finally {
+
+		}
+		return stocks;
+
+	}
+
+	// 종목분석-기업현황
+	// http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=064260&cn=
+	// 종목분석-기업개요
+	// http://companyinfo.stock.naver.com/v1/company/c1020001.aspx?cmp_cd=010600&cn=
+	public static StockVO getStockHompage(int cnt, String code, String name) {
+		Document doc;
+		StockVO stock = new StockVO();
+		try {
+			// 종합정보
+			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + code).get();
+			if (cnt == 1) {
+				System.out.println(doc.title());
+				System.out.println(doc.html());
+			}
+			stock.setStockCode(code);
+
+			String stockName = "";
+			String curPrice = "";
+			int iCurPrice = 0;
+
+			Element meta = doc.select("meta").get(5);
+			String metaProperty = meta.attr("property");
+			if (metaProperty.equals("og:description")) {
+				String metaContent = meta.attr("content");
+				metaContent = metaContent.substring(0, metaContent.indexOf("%") + 1);
+				System.out.println("metaContent:" + metaContent);
+				String[] metaContentArray = metaContent.split(" ");
+				int contentCnt = 0;
+				for (String s : metaContentArray) {
+					System.out.println("content[" + (contentCnt++) + "]:" + s);
+				}
+				if (metaContentArray.length > 4) {
+					stockName = metaContentArray[0] + " " + metaContentArray[1];
+					if (metaContentArray[0] == null) {
+						stockName = name;
+					}
+				} else {
+					stockName = metaContentArray[0];
+				}
+				System.out.println("stockName:" + stockName);
+
+				curPrice = metaContentArray[metaContentArray.length - 3];
+				iCurPrice = Integer.parseInt(curPrice.replaceAll(",", ""));
+
+				stock.setStockName(stockName);
+				stock.setCurPrice(curPrice);
+				stock.setiCurPrice(iCurPrice);
+
+			}
+
+			// 종목분석-기업현황
+			doc = Jsoup.connect("http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + code).get();
+			System.out.println("title:" + doc.title());
+			if (cnt == 1) {
+				System.out.println(doc.html());
+			}
+
+			stock.setStockCode(code);
+
+			System.out.println("stockName:" + stockName);
+			Elements aClass = doc.select(".gHead01");
+			Element aElem = null;
+			if (aClass.size() <= 0) {
+				return null;
+			}
+			if (aClass.size() > 1) {
+				aElem = aClass.get(1);
+			}
+			if (aElem != null) {
+				Elements tdElem = aElem.select("td");
+				Element trElem = null;
+				String retainVolume = "";
+				String retainRatio = "";
+				long lRetainVolume = 0;
+				float fRetainRatio = 0;
+
+				String retainAmount = "";
+				long lRetainAmount = 0;
+				for (Element td : tdElem) {
+					String title = td.attr("title");
+					if (title.equals("국민연금")) {
+						trElem = td.parent();
+						System.out.println("trElem:" + trElem);
+
+						Elements kookmin = trElem.select("td");
+						for (int i = 0; i < kookmin.size(); i++) {
+							if (i == 1) {
+								retainVolume = kookmin.get(1).text();
+								retainVolume = retainVolume.substring(0, retainVolume.length() - 1);
+								lRetainVolume = Long.parseLong(retainVolume.replaceAll(",", ""));
+								lRetainAmount = lRetainVolume * iCurPrice / 1000000;
+
+								DecimalFormat df = new DecimalFormat("#,##0");
+								retainAmount = df.format(lRetainAmount);
+							}
+							if (i == 2) {
+								retainRatio = kookmin.get(2).text();
+								retainRatio = retainRatio.substring(0, retainRatio.length() - 1);
+								fRetainRatio = Float.parseFloat(retainRatio);
+							}
+						}
+						System.out.println("curPrice:" + curPrice);
+						System.out.println("retainVolume:" + retainVolume);
+						System.out.println("retainRatio:" + retainRatio);
+						System.out.println("fRetainRatio:" + fRetainRatio);
+						System.out.println("retainAmount:" + retainAmount);
+						System.out.println("lRetainAmount:" + lRetainAmount);
+						stock.setRetainVolume(retainVolume);
+						stock.setRetainRatio(retainRatio);
+						stock.setfRetainRatio(fRetainRatio);
+						stock.setRetainAmount(retainAmount);
+						stock.setlRetainAmount(lRetainAmount);
+						return stock;
+					}
+				}
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void writeFile(List<StockVO> list, String title) {
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
+			String strDate = sdf.format(new Date());
+
+			StringBuilder sb1 = new StringBuilder();
+			sb1.append("<html>\r\n");
+			sb1.append("<head>\r\n");
+			sb1.append("<style>\r\n");
+			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
+			sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
+			sb1.append("</style>\r\n");
+			sb1.append("</head>\r\n");
+			sb1.append("<body>\r\n");
+			sb1.append("\t<font size=5>" + title + "</font>");
+			sb1.append("<table>\r\n");
+			sb1.append("<tr>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>No.</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>종목명</td>\r\n");
+			// sb1.append("<td
+			// style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>종목코드</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>보유율</td>\r\n");
+			// sb1.append("<td
+			// style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>현재가</td>\r\n");
+			sb1.append(
+					"<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>총금액(백만)</td>\r\n");
+			sb1.append("</tr>\r\n");
+
+			int cnt = 1;
+			for (StockVO s : list) {
+
+				if (s != null) {
+					sb1.append("<tr>\r\n");
+					String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
+					sb1.append("<td>" + cnt++ + "</td>\r\n");
+					sb1.append("<td><a href='" + url + "'>" + s.getStockName() + "</a></td>\r\n");
+					// sb1.append("<td
+					// style='text-align:center'>"+s.getStockCode()+"</td>\r\n");
+					sb1.append("<td style='text-align:right'>" + s.getRetainVolume() + "</td>\r\n");
+					sb1.append("<td style='text-align:right'>" + s.getRetainRatio() + "</td>\r\n");
+					// sb1.append("<td
+					// style='text-align:right'>"+s.getCurPrice()+"</td>\r\n");
+					sb1.append("<td style='text-align:right'>" + s.getRetainAmount() + "</td>\r\n");
+					sb1.append("</tr>\r\n");
+				}
+			}
+			sb1.append("</body>\r\n");
+			sb1.append("</html>\r\n");
+			System.out.println(sb1.toString());
+
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strDate + "_" + title + ".html");
+			fw.write(sb1.toString());
+			fw.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} finally {
+
+		}
+	}
+
+}
