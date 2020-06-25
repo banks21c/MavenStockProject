@@ -477,28 +477,28 @@ public class StockUtilTest {
 
 	/**
 	 * Test method for
-	 * {@link html.parsing.stock.StockUtil#getSpecificDay(java.lang.String, java.lang.String)}.
+	 * {@link html.parsing.stock.StockUtil#getChosenDay(java.lang.String, java.lang.String)}.
 	 */
 	@Test
-	public void testGetSpecificDay() {
+	public void testgetChosenDay() {
 		// fail("Not yet implemented");
 	}
 
 	/**
 	 * Test method for
-	 * {@link html.parsing.stock.StockUtil#getSpecificDayEndPrice(java.lang.String, java.lang.String, java.lang.String)}.
+	 * {@link html.parsing.stock.StockUtil#getChosenDayEndPrice(java.lang.String, java.lang.String, java.lang.String)}.
 	 * @throws Exception 
 	 */
-	public void testGetSpecificDayEndPrice() throws Exception {
-		StockUtil.getSpecificDayEndPrice("344820", "케이씨씨글라스", "2020.01.21");
+	public void testgetChosenDayEndPrice() throws Exception {
+		StockUtil.getChosenDayEndPrice("344820", "케이씨씨글라스", "2020.01.21");
 	}
 
 	/**
 	 * Test method for
-	 * {@link html.parsing.stock.StockUtil#findSpecificDayEndPrice(java.lang.String, java.lang.String, java.lang.String, int)}.
+	 * {@link html.parsing.stock.StockUtil#findChosenDayEndPrice(java.lang.String, java.lang.String, java.lang.String, int)}.
 	 */
 	@Test
-	public void testFindSpecificDayEndPrice() {
+	public void testFindChosenDayEndPrice() {
 		// fail("Not yet implemented");
 	}
 

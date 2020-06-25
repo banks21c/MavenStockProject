@@ -31,6 +31,7 @@ import html.parsing.stock.util.ImageUtil;
 
 public class WwwAsiaeCoKr extends javax.swing.JFrame {
 
+	private static final long serialVersionUID = -7679886776886295504L;
 	private static Logger logger = LoggerFactory.getLogger(WwwAsiaeCoKr.class);
 	final static String userHome = System.getProperty("user.home");
 
@@ -218,6 +219,7 @@ public class WwwAsiaeCoKr extends javax.swing.JFrame {
 			doc.select(".art_btm").remove();
 			doc.select(".article_ad").remove();
 			doc.select(".you_section01").remove();
+			doc.select(".comment_box").remove();
 
 			String fileName2 = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
 			System.out.println("fileName2:" + fileName2);

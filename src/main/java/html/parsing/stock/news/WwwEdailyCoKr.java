@@ -35,19 +35,19 @@ public class WwwEdailyCoKr extends News {
 	static String strYMD = "";
 	static String strDate = null;
 	static String strTitle = null;
+	static String strSubTitle = null;
 
 	public static void main(String[] args) {
 		new WwwEdailyCoKr(1);
 	}
 
 	public WwwEdailyCoKr() {
-		
+
 	}
 
 	public WwwEdailyCoKr(int i) {
-		
-		
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://www.edaily.co.kr/news/news_detail.asp?newsId=01918806619115112&mediaCodeNo=257";
@@ -55,9 +55,9 @@ public class WwwEdailyCoKr extends News {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
-		getURL(url);
-		System.out.println("url:" + url);
+	public static StringBuilder createHTMLFile(String strUrl) {
+		getURL(strUrl);
+		System.out.println("url:" + strUrl);
 		System.out.println("createHTMLFile protocol:" + protocol);
 		System.out.println("createHTMLFile host:" + host);
 		System.out.println("createHTMLFile path:" + path);
@@ -65,8 +65,9 @@ public class WwwEdailyCoKr extends News {
 		Document doc;
 		String strTitleForFileName = "";
 		String strFileNameDate = "";
+		String strFileName;
 		try {
-			doc = Jsoup.connect(url).get();
+			doc = Jsoup.connect(strUrl).get();
 			doc = Jsoup.parse(doc.html().replaceAll("data-src", "dataSrc"));
 			doc.select("iframe").remove();
 			doc.select("script").remove();
@@ -80,12 +81,18 @@ public class WwwEdailyCoKr extends News {
 			doc.select(".tex_l_box").remove();
 			doc.select(".tex_s_box").remove();
 			doc.select(".issue_more").remove();
-			doc.select("table").attr("width","548");
-			System.out.println("a link:" + doc.select("a"));
-			//System.out.println("doc:[" + doc+"]");
+			doc.select("table").attr("width", "548");
+			System.out.println("doc:[" + doc + "]");
+			strFileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_doc.html";
+			FileUtil.fileWrite(strFileName, doc.html());
+			
 			strTitle = doc.select("h2.tit").text();
 			if (strTitle.equals("")) {
 				strTitle = doc.select(".news_titles h2").text();
+			}
+			if (strUrl.contains("realtimenews")) {
+				strTitle = doc.select("h2").text();
+				strSubTitle = doc.select(".subtitle").html();
 			}
 			System.out.println("strTitle:[" + strTitle + "]");
 			strTitleForFileName = strTitle;
@@ -101,6 +108,9 @@ public class WwwEdailyCoKr extends News {
 			String writer = writerElement.text();
 			if (writer.equals("")) {
 				writer = doc.select(".stiky_l .reporter_info .reporter_name").text();
+			}
+			if (strUrl.contains("realtimenews")) {
+				writer = doc.select(".output_info ul.quick_info li").get(2).text();
 			}
 
 			Elements timeElement = doc.select(".author_info .time");
@@ -135,6 +145,9 @@ public class WwwEdailyCoKr extends News {
 					}
 				}
 			}
+			if (strUrl.contains("realtimenews")) {
+				strDate = doc.select(".output_info ul.quick_info li").get(1).text();
+			}
 			strDate = strDate.replaceAll("입력 ", "");
 			System.out.println("strDate:" + strDate);
 			strFileNameDate = strDate;
@@ -145,6 +158,9 @@ public class WwwEdailyCoKr extends News {
 			if (article.isEmpty()) {
 				System.out.println("article is empty...");
 				article = doc.select(".article_news");
+			}
+			if (strUrl.contains("realtimenews")) {
+				article = doc.select(".newstext_area");
 			}
 			// article.select(".image-area").append("<br><br>");
 			article.select(".image-area").after("<br><br>");
@@ -173,11 +189,12 @@ public class WwwEdailyCoKr extends News {
 			sb1.append(StockUtil.getMyCommentBox());
 
 			sb1.append("<div style='width:548px'>\r\n");
-			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-			sb1.append("<h2>[" + strDate + "] " + strTitle + "</h2>\n");
-			sb1.append("<span style='font-size:12px'>" + writer + "</span><br>\n");
-			sb1.append("<span style='font-size:12px'>" + strDate + "</span><br><br>\n");
-			sb1.append(strContent + "\n");
+			sb1.append("<h3> 기사주소:[<a href='").append(strUrl).append("' target='_sub'>").append(strUrl).append("</a>] </h3>\n");
+			sb1.append("<h2>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
+			sb1.append(strSubTitle).append("\r\n");
+			sb1.append("<span style='font-size:12px'>").append(writer).append("</span><br>\n");
+			sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
+			sb1.append(strContent).append("\n");
 			//sb1.append(copyRight);
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
@@ -188,11 +205,11 @@ public class WwwEdailyCoKr extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
-			FileUtil.fileWrite(fileName, sb1.toString());
+			strFileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			FileUtil.fileWrite(strFileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
-			FileUtil.fileWrite(fileName, sb1.toString());
+			strFileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			FileUtil.fileWrite(strFileName, sb1.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();

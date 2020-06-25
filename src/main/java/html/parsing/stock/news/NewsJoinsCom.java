@@ -74,6 +74,7 @@ public class NewsJoinsCom extends News {
             doc.select("script").remove();
             doc.select("body").removeAttr("onload");
             doc.select("div.pop_prt_btns").remove();
+            doc.select(".ab_photo").remove();
 
 //            JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
 //            JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);

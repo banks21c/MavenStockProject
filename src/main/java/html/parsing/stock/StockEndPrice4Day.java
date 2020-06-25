@@ -29,41 +29,41 @@ public class StockEndPrice4Day {
 		String stockName = "SK바이오랜드";
 		String listedDay = StockUtil.getStockListedDay(stockCode);
 
-		return getSpecificDayPrice(targetDay, listedDay, stockCode, stockName);
+		return getChosenDayPrice(targetDay, listedDay, stockCode, stockName);
 	}
 	
-	public static String getSpecificDayPrice(String targetDay, String listedDay, String stockCode, String stockName) {
-		String findDay = "";
+	public static String getChosenDayPrice(String targetDay, String listedDay, String stockCode, String stockName) {
+		String chosenDay = "";
 		int iTargetDay = Integer.parseInt(targetDay.replaceAll("\\.", ""));
 		int iListedDay = Integer.parseInt(listedDay.replaceAll("\\.", ""));
 		if (iListedDay < iTargetDay) {
 			// 상장일이 찾으려는 날짜보다 과거이면...
 			// 찾으려는 날짜가 상장일 이후이면...
-			findDay = targetDay;
+			chosenDay = targetDay;
 		} else {
-			findDay = listedDay;
+			chosenDay = listedDay;
 		}
-		return findSpecificDayPrice(stockCode, stockName, findDay);
+		return findChosenDayPrice(stockCode, stockName, chosenDay);
 	}
 
-	public static String findSpecificDayPrice(String stockCode, String stockName, String findDay) {
-		System.out.println("findDay:" + findDay);
+	public static String findChosenDayPrice(String stockCode, String stockName, String chosenDay) {
+		System.out.println("chosenDay:" + chosenDay);
 		System.out.println("findDate:" + findDate);
 
-		String specificDayPrice = "";
+		String chosenDayPrice = "";
 		// 상장일이 찾으려는 날짜보다 과거이면...
 		// 찾으려는 날짜가 상장일 이후이면...
 		int pageNo = 1;
 		findDate = false;
 		while (!findDate) {
-			specificDayPrice = findSpecificDayPrice(stockCode, stockName, findDay, pageNo++);
+			chosenDayPrice = findChosenDayPrice(stockCode, stockName, chosenDay, pageNo++);
 		}
-		logger.debug(stockCode + " " + stockName + " " + findDay + " 종가 :" + specificDayPrice);
-		return specificDayPrice;
+		logger.debug(stockCode + " " + stockName + " " + chosenDay + " 종가 :" + chosenDayPrice);
+		return chosenDayPrice;
 	}
 
-	public static String findSpecificDayPrice(String stockCode, String stockName, String findDay, int pageNo) {
-		String specificDayPrice = "0";
+	public static String findChosenDayPrice(String stockCode, String stockName, String chosenDay, int pageNo) {
+		String chosenDayPrice = "0";
 		Document doc;
 		try {
 			// 종합분석-기업개요
@@ -92,29 +92,29 @@ public class StockEndPrice4Day {
 
 			Elements thEls = type2.select("tbody tr th");
 			int dayIndex = 0;
-			int specificDayIndex = 0;
+			int chosenDayIndex = 0;
 			for (int i = 0; i < thEls.size(); i++) {
 				Element thEl = thEls.get(i);
 				String key = thEl.text();
 				if (key.equals("날짜")) {
 					dayIndex = i;
 				} else if (key.equals("종가")) {
-					specificDayIndex = i;
+					chosenDayIndex = i;
 				}
 			}
 			Elements trEls = type2.select("tbody tr");
-			String temp_specificDay = "";
-			String temp_specificDayPrice = "";
+			String temp_chosenDay = "";
+			String temp_chosenDayPrice = "";
 			for (Element tr : trEls) {
 				Elements tdEls = tr.select("td");
 				if (tdEls.size() > 1) {
 					Element dayEl = tdEls.get(dayIndex);
-					Element specificDayPriceEl = tdEls.get(specificDayIndex);
-					temp_specificDay = dayEl.text();
-					temp_specificDayPrice = specificDayPriceEl.text();
-					if (findDay.equals(temp_specificDay)) {
-						logger.debug(temp_specificDay + "\t" + temp_specificDayPrice);
-						specificDayPrice = temp_specificDayPrice;
+					Element chosenDayPriceEl = tdEls.get(chosenDayIndex);
+					temp_chosenDay = dayEl.text();
+					temp_chosenDayPrice = chosenDayPriceEl.text();
+					if (chosenDay.equals(temp_chosenDay)) {
+						logger.debug(temp_chosenDay + "\t" + temp_chosenDayPrice);
+						chosenDayPrice = temp_chosenDayPrice;
 						findDate = true;
 						break;
 					}
@@ -123,14 +123,14 @@ public class StockEndPrice4Day {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if (specificDayPrice.equals(""))
-			specificDayPrice = "0";
-		return specificDayPrice;
+		if (chosenDayPrice.equals(""))
+			chosenDayPrice = "0";
+		return chosenDayPrice;
 	}
 
 	public static String getEndPrice2(String stockCode, String stockName, String tradeDay, int pageNo) {
 		System.out.println("pageNo:" + pageNo);
-		String specificDayPrice = "";
+		String chosenDayPrice = "";
 		Document doc;
 		try {
 			// 종합분석-기업개요
@@ -161,42 +161,42 @@ public class StockEndPrice4Day {
 
 			Elements thEls = type2.select("tbody tr th");
 			int dayIndex = 0;
-			int specificDayIndex = 0;
+			int chosenDayIndex = 0;
 			for (int i = 0; i < thEls.size(); i++) {
 				Element thEl = thEls.get(i);
 				String key = thEl.text();
 				if (key.equals("날짜")) {
 					dayIndex = i;
 				} else if (key.equals("종가")) {
-					specificDayIndex = i;
+					chosenDayIndex = i;
 				}
 			}
 			logger.debug("dayIndex:" + dayIndex);
-			logger.debug("specificDayIndex:" + specificDayIndex);
+			logger.debug("chosenDayIndex:" + chosenDayIndex);
 			Elements trEls = type2.select("tbody tr");
-			String temp_specificDay = "";
-			String temp_specificDayPrice = "";
+			String temp_chosenDay = "";
+			String temp_chosenDayPrice = "";
 			for (Element tr : trEls) {
 				Elements tdEls = tr.select("td");
 				if (tdEls.size() > 1) {
 					Element dayEl = tdEls.get(dayIndex);
-					Element specificDayPriceEl = tdEls.get(specificDayIndex);
-					temp_specificDay = dayEl.text();
-					temp_specificDayPrice = specificDayPriceEl.text();
-					logger.debug(temp_specificDay + "\t" + temp_specificDayPrice);
-					if (tradeDay.equals(temp_specificDay)) {
-						specificDayPrice = temp_specificDayPrice;
+					Element chosenDayPriceEl = tdEls.get(chosenDayIndex);
+					temp_chosenDay = dayEl.text();
+					temp_chosenDayPrice = chosenDayPriceEl.text();
+					logger.debug(temp_chosenDay + "\t" + temp_chosenDayPrice);
+					if (tradeDay.equals(temp_chosenDay)) {
+						chosenDayPrice = temp_chosenDayPrice;
 						findDate = true;
 					}
 				}
 			}
 			if (!findDate) {
-				specificDayPrice = getEndPrice2(stockCode, stockName, tradeDay, ++pageNo);
+				chosenDayPrice = getEndPrice2(stockCode, stockName, tradeDay, ++pageNo);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return specificDayPrice;
+		return chosenDayPrice;
 	}
 
 }

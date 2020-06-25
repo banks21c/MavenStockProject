@@ -18,17 +18,17 @@ public class MajorStockHolderVO {
     private float fRetainRatio;
     private long lRetainAmountByMillion = 0;
 
-    private String specificDayRetainAmount;
-    private long lSpecificDayRetainAmount;
+    private String chosenDayRetainAmount;
+    private long lChosenDayRetainAmount;
 
-    private String specificDayRetainAmountByMillion;
-    private long lSpecificDayRetainAmountByMillion;
+    private String chosenDayRetainAmountByMillion;
+    private long lChosenDayRetainAmountByMillion;
 
-    private long lSpecificDayVsCurDayGapAmount;
-    private String specificDayVsCurDayGapAmount;
+    private long lChosenDayVsCurDayGapAmount;
+    private String chosenDayVsCurDayGapAmount;
 
-    private long lSpecificDayVsCurDayGapAmountByMillion;
-    private String specificDayVsCurDayGapAmountByMillion;
+    private long lChosenDayVsCurDayGapAmountByMillion;
+    private String chosenDayVsCurDayGapAmountByMillion;
 
     public long getlRetainAmountByMillion() {
         return lRetainAmountByMillion;
@@ -102,68 +102,68 @@ public class MajorStockHolderVO {
         this.fRetainRatio = fRetainRatio;
     }
 
-    public String getSpecificDayRetainAmount() {
-		return specificDayRetainAmount;
+    public String getChosenDayRetainAmount() {
+		return chosenDayRetainAmount;
 	}
 
-	public void setSpecificDayRetainAmount(String specificDayRetainAmount) {
-		this.specificDayRetainAmount = specificDayRetainAmount;
+	public void setChosenDayRetainAmount(String chosenDayRetainAmount) {
+		this.chosenDayRetainAmount = chosenDayRetainAmount;
 	}
 
-	public long getlSpecificDayRetainAmount() {
-		return lSpecificDayRetainAmount;
+	public long getlChosenDayRetainAmount() {
+		return lChosenDayRetainAmount;
 	}
 
-	public void setlSpecificDayRetainAmount(long lSpecificDayRetainAmount) {
-		this.lSpecificDayRetainAmount = lSpecificDayRetainAmount;
+	public void setlChosenDayRetainAmount(long lChosenDayRetainAmount) {
+		this.lChosenDayRetainAmount = lChosenDayRetainAmount;
 	}
 
-	public String getSpecificDayRetainAmountByMillion() {
-		return specificDayRetainAmountByMillion;
+	public String getChosenDayRetainAmountByMillion() {
+		return chosenDayRetainAmountByMillion;
 	}
 
-	public void setSpecificDayRetainAmountByMillion(String specificDayRetainAmountByMillion) {
-		this.specificDayRetainAmountByMillion = specificDayRetainAmountByMillion;
+	public void setChosenDayRetainAmountByMillion(String chosenDayRetainAmountByMillion) {
+		this.chosenDayRetainAmountByMillion = chosenDayRetainAmountByMillion;
 	}
 
-	public long getlSpecificDayRetainAmountByMillion() {
-		return lSpecificDayRetainAmountByMillion;
+	public long getlChosenDayRetainAmountByMillion() {
+		return lChosenDayRetainAmountByMillion;
 	}
 
-	public void setlSpecificDayRetainAmountByMillion(long lSpecificDayRetainAmountByMillion) {
-		this.lSpecificDayRetainAmountByMillion = lSpecificDayRetainAmountByMillion;
+	public void setlChosenDayRetainAmountByMillion(long lChosenDayRetainAmountByMillion) {
+		this.lChosenDayRetainAmountByMillion = lChosenDayRetainAmountByMillion;
 	}
 
-	public long getlSpecificDayVsCurDayGapAmount() {
-		return lSpecificDayVsCurDayGapAmount;
+	public long getlChosenDayVsCurDayGapAmount() {
+		return lChosenDayVsCurDayGapAmount;
 	}
 
-	public void setlSpecificDayVsCurDayGapAmount(long lSpecificDayVsCurDayGapAmount) {
-		this.lSpecificDayVsCurDayGapAmount = lSpecificDayVsCurDayGapAmount;
+	public void setlChosenDayVsCurDayGapAmount(long lChosenDayVsCurDayGapAmount) {
+		this.lChosenDayVsCurDayGapAmount = lChosenDayVsCurDayGapAmount;
 	}
 
-	public String getSpecificDayVsCurDayGapAmount() {
-		return specificDayVsCurDayGapAmount;
+	public String getChosenDayVsCurDayGapAmount() {
+		return chosenDayVsCurDayGapAmount;
 	}
 
-	public void setSpecificDayVsCurDayGapAmount(String specificDayVsCurDayGapAmount) {
-		this.specificDayVsCurDayGapAmount = specificDayVsCurDayGapAmount;
+	public void setChosenDayVsCurDayGapAmount(String chosenDayVsCurDayGapAmount) {
+		this.chosenDayVsCurDayGapAmount = chosenDayVsCurDayGapAmount;
 	}
 
-	public long getlSpecificDayVsCurDayGapAmountByMillion() {
-		return lSpecificDayVsCurDayGapAmountByMillion;
+	public long getlChosenDayVsCurDayGapAmountByMillion() {
+		return lChosenDayVsCurDayGapAmountByMillion;
 	}
 
-	public void setlSpecificDayVsCurDayGapAmountByMillion(long lSpecificDayVsCurDayGapAmountByMillion) {
-		this.lSpecificDayVsCurDayGapAmountByMillion = lSpecificDayVsCurDayGapAmountByMillion;
+	public void setlChosenDayVsCurDayGapAmountByMillion(long lChosenDayVsCurDayGapAmountByMillion) {
+		this.lChosenDayVsCurDayGapAmountByMillion = lChosenDayVsCurDayGapAmountByMillion;
 	}
 
-	public String getSpecificDayVsCurDayGapAmountByMillion() {
-		return specificDayVsCurDayGapAmountByMillion;
+	public String getChosenDayVsCurDayGapAmountByMillion() {
+		return chosenDayVsCurDayGapAmountByMillion;
 	}
 
-	public void setSpecificDayVsCurDayGapAmountByMillion(String specificDayVsCurDayGapAmountByMillion) {
-		this.specificDayVsCurDayGapAmountByMillion = specificDayVsCurDayGapAmountByMillion;
+	public void setChosenDayVsCurDayGapAmountByMillion(String chosenDayVsCurDayGapAmountByMillion) {
+		this.chosenDayVsCurDayGapAmountByMillion = chosenDayVsCurDayGapAmountByMillion;
 	}
 
 	public String toString1() {

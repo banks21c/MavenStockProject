@@ -28,8 +28,8 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.util.DataSort.SpecificDayEndPriceVsCurPriceUpDownRatioRatioAscCompare;
-import html.parsing.stock.util.DataSort.SpecificDayEndPriceVsCurPriceUpDownRatioRatioDescCompare;
+import html.parsing.stock.util.DataSort.ChosenDayEndPriceVsCurPriceUpDownRatioRatioAscCompare;
+import html.parsing.stock.util.DataSort.ChosenDayEndPriceVsCurPriceUpDownRatioRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
 
 public class StockPlusMinusDivideEx extends Thread {
@@ -68,7 +68,7 @@ public class StockPlusMinusDivideEx extends Thread {
 	int iExtractCount = -1;
 
 	static String baseDay = "";
-	static String specificDay = "";
+	static String chosenDay = "";
 	static String thisYearLowestTradeDay = "2020.03.19";
 	static String thisYearFirstTradeDay = "2020.01.02";
 	static String thisYearPeakTradeDay = "2020.01.20";// 2020년 최고지수 2277.23
@@ -90,7 +90,7 @@ public class StockPlusMinusDivideEx extends Thread {
 			baseDay = thisYearFirstTradeDay;
 		
 		// 대표주식(삼성전자) 기준일이 몇 페이지에 있는지 페이지 번호 구하기
-		pageNo = StockUtil.getSpecificDayPageNo("005930", "삼성전자", baseDay);
+		pageNo = StockUtil.getChosenDayPageNo("005930", "삼성전자", baseDay);
 		logger.debug("pageNo :" + pageNo);
 		
 		long startTime = System.currentTimeMillis();
@@ -197,12 +197,12 @@ public class StockPlusMinusDivideEx extends Thread {
 
 		sBuilder = new StringBuilder();
 		// 1.기준일 대비 상승율순 정렬
-		Collections.sort(kospiAllStockList, new SpecificDayEndPriceVsCurPriceUpDownRatioRatioDescCompare());
+		Collections.sort(kospiAllStockList, new ChosenDayEndPriceVsCurPriceUpDownRatioRatioDescCompare());
 		StringBuilder info1 = getStockInformation(kospiAllStockList, "코스피", "기준일 대비 상승율");
 		writeFile(info1, "코스피 기준일 대비 등락율(상승율순)");
 
 		// 2.기준일 대비 하락율순 정렬
-		Collections.sort(kospiAllStockList, new SpecificDayEndPriceVsCurPriceUpDownRatioRatioAscCompare());
+		Collections.sort(kospiAllStockList, new ChosenDayEndPriceVsCurPriceUpDownRatioRatioAscCompare());
 		StringBuilder info2 = getStockInformation(kospiAllStockList, "코스피", "기준일 대비 하락율");
 		writeFile(info2, "코스피 기준일 대비 등락율(하락율순)");
 
@@ -233,12 +233,12 @@ public class StockPlusMinusDivideEx extends Thread {
 		steadyCount = sUtil.getSteadyCount();
 
 		// 1.기준일 대비 상승율순 정렬
-		Collections.sort(kosdaqAllStockList, new SpecificDayEndPriceVsCurPriceUpDownRatioRatioDescCompare());
+		Collections.sort(kosdaqAllStockList, new ChosenDayEndPriceVsCurPriceUpDownRatioRatioDescCompare());
 		StringBuilder info5 = getStockInformation(kosdaqAllStockList, "코스닥", "기준일 대비 상승율");
 		writeFile(info5, "코스닥 기준일 대비 등락율(상승율순)");
 
 		// 2.기준일 대비 하락율순 정렬
-		Collections.sort(kosdaqAllStockList, new SpecificDayEndPriceVsCurPriceUpDownRatioRatioAscCompare());
+		Collections.sort(kosdaqAllStockList, new ChosenDayEndPriceVsCurPriceUpDownRatioRatioAscCompare());
 		StringBuilder info6 = getStockInformation(kosdaqAllStockList, "코스닥", "기준일 대비 하락율");
 		writeFile(info6, "코스닥 기준일 대비 등락율(하락율순)");
 
@@ -610,18 +610,18 @@ public class StockPlusMinusDivideEx extends Thread {
 				sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(svo.getTradingVolume(), "")
 					+ "</td>\r\n");
 				sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(svo.getTradingAmount(), "") + "</td>\r\n");
-				sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(svo.getSpecificDayEndPrice(), "") + "</td>\r\n");
+				sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(svo.getChosenDayEndPrice(), "") + "</td>\r\n");
 				
-				String specificDayEndPriceVsCurPriceUpDownRatioStyle = "";
-				if (svo.getSpecificDayEndPriceVsCurPriceUpDownRatio() < 0) {
-					specificDayEndPriceVsCurPriceUpDownRatioStyle = "blue";
-				} else if (svo.getSpecificDayEndPriceVsCurPriceUpDownRatio() == 0) {
-					specificDayEndPriceVsCurPriceUpDownRatioStyle = "gray";
+				String chosenDayEndPriceVsCurPriceUpDownRatioStyle = "";
+				if (svo.getChosenDayEndPriceVsCurPriceUpDownRatio() < 0) {
+					chosenDayEndPriceVsCurPriceUpDownRatioStyle = "blue";
+				} else if (svo.getChosenDayEndPriceVsCurPriceUpDownRatio() == 0) {
+					chosenDayEndPriceVsCurPriceUpDownRatioStyle = "gray";
 				} else {
-					specificDayEndPriceVsCurPriceUpDownRatioStyle = "red";
+					chosenDayEndPriceVsCurPriceUpDownRatioStyle = "red";
 				}
 				
-				sb1.append("<td style='text-align:right' class='" + specificDayEndPriceVsCurPriceUpDownRatioStyle + "'>" + svo.getSpecificDayEndPriceVsCurPriceUpDownRatio() + "%</td>\r\n");
+				sb1.append("<td style='text-align:right' class='" + chosenDayEndPriceVsCurPriceUpDownRatioStyle + "'>" + svo.getChosenDayEndPriceVsCurPriceUpDownRatio() + "%</td>\r\n");
 
 				sb1.append("</tr>\r\n");
 

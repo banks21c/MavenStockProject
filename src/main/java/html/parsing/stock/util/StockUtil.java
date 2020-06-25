@@ -5,7 +5,6 @@
  */
 package html.parsing.stock.util;
 
-import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -30,11 +29,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.PropertyConfigurator;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -54,8 +53,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.StockNameLengthDescCompare;
-import java.util.regex.Pattern;
 
 /**
  *
@@ -76,6 +75,12 @@ public class StockUtil {
 	String strYmdDash = strDefaultDate.replaceAll("\\.", "-");
 	String strYmdDashBracket = "[" + strDefaultDate.replaceAll("\\.", "-") + "]";
 	public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36 NetHelper70";
+
+	// STOCK_LIST_TYPE
+	// 1 : txt
+	// 2 : excel
+	// 3 : web
+	private static final int STOCK_LIST_TYPE = 1;
 
 	static int topCount = 0;
 	static int upCount = 0;
@@ -186,10 +191,10 @@ public class StockUtil {
 		String kospiFileName = GlobalVariables.kospiFileName;
 		List<StockVO> kospiStockList = new ArrayList<>();
 		try {
-			kospiStockList = readStockCodeNameListFromExcel(kospiStockList, kospiFileName);
+			kospiStockList = readStockCodeNameListFromExcel(kospiFileName);
 		} catch (Exception ex) {
 			logger.debug("1.ex.getMessage :" + ex.getMessage());
-			kospiStockList = getStockCodeNameListFromKindKrxCoKr(kospiStockList, "stockMkt");
+			kospiStockList = getStockCodeNameListFromKindKrxCoKr("stockMkt");
 		}
 		return kospiStockList;
 	}
@@ -198,10 +203,10 @@ public class StockUtil {
 		String kosdaqFileName = GlobalVariables.kosdaqFileName;
 		List<StockVO> kosdaqStockList = new ArrayList<>();
 		try {
-			kosdaqStockList = readStockCodeNameListFromExcel(kosdaqStockList, kosdaqFileName);
+			kosdaqStockList = readStockCodeNameListFromExcel(kosdaqFileName);
 		} catch (Exception ex) {
 			logger.debug("2.ex.getMessage :" + ex.getMessage());
-			kosdaqStockList = getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
+			kosdaqStockList = getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
 		}
 		return kosdaqStockList;
 	}
@@ -272,6 +277,39 @@ public class StockUtil {
 		return kosdaqStockList;
 	}
 
+	public static List<StockVO> readStockCodeNameList(String marketType) {
+		String strFileName = "";
+		if (marketType.equals("kospi") || marketType.equals("코스피")) {
+			if (STOCK_LIST_TYPE == 1) {
+				strFileName = GlobalVariables.KOSPI_LIST_TXT;
+				return readStockCodeNameListFromTxtFile(strFileName);
+			} else if (STOCK_LIST_TYPE == 2) {
+				strFileName = GlobalVariables.kospiFileName;
+				return readStockCodeNameListFromExcel(strFileName);
+			} else if (STOCK_LIST_TYPE == 3) {
+				String krxMarketType = "stockMkt";
+				return readStockCodeNameListFromKrx(krxMarketType);
+			} else {
+				strFileName = GlobalVariables.KOSPI_LIST_TXT;
+				return readStockCodeNameListFromTxtFile(strFileName);
+			}
+		} else {
+			if (STOCK_LIST_TYPE == 1) {
+				strFileName = GlobalVariables.KOSDAQ_LIST_TXT;
+				return readStockCodeNameListFromTxtFile(strFileName);
+			} else if (STOCK_LIST_TYPE == 2) {
+				strFileName = GlobalVariables.kosdaqFileName;
+				return readStockCodeNameListFromExcel(strFileName);
+			} else if (STOCK_LIST_TYPE == 3) {
+				String krxMarketType = "kosdaqMkt";
+				return readStockCodeNameListFromKrx(krxMarketType);
+			} else {
+				strFileName = GlobalVariables.KOSDAQ_LIST_TXT;
+				return readStockCodeNameListFromTxtFile(strFileName);
+			}
+		}
+	}
+
 	public static List<StockVO> readStockCodeNameListFromTxtFile(String stockListTxtFileName) {
 		List<StockVO> stockList = new ArrayList<>();
 		try {
@@ -312,7 +350,7 @@ public class StockUtil {
 			// ide에서 실행하였을 경우에는 프로젝트 경로
 			// 프로젝트 경로에 있는 파일들은 jar파일에 묶이지 않는다.
 			System.out.println(". AbsolutePath:" + new File(".").getAbsolutePath());
-			File f = new File("./"+stockListTxtFileName);
+			File f = new File("./" + stockListTxtFileName);
 			System.out.println("f.exists():" + f.exists());
 			InputStream inputStream = null;
 			if (f.exists()) {
@@ -320,11 +358,11 @@ public class StockUtil {
 				System.out.println("inputStream1: " + inputStream);
 			} else {
 				// classes root 경로
-				inputStream = StockUtil.class.getResourceAsStream("/"+stockListTxtFileName);
+				inputStream = StockUtil.class.getResourceAsStream("/" + stockListTxtFileName);
 				System.out.println("inputStream2: " + inputStream);
 				System.out.println("class 경로 read " + stockListTxtFileName + " Resource");
 			}
-			
+
 			if (inputStream != null) {
 				InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF8");
 				BufferedReader br = new BufferedReader(inputStreamReader);
@@ -380,9 +418,8 @@ public class StockUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<StockVO> readStockCodeNameListFromKrx(String marketType) throws Exception {
-		List<StockVO> stockList = new ArrayList<StockVO>();
-		getStockCodeNameListFromKindKrxCoKr(stockList, marketType);
+	public static List<StockVO> readStockCodeNameListFromKrx(String marketType) {
+		List<StockVO> stockList = getStockCodeNameListFromKindKrxCoKr(marketType);
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		return stockList;
 	}
@@ -397,30 +434,29 @@ public class StockUtil {
 	 * @throws Exception
 	 */
 	public static List<StockVO> readStockCodeNameListFromKrx(String marketType, String searchType) throws Exception {
-		List<StockVO> stockList = new ArrayList<StockVO>();
-		getStockCodeNameListFromKindKrxCoKr(stockList, marketType, searchType);
+		List<StockVO> stockList = getStockCodeNameListFromKindKrxCoKr(marketType, searchType);
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		return stockList;
 	}
 
 	public static List<StockVO> readKospiStockCodeNameListFromKrx() throws Exception {
-		List<StockVO> stockList = new ArrayList<StockVO>();
-		getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
+		List<StockVO> stockList = getStockCodeNameListFromKindKrxCoKr("stockMkt");
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		return stockList;
 	}
 
 	public static List<StockVO> readKosdaqStockCodeNameListFromKrx() throws Exception {
-		List<StockVO> stockList = new ArrayList<StockVO>();
-		getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+		List<StockVO> stockList = getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		return stockList;
 	}
 
 	public static List<StockVO> readAllStockCodeNameListFromKrx() throws Exception {
-		List<StockVO> stockList = new ArrayList<StockVO>();
-		getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
-		getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+		List<StockVO> stockList = new ArrayList<>();
+		List<StockVO> stockList1 = getStockCodeNameListFromKindKrxCoKr("stockMkt");
+		List<StockVO> stockList2 = getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
+		stockList.addAll(stockList1);
+		stockList.addAll(stockList2);
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		return stockList;
 	}
@@ -431,12 +467,12 @@ public class StockUtil {
 
 		List<StockVO> stockList = new ArrayList<StockVO>();
 		try {
-			readStockCodeNameListFromExcel(stockList, kospiFileName);
-			readStockCodeNameListFromExcel(stockList, kosdaqFileName);
+			stockList.addAll(readStockCodeNameListFromExcel(stockList, kospiFileName));
+			stockList.addAll(readStockCodeNameListFromExcel(stockList, kosdaqFileName));
 		} catch (Exception e) {
 			e.printStackTrace();
-			getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
-			getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+			stockList.addAll(getStockCodeNameListFromKindKrxCoKr("stockMkt"));
+			stockList.addAll(getStockCodeNameListFromKindKrxCoKr("kosdaqMkt"));
 		}
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		return stockList;
@@ -485,8 +521,8 @@ public class StockUtil {
 
 		List<StockVO> stockList = new ArrayList<>();
 
-		getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
-		getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+		stockList.addAll(getStockCodeNameListFromKindKrxCoKr("stockMkt"));
+		stockList.addAll(getStockCodeNameListFromKindKrxCoKr("kosdaqMkt"));
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		for (int i = 0; i < stockList.size(); i++) {
 			StockVO vo = stockList.get(i);
@@ -524,13 +560,13 @@ public class StockUtil {
 		List<StockVO> stockList = new ArrayList<>();
 
 		try {
-			readStockCodeNameListFromExcel(stockList, kospiFileName);
-			readStockCodeNameListFromExcel(stockList, kosdaqFileName);
+			stockList.addAll(readStockCodeNameListFromExcel(kospiFileName));
+			stockList.addAll(readStockCodeNameListFromExcel(kosdaqFileName));
 		} catch (Exception e) {
 			logger.debug("Exception e:" + e.getMessage());
 			e.printStackTrace();
-			getStockCodeNameListFromKindKrxCoKr(stockList, "stockMkt");
-			getStockCodeNameListFromKindKrxCoKr(stockList, "kosdaqMkt");
+			stockList.addAll(getStockCodeNameListFromKindKrxCoKr("stockMkt"));
+			stockList.addAll(getStockCodeNameListFromKindKrxCoKr("kosdaqMkt"));
 		}
 		Collections.sort(stockList, new StockNameLengthDescCompare());
 		for (int i = 0; i < stockList.size(); i++) {
@@ -778,6 +814,84 @@ public class StockUtil {
 		return stockList;
 	}
 
+	/**
+	 * 엑셀 파일 읽어서 코스피,코스닥 종목코드,종목명 목록을 추출한다.
+	 *
+	 * @param stockList
+	 * @param fileName
+	 * @return List<StockVO>
+	 * @throws Exception
+	 */
+	public static List<StockVO> readStockCodeNameListFromExcel(String fileName) {
+		List<StockVO> svoList = new ArrayList<>();
+		// Creating a Workbook from an Excel file (.xls or .xlsx)
+		logger.debug("fileName:" + fileName);
+		File file = new File(fileName);
+		Workbook workbook;
+		try {
+			workbook = WorkbookFactory.create(file);
+
+			// Getting the Sheet at index zero
+			Sheet sheet = workbook.getSheetAt(0);
+
+			// Create a DataFormatter to format and get each cell's value as String
+			DataFormatter dataFormatter = new DataFormatter();
+
+			// 1. You can obtain a rowIterator and columnIterator and iterate over them
+			Iterator<Row> rowIterator = sheet.rowIterator();
+			int cnt = 0;
+			while (rowIterator.hasNext()) {
+				StockVO svo = new StockVO();
+				Row row = rowIterator.next();
+
+				// Now let's iterate over the columns of the current row
+				Iterator<Cell> cellIterator = row.cellIterator();
+				String strStockName = null;
+				String strStockCode = null;
+				int stockNameLength = 0;
+				if (row.getLastCellNum() > 1) {
+					int i = 0;
+					while (cellIterator.hasNext()) {
+						if (i == 2) {
+							break;
+						}
+						Cell cell = cellIterator.next();
+						String cellValue = dataFormatter.formatCellValue(cell);
+						if (i == 0) {
+							strStockName = cellValue;
+							svo.setStockName(strStockName);
+							stockNameLength = strStockName.length();
+							svo.setStockNameLength(stockNameLength);
+						}
+						if (i == 1) {
+							strStockCode = cellValue;
+							svo.setStockCode(strStockCode);
+						}
+						i++;
+					}
+					if (strStockCode.length() != 6) {
+						continue;
+					}
+//					logger.debug(strStockCode + "\t" + strStockName);
+				}
+				svoList.add(svo);
+				cnt++;
+			}
+			// Closing the workbook
+			workbook.close();
+		} catch (EncryptedDocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return svoList;
+	}
+
 	public static List<StockVO> getAllStockInfo(List<StockVO> stockList) {
 		List<StockVO> svoList = new ArrayList<>();
 		int cnt = 0;
@@ -825,47 +939,47 @@ public class StockUtil {
 				if (baseDay.equals("")) {
 					baseDay = thisYearFirstTradeDay;
 				}
-				String specificDay = StockUtil.getSpecificDay(baseDay, listedDay);
-				logger.debug("specificDay :" + specificDay);
-				vo.setSpecificDay(specificDay);
+				String chosenDay = StockUtil.getChosenDay(baseDay, listedDay);
+				logger.debug("chosenDay :" + chosenDay);
+				vo.setChosenDay(chosenDay);
 
-//				String specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
-				String specificDayEndPrice = "0";
-				if (baseDay.equals(specificDay)) {
-					specificDayEndPrice = StockUtil.findSpecificDayEndPrice(strStockCode, strStockName, specificDay,
+//				String chosenDayEndPrice = StockUtil.getChosenDayEndPrice(strStockCode, strStockName, chosenDay);
+				String chosenDayEndPrice = "0";
+				if (baseDay.equals(chosenDay)) {
+					chosenDayEndPrice = StockUtil.findChosenDayEndPrice(strStockCode, strStockName, chosenDay,
 							pageNo);
 				} else {
-					specificDayEndPrice = StockUtil.getSpecificDayEndPrice(strStockCode, strStockName, specificDay);
+					chosenDayEndPrice = StockUtil.getChosenDayEndPrice(strStockCode, strStockName, chosenDay);
 				}
-				logger.debug("specificDayEndPrice :" + specificDayEndPrice);
-				vo.setSpecificDayEndPrice(specificDayEndPrice);
+				logger.debug("chosenDayEndPrice :" + chosenDayEndPrice);
+				vo.setChosenDayEndPrice(chosenDayEndPrice);
 
-				specificDayEndPrice = specificDayEndPrice.replaceAll(",", "");
-				logger.debug("specificDayEndPrice :" + specificDayEndPrice);
-				if (specificDayEndPrice.equals("")) {
-					specificDayEndPrice = "0";
+				chosenDayEndPrice = chosenDayEndPrice.replaceAll(",", "");
+				logger.debug("chosenDayEndPrice :" + chosenDayEndPrice);
+				if (chosenDayEndPrice.equals("")) {
+					chosenDayEndPrice = "0";
 				}
-				int iSpecificDayEndPrice = Integer.parseInt(specificDayEndPrice);
-				vo.setiSpecificDayEndPrice(iSpecificDayEndPrice);
-				logger.debug("iSpecificDayEndPrice :" + iSpecificDayEndPrice);
+				int iChosenDayEndPrice = Integer.parseInt(chosenDayEndPrice);
+				vo.setiChosenDayEndPrice(iChosenDayEndPrice);
+				logger.debug("iChosenDayEndPrice :" + iChosenDayEndPrice);
 
 				int iCurPrice = vo.getiCurPrice();
 				// ===========================================================================
 				double upDownRatio = 0d;
-				if (iSpecificDayEndPrice != 0) {
-					if (iSpecificDayEndPrice < iCurPrice) {
-						double d1 = iCurPrice - iSpecificDayEndPrice;
-						double d2 = d1 / iSpecificDayEndPrice * 100;
+				if (iChosenDayEndPrice != 0) {
+					if (iChosenDayEndPrice < iCurPrice) {
+						double d1 = iCurPrice - iChosenDayEndPrice;
+						double d2 = d1 / iChosenDayEndPrice * 100;
 						upDownRatio = Math.round(d2 * 100) / 100.0;
-					} else if (iSpecificDayEndPrice > iCurPrice) {
-						double d1 = iSpecificDayEndPrice - iCurPrice;
-						double d2 = d1 / iSpecificDayEndPrice * 100;
+					} else if (iChosenDayEndPrice > iCurPrice) {
+						double d1 = iChosenDayEndPrice - iCurPrice;
+						double d2 = d1 / iChosenDayEndPrice * 100;
 						upDownRatio = -(Math.round(d2 * 100) / 100.0);
 					}
 				}
-				logger.debug("iCurPrice:" + iCurPrice + " iSpecificDayEndPrice :" + iSpecificDayEndPrice);
+				logger.debug("iCurPrice:" + iCurPrice + " iChosenDayEndPrice :" + iChosenDayEndPrice);
 				logger.debug("특정일 대비 up,down 비율:" + upDownRatio + "%");
-				vo.setSpecificDayEndPriceVsCurPriceUpDownRatio(upDownRatio);
+				vo.setChosenDayEndPriceVsCurPriceUpDownRatio(upDownRatio);
 				// ===========================================================================
 
 				svoList.add(vo);
@@ -1018,14 +1132,7 @@ public class StockUtil {
 	 */
 	public static final String SERVER_URI = "http://kind.krx.co.kr/corpgeneral/corpList.do";
 
-	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(List<StockVO> stockList, String marketType) {
-		// searchType 13 = 상장법인
-		logger.debug("marketType:" + marketType);
-		return getStockCodeNameListFromKindKrxCoKr(stockList, marketType, "13");
-	}
-
-	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(List<StockVO> stockList, String marketType,
-			String searchType) {
+	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(String marketType, String searchType) {
 		List<StockVO> svoList = new ArrayList<>();
 		try {
 			String param = "method=download&pageIndex=1&currentPageSize=5000&comAbbrv=&beginIndex=&orderMode=3"
@@ -1107,17 +1214,17 @@ public class StockUtil {
 			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		logger.debug("svoList.size :" + svoList.size());
-		stockList.addAll(svoList);
-		logger.debug("stockList.size :" + stockList.size());
-		return stockList;
+		return svoList;
 	}
 
 	public static List<StockVO> getStockCodeNameListFromKindKrxCoKr(String marketType) {
+		// searchType 13 = 상장법인
+		String searchType = "13";
 		List<StockVO> svoList = new ArrayList<>();
 		try {
 			String param = "method=download&pageIndex=1&currentPageSize=5000&comAbbrv=&beginIndex=&orderMode=3"
-					+ "&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=" + "&marketType=" + marketType
-					+ "&searchType=13" + "&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
+					+ "&orderStat=D&isurCd=&repIsuSrtCd=&searchCodeType=" + "&marketType=" + marketType + "&searchType="
+					+ searchType + "&industry=&fiscalYearEnd=all&comAbbrvTmp=&location=all";
 
 			String strUri = SERVER_URI + "?" + param;
 //			Document doc = Jsoup.parse(new URL(strUri).openStream(), "EUC-KR", strUri);
@@ -1987,9 +2094,7 @@ public class StockUtil {
 			String companyInfoUrl = "http://companyinfo.stock.naver.com/v1/company/c1020001.aspx?cmp_cd=" + stockCode;
 			logger.debug("companyInfoUrl:" + companyInfoUrl);
 
-//			doc = Jsoup.connect(companyInfoUrl).get();
-			StringBuffer sb = sendPost(companyInfoUrl, "UTF-8");
-			doc = Jsoup.parse(sb.toString());
+			doc = Jsoup.connect(companyInfoUrl).get();
 			String strDoc = doc.html();
 			if (strDoc.equals("")) {
 				return "";
@@ -2031,103 +2136,103 @@ public class StockUtil {
 		return listedDay.replaceAll("/", ".");
 	}
 
-	private static boolean findDate = false;
+	private static boolean findDateYn = false;
 
-	public static String getSpecificDay(String specificDay, String listedDay) {
+	public static String getChosenDay(String chosenDay, String listedDay) {
 		// 특정일 정보가 없으면???
-		if (specificDay.equals("")) {
+		if (chosenDay.equals("")) {
 			return "";
 		}
 
 		// 상장일 정보가 없으면???
 		if (listedDay.equals("")) {
-			return specificDay;
+			return chosenDay;
 		}
 
-		int iSpecificDay = Integer.parseInt(specificDay.replaceAll("\\.", "0"));
+		int iChosenDay = Integer.parseInt(chosenDay.replaceAll("\\.", "0"));
 		int iListedDay = Integer.parseInt(listedDay.replaceAll("\\.", "0"));
-		if (iListedDay < iSpecificDay) {
+		if (iListedDay < iChosenDay) {
 			// 상장일이 찾으려는 날짜보다 과거이면...
 			// 찾으려는 날짜가 상장일 이후이면...
-			return specificDay;
+			return chosenDay;
 		} else {
 			return listedDay;
 		}
 	}
 
 	// @Test
-	public void getSpecificDayEndPriceTest() throws Exception {
-		String specificDayEndPrice = getSpecificDayEndPrice("204210", "모두투어리츠", "2020.01.21");
+	public void getChosenDayEndPriceTest() throws Exception {
+		String chosenDayEndPrice = getChosenDayEndPrice("204210", "모두투어리츠", "2020.01.21");
 	}
 
-	public static String getSpecificDayEndPrice(String stockCode, String stockName, String findDay) {
-		logger.debug("findDay:" + findDay);
-		logger.debug("findDate:" + findDate);
+	public static String getChosenDayEndPrice(String stockCode, String stockName, String chosenDay) {
+		logger.debug("chosenDay:" + chosenDay);
+		logger.debug("findDateYn:" + findDateYn);
 
-		String specificDayEndPrice = "";
+		String chosenDayEndPrice = "";
 		// 상장일이 찾으려는 날짜보다 과거이면...찾으려는 날짜
 		// 상장일이 찾으려는 날짜보다 이후이면...상장일
 		// 찾으려는 날짜가 상장일 이후이면...찾으려는 날짜
 		// 찾으려는 날짜가 상장일 이전이면...상장일
 		int pageNo = 1;
-		findDate = false;
-		while (!findDate) {
+		findDateYn = false;
+		while (!findDateYn) {
 			if (pageNo > 100) {
 				break;
 			}
-			specificDayEndPrice = findSpecificDayEndPrice(stockCode, stockName, findDay, pageNo);
+			chosenDayEndPrice = findChosenDayEndPrice(stockCode, stockName, chosenDay, pageNo);
 			pageNo++;
 		}
-		logger.debug(stockCode + " " + stockName + " " + findDay + " 종가 :" + specificDayEndPrice);
-		return specificDayEndPrice;
+		logger.debug(stockCode + " " + stockName + " " + chosenDay + " 종가 :" + chosenDayEndPrice);
+		return chosenDayEndPrice;
 	}
 
 //	@Test
-	public void getSpecificDayPageNoTest() {
-		int pageNo = getSpecificDayPageNo("005930", "삼성전자", "2020.01.02");
+	public void getChosenDayPageNoTest() {
+		int pageNo = getChosenDayPageNo("005930", "삼성전자", "2020.01.02");
 		logger.debug("pageNo:" + pageNo);
-		pageNo = getSpecificDayPageNo("005930", "삼성전자", "2019.01.02");
+		pageNo = getChosenDayPageNo("005930", "삼성전자", "2019.01.02");
 		logger.debug("pageNo:" + pageNo);
-		pageNo = getSpecificDayPageNo("005930", "삼성전자", "2018.01.02");
+		pageNo = getChosenDayPageNo("005930", "삼성전자", "2018.01.02");
 		logger.debug("pageNo:" + pageNo);
 	}
 
-	public static int getSpecificDayPageNo(String stockCode, String stockName, String findDay) {
-		logger.debug("findDay:" + findDay);
+	public static int getChosenDayPageNo(String stockCode, String stockName, String chosenDay) {
+		logger.debug("chosenDay:" + chosenDay);
 
 		// 상장일이 찾으려는 날짜보다 과거이면...찾으려는 날짜
 		// 상장일이 찾으려는 날짜보다 이후이면...상장일
 		// 찾으려는 날짜가 상장일 이후이면...찾으려는 날짜
 		// 찾으려는 날짜가 상장일 이전이면...상장일
 		int pageNo = 1;
-		findDate = false;
-		while (!findDate) {
+		findDateYn = false;
+		while (!findDateYn) {
 			if (pageNo > 100) {
 				break;
 			}
 			try {
-				pageNo = findSpecificDayPageNo(stockCode, stockName, findDay, pageNo);
-				if (!findDate) {
+				pageNo = findChosenDayPageNo(stockCode, stockName, chosenDay, pageNo);
+				if (!findDateYn) {
 					pageNo++;
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		logger.debug(stockCode + " " + stockName + " " + findDay + " pageNo :" + pageNo);
+		logger.debug(stockCode + " " + stockName + " " + chosenDay + " pageNo :" + pageNo);
 		return pageNo;
 	}
 
 	// @Test
-	public void findSpecificDayEndPriceTest() throws Exception {
-		String specificDayEndPrice = StockUtil.findSpecificDayEndPrice("338100", "NH프라임리츠", "NH프라임리츠", 9);
-		logger.debug("specificDayEndPrice:" + specificDayEndPrice);
+	public void findChosenDayEndPriceTest() throws Exception {
+		String chosenDayEndPrice = StockUtil.findChosenDayEndPrice("338100", "NH프라임리츠", "NH프라임리츠", 9);
+		logger.debug("chosenDayEndPrice:" + chosenDayEndPrice);
 	}
 
 	@Test
 	public void a() throws Exception {
-		String specificDayEndPrice = findSpecificDayEndPrice("353200", "대덕전자", "2020.05.21", 1);
-		logger.debug("specificDayEndPrice :" + specificDayEndPrice);
+		String chosenDayEndPrice = findChosenDayEndPrice("353200", "대덕전자", "2020.05.21", 1);
+		logger.debug("chosenDayEndPrice :" + chosenDayEndPrice);
 
 	}
 
@@ -2136,13 +2241,13 @@ public class StockUtil {
 	 *
 	 * @param stockCode
 	 * @param stockName
-	 * @param findDay
+	 * @param chosenDay
 	 * @param pageNo
 	 * @return
 	 * @throws Exception
 	 */
-	public static String findSpecificDayEndPrice(String stockCode, String stockName, String findDay, int pageNo) {
-		String specificDayEndPrice = "0";
+	public static String findChosenDayEndPrice(String stockCode, String stockName, String chosenDay, int pageNo) {
+		String chosenDayEndPrice = "0";
 		Document doc;
 		// 종합분석-기업개요
 //			doc = Jsoup.connect("https://finance.naver.com/item/sise_day.nhn?code=" + stockCode).get();
@@ -2159,9 +2264,10 @@ public class StockUtil {
 //		doc = Jsoup.connect(nhnSiseDayUrl).cookies(loginCookies).userAgent(userAgent).get();
 		StringBuffer sb;
 		try {
-			sb = sendPost(nhnSiseDayUrl, "EUC-KR");
-			logger.debug("sb:" + sb);
-			doc = Jsoup.parse(sb.toString());
+			doc = Jsoup.connect(nhnSiseDayUrl).get();
+//			sb = sendPost(nhnSiseDayUrl, "EUC-KR");
+//			logger.debug("sb:" + sb);
+//			doc = Jsoup.parse(sb.toString());
 
 			doc.select("link").remove();
 			doc.select("javascript").remove();
@@ -2192,7 +2298,7 @@ public class StockUtil {
 
 				Elements trEls = type2.select("tbody tr");
 				String temp_tradeDay = "";
-				String temp_specificDayEndPrice = "";
+				String temp_chosenDayEndPrice = "";
 				for (Element tr : trEls) {
 					Elements tdEls = tr.select("td");
 					if (tdEls.size() > 1) {
@@ -2200,27 +2306,26 @@ public class StockUtil {
 						temp_tradeDay = dayEl.text();
 						logger.debug("temp_tradeDay:" + temp_tradeDay);
 
-						Element specificDayEndPriceEl = tdEls.get(endPriceIndex);
-						temp_specificDayEndPrice = specificDayEndPriceEl.text();
-						logger.debug("temp_specificDayEndPrice:" + temp_specificDayEndPrice);
-						if (findDay.equals(temp_tradeDay)) {
-							logger.debug(temp_tradeDay + "\t" + temp_specificDayEndPrice);
-							specificDayEndPrice = temp_specificDayEndPrice;
-							findDate = true;
+						Element chosenDayEndPriceEl = tdEls.get(endPriceIndex);
+						temp_chosenDayEndPrice = chosenDayEndPriceEl.text();
+						logger.debug("temp_chosenDayEndPrice:" + temp_chosenDayEndPrice);
+						if (chosenDay.equals(temp_tradeDay)) {
+							logger.debug(temp_tradeDay + "\t" + temp_chosenDayEndPrice);
+							chosenDayEndPrice = temp_chosenDayEndPrice;
+							findDateYn = true;
 							break;
 						}
 					}
 				}
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		logger.debug("specificDayEndPrice:" + specificDayEndPrice);
-		return specificDayEndPrice;
+		logger.debug("chosenDayEndPrice:" + chosenDayEndPrice);
+		return chosenDayEndPrice;
 	}
 
-	public static int findSpecificDayPageNo(String stockCode, String stockName, String findDay, int pageNo)
+	public static int findChosenDayPageNo(String stockCode, String stockName, String chosenDay, int pageNo)
 			throws IOException {
 		Document doc;
 		// 종합분석-기업개요
@@ -2262,8 +2367,8 @@ public class StockUtil {
 			if (tdEls.size() > 1) {
 				Element dayEl = tdEls.get(dayIndex);
 				temp_tradeDay = dayEl.text();
-				if (findDay.equals(temp_tradeDay)) {
-					findDate = true;
+				if (chosenDay.equals(temp_tradeDay)) {
+					findDateYn = true;
 					break;
 				}
 			}
@@ -2569,7 +2674,6 @@ public class StockUtil {
 			}
 			stock.setSpecialLetter(specialLetter);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return stock;
@@ -2825,7 +2929,7 @@ public class StockUtil {
 		con.setRequestMethod("POST");
 		con.setRequestProperty("User-Agent", USER_AGENT);
 		con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-		con.setConnectTimeout(10000); // 컨텍션타임아웃 10초
+		con.setConnectTimeout(5000); // 커넥션타임아웃 10초
 		con.setReadTimeout(5000); // 컨텐츠조회 타임아웃 5초
 		// Send post request
 		con.setDoOutput(true); // 항상 갱신된내용을 가져옴.
@@ -2834,7 +2938,6 @@ public class StockUtil {
 //		wr.writeBytes(urlParameters);
 		wr.flush();
 		wr.close();
-		logger.debug("sendPost wr2 : " + wr);
 
 		int responseCode = con.getResponseCode();
 		logger.debug("\nSending 'POST' request to URL : " + url);
@@ -2848,11 +2951,11 @@ public class StockUtil {
 		StringBuffer sb = new StringBuffer();
 
 		while ((inputLine = in.readLine()) != null) {
-			logger.debug("inputLine:" + inputLine);
+//			logger.debug("inputLine:" + inputLine);
 			sb.append(inputLine + "\r\n");
 		}
 		in.close();
-		// logger.debug(sb.toString());
+		logger.debug(sb.toString());
 		return sb;
 	}
 

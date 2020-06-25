@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.model.MajorStockHolderVO;
 import html.parsing.stock.model.StockVO;
-import html.parsing.stock.util.DataSort.SpecificDayVsCurPriceUpDownRatioDescCompare;
+import html.parsing.stock.util.DataSort.ChosenDayVsCurPriceUpDownRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
@@ -33,6 +33,8 @@ class NationalPensionThread extends Thread {
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
 
+	String baseDay = "";
+	String chosenDay = "";
 	static String thisYearFirstTradeDay = "2020.01.02";
 	static String thisYearPeakTradeDay = "2020.01.20";// 2020년 최고지수 2277.23
 	static String lastYearFirstTradeDay = "2019.01.02";// 2019년 첫 거래일
@@ -41,7 +43,6 @@ class NationalPensionThread extends Thread {
 	static String twoYearAgoPeakTradeDay = "2018.01.29";// 2018년 최고지수 2607.20
 
 	String marketType = "";
-	String specificDay = "";
 	String majorStockHolders = "";
 
 	static DecimalFormat df = new DecimalFormat("#,##0");
@@ -52,11 +53,17 @@ class NationalPensionThread extends Thread {
 	List<StockVO> stockList = new ArrayList<StockVO>();
 
 	public static void main(String args[]) {
-		NationalPensionThread thread1 = new NationalPensionThread("kospi", "국민연금공단", "2020.01.02");
-		thread1.start();
+//		NationalPensionThread thread1 = new NationalPensionThread("kospi", "국민연금공단", "2020.01.02");
+//		thread1.start();
 //		NationalPensionThread thread2 = new NationalPensionThread("kosdaq", "국민연금공단", "2020.01.02");
 //		thread2.start();
 
+		NationalPensionThread thread2 = new NationalPensionThread("kosdaq", "국민연금공단", "2020.01.02");
+		try {
+			thread2.readAndWriteMajorStockHoldersTest();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	NationalPensionThread(String marketType) {
@@ -64,13 +71,13 @@ class NationalPensionThread extends Thread {
 		logger.debug("marketType:" + this.marketType);
 	}
 
-	NationalPensionThread(String marketType, String majorStockHolders, String specificDay) {
+	NationalPensionThread(String marketType, String majorStockHolders, String baseDay) {
 		this.marketType = marketType;
 		this.majorStockHolders = majorStockHolders;
-		this.specificDay = specificDay;
+		this.baseDay = baseDay;
 		logger.debug("marketType:" + this.marketType);
 		logger.debug("majorStockHolders:" + this.majorStockHolders);
-		logger.debug("specificDay:" + this.specificDay);
+		logger.debug("baseDay:" + this.baseDay);
 	}
 
 	public void run() {
@@ -93,6 +100,20 @@ class NationalPensionThread extends Thread {
 
 		logger.debug("실행시간 : " + hour + " 시간 " + minute + " 분 " + second + " 초");
 	}
+	
+	public void readAndWriteMajorStockHoldersTest() throws Exception {
+		List<StockVO> stockList = new ArrayList<StockVO>();
+		StockVO svo = new StockVO();
+		svo.setStockCode("316140");
+		svo.setStockName("우리금융지주");
+		stockList.add(svo);
+
+		stockList = getAllStockInfo(stockList);
+
+		Collections.sort(stockList, new ChosenDayVsCurPriceUpDownRatioDescCompare());
+
+		writeFile(stockList, marketType + " " + majorStockHolders + " 투자현황");
+	}
 
 	public void readAndWriteMajorStockHolders() throws Exception {
 
@@ -101,22 +122,22 @@ class NationalPensionThread extends Thread {
 
 		stockList = getAllStockInfo(stockList);
 
-		Collections.sort(stockList, new SpecificDayVsCurPriceUpDownRatioDescCompare());
+		Collections.sort(stockList, new ChosenDayVsCurPriceUpDownRatioDescCompare());
 
 		writeFile(stockList, marketType + " " + majorStockHolders + " 투자현황");
 	}
 
 	public List<StockVO> readOne(String stockCode, String stockName) throws Exception {
-		List<StockVO> stocks = new ArrayList<StockVO>();
+		List<StockVO> stockList = new ArrayList<StockVO>();
 
 		int cnt = 1;
 		StockVO stock = getStockHompage(cnt, stockCode, stockName);
 		if (stock != null) {
-			stocks.add(stock);
+			stockList.add(stock);
 		} else {
 			System.out.println("stock is null");
 		}
-		return stocks;
+		return stockList;
 	}
 
 	long totalAmount = 0;
@@ -190,10 +211,10 @@ class NationalPensionThread extends Thread {
 		svo.setListedDay(listedDay);
 
 		// 기준일가 또는 올해 상장했을 경우 상장일가 구하기
-		String chosenDay = StockUtil.getSpecificDay(specificDay, listedDay);
+		String chosenDay = StockUtil.getChosenDay(baseDay, listedDay);
 		logger.debug("chosenDay :" + chosenDay);
 		svo.setChosenDay(chosenDay);
-		String chosenDayEndPrice = StockUtil.getChosenDayEndPrice(strStockCode, strStockName, specificDay);
+		String chosenDayEndPrice = StockUtil.getChosenDayEndPrice(strStockCode, strStockName, chosenDay);
 		logger.debug("chosenDayEndPrice1 :" + chosenDayEndPrice);
 		svo.setChosenDayEndPrice(chosenDayEndPrice);
 		logger.debug("chosenDayEndPrice2 :" + svo.getChosenDayEndPrice());
@@ -330,11 +351,11 @@ class NationalPensionThread extends Thread {
 				long lRetainAmount = 0;
 				long lRetainAmountByMillion = 0;
 
-				String specificDayRetainAmount = "";
-				long lSpecificDayRetainAmount = 0;
+				String chosenDayRetainAmount = "";
+				long lChosenDayRetainAmount = 0;
 
-				String specificDayRetainAmountByMillion = "";
-				long lSpecificDayRetainAmountByMillion = 0;
+				String chosenDayRetainAmountByMillion = "";
+				long lChosenDayRetainAmountByMillion = 0;
 
 				String retainRatio = "";
 				float fRetainRatio = 0;
@@ -397,31 +418,31 @@ class NationalPensionThread extends Thread {
 						majorStockHolderVO.setfRetainRatio(fRetainRatio);
 
 						// 특정일 보유가격=보유주식수*특정일종가
-						lSpecificDayRetainAmount = lRetainVolume * iChosenDayEndPrice;
-						specificDayRetainAmount = df.format(lSpecificDayRetainAmount);
+						lChosenDayRetainAmount = lRetainVolume * iChosenDayEndPrice;
+						chosenDayRetainAmount = df.format(lChosenDayRetainAmount);
 
-						lSpecificDayRetainAmountByMillion = lSpecificDayRetainAmount / 1000000;
-						specificDayRetainAmountByMillion = df.format(lSpecificDayRetainAmountByMillion);
+						lChosenDayRetainAmountByMillion = lChosenDayRetainAmount / 1000000;
+						chosenDayRetainAmountByMillion = df.format(lChosenDayRetainAmountByMillion);
 
-						majorStockHolderVO.setSpecificDayRetainAmount(specificDayRetainAmount);
-						majorStockHolderVO.setlSpecificDayRetainAmount(lSpecificDayRetainAmount);
+						majorStockHolderVO.setChosenDayRetainAmount(chosenDayRetainAmount);
+						majorStockHolderVO.setlChosenDayRetainAmount(lChosenDayRetainAmount);
 
-						majorStockHolderVO.setSpecificDayRetainAmountByMillion(specificDayRetainAmountByMillion);
-						majorStockHolderVO.setlSpecificDayRetainAmountByMillion(lSpecificDayRetainAmountByMillion);
+						majorStockHolderVO.setChosenDayRetainAmountByMillion(chosenDayRetainAmountByMillion);
+						majorStockHolderVO.setlChosenDayRetainAmountByMillion(lChosenDayRetainAmountByMillion);
 
 						// 차이금액=특정시점 총액-현재 총액
-						long lSpecificDayVsCurDayGapAmount = lRetainAmount - lSpecificDayRetainAmount;
-						String specificDayVsCurDayGapAmount = df.format(lSpecificDayVsCurDayGapAmount);
-						majorStockHolderVO.setlSpecificDayVsCurDayGapAmount(lSpecificDayVsCurDayGapAmount);
-						majorStockHolderVO.setSpecificDayVsCurDayGapAmount(specificDayVsCurDayGapAmount);
+						long lChosenDayVsCurDayGapAmount = lRetainAmount - lChosenDayRetainAmount;
+						String chosenDayVsCurDayGapAmount = df.format(lChosenDayVsCurDayGapAmount);
+						majorStockHolderVO.setlChosenDayVsCurDayGapAmount(lChosenDayVsCurDayGapAmount);
+						majorStockHolderVO.setChosenDayVsCurDayGapAmount(chosenDayVsCurDayGapAmount);
 
-						long lSpecificDayVsCurDayGapAmountByMillion = lSpecificDayVsCurDayGapAmount / 1000000;
-						String specificDayVsCurDayGapAmountByMillion = df
-								.format(lSpecificDayVsCurDayGapAmountByMillion);
+						long lChosenDayVsCurDayGapAmountByMillion = lChosenDayVsCurDayGapAmount / 1000000;
+						String chosenDayVsCurDayGapAmountByMillion = df
+								.format(lChosenDayVsCurDayGapAmountByMillion);
 						majorStockHolderVO
-								.setlSpecificDayVsCurDayGapAmountByMillion(lSpecificDayVsCurDayGapAmountByMillion);
+								.setlChosenDayVsCurDayGapAmountByMillion(lChosenDayVsCurDayGapAmountByMillion);
 						majorStockHolderVO
-								.setSpecificDayVsCurDayGapAmountByMillion(specificDayVsCurDayGapAmountByMillion);
+								.setChosenDayVsCurDayGapAmountByMillion(chosenDayVsCurDayGapAmountByMillion);
 						logger.debug("majorStockHolderVO :" + majorStockHolderVO);
 
 						svo.getMajorStockHolderList().add(majorStockHolderVO);
@@ -468,10 +489,10 @@ class NationalPensionThread extends Thread {
 		sb1.append("</head>\r\n");
 		sb1.append("<body>\r\n");
 		sb1.append("\t<h2>" + strYMD + title + "</h2>");
-		sb1.append("\t<h3>비교 대상 기준일 :" + specificDay + "</h3>");
+		sb1.append("\t<h3>비교 대상 기준일 :" + chosenDay + "</h3>");
 
-		long lTotalSpecificDayVsCurDayGapAmount = 0;
-		long lTotalSpecificDayRetainAmount = 0;
+		long lTotalChosenDayVsCurDayGapAmount = 0;
+		long lTotalChosenDayRetainAmount = 0;
 		long lRetainAmount = 0;
 
 		for (StockVO svo : list) {
@@ -481,22 +502,22 @@ class NationalPensionThread extends Thread {
 				// 현재보유총액
 				lRetainAmount += holderVO.getlRetainAmount();
 				// 특정일총액
-				lTotalSpecificDayRetainAmount += holderVO.getlSpecificDayRetainAmount();
+				lTotalChosenDayRetainAmount += holderVO.getlChosenDayRetainAmount();
 				// 특정일VS현재 차이총액
-				long lSpecificDayVsCurDayGapAmount = holderVO.getlSpecificDayVsCurDayGapAmount();
-				lTotalSpecificDayVsCurDayGapAmount += lSpecificDayVsCurDayGapAmount;
+				long lChosenDayVsCurDayGapAmount = holderVO.getlChosenDayVsCurDayGapAmount();
+				lTotalChosenDayVsCurDayGapAmount += lChosenDayVsCurDayGapAmount;
 			}
 		}
 
 		String retainAmount = df.format(lRetainAmount);
 		sb1.append("현재 총금액(원) = " + retainAmount + "<br/>\r\n");
 
-		String totalSpecificDayRetainAmount = df.format(lTotalSpecificDayRetainAmount);
-		sb1.append("기준일 총금액(원) = " + totalSpecificDayRetainAmount + "<br/>\r\n");
+		String totalChosenDayRetainAmount = df.format(lTotalChosenDayRetainAmount);
+		sb1.append("기준일 총금액(원) = " + totalChosenDayRetainAmount + "<br/>\r\n");
 
-		String totalSpecificDayVsCurDayGapAmount = df.format(lTotalSpecificDayVsCurDayGapAmount);
+		String totalChosenDayVsCurDayGapAmount = df.format(lTotalChosenDayVsCurDayGapAmount);
 		sb1.append("기준일대비 현재총금액 차이(" + moneyUnit + ") = ");
-		sb1.append(StockUtil.moneyUnitSplit(moneyUnit, lTotalSpecificDayVsCurDayGapAmount));
+		sb1.append(StockUtil.moneyUnitSplit(moneyUnit, lTotalChosenDayVsCurDayGapAmount));
 
 		sb1.append("<table>\r\n");
 		sb1.append("<tr>\r\n");
@@ -560,15 +581,15 @@ class NationalPensionThread extends Thread {
 					sb1.append("<td style='text-align:right'>" + holderVO.getRetainVolume() + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>" + holderVO.getRetainRatio() + "%</td>\r\n");
 //					sb1.append("<td style='text-align:right'>" + holderVO.getRetainAmount() + "</td>\r\n");
-//					sb1.append("<td style='text-align:right'>" + holderVO.getSpecificDayRetainAmount() + "</td>\r\n");
-//					sb1.append("<td style='text-align:right'>" + holderVO.getSpecificDayVsCurDayGapAmount() + "</td>\r\n");
+//					sb1.append("<td style='text-align:right'>" + holderVO.getChosenDayRetainAmount() + "</td>\r\n");
+//					sb1.append("<td style='text-align:right'>" + holderVO.getChosenDayVsCurDayGapAmount() + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>"
 							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlRetainAmount()) + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>"
-							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlSpecificDayRetainAmount())
+							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayRetainAmount())
 							+ "</td>\r\n");
 					sb1.append("<td style='text-align:right'>"
-							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlSpecificDayVsCurDayGapAmount())
+							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayVsCurDayGapAmount())
 							+ "</td>\r\n");
 
 					sb1.append("</tr>\r\n");

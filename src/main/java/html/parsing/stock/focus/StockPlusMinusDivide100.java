@@ -217,7 +217,7 @@ public class StockPlusMinusDivide100 extends Thread {
 		StringBuilder info3 = new StringBuilder();
 		if (iExtractCount <= 0) {
 			Collections.sort(stockList, new StockNameAscCompare());
-			//info3 = getStockInfoHtml(stockList, marketGubun, "보합");
+			info3 = getStockInfoHtml(stockList, marketGubun, "보합");
 		}
 
 		// 4.거래량 정렬

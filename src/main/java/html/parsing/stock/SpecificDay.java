@@ -10,14 +10,15 @@ public class SpecificDay {
 		String stockCode = "";
 		String stockName = "";
 		String stockListedDay = "";
-		String yearFirstTradeDayEndPrice = "";
+		String chosenDay = "";
+		String chosenDayEndPrice = "";
 		
 //		String stockCode = "018000";
 //		String stockName = "유니슨";
 //
 //		String stockListedDay = StockUtil.getStockListedDay(stockCode);
-//		yearFirstTradeDay = StockUtil.getSpecificDay(yearFirstTradeDay, stockListedDay);
-//		String yearFirstTradeDayEndPrice = StockUtil.getSpecificDayEndPrice(stockCode, stockName,
+//		yearFirstTradeDay = StockUtil.getChosenDay(yearFirstTradeDay, stockListedDay);
+//		String yearFirstTradeDayEndPrice = StockUtil.getChosenDayEndPrice(stockCode, stockName,
 //				yearFirstTradeDay);
 //		System.out.println("stockListedDay:" + stockListedDay);
 //		System.out.println("yearFirstTradeDay:" + yearFirstTradeDay);
@@ -26,8 +27,8 @@ public class SpecificDay {
 //		stockName = "삼성전자";
 //
 //		stockListedDay = StockUtil.getStockListedDay(stockCode);
-//		yearFirstTradeDay = StockUtil.getSpecificDay(yearFirstTradeDay, stockListedDay);
-//		yearFirstTradeDayEndPrice = StockUtil.getSpecificDayEndPrice(stockCode, stockName, yearFirstTradeDay);
+//		yearFirstTradeDay = StockUtil.getChosenDay(yearFirstTradeDay, stockListedDay);
+//		yearFirstTradeDayEndPrice = StockUtil.getChosenDayEndPrice(stockCode, stockName, yearFirstTradeDay);
 //		System.out.println("stockListedDay:" + stockListedDay);
 //		System.out.println("yearFirstTradeDay:" + yearFirstTradeDay);
 //
@@ -35,8 +36,8 @@ public class SpecificDay {
 //		stockName = "대웅제약";
 //
 //		stockListedDay = StockUtil.getStockListedDay(stockCode);
-//		yearFirstTradeDay = StockUtil.getSpecificDay(yearFirstTradeDay, stockListedDay);
-//		yearFirstTradeDayEndPrice = StockUtil.getSpecificDayEndPrice(stockCode, stockName, yearFirstTradeDay);
+//		yearFirstTradeDay = StockUtil.getChosenDay(yearFirstTradeDay, stockListedDay);
+//		yearFirstTradeDayEndPrice = StockUtil.getChosenDayEndPrice(stockCode, stockName, yearFirstTradeDay);
 //		System.out.println("stockListedDay:" + stockListedDay);
 //		System.out.println("yearFirstTradeDay:" + yearFirstTradeDay);
 		
@@ -44,8 +45,9 @@ public class SpecificDay {
 		stockName = "케이씨씨글라스";
 
 		stockListedDay = StockUtil.getStockListedDay(stockCode);
-		yearFirstTradeDay = StockUtil.getSpecificDay(yearFirstTradeDay, stockListedDay);
-		yearFirstTradeDayEndPrice = StockUtil.getSpecificDayEndPrice(stockCode, stockName, yearFirstTradeDay);
+		chosenDay = StockUtil.getChosenDay(yearFirstTradeDay, stockListedDay);
+		chosenDayEndPrice = StockUtil.getChosenDayEndPrice(stockCode, stockName, yearFirstTradeDay);
+		System.out.println("chosenDay:" + chosenDay);
 		System.out.println("stockListedDay:" + stockListedDay);
 		System.out.println("yearFirstTradeDay:" + yearFirstTradeDay);
 
