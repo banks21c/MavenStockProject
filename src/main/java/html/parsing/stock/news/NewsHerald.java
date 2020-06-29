@@ -304,7 +304,7 @@ public class NewsHerald extends News {
 
             sb1.append("<div style='width:548px'>\r\n");
 
-            sb1.append("<h2>[" + strTime + "] " + strTitle + "</h2>\n");
+            sb1.append("<h2 id='title'>[" + strTime + "] " + strTitle + "</h2>\n");
             sb1.append("<h2>" + strTitle + "</h2>\n");
             sb1.append("<span style='font-size:12px'>" + strDate + "</span><br><br>\n");
             sb1.append(strContent + "\n");

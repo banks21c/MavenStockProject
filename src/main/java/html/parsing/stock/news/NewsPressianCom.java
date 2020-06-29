@@ -137,7 +137,7 @@ public class NewsPressianCom extends News {
             sb1.append("<div style='width:548px'>\r\n");
 
             sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-            sb1.append("<h2>[" + strDate + "] " + strTitle + "</h2>\n");
+            sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");
             sb1.append("<h4>" + strSubTitle + "</h4>\n");
             sb1.append("<span style='font-size:12px'>" + writer + "</span><br>\n");
             sb1.append("<span style='font-size:12px'>" + strDate + "</span><br><br>\n");

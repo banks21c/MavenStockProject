@@ -263,7 +263,7 @@ public class MSedailyCom extends javax.swing.JFrame {
 			sb1.append("<div style='width:548px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\r\n");
-			sb1.append("<h4>[" + strDate + "] " + strTitle + "</h4>\r\n");
+			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append("<br/>\r\n");
 			sb1.append("" + strAuthorHtml + "\r\n");
 			sb1.append("<br/>\r\n");
