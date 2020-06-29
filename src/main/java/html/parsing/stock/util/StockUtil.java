@@ -62,7 +62,7 @@ import html.parsing.stock.util.DataSort.StockNameLengthDescCompare;
  */
 public class StockUtil {
 
-	private final static String totalInfoUrl = "http://finance.naver.com/item/main.nhn?code=";
+	private final static String TOTAL_INFO_URL = "http://finance.naver.com/item/main.nhn?code=";
 	final static String userHome = System.getProperty("user.home");
 	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E hh.mm.SSS", Locale.KOREAN).format(new Date());
 	private static final Logger logger = LoggerFactory.getLogger(StockUtil.class);
@@ -71,9 +71,9 @@ public class StockUtil {
 	String strDefaultDate = sdf.format(new Date());
 	// String strYyyyMmDd = new SimpleDateFormat("yyyy년 M월 d일
 	// E",Locale.KOREAN).format(new Date());
-	int iYmd = Integer.parseInt(strDefaultDate.replaceAll("\\.", ""));
-	String strYmdDash = strDefaultDate.replaceAll("\\.", "-");
-	String strYmdDashBracket = "[" + strDefaultDate.replaceAll("\\.", "-") + "]";
+//	int iYmd = Integer.parseInt(strDefaultDate.replaceAll("\\.", ""));
+//	String strYmdDash = strDefaultDate.replaceAll("\\.", "-");
+//	String strYmdDashBracket = "[" + strDefaultDate.replaceAll("\\.", "-") + "]";
 	public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36 NetHelper70";
 
 	// STOCK_LIST_TYPE
@@ -606,35 +606,35 @@ public class StockUtil {
 			if (strNews.contains("현대차") && stockName.equals("현대자동차")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("현대차",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
 			} else if (strNews.contains("현대자동차") && stockName.equals("현대자동차")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("현대자동차",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
 			} else if (strNews.contains("현대자동차") && stockName.equals("현대차")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("현대자동차",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
 			} else if (strNews.contains("현대차") && stockName.equals("현대차")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("현대차",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
 			} else if (strNews.contains("POSCO") && stockName.equals("포스코")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("POSCO",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
 			} else if (strNews.contains("POSCO") && stockName.equals("POSCO")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("POSCO",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
 			} else if (strNews.contains("포스코") && stockName.equals("POSCO")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("포스코",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
 			} else if (strNews.contains("포스코") && stockName.equals("포스코")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("포스코",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
 			} else if (strNews.contains(stockName)) {
 				int count = StringUtils.countMatches(strNews, stockName);
 				logger.debug(stockName + " 갯수:" + count);
@@ -651,7 +651,7 @@ public class StockUtil {
 				}
 				newsStockList.add(stock);
 				// logger.debug("stock link : " + stockCode + ":" + stockName);
-				strNews = strNews.replaceAll(stockName, "<strong><a href='" + totalInfoUrl + stockCode + "'>"
+				strNews = strNews.replaceAll(stockName, "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
 						+ nbspString(stockName) + "</a></strong>");
 
 			}
@@ -683,35 +683,35 @@ public class StockUtil {
 			if (strNews.contains("현대차") && stockName.equals("현대자동차")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("현대차",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
 			} else if (strNews.contains("현대자동차") && stockName.equals("현대자동차")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("현대자동차",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
 			} else if (strNews.contains("현대자동차") && stockName.equals("현대차")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("현대자동차",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
 			} else if (strNews.contains("현대차") && stockName.equals("현대차")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("현대차",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
 			} else if (strNews.contains("POSCO") && stockName.equals("포스코")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("POSCO",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
 			} else if (strNews.contains("POSCO") && stockName.equals("POSCO")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("POSCO",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
 			} else if (strNews.contains("포스코") && stockName.equals("POSCO")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("포스코",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
 			} else if (strNews.contains("포스코") && stockName.equals("포스코")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("포스코",
-						"<strong><a href='" + totalInfoUrl + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
+						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
 			} else if (strNews.contains(stockName)) {
 				int count = StringUtils.countMatches(strNews, stockName);
 				logger.debug(stockName + " 갯수:" + count);
@@ -728,7 +728,7 @@ public class StockUtil {
 				}
 				newsStockList.add(stock);
 				// logger.debug("stock link : " + stockCode + ":" + stockName);
-				strNews = strNews.replaceAll(stockName, "<strong><a href='" + totalInfoUrl + stockCode + "'>"
+				strNews = strNews.replaceAll(stockName, "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
 						+ nbspString(stockName) + "</a></strong>");
 
 			}
@@ -1319,7 +1319,7 @@ public class StockUtil {
 		stock.setStockName(strStockName);
 		try {
 			// 종합정보
-			doc = Jsoup.connect(totalInfoUrl + strStockCode).get();
+			doc = Jsoup.connect(TOTAL_INFO_URL + strStockCode).get();
 			// logger.debug("doc:"+doc);
 
 			Elements new_totalinfos = doc.select(".new_totalinfo");
@@ -1622,7 +1622,7 @@ public class StockUtil {
 
 		try {
 			// 종합정보
-			doc = Jsoup.connect(totalInfoUrl + code).get();
+			doc = Jsoup.connect(TOTAL_INFO_URL + code).get();
 
 			Elements dates = doc.select(".date");
 			if (dates != null) {
@@ -1766,7 +1766,7 @@ public class StockUtil {
 
 		try {
 			// 종합정보
-			doc = Jsoup.connect(totalInfoUrl + code).get();
+			doc = Jsoup.connect(TOTAL_INFO_URL + code).get();
 
 			Elements dates = doc.select(".date");
 			if (dates != null) {
@@ -1938,7 +1938,7 @@ public class StockUtil {
 					String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
 					logger.debug("specialLetter+++>" + specialLetter);
 					sb1.append("<tr>\r\n");
-					String url = totalInfoUrl + s.getStockCode();
+					String url = TOTAL_INFO_URL + s.getStockCode();
 					sb1.append("<td>").append(cnt++).append("</td>\r\n");
 					sb1.append("<td><a href='").append(url).append("' target='_sub'>").append(s.getStockName())
 							.append("</a></td>\r\n");
@@ -2013,7 +2013,7 @@ public class StockUtil {
 					String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
 					logger.debug("specialLetter+++>" + specialLetter);
 					sb1.append("<tr>\r\n");
-					String url = totalInfoUrl + s.getStockCode();
+					String url = TOTAL_INFO_URL + s.getStockCode();
 					sb1.append(
 							"<td style='border-bottom:1px solid gray;background-color:white;'>" + cnt++ + "</td>\r\n");
 					sb1.append("<td style='border-bottom:1px solid gray;background-color:white;'><a href='" + url
@@ -2541,7 +2541,7 @@ public class StockUtil {
 		stock.setStockCode(code);
 
 		try {
-			doc = Jsoup.connect(totalInfoUrl + code).get();
+			doc = Jsoup.connect(TOTAL_INFO_URL + code).get();
 
 			Elements new_totalinfos = doc.select(".new_totalinfo");
 
@@ -2818,18 +2818,18 @@ public class StockUtil {
 	}
 
 //	@Test
-	public void totalInfoUrlCheck() {
+	public void TOTAL_INFO_URLCheck() {
 		String strStockCode = "159650";
 		String strStockName = "하이골드8호";
-		totalInfoUrlCheck(strStockCode, strStockName);
+		TOTAL_INFO_URLCheck(strStockCode, strStockName);
 	}
 
-	public static Document totalInfoUrlCheck(String strStockCode, String strStockName) {
+	public static Document TOTAL_INFO_URLCheck(String strStockCode, String strStockName) {
 		logger.debug("stockName:" + strStockName + "(" + strStockCode + ")");
 		Document doc = null;
 		try {
 			// 종합정보
-			doc = Jsoup.connect(totalInfoUrl + strStockCode).get();
+			doc = Jsoup.connect(TOTAL_INFO_URL + strStockCode).get();
 			logger.debug("doc:" + doc);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2958,5 +2958,46 @@ public class StockUtil {
 		logger.debug(sb.toString());
 		return sb;
 	}
+	
+	public static String getDateInfo(String strStockCode) {
+		// 종합정보
+		// http://finance.naver.com/item/main.nhn?code=005930
+		Document doc;
+		String strYmdDash;
+		int iYmd;
+		String strYmdDashBracket = null;
+		try {
+			// 종합정보
+			doc = Jsoup.connect(TOTAL_INFO_URL + strStockCode).get();
+			// logger.debug("doc:"+doc);
 
+			Elements dates = doc.select(".date");
+			logger.debug("dates:" + dates);
+			if (dates != null) {
+				logger.debug("dates.size:" + dates.size());
+				if (dates.size() > 0) {
+					Element date = dates.get(0);
+					strYmdDash = date.ownText();
+					strYmdDash = date.childNode(0).toString().trim();
+
+					String strYmd4Int = strYmdDash.replaceAll("\\.", "");
+					if (strYmd4Int.length() > 8) {
+						strYmd4Int = strYmd4Int.substring(0, 8);
+					}
+					iYmd = Integer.parseInt(strYmd4Int);
+
+					strYmdDash = strYmdDash.replaceAll("\\.", "-");
+					strYmdDash = strYmdDash.replaceAll(":", "-");
+					strYmdDashBracket = "[" + strYmdDash + "]";
+
+					logger.debug("iYmd:[" + iYmd + "]");
+					logger.debug("strYmdDash:[" + strYmdDash + "]");
+				}
+			}
+		} catch (IOException ex) {
+			java.util.logging.Logger.getLogger(StockUtil.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return strYmdDashBracket;
+	}
+	
 }

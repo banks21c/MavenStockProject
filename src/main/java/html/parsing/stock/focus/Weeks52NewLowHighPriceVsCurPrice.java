@@ -163,7 +163,7 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 
 		/** 날짜 정보 가져오기 */
 		StockVO svo4Date = kospiStockList.get(0);
-		getDateInfo(svo4Date.getStockCode());
+		strYmdDashBracket = StockUtil.getDateInfo(svo4Date.getStockCode());
 
 		for (int i = 0; i < kospiStockList.size(); i++) {
 			StockVO svo = kospiStockList.get(i);
@@ -251,40 +251,6 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		} finally {
-		}
-	}
-
-	public void getDateInfo(String strStockCode) {
-		Document doc;
-		try {
-			// 종합정보
-			logger.debug("종합정보 http://finance.naver.com/item/main.nhn?code=" + strStockCode);
-			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + strStockCode).get();
-			// logger.debug("doc:"+doc);
-
-			Elements dates = doc.select(".date");
-			if (dates != null) {
-				if (dates.size() > 0) {
-					Element date = dates.get(0);
-					strYmdDash = date.ownText();
-					strYmdDash = date.childNode(0).toString().trim();
-
-					String strYmd4Int = strYmdDash.replaceAll("\\.", "");
-					if (strYmd4Int.length() > 8) {
-						strYmd4Int = strYmd4Int.substring(0, 8);
-					}
-					iYmd = Integer.parseInt(strYmd4Int);
-
-					strYmdDash = strYmdDash.replaceAll("\\.", "-");
-					strYmdDash = strYmdDash.replaceAll(":", "-");
-					strYmdDashBracket = "[" + strYmdDash + "]";
-				}
-			}
-			logger.debug("iYmd:[" + iYmd + "]");
-			logger.debug("strYmdDash:[" + strYmdDash + "]");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 

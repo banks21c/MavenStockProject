@@ -174,7 +174,7 @@ public class StockUnique_ReadTxtFile extends Thread {
 		long start = System.currentTimeMillis();
 		logger.debug("start run...");
 		// 날짜정보 조회
-		getDateInfo("005930");
+		strYmdDashBracket = StockUtil.getDateInfo("005930");
 		execute1();
 		execute2();
 
@@ -189,37 +189,6 @@ public class StockUnique_ReadTxtFile extends Thread {
 		logger.debug("실행시간 : " + hour + " 시간 " + minute + " 분 " + second + " 초");
 
 		logger.debug("end run...");
-	}
-
-	public void getDateInfo(String strStockCode) {
-		// 종합정보
-		// http://finance.naver.com/item/main.nhn?code=005930
-		Document doc;
-		try {
-			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + strStockCode).get();
-			Elements dates = doc.select(".date");
-			if (dates != null) {
-				if (dates.size() > 0) {
-					Element date = dates.get(0);
-					strYmdDash = date.ownText();
-					strYmdDash = date.childNode(0).toString().trim();
-
-					String strYmd4Int = strYmdDash.replaceAll("\\.", "");
-					if (strYmd4Int.length() > 8) {
-						strYmd4Int = strYmd4Int.substring(0, 8);
-					}
-					iYmd = Integer.parseInt(strYmd4Int);
-
-					strYmdDash = strYmdDash.replaceAll("\\.", "-");
-					strYmdDash = strYmdDash.replaceAll(":", "-");
-					strYmdDashBracket = "[" + strYmdDash + "]";
-
-					logger.debug("iYmd:[" + iYmd + "]");
-					logger.debug("strYmdDash:[" + strYmdDash + "]");
-				}
-			}
-		} catch (IOException e) {
-		}
 	}
 
 	public void execute1() {

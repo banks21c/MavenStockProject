@@ -131,38 +131,6 @@ public class StockPlusMinusDivideExtended extends Thread {
 		// writeFile(kosdaqStockList,kosdaqFileName,"코스닥");
 	}
 
-	public void getDateInfo(String stockCode) {
-		try {
-			// 종합정보
-			Document doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + stockCode).get();
-			// logger.debug("doc:"+doc);
-
-			Elements dates = doc.select(".date");
-			logger.debug("dates:" + dates);
-			if (dates != null) {
-				logger.debug("dates.size:" + dates.size());
-				if (dates.size() > 0) {
-					Element date = dates.get(0);
-					strYmdDash = date.ownText();
-					strYmdDash = date.childNode(0).toString().trim();
-					String strYmd4Int = strYmdDash.replaceAll("\\.", "");
-					if (strYmd4Int.length() > 8) {
-						strYmd4Int = strYmd4Int.substring(0, 8);
-					}
-					iYmd = Integer.parseInt(strYmd4Int);
-
-					strYmdDash = strYmdDash.replaceAll("\\.", "-");
-					strYmdDash = strYmdDash.replaceAll(":", "-");
-					strYmdDashBracket = "[" + strYmdDash + "]";
-				}
-			}
-			logger.debug("iYmd:[" + iYmd + "]");
-			logger.debug("strYmdDash:[" + strYmdDash + "]");
-		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-		}
-	}
-
 	public void execute() {
 		logger.debug(this.getClass().getSimpleName() + " .execute started");
 		System.out.println(this.getClass().getSimpleName() + " .execute started");
@@ -184,7 +152,7 @@ public class StockPlusMinusDivideExtended extends Thread {
 			logger.debug("kospiAllStockList.size2 :" + kospiAllStockList.size());
 		}
 		StockVO svo4Date = kospiAllStockList.get(0);
-		getDateInfo(svo4Date.getStockCode());
+		strYmdDashBracket = StockUtil.getDateInfo(svo4Date.getStockCode());
 
 		StockUtil sUtil = new StockUtil();
 		kospiAllStockList = sUtil.getAllStockInfoAddBaseDayPrice(kospiAllStockList, baseDay, thisYearFirstTradeDay, pageNo);

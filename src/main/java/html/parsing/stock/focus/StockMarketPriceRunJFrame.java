@@ -28,10 +28,10 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 			return;
 		}
 		
-		new StockUnique_ReadTxtFile_ThreadCall(strNidAut,strNidSes);
-		new StockWeeks52NewLowHighPriceTodayOneFile(strNidAut,strNidSes).start();
-		new StockPlusMinusDivide(strNidAut,strNidSes).start();
-		new StockPlusMinusDivide100(strNidAut,strNidSes).start();
+//		new StockUnique_ReadTxtFile_ThreadCall(strNidAut,strNidSes);
+//		new StockWeeks52NewLowHighPriceTodayOneFile(strNidAut,strNidSes).start();
+		new StockPlusMinusDivide_ThreadCall(strNidAut,strNidSes).start();
+//		new StockPlusMinusDivide100(strNidAut,strNidSes).start();
 	}
 
 	/**

@@ -67,7 +67,7 @@ public class MajorStockHolder {
 		kospiAllStockList = StockUtil.readStockCodeNameList("kospi");
 		logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());
 		StockVO svo4Date = kospiAllStockList.get(0);
-		getDateInfo(svo4Date.getStockCode());
+		strYmdDashBracket = StockUtil.getDateInfo(svo4Date.getStockCode());
 
 		kospiAllStockList = StockUtil.getAllStockInfo(kospiAllStockList);
 		System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
@@ -91,38 +91,6 @@ public class MajorStockHolder {
 		writeFile(kospiAllStockList, "코스피 국민연금 보유금액순");
 		writeFile(kosdaqAllStockList, "코스닥 국민연금 보유금액순");
 
-	}
-
-	public void getDateInfo(String stockCode) {
-		try {
-			// 종합정보
-			Document doc = Jsoup.connect(TOTAL_INFO_URL + stockCode).get();
-			// logger.debug("doc:"+doc);
-
-			Elements dates = doc.select(".date");
-			logger.debug("dates:" + dates);
-			if (dates != null) {
-				logger.debug("dates.size:" + dates.size());
-				if (dates.size() > 0) {
-					Element date = dates.get(0);
-					strYmdDash = date.ownText();
-					strYmdDash = date.childNode(0).toString().trim();
-					String strYmd4Int = strYmdDash.replaceAll("\\.", "");
-					if (strYmd4Int.length() > 8) {
-						strYmd4Int = strYmd4Int.substring(0, 8);
-					}
-					iYmd = Integer.parseInt(strYmd4Int);
-
-					strYmdDash = strYmdDash.replaceAll("\\.", "-");
-					strYmdDash = strYmdDash.replaceAll(":", "-");
-					strYmdDashBracket = "[" + strYmdDash + "]";
-				}
-			}
-			logger.debug("iYmd:[" + iYmd + "]");
-			logger.debug("strYmdDash:[" + strYmdDash + "]");
-		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(StockPlusMinusDivide100.class.getName()).log(Level.SEVERE, null, ex);
-		}
 	}
 
 	public static List<StockVO> readOne(String stockCode) {

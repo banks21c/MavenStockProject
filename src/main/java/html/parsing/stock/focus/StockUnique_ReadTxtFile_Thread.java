@@ -1,8 +1,5 @@
 package html.parsing.stock.focus;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +14,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
@@ -28,12 +26,16 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.NaverUtil;
+import html.parsing.stock.util.StockUtil;
 
 public class StockUnique_ReadTxtFile_Thread extends Thread {
 
+	private final static String TOTAL_INFO_URL = "http://finance.naver.com/item/main.nhn?code=";
 	final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = null;
 
@@ -92,15 +94,24 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 		new StockUnique_ReadTxtFile_Thread("kospi").start();
 	}
 
-	StockUnique_ReadTxtFile_Thread(String marketGubun) {
-		Class thisClass = this.getClass();
-		logger = LoggerFactory.getLogger(thisClass);
-		this.marketType = marketGubun;
+	StockUnique_ReadTxtFile_Thread() {
+		logger = LoggerFactory.getLogger(getClass());
 	}
 
-	StockUnique_ReadTxtFile_Thread(String marketGubun, String strNidAut, String strNidSes) {
+	StockUnique_ReadTxtFile_Thread(String marketType) {
 		logger = LoggerFactory.getLogger(getClass());
-		this.marketType = marketGubun;
+		this.marketType = marketType;
+	}
+
+	StockUnique_ReadTxtFile_Thread(String strNidAut, String strNidSes) {
+		logger = LoggerFactory.getLogger(getClass());
+		this.strNidAut = strNidAut;
+		this.strNidSes = strNidSes;
+	}
+
+	StockUnique_ReadTxtFile_Thread(String marketType, String strNidAut, String strNidSes) {
+		logger = LoggerFactory.getLogger(getClass());
+		this.marketType = marketType;
 		this.strNidAut = strNidAut;
 		this.strNidSes = strNidSes;
 	}
@@ -116,8 +127,8 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 //		writeFile(uniqueStockList, "코스닥");
 		StringBuilder html = createHtmlString(uniqueStockList, marketType + " 특징주");
 		writeFile(html, marketType + " 특징주");
-		
-		//네이버 블로그에 공유
+
+		// 네이버 블로그에 공유
 		naverBlogLinkShare(html);
 	}
 
@@ -157,7 +168,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 		long start = System.currentTimeMillis();
 		logger.debug("start run...");
 		// 날짜정보 조회
-		getDateInfo("005930");
+		strYmdDashBracket = StockUtil.getDateInfo("005930");
 		execute();
 //		execute1();
 //		execute2();
@@ -173,37 +184,6 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 		logger.debug(marketType + " 실행시간 : " + hour + " 시간 " + minute + " 분 " + second + " 초");
 
 		logger.debug("end run...");
-	}
-
-	public void getDateInfo(String strStockCode) {
-		// 종합정보
-		// http://finance.naver.com/item/main.nhn?code=005930
-		Document doc;
-		try {
-			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + strStockCode).get();
-			Elements dates = doc.select(".date");
-			if (dates != null) {
-				if (dates.size() > 0) {
-					Element date = dates.get(0);
-					strYmdDash = date.ownText();
-					strYmdDash = date.childNode(0).toString().trim();
-
-					String strYmd4Int = strYmdDash.replaceAll("\\.", "");
-					if (strYmd4Int.length() > 8) {
-						strYmd4Int = strYmd4Int.substring(0, 8);
-					}
-					iYmd = Integer.parseInt(strYmd4Int);
-
-					strYmdDash = strYmdDash.replaceAll("\\.", "-");
-					strYmdDash = strYmdDash.replaceAll(":", "-");
-					strYmdDashBracket = "[" + strYmdDash + "]";
-
-					logger.debug("iYmd:[" + iYmd + "]");
-					logger.debug("strYmdDash:[" + strYmdDash + "]");
-				}
-			}
-		} catch (IOException e) {
-		}
 	}
 
 	public void execute() {
@@ -222,17 +202,17 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 		Collections.sort(uniqueStockList, new VaryRatioDescCompare());
 		StringBuilder html = createHtmlString(uniqueStockList, marketType + " 특징주");
 		writeFile(html, marketType + " 특징주");
-		
-		//네이버 블로그에 공유
-		naverBlogLinkShare(html);		
+
+		// 네이버 블로그에 공유
+		naverBlogLinkShare(html);
 
 	}
 
-	//네이버 블로그에 공유
+	// 네이버 블로그에 공유
 	public void naverBlogLinkShare(StringBuilder html) {
 		String strUrl = "";
 		String strTitle = Jsoup.parse(html.toString()).select("h2#title").text();
-		if(strTitle.equals("")) {
+		if (strTitle.equals("")) {
 			JOptionPane.showMessageDialog(null, "제목을 입력해주세요.");
 			strTitle = "특징주";
 		}
@@ -288,7 +268,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 		try {
 			// 종합정보
 			// http://finance.naver.com/item/main.nhn?code=005930
-			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + strStockCode).get();
+			doc = Jsoup.connect(TOTAL_INFO_URL + strStockCode).get();
 			logger.debug("_______________________________________________");
 			logger.debug(doc.select(".spot .rate_info .sp_txt9").html());
 			if (doc.select(".spot .rate_info .sp_txt9").html().equals("")) {
@@ -300,15 +280,26 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 			// Element tradeVolumeText =
 			// doc.select(".sp_txt9").get(0);
 			String tradeVolumeText = doc.select(".spot .rate_info .sp_txt9").get(0).parent().child(1).select("span")
-				.get(0).text();
+					.get(0).text();
 			if (tradeVolumeText.equals("0")) {
 				return stock;
 			}
 			logger.debug("tradeVolumeText:" + tradeVolumeText);
 
-			Element new_totalinfo = doc.select(".new_totalinfo").get(0);
+			Elements new_totalinfos = doc.select(".new_totalinfo");
+
+			if (new_totalinfos == null || new_totalinfos.size() == 0) {
+				return stock;
+			}
+
+			Element new_totalinfo = new_totalinfos.get(0);
 			Document new_totalinfo_doc = Jsoup.parse(new_totalinfo.html());
 			Element blind = new_totalinfo_doc.select(".blind").get(0);
+
+			if (blind == null) {
+				return stock;
+			}
+
 			Elements edds = blind.select("dd");
 
 			String specialLetter = "";
@@ -342,7 +333,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -352,7 +343,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 					varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
@@ -395,12 +386,12 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 				}
 				if (text.startsWith("거래량")) {
 					stock.setTradingVolume(text.split(" ")[1]);
-					stock.setlTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
+					stock.setlTradingVolume(Long.parseLong(stock.getTradingVolume().replaceAll(",", "")));
 				}
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -437,14 +428,14 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 			logger.debug("고가가 상한가인가?" + highPrice.equals(stock.getMaxPrice()));
 			// 고가가 0이 아니고 고가가 상한가인가?
 			if (!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())
-				&& !curPrice.equals(stock.getMaxPrice())) {
+					&& !curPrice.equals(stock.getMaxPrice())) {
 				stock.setStockGubun("상터치↑↘");
 				stock.setLineUp(12);
 				topTouchStockList.add(stock);
 				return stock;
 			}
 			if (!lowPrice.equals("0") && lowPrice.equals(stock.getMinPrice())
-				&& !curPrice.equals(stock.getMinPrice())) {
+					&& !curPrice.equals(stock.getMinPrice())) {
 				stock.setStockGubun("하터치↓↗");
 				stock.setLineUp(22);
 				bottomTouchStockList.add(stock);
@@ -534,7 +525,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락률</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래량</td>\r\n");
 			sb1.append(
-				"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
+					"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
 			sb1.append("</tr>\r\n");
 
 			if (list.size() == 0) {
@@ -547,7 +538,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 					String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
 					sb1.append("<td>").append(s.getStockGubun()).append("</td>\r\n");
 					sb1.append("<td><a href='").append(url).append("'>").append(s.getStockName())
-						.append("</a></td>\r\n");
+							.append("</a></td>\r\n");
 					sb1.append("<td style='text-align:right'>").append(s.getCurPrice()).append("</td>\r\n");
 
 					String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
@@ -557,13 +548,13 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 					logger.debug("varyPrice+++>" + varyPrice);
 
 					if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
-						|| specialLetter.startsWith("+")) {
+							|| specialLetter.startsWith("+")) {
 						sb1.append("<td style='text-align:right'><font color='red'>" + specialLetter + " " + varyPrice
-							+ "</font></td>\r\n");
+								+ "</font></td>\r\n");
 					} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
-						|| specialLetter.startsWith("-")) {
+							|| specialLetter.startsWith("-")) {
 						sb1.append("<td style='text-align:right'><font color='blue'>" + specialLetter + " " + varyPrice
-							+ "</font></td>\r\n");
+								+ "</font></td>\r\n");
 					} else {
 						sb1.append("<td style='text-align:right'>0</td>\r\n");
 					}
@@ -575,7 +566,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 						sb1.append("<td style='text-align:right'><font color='blue'>" + varyRatio + "</font></td>\r\n");
 					} else {
 						sb1.append(
-							"<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
+								"<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
 					}
 					sb1.append("<td style='text-align:right'>" + s.getTradingVolume() + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>" + s.getTradingAmount() + "</td>\r\n");
@@ -615,7 +606,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 	public void writeFile(StringBuilder sb, String title) {
 		try {
 			String fileName = USER_HOME + "\\documents\\" + strYmdDashBracket + " " + strHms + "_"
-				+ title.replaceAll(" ", "_") + ".html";
+					+ title.replaceAll(" ", "_") + ".html";
 			FileUtil.fileWrite(fileName, sb.toString());
 		} finally {
 		}
@@ -637,7 +628,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 			try {
 				// http://finance.naver.com/item/news_news.nhn?code=110570
 				doc = Jsoup.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=")
-					.get();
+						.get();
 				// http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
 				// logger.debug(doc.html());
 				Elements types = doc.select(".type5");
@@ -687,7 +678,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 					// +"</div>\n");
 					if (iYmd <= iYmd2) {
 						sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-							+ strStockName + "(" + strStockCode + ")</a></h3>");
+								+ strStockName + "(" + strStockCode + ")</a></h3>");
 						// sb1.append("<h3>"+ strTitle +"</h3>\n");
 						// sb1.append("<div>"+ strSource+" | "+ strDayTime
 						// +"</div>\n");
@@ -709,8 +700,8 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 
 						String strView = view.toString();
 						strView = strView.replaceAll(strStockName,
-							"<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-							+ strStockName + "</a>");
+								"<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
+										+ strStockName + "</a>");
 
 						sb1.append(strView);
 						sb1.append("\n");
@@ -733,7 +724,6 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 			String strDate = sdf.format(new Date());
 
-			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\NewsTest." + strDate + ".html");
 			StringBuilder sb1 = new StringBuilder();
 
 			for (StockVO vo : allStockList) {
@@ -747,7 +737,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 				logger.debug("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
 
 				Document doc = Jsoup
-					.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=").get();
+						.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=").get();
 				// http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
 				doc.select("script").remove();
 				Element e1 = doc.select(".type5").get(0);
@@ -786,7 +776,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 						// sb1.append("<div>"+ strSource+" | "+ strDayTime
 						// +"</div>\n");
 						sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-							+ strStockName + "(" + strStockCode + ")" + "</a></h3>\n");
+								+ strStockName + "(" + strStockCode + ")" + "</a></h3>\n");
 
 						doc = Jsoup.connect("http://finance.naver.com" + strLink).get();
 						Elements link_news_elements = doc.select(".link_news");
@@ -802,8 +792,8 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 
 						String strView = view.toString();
 						strView = strView.replaceAll(strStockName,
-							"<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-							+ strStockName + "</a>");
+								"<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
+										+ strStockName + "</a>");
 
 						sb1.append(strView);
 						sb1.append("<br><br>\n");
@@ -815,9 +805,8 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 
 			logger.debug(sb1.toString());
 
-			fw.write(sb1.toString());
-			fw.close();
-
+			String fileName = USER_HOME + "\\documents\\NewsTest." + strDate + ".html";
+			FileUtil.fileWrite(fileName, sb1.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
