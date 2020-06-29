@@ -10,6 +10,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -134,6 +136,9 @@ public class AllStockDisplayBoardSaveStockListApp extends Application {
 										&& !strStockName.startsWith("KOSEF")
 										&& !strStockName.contains("코스피")
 										&& !strStockName.contains("레버리지")
+										&& !strStockName.contains("S&P")
+										&& !strStockName.contains("마이다스")
+										&& !strStockName.contains("고배당")
 										&& !strStockName.contains("FOCUS")) {
 
 										stockCount++;
@@ -207,6 +212,7 @@ public class AllStockDisplayBoardSaveStockListApp extends Application {
 //		fileName = userHome + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
 		fileName = market_en + "_list.txt";
 		FileUtil.fileWrite(fileName, stockCodeNameSb.toString());
+		JOptionPane.showMessageDialog(null, "주식 목록을 추출하였습니다.");
 	}
 
 }
