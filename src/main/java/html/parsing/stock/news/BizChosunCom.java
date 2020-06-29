@@ -133,7 +133,7 @@ public class BizChosunCom extends News {
 			sb1.append("<div style='width:548px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-			sb1.append("<h2>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
+			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append("<span style='font-size:14px'>").append(strAuthor).append("</span><br><br>\n");
 			sb1.append("<span style='font-size:14px'>").append(strDate).append("</span><br><br>\n");
 			sb1.append(strContent).append("<br><br>\n");

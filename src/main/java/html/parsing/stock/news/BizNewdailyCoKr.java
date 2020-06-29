@@ -164,7 +164,7 @@ public class BizNewdailyCoKr extends News {
 			sb1.append("<div style='width:548px;padding:5px 0px;'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-			sb1.append("<h2>[" + strDate + "] " + strTitle + "</h2>\n");
+			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append("<span style='font-size:13px;font-family:맑은 고딕'>" + writer + "</span><br>\n");
 			sb1.append("<span style='font-size:13px;font-family:맑은 고딕'>" + strDate + "</span><br><br>\n");
 			sb1.append(strContent + "\r\n");
