@@ -220,8 +220,8 @@ public class DataSort {
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getiTradingVolume() < arg1.getiTradingVolume() ? -1
-                    : arg0.getiTradingVolume() > arg1.getiTradingVolume() ? 1 : 0;
+            return arg0.getlTradingVolume() < arg1.getlTradingVolume() ? -1
+                    : arg0.getlTradingVolume() > arg1.getlTradingVolume() ? 1 : 0;
         }
 
     }
@@ -239,8 +239,8 @@ public class DataSort {
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getiTradingVolume() > arg1.getiTradingVolume() ? -1
-                    : arg0.getiTradingVolume() < arg1.getiTradingVolume() ? 1 : 0;
+            return arg0.getlTradingVolume() > arg1.getlTradingVolume() ? -1
+                    : arg0.getlTradingVolume() < arg1.getlTradingVolume() ? 1 : 0;
         }
 
     }
