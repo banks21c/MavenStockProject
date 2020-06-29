@@ -1,7 +1,5 @@
 package html.parsing.stock.focus;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +17,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
@@ -32,7 +29,10 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
 
 public class StockUniqueByWeekly {
 
@@ -757,9 +757,12 @@ public class StockUniqueByWeekly {
                 }
             }
 
-            // 뉴스 첨부
-            sb1.append(getNews(list).toString());
-
+			// 뉴스 첨부
+			StringBuilder newsAddedStockList = StockUtil.getNews(list);
+			// 증권명에 증권링크 생성
+			StringBuilder stockTableAdded = StockUtil.stockLinkString(newsAddedStockList, list);
+			sb1.append(stockTableAdded.toString());
+			
             sb1.append("</body>\r\n");
             sb1.append("</html>\r\n");
             System.out.println(sb1.toString());
@@ -773,118 +776,6 @@ public class StockUniqueByWeekly {
         }
     }
 
-    public StringBuilder getNews(List<StockVO> allStockList) {
-
-        StringBuilder sb1 = new StringBuilder();
-
-        for (StockVO vo : allStockList) {
-            strStockCode = vo.getStockCode();
-            strStockName = vo.getStockName();
-
-            // 종합정보
-            System.out.println("strStockCode:" + strStockCode + " strStockName:" + strStockName);
-            System.out.println("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
-
-            Document doc;
-            try {
-                // http://finance.naver.com/item/news_news.nhn?code=110570
-                doc = Jsoup.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=")
-                        .get();
-                // http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
-                // System.out.println(doc.html());
-                Elements types = doc.select(".type5");
-                Element type = null;
-                if (types.size() <= 0) {
-                    return sb1;
-                }
-                type = doc.select(".type5").get(0);
-
-                Elements trs = type.getElementsByTag("tr");
-                if (trs != null) {
-                    System.out.println("trs.size:" + trs.size());
-                }
-
-                for (int i = 0; i < trs.size(); i++) {
-                    Element tr = trs.get(i);
-
-                    Elements tds = tr.getElementsByTag("td");
-                    if (tds.size() < 3) {
-                        continue;
-                    }
-
-                    Element a1 = tr.getElementsByTag("a").first();
-                    Element source = tr.getElementsByClass("info").first();
-                    Element dayTime = tr.getElementsByClass("date").first();
-
-                    if (a1 == null) {
-                        continue;
-                    }
-                    System.out.println("a:" + a1);
-                    System.out.println("source:" + source);
-                    System.out.println("dayTime:" + dayTime);
-                    System.out.println("title:" + a1.html());
-                    System.out.println("href:" + a1.attr("href"));
-                    System.out.println("source:" + source.html());
-                    System.out.println("dayTime:" + dayTime.html());
-
-                    String strTitle = a1.html();
-                    String strLink = a1.attr("href");
-                    String strSource = source.html();
-                    String strDayTime = dayTime.html();
-                    String strNewsYmd = strDayTime.substring(0, 10);
-                    //int iYmd2 = Integer.parseInt(strNewsYmd.replaceAll("\\.", ""));
-                    String year = strNewsYmd.substring(0, 4);
-                    String month = strNewsYmd.substring(5, 7);
-                    String day = strNewsYmd.substring(8, 10);
-                    int iYear = Integer.parseInt(year);
-                    int iMonth = Integer.parseInt(month) - 1;
-                    int iDay = Integer.parseInt(day);
-                    newsDateCal.set(iYear, iMonth, iDay);
-                    newsDate = newsDateCal.getTime();
-
-                    if (newsDate.before(inputDateMondayDate)) {
-                        continue;
-                    } else if (newsDate.after(inputDateFridayDate)) {
-                        continue;
-                    } else {
-                        sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-                                + strStockName + "(" + strStockCode + ")</a></h3>");
-                        // sb1.append("<h3>"+ strTitle +"</h3>\n");
-                        // sb1.append("<div>"+ strSource+" | "+ strDayTime
-                        // +"</div>\n");
-
-                        doc = Jsoup.connect("http://finance.naver.com" + strLink).get();
-                        Elements link_news_elements = doc.select(".link_news");
-                        if (link_news_elements != null) {
-                            link_news_elements.remove();
-                        }
-                        Elements naver_splugin = doc.select(".naver-splugin");
-                        System.out.println("naver_splugin:" + naver_splugin);
-                        if (naver_splugin != null) {
-                            naver_splugin.remove();
-                        }
-                        doc.select("a").remove();
-                        doc.select("li").remove();
-
-                        Element view = doc.select(".view").get(0);
-
-                        String strView = view.toString();
-                        strView = strView.replaceAll(strStockName,
-                                "<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-                                + strStockName + "</a>");
-
-                        sb1.append(strView);
-                        sb1.append("\n");
-
-                        System.out.println("view:" + view);
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sb1;
-    }
 
     public void readNews(List<StockVO> allStockList) {
 

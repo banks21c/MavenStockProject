@@ -459,7 +459,7 @@ public class AllStockForeignOrganNew {
 				}
 				if (text.startsWith("거래량")) {
 					stock.setTradingVolume(text.split(" ")[1]);
-					stock.setiTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
+					stock.setlTradingVolume(Long.parseLong(stock.getTradingVolume().replaceAll(",", "")));
 				}
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));

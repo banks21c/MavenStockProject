@@ -1,7 +1,5 @@
 package html.parsing.stock.focus;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +25,10 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.NameAscCompare;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
 
 public class Weeks52NewLowHighNextDay {
 
@@ -290,7 +291,7 @@ public class Weeks52NewLowHighNextDay {
                 }
                 if (text.startsWith("거래량")) {
                     stock.setTradingVolume(text.split(" ")[1]);
-                    stock.setiTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
+                    stock.setlTradingVolume(Long.parseLong(stock.getTradingVolume().replaceAll(",", "")));
                 }
                 if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
                     stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
@@ -452,9 +453,12 @@ public class Weeks52NewLowHighNextDay {
                 }
             }
 
-            // 뉴스 첨부
-            sb1.append(getNews(list).toString());
-
+			// 뉴스 첨부
+			StringBuilder newsAddedStockList = StockUtil.getNews(list);
+			// 증권명에 증권링크 생성
+			StringBuilder stockTableAdded = StockUtil.stockLinkString(newsAddedStockList, list);
+			sb1.append(stockTableAdded.toString());
+			
             sb1.append("</body>\r\n");
             sb1.append("</html>\r\n");
             System.out.println(sb1.toString());
@@ -468,99 +472,6 @@ public class Weeks52NewLowHighNextDay {
         }
     }
 
-    public StringBuilder getNews(List<StockVO> allStockList) {
-
-        StringBuilder sb1 = new StringBuilder();
-
-        for (StockVO vo : allStockList) {
-            strStockCode = vo.getStockCode();
-            strStockName = vo.getStockName();
-
-            // 종합정보
-            System.out.println("strStockCode:" + strStockCode + " strStockName:" + strStockName);
-            System.out.println("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
-
-            Document doc;
-            try {
-                // http://finance.naver.com/item/news_news.nhn?code=110570
-                doc = Jsoup.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=")
-                        .get();
-                // http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
-                // System.out.println(doc.html());
-                Element e1 = doc.select(".type2").get(0);
-
-                Elements trs = e1.getElementsByTag("tr");
-
-                for (int i = 0; i < trs.size(); i++) {
-                    Element tr = trs.get(i);
-
-                    Elements tds = tr.getElementsByTag("td");
-                    if (tds.size() < 3) {
-                        continue;
-                    }
-
-                    Element a1 = tr.getElementsByTag("a").first();
-                    Element source = tr.getElementsByTag("td").get(2);
-                    Element dayTime = tr.getElementsByTag("span").first();
-
-                    if (a1 == null) {
-                        continue;
-                    }
-                    System.out.println("a:" + a1);
-                    System.out.println("source:" + source);
-                    System.out.println("dayTime:" + dayTime);
-                    System.out.println("title:" + a1.html());
-                    System.out.println("href:" + a1.attr("href"));
-                    System.out.println("source:" + source.html());
-                    System.out.println("dayTime:" + dayTime.html());
-
-                    String strTitle = a1.html();
-                    String strLink = a1.attr("href");
-                    String strSource = source.html();
-                    String strDayTime = dayTime.html();
-                    String yyyyMMdd = strDayTime.substring(0, 10);
-
-                    // sb1.append("<h3>"+ strTitle +"</h3>\n");
-                    // sb1.append("<div>"+ strSource+" | "+ strDayTime
-                    // +"</div>\n");
-                    if (strDefaultDate.equals(yyyyMMdd)) {
-                        sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-                                + strStockName + "(" + strStockCode + ")</a></h3>");
-                        // sb1.append("<h3>"+ strTitle +"</h3>\n");
-                        // sb1.append("<div>"+ strSource+" | "+ strDayTime
-                        // +"</div>\n");
-
-                        doc = Jsoup.connect("http://finance.naver.com" + strLink).get();
-                        Elements link_news_elements = doc.select(".link_news");
-                        if (link_news_elements != null) {
-                            link_news_elements.remove();
-                        }
-                        Elements naver_splugin = doc.select(".naver-splugin");
-                        System.out.println("naver_splugin:" + naver_splugin);
-                        if (naver_splugin != null) {
-                            naver_splugin.remove();
-                        }
-                        doc.select("a").remove();
-                        doc.select("li").remove();
-
-                        Element view = doc.select(".view").get(0);
-
-                        String strView = view.toString();
-                        strView = strView.replaceAll(strStockName, "<a href='http://finance.naver.com/item/main.nhn?code="
-                                + strStockCode + "'>" + strStockName + "</a>");
-
-                        sb1.append(strView);
-                        sb1.append("\n");
-
-                        System.out.println("view:" + view);
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return sb1;
-    }
 
     public void readNews(List<StockVO> allStockList) {
 

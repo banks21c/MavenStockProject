@@ -543,8 +543,6 @@ public class AllStockPriceByDate extends Thread {
                 sb1.append("</tr>\r\n");
             }
         }
-        // 뉴스 첨부
-        //sb1.append(getNews(list).toString());
         sb1.append("</body>\r\n");
         sb1.append("</html>\r\n");
         System.out.println(sb1.toString());

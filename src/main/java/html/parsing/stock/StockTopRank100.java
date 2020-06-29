@@ -259,7 +259,7 @@ public class StockTopRank100 {
                 if (text.startsWith("거래량")) {
                     System.out.println("거래량 ->" + text.split(" ")[1]);
                     stock.setTradingVolume(text.split(" ")[1]);
-                    stock.setiTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
+                    stock.setlTradingVolume(Long.parseLong(stock.getTradingVolume().replaceAll(",", "")));
                 }
                 if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
                     System.out.println("거래대금 ->" + text.split(" ")[1]);

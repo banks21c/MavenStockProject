@@ -42,11 +42,11 @@ public class StockNewsToday extends News {
 	String strDate = sdf.format(new Date());
 	String strDate2 = strDate.replaceAll("\\.", "-");
 
-	String strStockCodeOrName = "코오롱생명과학";
+	String strStockCodeOrName = "롯데케미칼";
 	String kospiFileName = GlobalVariables.kospiFileName;
 	String kosdaqFileName = GlobalVariables.kosdaqFileName;
-	String strStockName = "삼성물산";
-	String strStockCode = "028260";
+	String strStockName = "롯데케미칼";
+	String strStockCode = "011170";
 	boolean findYn = false;
 
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
@@ -75,12 +75,11 @@ public class StockNewsToday extends News {
 
 	StockNewsToday() {
 
-
 		// List<Stock> kospiStockList = readOne("071970");
 		// writeFile(kospiStockList,kospiFileName,"코스피");
 
 		readOne(strStockCode, strStockName);
-		System.out.println("stock:" + stock);
+		logger.debug("stock:" + stock);
 		writeFile(stock, kosdaqFileName, stock.getStockName());
 
 	}
@@ -90,15 +89,15 @@ public class StockNewsToday extends News {
 		// MakeKospiKosdaqList.makeKospiKosdaqList();
 		strDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDate);
 		strDate2 = strDate.replaceAll("\\.", "-");
-		System.out.println("strDate:" + strDate);
-		System.out.println("strDate2:" + strDate2);
+		logger.debug("strDate:" + strDate);
+		logger.debug("strDate2:" + strDate2);
 		String year = strDate.substring(0, 4);
 		String month = strDate.substring(5, 7);
 		String day = strDate.substring(8, 10);
 		int iYear = Integer.parseInt(year);
 		int iMonth = Integer.parseInt(month) - 1;
 		int iDay = Integer.parseInt(day);
-		// System.out.println(year + month + day);
+		// logger.debug(year + month + day);
 
 		cal1.set(iYear, iMonth, iDay);
 		// 코스피
@@ -126,7 +125,7 @@ public class StockNewsToday extends News {
 			int stockNameLength = 0;
 			int cnt = 1;
 			while ((read = reader.readLine()) != null) {
-				System.out.println(cnt + "." + read);
+				logger.debug(cnt + "." + read);
 				stockCode = read.split("\t")[0];
 				stockName = read.split("\t")[1];
 				stockNameLength = stockName.length();
@@ -158,7 +157,7 @@ public class StockNewsToday extends News {
 			String read = null;
 			int cnt = 1;
 			while ((read = reader.readLine()) != null) {
-				System.out.println(cnt + "." + read);
+				logger.debug(cnt + "." + read);
 				String stockCode = read.split("\t")[0];
 				String stockName = read.split("\t")[1];
 
@@ -178,17 +177,15 @@ public class StockNewsToday extends News {
 	}
 
 	public StockVO getStockInfo(int cnt, String strStockCode, String strStockName) {
-		System.out.println("code:" + strStockCode);
 		Document doc;
 		StockVO stock = new StockVO();
 		stock.setStockCode(strStockCode);
 		stock.setStockName(strStockName);
 
 		try {
-			stock.setStockCode(strStockCode);
 			// 종합정보
 			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + strStockCode).get();
-			// System.out.println("doc:"+doc);
+			// logger.debug("doc:"+doc);
 
 			Elements dates = doc.select(".date");
 			if (dates != null) {
@@ -201,7 +198,7 @@ public class StockNewsToday extends News {
 			}
 			String market = doc.select(".wrap_company .description img").get(0).attr("class");
 			stock.setMarket(market);
-			System.out.println("market" + market);
+			logger.debug("market" + market);
 
 			Element new_totalinfo = doc.select(".new_totalinfo").get(0);
 			Document new_totalinfo_doc = Jsoup.parse(new_totalinfo.html());
@@ -220,15 +217,10 @@ public class StockNewsToday extends News {
 			for (int i = 0; i < edds.size(); i++) {
 				Element dd = edds.get(i);
 				String text = dd.text();
-				// System.out.println("text:" + text);
-				if (text.startsWith("종목명")) {
-					String stockName = text.substring(4);
-					// System.out.println("stockName:" + stockName);
-					stock.setStockName(stockName);
-				}
+				logger.debug("text:" + text);
 
 				if (text.startsWith("현재가")) {
-					// System.out.println("data1:" + dd.text());
+					// logger.debug("data1:" + dd.text());
 					text = text.replaceAll("플러스", "+");
 					text = text.replaceAll("마이너스", "-");
 					text = text.replaceAll("상승", "▲");
@@ -239,7 +231,7 @@ public class StockNewsToday extends News {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -249,13 +241,13 @@ public class StockNewsToday extends News {
 					varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
 					sign = txts[5];
 					stock.setSign(sign);
-					// System.out.println("txts.length:" + txts.length);
+					// logger.debug("txts.length:" + txts.length);
 					if (txts.length == 7) {
 						stock.setVaryRatio(txts[5] + txts[6]);
 					} else if (txts.length == 8) {
@@ -263,7 +255,7 @@ public class StockNewsToday extends News {
 					}
 					varyRatio = stock.getVaryRatio();
 					stock.setfVaryRatio(Float.parseFloat(varyRatio.replaceAll("%", "")));
-					// System.out.println("상승률:" + stock.getVaryRatio());
+					// logger.debug("상승률:" + stock.getVaryRatio());
 				}
 
 				if (text.startsWith("전일가")) {
@@ -292,12 +284,12 @@ public class StockNewsToday extends News {
 				}
 				if (text.startsWith("거래량")) {
 					stock.setTradingVolume(text.split(" ")[1]);
-					stock.setiTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
+					stock.setlTradingVolume(Long.parseLong(stock.getTradingVolume().replaceAll(",", "")));
 				}
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -312,34 +304,39 @@ public class StockNewsToday extends News {
 			if (specialLetter.equals("↑")) {
 				stock.setStockGubun("상한가↑");
 				stock.setLineUp(11);
+				return stock;
 			}
 			if (specialLetter.equals("↓")) {
 				stock.setStockGubun("하한가↓");
 				stock.setLineUp(21);
+				return stock;
 			}
 
 			String highPrice = stock.getHighPrice();
 			String lowPrice = stock.getLowPrice();
 			String maxPrice = stock.getMaxPrice();
-			System.out.println("highPrice:" + highPrice);
-			System.out.println("lowPrice:" + lowPrice);
-			System.out.println("maxPrice:" + maxPrice);
+			logger.debug("highPrice:" + highPrice);
+			logger.debug("lowPrice:" + lowPrice);
+			logger.debug("maxPrice:" + maxPrice);
 			// 고가가 0이 아니고 고가가 상한가인가?
-			System.out.println(!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice()));
+			logger.debug("고가가 0이 아니고 고가가 상한가인가?"
+					+ String.valueOf(!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())));
 			// 현재가가 상한가가 아닌가?
-			System.out.println(!curPrice.equals(stock.getMaxPrice()));
+			logger.debug("현재가가 상한가가 아닌가?" + String.valueOf(!curPrice.equals(stock.getMaxPrice())));
 			// 고가가 상한가인가?
-			System.out.println(highPrice.equals(stock.getMaxPrice()));
+			logger.debug("고가가 상한가인가?" + String.valueOf(highPrice.equals(stock.getMaxPrice())));
 			// 고가가 0이 아니고 고가가 상한가인가?
 			if (!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())
-				&& !curPrice.equals(stock.getMaxPrice())) {
+					&& !curPrice.equals(stock.getMaxPrice())) {
 				stock.setStockGubun("상터치↑↘");
 				stock.setLineUp(12);
+				return stock;
 			}
 			if (!lowPrice.equals("0") && lowPrice.equals(stock.getMinPrice())
-				&& !curPrice.equals(stock.getMinPrice())) {
+					&& !curPrice.equals(stock.getMinPrice())) {
 				stock.setStockGubun("하터치↓↗");
 				stock.setLineUp(22);
+				return stock;
 			}
 
 			// 현재가에 비한 ↗폭이나 ↘폭이 컸던 종목을 찾는다.
@@ -353,25 +350,17 @@ public class StockNewsToday extends News {
 			if (Math.abs(icur - ihigh) > Math.abs(icur - ilow)) {
 				higher = Math.abs(icur - ihigh);
 				flag = "↗↘";
-				System.out.println("higher:" + higher + "\t" + (higher / icur * 100));
-				float upDownRatio = higher / icur * 100;
-				// upDownRatio = ((int)(upDownRatio * 100))/100f;
-				String strUpDownRatio = df.format(upDownRatio);
-				if (higher / icur * 100 > 10 && iTradingVolume > 0) {
-					stock.setStockGubun(strUpDownRatio + "%" + flag);
-					stock.setLineUp(16);
-				}
 			} else {
 				higher = Math.abs(icur - ilow);
 				flag = "↘↗";
-				System.out.println("higher:" + higher + "\t" + (higher / icur * 100));
-				float upDownRatio = higher / icur * 100;
-				// upDownRatio = ((int)(upDownRatio * 100))/100f;
-				String strUpDownRatio = df.format(upDownRatio);
-				if (upDownRatio > 10 && iTradingVolume > 0) {
-					stock.setStockGubun(strUpDownRatio + "%" + flag);
-					stock.setLineUp(16);
-				}
+			}
+			logger.debug("higher:" + higher + "\t" + (higher / icur * 100));
+			float upDownRatio = higher / icur * 100;
+			String strUpDownRatio = df.format(upDownRatio);
+			if (upDownRatio > 10 && iTradingVolume > 0) {
+				stock.setStockGubun(strUpDownRatio + "%" + flag);
+				stock.setLineUp(16);
+				return stock;
 			}
 
 			float fRatio = 0f;
@@ -410,7 +399,8 @@ public class StockNewsToday extends News {
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("<style>\r\n");
 			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 			sb1.append("    th {border:1px solid #aaaaaa;background:#00c73c;}\r\n");
@@ -429,7 +419,7 @@ public class StockNewsToday extends News {
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			System.out.println(sb1.toString());
+			logger.debug(sb1.toString());
 
 			fw.write(sb1.toString());
 			fw.close();
@@ -455,7 +445,6 @@ public class StockNewsToday extends News {
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("<style>\r\n");
 			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 			sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
@@ -470,7 +459,7 @@ public class StockNewsToday extends News {
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			System.out.println(sb1.toString());
+			logger.debug(sb1.toString());
 
 			fw.write(sb1.toString());
 			fw.close();
@@ -479,18 +468,18 @@ public class StockNewsToday extends News {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		} finally {
-			System.out.println("file write finished...");
+			logger.debug("file write finished...");
 		}
 	}
 
 	public StringBuilder getAllNews(List<StockVO> stockList) {
-		System.out.println("stockList.size:" + stockList.size());
+		logger.debug("stockList.size:" + stockList.size());
 
 		StringBuilder sb = new StringBuilder();
 
 		for (StockVO stock : stockList) {
 			// 중복 뉴스 체크 로직 구현해야....
-			StringBuilder sb1 = getNews(stock);
+			StringBuilder sb1 = StockUtil.getNews(stock);
 			sb.append(sb1);
 		}
 		return sb;
@@ -504,12 +493,6 @@ public class StockNewsToday extends News {
 		strStockName = stock.getStockName();
 
 		// 종합정보
-		System.out.println("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
-
-		// SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREAN);
-		// String strDate = sdf.format(new Date());
-		System.out.println("날짜:" + strDate);
-
 		Document doc;
 		try {
 			String url = "http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=";
@@ -551,13 +534,6 @@ public class StockNewsToday extends News {
 				String strDayTime = dayTime.html();
 				String yyyyMMdd = strDayTime.substring(0, 10);
 
-				// System.out.println("strTitle:" + strTitle);
-				// System.out.println("strLink:" + strLink);
-				// System.out.println("strSource:" + strSource);
-				// System.out.println("strDayTime:" + strDayTime);
-				// System.out.println("strDayTimeText:" + strDayTimeText);
-				// System.out.println("yyyyMMdd:" + yyyyMMdd);
-				// System.out.println("strDate:" + strDate);
 				if (strDate.equals(yyyyMMdd)) {
 
 					doc = Jsoup.connect(strLink).get();
@@ -570,7 +546,7 @@ public class StockNewsToday extends News {
 					}
 
 					Elements naver_splugin = doc.select(".naver-splugin");
-					System.out.println("naver_splugin:" + naver_splugin);
+					logger.debug("naver_splugin:" + naver_splugin);
 					if (naver_splugin != null) {
 						naver_splugin.remove();
 					}
@@ -578,8 +554,8 @@ public class StockNewsToday extends News {
 					doc.select("a").remove();
 					doc.select("li").remove();
 					Element view = doc.select(".view").get(0);
-					System.out.println("view.className:" + view.className());
-					System.out.println("attr(class):" + view.attr("class"));
+					logger.debug("view.className:" + view.className());
+					logger.debug("attr(class):" + view.attr("class"));
 					view.attr("style", "width:548px;");
 					view.select("td").attr("style", "border:0;");
 
@@ -601,39 +577,39 @@ public class StockNewsToday extends News {
 						}
 					}
 					Elements imgTables = view.select("table#ImgTable");
-					System.out.println("imgTables.size():" + imgTables.size());
-					System.out.println("imgTables1:" + imgTables);
+					logger.debug("imgTables.size():" + imgTables.size());
+					logger.debug("imgTables1:" + imgTables);
 					for (Element imgTable : imgTables) {
-						System.out.println("imgTable:" + imgTable);
+						logger.debug("imgTable:" + imgTable);
 						Elements imgs = imgTable.select(".end_photo_org");
-						System.out.println("imgs.size():" + imgs.size());
-						System.out.println("imgs:" + imgs);
+						logger.debug("imgs.size():" + imgs.size());
+						logger.debug("imgs:" + imgs);
 						Element img = null;
 						if (imgs.size() > 0) {
 							img = imgTable.select(".end_photo_org").get(0);
 							imgTable.html("");
-							System.out.println("img1:" + img);
-							//imgTable.html(img.toString());
+							logger.debug("img1:" + img);
+							// imgTable.html(img.toString());
 							imgTable.replaceWith(img);
-							System.out.println("imgTable:" + imgTable);
+							logger.debug("imgTable:" + imgTable);
 						}
 					}
-					System.out.println("imgTables2:" + imgTables);
+					logger.debug("imgTables2:" + imgTables);
 
-					System.out.println("attr(style):" + view.attr("style"));
+					logger.debug("attr(style):" + view.attr("style"));
 
 					String strView = view.toString();
-					//System.out.println("strView:" + strView);
-					System.out.println("strStockName:" + strStockName);
+					// logger.debug("strView:" + strView);
+					logger.debug("strStockName:" + strStockName);
 					strView = strView.replaceAll(strStockName, "<a href='http://finance.naver.com/item/main.nhn?code="
-						+ strStockCode + "'>" + strStockName + "</a>");
+							+ strStockCode + "'>" + strStockName + "</a>");
 					strView = strView.replaceAll("\\[\\]", "");
 					strView = strView.replaceAll("<ul></ul>", "");
 					strView = strView.replaceAll("<br>\r\n<br>\r\n<br>", "<br><br>");
 					strView = strView.replaceAll("&amp;", "&");
 
 					strView = strView.replaceAll("<script type=\"text/javascript\" src=\"/js/news_read.js\"></script>",
-						"");
+							"");
 
 					String title = view.select("tr th strong").get(0).text();
 					Element dateElement = view.select("tr th span span").get(0);
@@ -644,11 +620,11 @@ public class StockNewsToday extends News {
 					companyElement.select("span").remove();
 					String company = companyElement.text();
 
-					System.out.println("title:" + title);
-					System.out.println("company:" + company);
-					System.out.println("date:" + date);
-					System.out.println("stockNewsList1:" + stockNewsList1);
-					System.out.println("stockNewsList1.size:" + stockNewsList1.size());
+					logger.debug("title:" + title);
+					logger.debug("company:" + company);
+					logger.debug("date:" + date);
+					logger.debug("stockNewsList1:" + stockNewsList1);
+					logger.debug("stockNewsList1.size:" + stockNewsList1.size());
 					// 소스 수정필요
 					StockNewsVO newsVO = new StockNewsVO();
 					newsVO.setTitle(title);
@@ -658,7 +634,7 @@ public class StockNewsToday extends News {
 					if (stockNewsList1.size() == 0) {
 						stockNewsList1.add(newsVO);
 						sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-							+ strStockName + "(" + strStockCode + ")</a></h3>");
+								+ strStockName + "(" + strStockCode + ")</a></h3>");
 						sb1.append(strView);
 						sb1.append("<br><br>\n");
 					} else {
@@ -667,25 +643,25 @@ public class StockNewsToday extends News {
 							String tempCompany = sNewsVO.getCompany();
 							String tempDate = sNewsVO.getDate();
 
-							System.out.println("tempTitle:" + tempTitle);
-							System.out.println("tempCompany:" + tempCompany);
-							System.out.println("tempDate:" + tempDate);
-							System.out.println("title.equals(tempTitle):" + title.equals(tempTitle));
-							System.out.println("company.equals(tempCompany):" + company.equals(tempCompany));
-							System.out.println("date.equals(tempDate):" + date.equals(tempDate));
+							logger.debug("tempTitle:" + tempTitle);
+							logger.debug("tempCompany:" + tempCompany);
+							logger.debug("tempDate:" + tempDate);
+							logger.debug("title.equals(tempTitle):" + title.equals(tempTitle));
+							logger.debug("company.equals(tempCompany):" + company.equals(tempCompany));
+							logger.debug("date.equals(tempDate):" + date.equals(tempDate));
 
 							if ((title.equals(tempTitle) && company.equals(tempCompany) && date.equals(tempDate))) {
-								System.out.println("다 같으면...");
+								logger.debug("다 같으면...");
 								newsVO = null;
 							}
 						}
-						System.out.println("newsVO:" + newsVO);
+						logger.debug("newsVO:" + newsVO);
 						if (newsVO != null) {
-							System.out.println("strStockCode:" + strStockCode);
-							System.out.println("strStockName:" + strStockName);
+							logger.debug("strStockCode:" + strStockCode);
+							logger.debug("strStockName:" + strStockName);
 							stockNewsList1.add(newsVO);
 							sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-								+ strStockName + "(" + strStockCode + ")</a></h3>");
+									+ strStockName + "(" + strStockCode + ")</a></h3>");
 							sb1.append(strView);
 							sb1.append("<br><br>\n");
 						}
@@ -694,7 +670,7 @@ public class StockNewsToday extends News {
 					break;
 				}
 			}
-			System.out.println("=========================================");
+			logger.debug("=========================================");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

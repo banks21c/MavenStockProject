@@ -1,8 +1,5 @@
 package html.parsing.stock.focus;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,9 +30,12 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.NameAscCompare;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.NaverUtil;
+import html.parsing.stock.util.StockUtil;
 
 public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 
@@ -545,9 +545,9 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 		}
 	}
 
-	public StringBuilder createHtmlString(List<StockVO> kospiKosdaqStockList, String stockMarketGubun,
+	public StringBuilder createHtmlString(List<StockVO> stockList, String stockMarketGubun,
 			String lowHighGubun, String orderBy) {
-		logger.debug("kospiKosdaqStockList.size :" + kospiKosdaqStockList.size());
+		logger.debug("kospiKosdaqStockList.size :" + stockList.size());
 		String strFileNameSuffix = "";
 		if (lowHighGubun.equals("신고가")) {// 신고가
 //			strFileNameSuffix = "52주 신저가 대비 상승율(" + orderBy + ")";
@@ -586,7 +586,7 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 		sb1.append("</tr>\r\n");
 
 		int cnt = 1;
-		for (StockVO s : kospiKosdaqStockList) {
+		for (StockVO s : stockList) {
 			logger.debug("s :" + s);
 			if (s != null) {
 				sb1.append("<tr>\r\n");
@@ -647,7 +647,11 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 		sb1.append("<br><br>\r\n");
 
 		// 뉴스 첨부
-		sb1.append(getNews(kospiKosdaqStockList).toString());
+		StringBuilder newsAddedStockList = StockUtil.getNews(stockList);
+		// 증권명에 증권링크 생성
+		StringBuilder stockTableAdded = StockUtil.stockLinkString(newsAddedStockList, stockList);
+		sb1.append(stockTableAdded.toString());
+
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
 		logger.debug(sb1.toString());
@@ -787,7 +791,10 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 			String key = (String) it.next();
 			List<StockVO> stockList = newLowHighPriceMap.get(key);
 			// 뉴스 첨부
-			sb1.append(getNews(stockList).toString());
+			StringBuilder newsAddedStockList = StockUtil.getNews(stockList);
+			// 증권명에 증권링크 생성
+			StringBuilder stockTableAdded = StockUtil.stockLinkString(newsAddedStockList, stockList);
+			sb1.append(stockTableAdded.toString());
 		}
 
 		sb1.append("</body>\r\n");
@@ -795,110 +802,6 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 		strFileName = USER_HOME + "\\documents\\" + strYmdDashBracket + "_" + strHms + "_코스피,코스닥_52주_신고,신저가.html";
 		logger.debug("strFileName==>" + strFileName);
 		FileUtil.fileWrite(strFileName, sb1.toString());
-	}
-
-	public StringBuilder getNews(List<StockVO> allStockList) {
-
-		StringBuilder sb1 = new StringBuilder();
-
-		for (StockVO vo : allStockList) {
-			strStockCode = vo.getStockCode();
-			strStockName = vo.getStockName();
-
-			// 종합정보
-			logger.debug("strStockCode:" + strStockCode + " strStockName:" + strStockName);
-			logger.debug("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
-
-			Document doc;
-			try {
-				// http://finance.naver.com/item/news_news.nhn?code=110570
-				doc = Jsoup.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=")
-						.get();
-				// http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
-				// logger.debug(doc.html());
-				Elements types = doc.select(".type5");
-				Element type = null;
-				if (types.size() <= 0) {
-					return sb1;
-				}
-				type = doc.select(".type5").get(0);
-
-				Elements trs = type.getElementsByTag("tr");
-				if (trs != null) {
-					logger.debug("trs.size:" + trs.size());
-				}
-
-				for (int i = 0; i < trs.size(); i++) {
-					Element tr = trs.get(i);
-
-					Elements tds = tr.getElementsByTag("td");
-					if (tds.size() < 3) {
-						continue;
-					}
-
-					Element a1 = tr.getElementsByTag("a").first();
-					Element source = tr.getElementsByClass("info").first();
-					Element dayTime = tr.getElementsByClass("date").first();
-
-					if (a1 == null) {
-						continue;
-					}
-					logger.debug("a:" + a1);
-					logger.debug("source:" + source);
-					logger.debug("dayTime:" + dayTime);
-					logger.debug("title:" + a1.html());
-					logger.debug("href:" + a1.attr("href"));
-					logger.debug("source:" + source.html());
-					logger.debug("dayTime:" + dayTime.html());
-
-					String strTitle = a1.html();
-					String strLink = a1.attr("href");
-					String strSource = source.html();
-					String strDayTime = dayTime.html();
-					String strYmd2 = strDayTime.substring(0, 10);
-					int iYmd2 = Integer.parseInt(strYmd2.replaceAll("\\.", ""));
-
-					// sb1.append("<h3>"+ strTitle +"</h3>\n");
-					// sb1.append("<div>"+ strSource+" | "+ strDayTime
-					// +"</div>\n");
-					if (iYmd <= iYmd2) {
-						sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=").append(strStockCode)
-								.append("'>").append(strStockName).append("(").append(strStockCode)
-								.append(")</a></h3>");
-						// sb1.append("<h3>"+ strTitle +"</h3>\n");
-						// sb1.append("<div>"+ strSource+" | "+ strDayTime
-						// +"</div>\n");
-
-						doc = Jsoup.connect("http://finance.naver.com" + strLink).get();
-						Elements link_news_elements = doc.select(".link_news");
-						if (link_news_elements != null) {
-							link_news_elements.remove();
-						}
-						Elements naver_splugin = doc.select(".naver-splugin");
-						logger.debug("naver_splugin:" + naver_splugin);
-						if (naver_splugin != null) {
-							naver_splugin.remove();
-						}
-						doc.select("a").remove();
-						doc.select("li").remove();
-
-						Element view = doc.select(".view").get(0);
-
-						String strView = view.toString();
-						strView = strView.replaceAll(strStockName,
-								"<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-										+ strStockName + "</a>");
-
-						sb1.append(strView);
-						sb1.append("\n");
-
-						logger.debug("view:" + view);
-					}
-				}
-			} catch (IOException e) {
-			}
-		}
-		return sb1;
 	}
 
 	public void readNews(List<StockVO> allStockList) {

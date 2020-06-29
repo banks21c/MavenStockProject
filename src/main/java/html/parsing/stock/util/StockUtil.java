@@ -21,6 +21,7 @@ import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,6 +54,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 
+import html.parsing.stock.StockNewsVO;
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.StockNameLengthDescCompare;
 
@@ -82,61 +84,6 @@ public class StockUtil {
 	// 3 : web
 	private static final int STOCK_LIST_TYPE = 1;
 
-	static int topCount = 0;
-	static int upCount = 0;
-	static int bottomCount = 0;
-	static int downCount = 0;
-	static int steadyCount = 0;
-
-	public int getTopCount() {
-		return topCount;
-	}
-
-	public void setTopCount(int topCount) {
-		this.topCount = topCount;
-	}
-
-	public int getUpCount() {
-		return upCount;
-	}
-
-	public void setUpCount(int upCount) {
-		this.upCount = upCount;
-	}
-
-	public int getBottomCount() {
-		return bottomCount;
-	}
-
-	public void setBottomCount(int bottomCount) {
-		this.bottomCount = bottomCount;
-	}
-
-	public int getDownCount() {
-		return downCount;
-	}
-
-	public void setDownCount(int downCount) {
-		this.downCount = downCount;
-	}
-
-	public int getSteadyCount() {
-		return steadyCount;
-	}
-
-	public void setSteadyCount(int steadyCount) {
-		this.steadyCount = steadyCount;
-	}
-
-	static List<StockVO> allStockList = new ArrayList<StockVO>();
-	static List<StockVO> topStockList = new ArrayList<StockVO>();
-	static List<StockVO> bottomStockList = new ArrayList<StockVO>();
-	static List<StockVO> topTouchStockList = new ArrayList<StockVO>();
-	static List<StockVO> bottomTouchStockList = new ArrayList<StockVO>();
-	static List<StockVO> upDownStockList = new ArrayList<StockVO>();
-	static List<StockVO> downUpStockList = new ArrayList<StockVO>();
-	static List<StockVO> over5PerUpStockList = new ArrayList<StockVO>();
-	static List<StockVO> over5PerDownStockList = new ArrayList<StockVO>();
 	static DecimalFormat df = new DecimalFormat("###.##");
 
 	public static String protocol;
@@ -223,7 +170,7 @@ public class StockUtil {
 			String strStockCode;
 			String strStockName;
 			while ((line = br.readLine()) != null) {
-				System.out.println("line:" + line);
+				logger.debug("line:" + line);
 				if (line.contains(" ")) {
 					String separator = "[ \t]*";
 					String lineArray[] = line.split(Pattern.quote(separator));
@@ -256,7 +203,7 @@ public class StockUtil {
 			String strStockCode;
 			String strStockName;
 			while ((line = br.readLine()) != null) {
-				System.out.println("line:" + line);
+				logger.debug("line:" + line);
 				if (line.contains(" ")) {
 					String separator = "[ \t]*";
 					String lineArray[] = line.split(Pattern.quote(separator));
@@ -321,7 +268,7 @@ public class StockUtil {
 			String strStockCode;
 			String strStockName;
 			while ((line = br.readLine()) != null) {
-				System.out.println("line:" + line);
+				logger.debug("line:" + line);
 				if (line.matches("[0-9]*[ \t].*")) {
 					String separator = "\t";
 					String lineArray[] = line.split(Pattern.quote(separator));
@@ -349,18 +296,18 @@ public class StockUtil {
 			// jar를 실행하였을 경우는 jar와 동일 경로
 			// ide에서 실행하였을 경우에는 프로젝트 경로
 			// 프로젝트 경로에 있는 파일들은 jar파일에 묶이지 않는다.
-			System.out.println(". AbsolutePath:" + new File(".").getAbsolutePath());
+			logger.debug(". AbsolutePath:" + new File(".").getAbsolutePath());
 			File f = new File("./" + stockListTxtFileName);
-			System.out.println("f.exists():" + f.exists());
+			logger.debug("f.exists():" + f.exists());
 			InputStream inputStream = null;
 			if (f.exists()) {
 				inputStream = new FileInputStream(f);
-				System.out.println("inputStream1: " + inputStream);
+				logger.debug("inputStream1: " + inputStream);
 			} else {
 				// classes root 경로
 				inputStream = StockUtil.class.getResourceAsStream("/" + stockListTxtFileName);
-				System.out.println("inputStream2: " + inputStream);
-				System.out.println("class 경로 read " + stockListTxtFileName + " Resource");
+				logger.debug("inputStream2: " + inputStream);
+				logger.debug("class 경로 read " + stockListTxtFileName + " Resource");
 			}
 
 			if (inputStream != null) {
@@ -371,7 +318,7 @@ public class StockUtil {
 				String strStockCode;
 				String strStockName;
 				while ((line = br.readLine()) != null) {
-					System.out.println("line:" + line);
+					logger.debug("line:" + line);
 					if (line.matches("[0-9]*[ \t].*")) {
 						String separator = "\t";
 						String lineArray[] = line.split(Pattern.quote(separator));
@@ -609,24 +556,24 @@ public class StockUtil {
 						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
 			} else if (strNews.contains("현대자동차") && stockName.equals("현대자동차")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대자동차",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
+				strNews = strNews.replaceAll("현대자동차", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
+						+ nbspString("현대자동차") + "</a></strong>");
 			} else if (strNews.contains("현대자동차") && stockName.equals("현대차")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대자동차",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
+				strNews = strNews.replaceAll("현대자동차", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
+						+ nbspString("현대자동차") + "</a></strong>");
 			} else if (strNews.contains("현대차") && stockName.equals("현대차")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("현대차",
 						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
 			} else if (strNews.contains("POSCO") && stockName.equals("포스코")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("POSCO",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+				strNews = strNews.replaceAll("POSCO", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
+						+ nbspString("POSCO") + "</a></strong>");
 			} else if (strNews.contains("POSCO") && stockName.equals("POSCO")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("POSCO",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+				strNews = strNews.replaceAll("POSCO", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
+						+ nbspString("POSCO") + "</a></strong>");
 			} else if (strNews.contains("포스코") && stockName.equals("POSCO")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("포스코",
@@ -686,24 +633,24 @@ public class StockUtil {
 						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
 			} else if (strNews.contains("현대자동차") && stockName.equals("현대자동차")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대자동차",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
+				strNews = strNews.replaceAll("현대자동차", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
+						+ nbspString("현대자동차") + "</a></strong>");
 			} else if (strNews.contains("현대자동차") && stockName.equals("현대차")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대자동차",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대자동차") + "</a></strong>");
+				strNews = strNews.replaceAll("현대자동차", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
+						+ nbspString("현대자동차") + "</a></strong>");
 			} else if (strNews.contains("현대차") && stockName.equals("현대차")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("현대차",
 						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
 			} else if (strNews.contains("POSCO") && stockName.equals("포스코")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("POSCO",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+				strNews = strNews.replaceAll("POSCO", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
+						+ nbspString("POSCO") + "</a></strong>");
 			} else if (strNews.contains("POSCO") && stockName.equals("POSCO")) {
 				newsStockList.add(stock);
-				strNews = strNews.replaceAll("POSCO",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("POSCO") + "</a></strong>");
+				strNews = strNews.replaceAll("POSCO", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
+						+ nbspString("POSCO") + "</a></strong>");
 			} else if (strNews.contains("포스코") && stockName.equals("POSCO")) {
 				newsStockList.add(stock);
 				strNews = strNews.replaceAll("포스코",
@@ -946,8 +893,7 @@ public class StockUtil {
 //				String chosenDayEndPrice = StockUtil.getChosenDayEndPrice(strStockCode, strStockName, chosenDay);
 				String chosenDayEndPrice = "0";
 				if (baseDay.equals(chosenDay)) {
-					chosenDayEndPrice = StockUtil.findChosenDayEndPrice(strStockCode, strStockName, chosenDay,
-							pageNo);
+					chosenDayEndPrice = StockUtil.findChosenDayEndPrice(strStockCode, strStockName, chosenDay, pageNo);
 				} else {
 					chosenDayEndPrice = StockUtil.getChosenDayEndPrice(strStockCode, strStockName, chosenDay);
 				}
@@ -1417,7 +1363,7 @@ public class StockUtil {
 				if (text.startsWith("거래량")) {
 					stock.setTradingVolume(text.split(" ")[1]);
 					stock.setlTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
-					stock.setiTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
+					stock.setlTradingVolume(Long.parseLong(stock.getTradingVolume().replaceAll(",", "")));
 				}
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
@@ -1433,119 +1379,6 @@ public class StockUtil {
 				specialLetter = "↓";
 			}
 			stock.setSpecialLetter(specialLetter);
-
-			if (specialLetter.equals("↑")) {
-				topCount++;
-			} else if (specialLetter.equals("▲")) {
-				upCount++;
-			} else if (specialLetter.equals("↓")) {
-				bottomCount++;
-			} else if (specialLetter.equals("▼")) {
-				downCount++;
-			} else {
-				if (stock.getiTradingVolume() > 0) {
-					steadyCount++;
-				}
-			}
-
-			if (specialLetter.equals("↑")) {
-				stock.setStockGubun("상한가↑");
-				stock.setLineUp(11);
-
-				topStockList.add(stock);
-				return stock;
-			}
-			if (specialLetter.equals("↓")) {
-				stock.setStockGubun("하한가↓");
-				stock.setLineUp(21);
-				bottomStockList.add(stock);
-				return stock;
-			}
-
-			String highPrice = stock.getHighPrice();
-			String lowPrice = stock.getLowPrice();
-			String maxPrice = stock.getMaxPrice();
-			logger.debug("highPrice:" + highPrice);
-			logger.debug("lowPrice:" + lowPrice);
-			logger.debug("maxPrice:" + maxPrice);
-			// 고가가 0이 아니고 고가가 상한가인가?
-			logger.debug("고가가 0이 아니고 고가가 상한가인가? :" + (!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())));
-			// 현재가가 상한가가 아닌가?
-			logger.debug("현재가가 상한가가 아닌가? :" + !curPrice.equals(stock.getMaxPrice()));
-			// 고가가 상한가인가?
-			logger.debug("고가가 상한가인가?:" + highPrice.equals(stock.getMaxPrice()));
-			// 고가가 0이 아니고 고가가 상한가인가?
-			if (!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())
-					&& !curPrice.equals(stock.getMaxPrice())) {
-				logger.debug("고가가 0이 아니고 고가가 상한가인가?:" + (!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())
-						&& !curPrice.equals(stock.getMaxPrice())));
-				stock.setStockGubun("상터치↑↘");
-				stock.setLineUp(12);
-				topTouchStockList.add(stock);
-				return stock;
-			}
-			if (!lowPrice.equals("0") && lowPrice.equals(stock.getMinPrice())
-					&& !curPrice.equals(stock.getMinPrice())) {
-				logger.debug("고가가 0이 아니고 저가 하한가인가?:" + (!lowPrice.equals("0") && lowPrice.equals(stock.getMinPrice())
-						&& !curPrice.equals(stock.getMinPrice())));
-				stock.setStockGubun("하터치↓↗");
-				stock.setLineUp(22);
-				bottomTouchStockList.add(stock);
-				return stock;
-			}
-
-			// 현재가에 비한 ↗폭이나 ↘폭이 컸던 종목을 찾는다.
-			float higher = 0;
-			String flag = "";
-			int icur = stock.getiCurPrice();
-			int ihigh = stock.getiHighPrice();
-			int ilow = stock.getiLowPrice();
-
-			long lTradingVolume = stock.getlTradingVolume();
-			if (Math.abs(icur - ihigh) > Math.abs(icur - ilow)) {
-				higher = Math.abs(icur - ihigh);
-				flag = "↗↘";
-				logger.debug("higher:" + higher + "\t" + (higher / icur * 100));
-				float upDownRatio = higher / icur * 100;
-				// upDownRatio = ((int)(upDownRatio * 100))/100f;
-				String strUpDownRatio = df.format(upDownRatio);
-				if (higher / icur * 100 > 10 && lTradingVolume > 0) {
-					stock.setStockGubun(strUpDownRatio + "%" + flag);
-					stock.setLineUp(16);
-					upDownStockList.add(stock);
-					return stock;
-				}
-			} else {
-				higher = Math.abs(icur - ilow);
-				flag = "↘↗";
-				logger.debug("higher:" + higher + "\t" + (higher / icur * 100));
-				float upDownRatio = higher / icur * 100;
-				// upDownRatio = ((int)(upDownRatio * 100))/100f;
-				String strUpDownRatio = df.format(upDownRatio);
-				if (upDownRatio > 10 && lTradingVolume > 0) {
-					stock.setStockGubun(strUpDownRatio + "%" + flag);
-					stock.setLineUp(16);
-					downUpStockList.add(stock);
-					return stock;
-				}
-			}
-
-			float fRatio = 0f;
-			if (varyRatio.indexOf("%") != -1) {
-				fRatio = Float.parseFloat(varyRatio.substring(1, varyRatio.indexOf("%")));
-				if (fRatio >= 5) {
-					if (specialLetter.equals("+") || specialLetter.equals("▲")) {
-						stock.setStockGubun("+5%이상↗");
-						stock.setLineUp(13);
-						over5PerUpStockList.add(stock);
-					} else if (specialLetter.equals("-") || specialLetter.equals("▼")) {
-						stock.setStockGubun("-5%이상↘");
-						stock.setLineUp(23);
-						over5PerDownStockList.add(stock);
-					}
-					return stock;
-				}
-			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -1735,7 +1568,7 @@ public class StockUtil {
 				}
 				if (text.startsWith("거래량")) {
 					stock.setTradingVolume(text.split(" ")[1]);
-					stock.setiTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
+					stock.setlTradingVolume(Long.parseLong(stock.getTradingVolume().replaceAll(",", "")));
 				}
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
@@ -1762,22 +1595,11 @@ public class StockUtil {
 	public StockVO getStockInfo(StockVO stock) {
 		Document doc;
 
-		String code = stock.getStockCode();
+		String strStockCode = stock.getStockCode();
 
 		try {
 			// 종합정보
-			doc = Jsoup.connect(TOTAL_INFO_URL + code).get();
-
-			Elements dates = doc.select(".date");
-			if (dates != null) {
-				if (dates.size() > 0) {
-					Element date = dates.get(0);
-					strYMD = date.ownText();
-					strYMD = date.childNode(0).toString().trim();
-					strYMD = "[" + strYMD.replaceAll("\\.", "-") + "] ";
-				}
-			}
-			logger.debug("strYMD2:[" + strYMD + "]");
+			doc = Jsoup.connect(TOTAL_INFO_URL + strStockCode).get();
 
 			Elements new_totalinfos = doc.select(".new_totalinfo");
 
@@ -1879,7 +1701,7 @@ public class StockUtil {
 				}
 				if (text.startsWith("거래량")) {
 					stock.setTradingVolume(text.split(" ")[1]);
-					stock.setiTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
+					stock.setlTradingVolume(Long.parseLong(stock.getTradingVolume().replaceAll(",", "")));
 				}
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
@@ -1895,20 +1717,6 @@ public class StockUtil {
 				specialLetter = "↓";
 			}
 			stock.setSpecialLetter(specialLetter);
-
-			if (specialLetter.equals("↑")) {
-				topCount++;
-			} else if (specialLetter.equals("▲")) {
-				upCount++;
-			} else if (specialLetter.equals("↓")) {
-				bottomCount++;
-			} else if (specialLetter.equals("▼")) {
-				downCount++;
-			} else {
-				if (stock.getiTradingVolume() > 0) {
-					steadyCount++;
-				}
-			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -2657,7 +2465,7 @@ public class StockUtil {
 				}
 				if (text.startsWith("거래량")) {
 					stock.setTradingVolume(text.split(" ")[1]);
-					stock.setiTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
+					stock.setlTradingVolume(Long.parseLong(stock.getTradingVolume().replaceAll(",", "")));
 				}
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
@@ -2797,7 +2605,7 @@ public class StockUtil {
 			}
 			if (text.startsWith("거래량")) {
 				stock.setTradingVolume(text.split(" ")[1]);
-				stock.setiTradingVolume(Integer.parseInt(stock.getTradingVolume().replaceAll(",", "")));
+				stock.setlTradingVolume(Long.parseLong(stock.getTradingVolume().replaceAll(",", "")));
 			}
 			if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 				stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
@@ -2958,7 +2766,12 @@ public class StockUtil {
 		logger.debug(sb.toString());
 		return sb;
 	}
-	
+
+//	@Test
+//	public void getDateInfoTest() {
+//		getDateInfo("005930");
+//	}
+
 	public static String getDateInfo(String strStockCode) {
 		// 종합정보
 		// http://finance.naver.com/item/main.nhn?code=005930
@@ -2999,5 +2812,313 @@ public class StockUtil {
 		}
 		return strYmdDashBracket;
 	}
-	
+
+	public static StringBuilder getNews(List<StockVO> allStockList) {
+
+		StringBuilder sb1 = new StringBuilder();
+
+		String strStockCode;
+		String strStockName;
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy", Locale.KOREAN);
+		String strDefaultDate = sdf.format(new Date());
+		int iYmd = Integer.parseInt(strDefaultDate);
+
+		for (StockVO vo : allStockList) {
+			strStockCode = vo.getStockCode();
+			strStockName = vo.getStockName();
+
+			// 종합정보
+			Document doc;
+			try {
+				// 5페이지 정도 돌면서 오늘 기사를 가져온다.
+				for (int page = 1; page <= 5; page++) {
+					doc = Jsoup.connect(
+							"http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=" + page).get();
+					Elements types = doc.select(".type5");
+					if (types.size() <= 0) {
+						return sb1;
+					}
+					Element type = types.get(0);
+
+					Elements trs = type.getElementsByTag("tr");
+					if (trs != null) {
+						logger.debug("trs.size:" + trs.size());
+					}
+
+					boolean isToday = true;
+					for (int i = 0; i < trs.size(); i++) {
+						Element tr = trs.get(i);
+
+						Elements tds = tr.getElementsByTag("td");
+						if (tds.size() < 3) {
+							continue;
+						}
+
+						Element a1 = tr.getElementsByTag("a").first();
+						Element source = tr.getElementsByClass("info").first();
+						Element dayTime = tr.getElementsByClass("date").first();
+
+						if (a1 == null) {
+							continue;
+						}
+						logger.debug("a:" + a1);
+						logger.debug("source:" + source);
+						logger.debug("dayTime:" + dayTime);
+						logger.debug("title:" + a1.html());
+						logger.debug("href:" + a1.attr("href"));
+						logger.debug("source:" + source.html());
+						logger.debug("dayTime:" + dayTime.html());
+						logger.debug("dayTime:" + dayTime.text());
+
+						String strTitle = a1.html();
+						String strLink = a1.attr("href");
+						String strSource = source.html();
+						String strDayTime = dayTime.html();
+						String strYmd2 = strDayTime.substring(0, 10);
+						int iYmd2 = Integer.parseInt(strYmd2.replaceAll("\\.", ""));
+
+						// 기사를 쓴 날이 오늘이면 가져온다.
+						if (iYmd == iYmd2) {
+							sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
+									+ strStockName + "(" + strStockCode + ")</a></h3>");
+
+							doc = Jsoup.connect("http://finance.naver.com" + strLink).get();
+							Elements link_news_elements = doc.select(".link_news");
+							if (link_news_elements != null) {
+								link_news_elements.remove();
+							}
+							Elements naver_splugin = doc.select(".naver-splugin");
+							logger.debug("naver_splugin:" + naver_splugin);
+							if (naver_splugin != null) {
+								naver_splugin.remove();
+							}
+							doc.select("a").remove();
+							doc.select("li").remove();
+							doc.select("script").remove();
+
+							Element view = doc.select(".view").get(0);
+
+							String strView = view.toString();
+							strView = strView.replaceAll(strStockName,
+									"<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
+											+ strStockName + "</a>");
+
+							sb1.append(strView);
+							sb1.append("\n");
+
+							logger.debug("view:" + view);
+						} else {
+							isToday = false;
+						}
+					}
+					if (!isToday) {
+						break;
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return sb1;
+	}
+
+	public static StringBuilder getNews(StockVO stock) {
+
+		StringBuilder sb1 = new StringBuilder();
+
+		String strStockCode = stock.getStockCode();
+		String strStockName = stock.getStockName();
+		logger.debug("strStockCode:" + strStockCode + " strStockName:" + strStockName);
+
+		// 종합정보
+		Document doc;
+		List<StockNewsVO> stockNewsList1 = new ArrayList<StockNewsVO>();
+		try {
+			// 028260 삼성물산
+			// http://finance.naver.com/item/news.nhn?code=091580
+			// http://finance.naver.com/item/news_news.nhn?code=028260&page=1
+			doc = Jsoup.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=1").get();
+			// http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
+			// logger.debug(doc.html());
+			Element type5 = doc.select(".type5").get(0);
+			logger.debug("type5:" + type5);
+
+			Elements trs = type5.getElementsByTag("tr");
+
+			for (int i = 0; i < trs.size(); i++) {
+				Element tr = trs.get(i);
+				logger.debug("tr:[" + tr + "]");
+
+				Elements tds = tr.getElementsByTag("td");
+				logger.debug("tds.size:[" + tds.size() + "]");
+				if (tds.size() < 3) {
+					continue;
+				}
+
+				Element dayTime = tr.select(".date").first();
+				Element a1 = tr.getElementsByTag("a").first();
+				Element source = tr.select(".info").first();
+
+				if (a1 == null) {
+					continue;
+				}
+
+				logger.debug("dayTime:" + dayTime);
+				logger.debug("a1:" + a1);
+				logger.debug("source" + source);
+				// logger.debug("a:" + a1);
+				// logger.debug("source:" + source);
+				// logger.debug("title:" + a1.html());
+				// logger.debug("href:" + a1.attr("href"));
+				// logger.debug("source:" + source.html());
+
+				String strTitle = a1.html();
+				String strLink = a1.attr("href");
+				String strSource = source.html();
+				String strDayTime = dayTime.html();
+				String yyyyMMdd = strDayTime.substring(0, 10);
+				logger.debug("yyyyMMdd:" + yyyyMMdd);
+				String strDayTimeText = dayTime.text();
+
+				String strYmdTemp = yyyyMMdd.replaceAll("\\.", "");
+				logger.debug("strYmdTemp:" + strYmdTemp);
+				int iYmdTemp = Integer.parseInt(strYmdTemp);
+				logger.debug("yyyyMMdd:" + yyyyMMdd);
+				logger.debug("iYmdTemp:" + iYmdTemp);
+
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy", Locale.KOREAN);
+				String strDefaultDate = sdf.format(new Date());
+				int iYmd = Integer.parseInt(strDefaultDate);
+
+				if (iYmdTemp < iYmd) {
+					continue;
+				}
+
+				String year = yyyyMMdd.substring(0, 4);
+				String month = yyyyMMdd.substring(5, 7);
+				String day = yyyyMMdd.substring(8, 10);
+				int iYear = Integer.parseInt(year);
+				int iMonth = Integer.parseInt(month) - 1;
+				int iDay = Integer.parseInt(day);
+				// logger.debug(year + month + day);
+
+				Calendar cal1 = Calendar.getInstance();// 오늘 ymd
+				Calendar cal2 = Calendar.getInstance();// 기사입력일 ymd
+				cal2.set(iYear, iMonth, iDay);
+
+				long diffSec = (cal2.getTimeInMillis() - cal1.getTimeInMillis()) / 1000; // 초
+				long diffDay = diffSec / (60 * 60 * 24); // 날
+				// logger.debug("두 날자의 일 차이수 = " + diffDay);
+
+				if (diffDay >= 0) {
+
+					doc = Jsoup.connect("http://finance.naver.com" + strLink).get();
+					doc.select("meta").remove();
+					doc.select("link").remove();
+					doc.select("script").remove();
+					Elements link_news_elements = doc.select(".link_news");
+					if (link_news_elements != null) {
+						link_news_elements.remove();
+					}
+
+					Elements naver_splugin = doc.select(".naver-splugin");
+					logger.debug("naver_splugin:" + naver_splugin);
+					if (naver_splugin != null) {
+						naver_splugin.remove();
+					}
+
+					// doc.select("a").remove();
+					doc.select("li").remove();
+					Elements aElements = doc.select("a");
+					for (int ii = 0; ii < aElements.size(); ii++) {
+						Element aElement = aElements.get(ii);
+						String aElementText = aElement.text();
+
+						Element p = doc.createElement("span");
+						p.appendText(aElementText);
+
+						aElement.replaceWith(p);
+						// logger.debug(aElement);
+					}
+					Element view = doc.select(".view").get(0);
+					view.select(".end_btn").remove();
+					// logger.debug("view.className:" + view.className());
+					// logger.debug("attr(class):" + view.attr("class"));
+					view.attr("style", "width:548px");
+					// logger.debug("attr(style):" + view.attr("style"));
+
+					String strView = view.toString();
+					// logger.debug("strStockName:" + strStockName);
+					// strView = strView.replaceAll(strStockName, "<a
+					// href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>" +
+					// strStockName + "</a>");
+					strView = strView.replaceAll("\\[\\]", "");
+					strView = strView.replaceAll("<ul></ul>", "");
+					strView = strView.replaceAll("<br>\r\n<br>\r\n<br>", "<br><br>");
+					strView = strView.replaceAll("&amp;", "&");
+
+					strView = strView.replaceAll("<script type=\"text/javascript\" src=\"/js/news_read.js\"></script>",
+							"");
+					strView = strView.replaceAll("NEWS\" data-cid=\"ne_[0-9]*_[0-9]*\" style=\"visibility: hidden;\">",
+							"");
+
+					String title = view.select("tr th strong").get(0).text();
+					Element dateElement = view.select("tr th span span").get(0);
+					String date = dateElement.text();
+
+					Element companyElement = view.select("tr th span").get(0);
+					companyElement.select("img").remove();
+					companyElement.select("span").remove();
+					String company = companyElement.text();
+
+					logger.debug("title:" + title);
+					logger.debug("company:" + company);
+					logger.debug("date:" + date);
+					// 소스 수정필요
+					StockNewsVO newsVO = new StockNewsVO();
+					newsVO.setTitle(title);
+					newsVO.setCompany(company);
+					newsVO.setDate(date);
+
+					// 뉴스 중복체크
+					boolean isSameNews = false;
+					for (StockNewsVO sNewsVO : stockNewsList1) {
+						String tempTitle = sNewsVO.getTitle();
+						String tempCompany = sNewsVO.getCompany();
+						String tempDate = sNewsVO.getDate();
+
+						logger.debug("tempTitle:" + tempTitle);
+						logger.debug("tempCompany:" + tempCompany);
+						logger.debug("tempDate:" + tempDate);
+						logger.debug("title.equals(tempTitle):" + title.equals(tempTitle));
+						logger.debug("company.equals(tempCompany):" + company.equals(tempCompany));
+						logger.debug("date.equals(tempDate):" + date.equals(tempDate));
+
+						if ((title.equals(tempTitle) && company.equals(tempCompany) && date.equals(tempDate))) {
+							logger.debug("다 같으면...");
+							isSameNews = true;
+						}
+					}
+					logger.debug("newsVO:" + newsVO);
+					if (!isSameNews) {
+						logger.debug("strStockCode:" + strStockCode);
+						logger.debug("strStockName:" + strStockName);
+						stockNewsList1.add(newsVO);
+						sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
+								+ strStockName + "(" + strStockCode + ")</a></h3>");
+						sb1.append(strView);
+						sb1.append("<br><br>\n");
+					}
+				} else {
+					break;
+				}
+			}
+			logger.debug("=========================================");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return sb1;
+	}
+
 }
