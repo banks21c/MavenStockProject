@@ -298,7 +298,7 @@ public class NewsReadAndMakeLinkFortune500Com extends javax.swing.JFrame {
 
         sb1.append("<div style='width:548px'>\r\n");
 
-        sb1.append("<h2>[" + strYMD + "] Fortune 500 </h2><br>\r\n");
+        sb1.append("<h2 id='title'>[" + strYMD + "] Fortune 500 </h2><br>\r\n");
         sb1.append(htmlTarget + "<br>\r\n");
 
         sb1.append("</div>\r\n");
