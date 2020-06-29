@@ -8,7 +8,7 @@
 	<groupId>com.banks</groupId>
 	<artifactId>MavenStockProject</artifactId>
 	<version>1.0-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>MavenStockProject</name>
 
