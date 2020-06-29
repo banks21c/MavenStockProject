@@ -600,7 +600,7 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 		sb1.append("</head>\r\n");
 		sb1.append("<body>\r\n");
 		sb1.append("\t<h2 id='title'>").append(strYmdDashBracket).append(" ").append(stockMarketGubun).append(" ")
-				.append(strFileNameSuffix).append("</h>");
+				.append(strFileNameSuffix).append("</h2>");
 
 		sb1.append("<table>\r\n");
 		sb1.append("<tr>\r\n");
