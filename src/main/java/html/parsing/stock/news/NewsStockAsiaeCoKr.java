@@ -270,11 +270,11 @@ public class NewsStockAsiaeCoKr extends javax.swing.JFrame {
 
             sb1.append("<div style='width:548px'>\r\n");
 
-            sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-            sb1.append("<h2>[" + strDate + "]" + strTitle + "</h2><br>\r\n");
-            sb1.append(strAuthor + "<br>\r\n");
-            sb1.append(strContent + "<br>\r\n");
-            sb1.append(copyright + "<br>\r\n");
+            sb1.append("<h3> 기사주소:[<a href='").append(url).append("' target='_sub'>").append(url).append("</a>] </h3>\n");
+            sb1.append("<h2 id='title'>[").append(strDate).append("]").append(strTitle).append("</h2><br>\r\n");
+            sb1.append(strAuthor).append("<br>\r\n");
+            sb1.append(strContent).append("<br>\r\n");
+            sb1.append(copyright).append("<br>\r\n");
 
             sb1.append("</div>\r\n");
             sb1.append("</body>\r\n");

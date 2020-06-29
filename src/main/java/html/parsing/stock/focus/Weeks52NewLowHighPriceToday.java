@@ -421,7 +421,7 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 			sb1.append("</style>\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
-			sb1.append("\t<h2>").append(strYmdDashBracket).append(" ").append(title).append("</h2>");
+			sb1.append("\t<h2 id='title'>").append(strYmdDashBracket).append(" ").append(title).append("</h2>");
 			sb1.append("<table>\r\n");
 			sb1.append("<tr>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");

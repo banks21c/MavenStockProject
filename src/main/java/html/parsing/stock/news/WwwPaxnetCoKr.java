@@ -147,7 +147,7 @@ public class WwwPaxnetCoKr extends News {
             doc.select(".news_date").remove();
 
             sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-            sb1.append("<h2>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
+            sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
             sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
             sb1.append(strContent).append("<br><br>\n");
             System.out.println("sb.toString:" + sb1.toString());

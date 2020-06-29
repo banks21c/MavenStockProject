@@ -1133,7 +1133,7 @@ public class NownewsSeoulCoKr extends javax.swing.JFrame {
 
 			sb1.append("<div style='width:548px'>\r\n");
 
-			sb1.append("<h1>" + strFileNameDate + strTitle + "</h1>\r\n");
+			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append("<h3>" + strSubtitle + "</h3>\r\n");
 			sb1.append("<div>" + strDate + "</div>\r\n");
 			sb1.append("<div>" + strWriter + "</div>\r\n");

@@ -190,7 +190,7 @@ public class WwwEdailyCoKr extends News {
 
 			sb1.append("<div style='width:548px'>\r\n");
 			sb1.append("<h3> 기사주소:[<a href='").append(strUrl).append("' target='_sub'>").append(strUrl).append("</a>] </h3>\n");
-			sb1.append("<h2>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
+			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append(strSubTitle).append("\r\n");
 			sb1.append("<span style='font-size:12px'>").append(writer).append("</span><br>\n");
 			sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");

@@ -131,7 +131,7 @@ public class WwwHankookilboCom extends News {
             sb1.append("<div style='width:548px'>\r\n");
 
             sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-            sb1.append("<h2>[" + strDate + "] " + strTitle + "</h2>\n");
+            sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");
             sb1.append("<span style='font-size:12px'>" + dateTime + "</span><br><br>\n");
             sb1.append("<span style='font-size:12px'>" + author + "</span><br><br>\n");
             sb1.append(strContent + "<br><br>\n");

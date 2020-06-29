@@ -131,7 +131,7 @@ public class WwwHuffingtonpostKr extends News {
             System.out.println("strDate:" + strDate);
 
             sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-            sb1.append("<h2>[" + strDate + "] " + strTitle + "</h2>\n");
+            sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");
             sb1.append("<span style='font-size:12px'>" + dateTime + "</span><br><br>\n");
             sb1.append("<span style='font-size:12px'>" + author + "</span><br><br>\n");
             sb1.append(main_visual_html + "\n");

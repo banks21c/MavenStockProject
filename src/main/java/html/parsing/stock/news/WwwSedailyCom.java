@@ -313,7 +313,7 @@ public class WwwSedailyCom extends javax.swing.JFrame {
 
 			sb1.append("<h3> 기사주소:[<a href='").append(url).append("' target='_sub'>").append(url)
 					.append("</a>] </h3>\n");
-			sb1.append("<h2>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
+			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append(authorAndTime).append("<br>\r\n");
 			sb1.append(strContent).append("<br>\r\n");
 			sb1.append(copyright).append("<br>\r\n");
