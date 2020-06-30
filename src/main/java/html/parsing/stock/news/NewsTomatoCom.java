@@ -226,6 +226,7 @@ public class NewsTomatoCom extends javax.swing.JFrame {
 			doc.select("#ctl00_ContentPlaceHolder1_WebNewsView_lblHTS").remove();
 			doc.select("#ctl00_ContentPlaceHolder1_WebNewsView_hyHTS").remove();
 			doc.select("#ctl00_ContentPlaceHolder1_WebNewsView_NewsReporterSns").remove();
+			doc.select("input#a").remove();
 
 			Elements title = doc.select("div.rn_stitle");
 			System.out.println("title:" + strTitle);
