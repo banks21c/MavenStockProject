@@ -31,6 +31,7 @@ import html.parsing.stock.util.FileUtil;
 
 public class NewsTomatoCom extends javax.swing.JFrame {
 
+	private static final long serialVersionUID = -1577789706191487340L;
 	private static Logger logger = LoggerFactory.getLogger(NewsTomatoCom.class);
 	final static String userHome = System.getProperty("user.home");
 
@@ -226,13 +227,6 @@ public class NewsTomatoCom extends javax.swing.JFrame {
 			doc.select("#ctl00_ContentPlaceHolder1_WebNewsView_hyHTS").remove();
 			doc.select("#ctl00_ContentPlaceHolder1_WebNewsView_NewsReporterSns").remove();
 
-			String fileName2 = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
-			System.out.println("fileName2:" + fileName2);
-			Writer bw = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
-			bw.write(doc.html());
-			bw.close();
-
 			Elements title = doc.select("div.rn_stitle");
 			System.out.println("title:" + strTitle);
 			if (title != null && title.size() > 0) {
@@ -250,8 +244,9 @@ public class NewsTomatoCom extends javax.swing.JFrame {
 			if (subTitle.size() > 0) {
 				strSubTitle = subTitle.outerHtml();
 			}
-
-			String strAuthor = doc.select(".author").html();
+			
+//			String strAuthor = doc.select(".author").html();
+			String strAuthor = doc.select(".header_wrap_b .h_top .h_left ul li.name").html();
 			if (strAuthor.equals("")) {
 				System.out.println(doc.select("#cc_textarea div"));
 				System.out.println(doc.select("#cc_textarea div").last());
@@ -317,7 +312,7 @@ public class NewsTomatoCom extends javax.swing.JFrame {
 			System.out.println("strContent:[" + strContent + "]");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
-			String copyright = doc.select(".desc").html();
+//			String copyright = doc.select(".desc").html();
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
@@ -335,7 +330,7 @@ public class NewsTomatoCom extends javax.swing.JFrame {
 			sb1.append(strSubTitle + "<br>\r\n");
 			sb1.append(strAuthor + "<br>\r\n");
 			sb1.append(strContent + "<br>\r\n");
-			sb1.append(copyright + "<br>\r\n");
+//			sb1.append(copyright + "<br>\r\n");
 
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
