@@ -120,7 +120,7 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 		PropertyConfigurator.configure(absolutePath);
 	}
 
-	StockWeeks52NewLowHighPriceTodayOneFile(String strNidAut, String strNidSes) {
+	public StockWeeks52NewLowHighPriceTodayOneFile(String strNidAut, String strNidSes) {
 		logger = LoggerFactory.getLogger(getClass());
 		this.strNidAut = strNidAut;
 		this.strNidSes = strNidSes;

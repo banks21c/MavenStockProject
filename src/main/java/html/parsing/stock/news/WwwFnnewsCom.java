@@ -88,20 +88,27 @@ public class WwwFnnewsCom extends News {
             doc.select("script").remove();
             doc.select("body").removeAttr("onload");
             doc.select("div.pop_prt_btns").remove();
+            doc.select("#add_view_06").remove();
+            doc.select(".view_evt_banner").remove();
+            doc.select(".view_evt_bannerM").remove();
+            doc.select(".banner_navch").remove();
 
             JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
             JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
             JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
             JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 
-            strTitle = doc.select(".article_head h1").text();
+            strTitle = doc.select(".inner_view_hd .tit_view").text();
             System.out.println("title2:" + strTitle);
             strTitleForFileName = strTitle;
             strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
             System.out.println("strTitleForFileName:" + strTitleForFileName);
 
             strDate = doc.select(".byline em").get(1).text();
-            strDate = strDate.replaceAll("입력 : ", "");
+            strDate = strDate.replaceAll("입력", "").trim();
+	    if(strDate.startsWith(":")){
+		    strDate = strDate.substring(1);
+	    }
             System.out.println("strDate:" + strDate);
 
             strFileNameDate = StockUtil.getDateForFileName(strDate);

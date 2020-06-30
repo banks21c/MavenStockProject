@@ -1,6 +1,9 @@
-package html.parsing.stock.focus;
+package html.parsing.stock.quartz2x.example2;
 
 import javax.swing.JOptionPane;
+
+import html.parsing.stock.focus.StockUnique_ReadTxtFile_ThreadCall;
+import html.parsing.stock.focus.StockWeeks52NewLowHighPriceTodayOneFile;
 
 /**
  * 유튜브에서 네이버로 공유할때 공유하기 화면
@@ -16,6 +19,11 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 	public StockMarketPriceRunJFrame() {
 		initComponents();
 //		execute();
+	}
+
+	public StockMarketPriceRunJFrame(String strNidAut, String strNidSes) {
+		this.strNidAut = strNidAut;
+		this.strNidSes = strNidSes;
 	}
 
 	public void execute() {
@@ -35,10 +43,11 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 	}
 
 	public void start() {
+		System.out.println("start1111111111111..........");
 		new StockUnique_ReadTxtFile_ThreadCall(strNidAut, strNidSes).start();
-		new StockWeeks52NewLowHighPriceTodayOneFile(strNidAut, strNidSes).start();
+//		new StockWeeks52NewLowHighPriceTodayOneFile(strNidAut, strNidSes).start();
 //		new StockPlusMinusDivide_ThreadCall(strNidAut,strNidSes).start();
-		new StockPlusMinusDivide100(strNidAut, strNidSes).start();
+//		new StockPlusMinusDivide100(strNidAut, strNidSes).start();
 	}
 
 	/**
@@ -230,4 +239,6 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 	private javax.swing.JTextArea nidAutTa;
 	private javax.swing.JTextArea nidSesTa;
 	// End of variables declaration//GEN-END:variables
+
+
 }

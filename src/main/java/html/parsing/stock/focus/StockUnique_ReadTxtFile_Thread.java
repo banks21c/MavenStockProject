@@ -60,9 +60,6 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 	String strDate = "";
 	String strStockCodeOrName = "롯데케미칼";
 
-	String kospiFileName = GlobalVariables.kospiFileName;
-	String kosdaqFileName = GlobalVariables.kosdaqFileName;
-
 	String strStockCode = "011170";
 	String strStockName = "롯데케미칼";
 
@@ -114,6 +111,10 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 		this.marketType = marketType;
 		this.strNidAut = strNidAut;
 		this.strNidSes = strNidSes;
+		
+		System.out.println("strNidAut:"+strNidAut);
+		System.out.println("strNidSes:"+strNidSes);
+		System.out.println("marketType:"+marketType);		
 	}
 
 	public void test() {
@@ -502,7 +503,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 		return stock;
 	}
 
-	public StringBuilder createHtmlString(List<StockVO> list, String title) {
+	public StringBuilder createHtmlString(List<StockVO> stockList, String title) {
 		StringBuilder sb1 = new StringBuilder();
 		try {
 			sb1.append("<html lang='ko'>\r\n");
@@ -528,11 +529,11 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 					"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
 			sb1.append("</tr>\r\n");
 
-			if (list.size() == 0) {
+			if (stockList.size() == 0) {
 				sb1.append("<tr><td colspan='7' style='text-align:center;'>데이터가 없습니다.</td></tr>\r\n");
 			}
 
-			for (StockVO s : list) {
+			for (StockVO s : stockList) {
 				if (s != null) {
 					sb1.append("<tr>\r\n");
 					String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
@@ -593,9 +594,10 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 			 * }
 			 */
 			// 뉴스 첨부
-			StringBuilder newsAddedStockList = StockUtil.getNews(list);
+			StringBuilder newsAddedStockList = StockUtil.getNews(stockList);
+			logger.debug("newsAddedStockList==>"+newsAddedStockList);
 			// 증권명에 증권링크 생성
-			StringBuilder stockTableAdded = StockUtil.stockLinkString(newsAddedStockList, list);
+			StringBuilder stockTableAdded = StockUtil.stockLinkString(newsAddedStockList, stockList);
 			sb1.append(stockTableAdded.toString());
 
 			sb1.append("</body>\r\n");

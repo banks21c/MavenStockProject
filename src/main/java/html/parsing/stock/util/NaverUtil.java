@@ -9,10 +9,14 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
+
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
+
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -38,28 +42,31 @@ public class NaverUtil {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		int serial = 567;
-		//String serial = "123";
+		// String serial = "123";
 		String suffix = String.format("%05s", serial);
 		System.out.println(suffix);
 	}
 
-	public static void naverBlogLinkShare(String strNidAut, String strNidSes, String strUrl, String strTitle, String categoryName, StringBuilder contentSb, JRootPane rootPane) {
+	public static void naverBlogLinkShare(String strNidAut, String strNidSes, String strUrl, String strTitle,
+			String categoryName, StringBuilder contentSb, JRootPane rootPane) {
 		if (strNidAut.equals("") || strNidSes.equals("")) {
-			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning",
+					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
 		try {
 			HttpHeaders headers = new HttpHeaders();
 
-			headers.set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+			headers.set("Accept",
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
 			headers.set("Accept-Encoding", "gzip, deflate");
 			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
 			headers.set("Cache-Control", "max-age=0");
 			headers.set("Connection", "keep-alive");
 			headers.set("Content-Length", "4148");
 //			headers.set("Content-Type", "application/x-www-form-urlencoded");
-			//headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+			// headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 //			headers.set("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE);
 //			headers.setContentType(MediaType.TEXT_PLAIN);
@@ -76,13 +83,13 @@ public class NaverUtil {
 			headers.set("Origin", "http://blog.naver.com");
 
 			String strEncodedTitle = URLEncoder.encode(strTitle, "UTF8");
-			logger.debug("strEncodedTitle==>"+strEncodedTitle);
+			logger.debug("strEncodedTitle==>" + strEncodedTitle);
 
 			headers.set("Referer", "http://blog.naver.com/LinkShare.nhn?url=" + strUrl + "&title=" + strEncodedTitle);
 
 			headers.set("Upgrade-Insecure-Requests", "1");
 			headers.set("User-Agent",
-				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
 
 //			headers.set("X-Requested-With", "XMLHttpRequest");
 			headers.forEach((key, value) -> {
@@ -101,23 +108,49 @@ public class NaverUtil {
 
 //            HttpEntity<String> entity = new HttpEntity<String>(headers);
 //			messageConverters.add(new org.springframework.http.converter.ByteArrayHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
 //			messageConverters.add(new org.springframework.http.converter.StringHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]			
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
 //			messageConverters.add(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]			
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
 //			messageConverters.add(new org.springframework.http.converter.ResourceHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]			
-			//			messageConverters.add(new org.springframework.http.converter.xml.SourceHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
+			// messageConverters.add(new
+			// org.springframework.http.converter.xml.SourceHttpMessageConverter());
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
 //			messageConverters.add(new org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not extract response: no suitable HttpMessageConverter found for response type [class java.lang.String] and content type [text/html;charset=UTF-8]
+			// org.springframework.web.client.RestClientException: Could not extract
+			// response: no suitable HttpMessageConverter found for response type [class
+			// java.lang.String] and content type [text/html;charset=UTF-8]
 //			messageConverters.add(new org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
 			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not extract response: no suitable HttpMessageConverter found for response type [class java.lang.String] and content type [text/html;charset=UTF-8]
+			// org.springframework.web.client.RestClientException: Could not extract
+			// response: no suitable HttpMessageConverter found for response type [class
+			// java.lang.String] and content type [text/html;charset=UTF-8]
 //			messageConverters.add(new org.springframework.http.converter.ResourceRegionHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
 			System.out.println("___________2____________");
 			for (HttpMessageConverter httpMessageConverter : messageConverters) {
 				System.out.println(httpMessageConverter);
@@ -133,7 +166,7 @@ public class NaverUtil {
 			}
 			System.out.println("__________3_____________");
 
-			//Form Data
+			// Form Data
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 //			map.add("domain", "www.youtube.com");
@@ -156,13 +189,32 @@ public class NaverUtil {
 			logger.debug("jsonvalue:" + jsonvalue);
 			String decodedJsonvalue = URLDecoder.decode(jsonvalue, "UTF8");
 			logger.debug("decodedJsonvalue:" + decodedJsonvalue);
+			if (!decodedJsonvalue.equals("")) {
 
-//			String encoded = URLEncoder.encode(temp, "UTF8");
-//			System.out.println("encoded:"+encoded);
-		
-temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leverage\" s_subtype=\"oglink\" jsonvalue=\"테스트(test)\"></span>";
+				JSONObject jobj = new JSONObject(decodedJsonvalue);
+				Iterator it = jobj.keys();
+				logger.debug("================");
+				while (it.hasNext()) {
+					String key = (String) it.next();
+					Object valueObj = jobj.get(key);
+					String value = "";
+					if (valueObj instanceof String) {
+						value = (String) valueObj;
+					} else if (valueObj instanceof JSONObject) {
+						value = valueObj.toString();
+					}
+
+					logger.debug(key + ":" + value);
+				}
+			}
+			logger.debug("================");
+
+			// String encoded = URLEncoder.encode(temp, "UTF8");
+			// System.out.println("encoded:"+encoded);
+
+			temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leverage\" s_subtype=\"oglink\" jsonvalue=\"테스트(test)\"></span>";
 			map.add("content", temp);
-			//공개 여부(비공개),0:비공개, 1:이웃공개, 2: 전체공개, 3:서로이웃공개
+			// 공개 여부(비공개),0:비공개, 1:이웃공개, 2: 전체공개, 3:서로이웃공개
 			map.add("postOpenType", "2");
 
 			Document linkSharePageDoc = getNaverBlogLinkSharePage(strNidAut, strNidSes);
@@ -174,14 +226,15 @@ temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leve
 					strCategoryNo = categoryListOption.attr("value");
 				}
 			}
-			logger.debug("strCategoryNo:"+strCategoryNo);
-			System.out.println("strCategoryNo:"+strCategoryNo);
+			logger.debug("strCategoryNo:" + strCategoryNo);
+			System.out.println("strCategoryNo:" + strCategoryNo);
 
-			//카테고리 번호(소개및알림),271:골드박스
+			// 카테고리 번호(소개및알림),271:골드박스
 			map.add("categoryNo", strCategoryNo);
 
-			//header에 있으면 Form Data에 없어도 된다.
-			//map.add("referrer", "https://blog.naver.com/openapi/share?url=https://www.asiae.co.kr/article/nationaldefense-diplomacy/2020062421382026021&title=%E5%8C%97,%20%EC%A0%95%EA%B2%BD%EB%91%90%20%EA%B5%AD%EB%B0%A9%EC%9E%A5%EA%B4%80%EC%97%90%20%22%EA%B2%81%20%EB%A8%B9%EC%9D%80%20%EA%B0%9C%EA%B0%80%20%EB%8D%94%20%EC%9A%94%EB%9E%80%22%20%EA%B2%BD%EA%B3%A0");
+			// header에 있으면 Form Data에 없어도 된다.
+			// map.add("referrer",
+			// "https://blog.naver.com/openapi/share?url=https://www.asiae.co.kr/article/nationaldefense-diplomacy/2020062421382026021&title=%E5%8C%97,%20%EC%A0%95%EA%B2%BD%EB%91%90%20%EA%B5%AD%EB%B0%A9%EC%9E%A5%EA%B4%80%EC%97%90%20%22%EA%B2%81%20%EB%A8%B9%EC%9D%80%20%EA%B0%9C%EA%B0%80%20%EB%8D%94%20%EC%9A%94%EB%9E%80%22%20%EA%B2%BD%EA%B3%A0");
 //			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(SERVER_URI);
 			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme("http").host("blog.naver.com");
 			builder = builder.path("/LinkSharePostWriteAsync.nhn");
@@ -191,9 +244,11 @@ temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leve
 			System.out.println("uri path:" + uri.getPath());
 
 			System.out.println("uriComponents :" + uriComponents);
-			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
+			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map,
+					headers);
 //			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.POST, entity, byte[].class);
-			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, byte[].class);
+			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity,
+					byte[].class);
 			System.out.println("response :" + response);
 
 //			RestTemplate template = new RestTemplate();
@@ -230,16 +285,17 @@ temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leve
 		try {
 			HttpHeaders headers = new HttpHeaders();
 
-			headers.set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+			headers.set("Accept",
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
 			headers.set("Accept-Encoding", "gzip, deflate");
 			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
 			headers.set("Cache-Control", "max-age=0");
 			headers.set("Connection", "keep-alive");
-			//headers.set("Content-Length", "5437");
+			// headers.set("Content-Length", "5437");
 //			headers.set("Content-Type", "application/x-www-form-urlencoded");
-			//headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+			// headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 //			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-			//text/html;charset=UTF-8
+			// text/html;charset=UTF-8
 			headers.setContentType(MediaType.TEXT_HTML);
 			List<Charset> acceptableCharsets = new ArrayList<>();
 			acceptableCharsets.add(Charset.forName("UTF-8"));
@@ -260,7 +316,7 @@ temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leve
 //			headers.set("Referer", "http://blog.naver.com/LinkShare.nhn?url=https%3A//www.youtube.com/watch%3Fv%3DaL55d6sDiGE%26feature%3Dshare");
 			headers.set("Upgrade-Insecure-Requests", "1");
 			headers.set("User-Agent",
-				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
 
 //			headers.set("X-Requested-With", "XMLHttpRequest");
 			headers.forEach((key, value) -> {
@@ -279,23 +335,49 @@ temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leve
 
 //            HttpEntity<String> entity = new HttpEntity<String>(headers);
 //			messageConverters.add(new org.springframework.http.converter.ByteArrayHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
 //			messageConverters.add(new org.springframework.http.converter.StringHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]			
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
 //			messageConverters.add(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]			
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
 //			messageConverters.add(new org.springframework.http.converter.ResourceHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]			
-			//			messageConverters.add(new org.springframework.http.converter.xml.SourceHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
+			// messageConverters.add(new
+			// org.springframework.http.converter.xml.SourceHttpMessageConverter());
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
 //			messageConverters.add(new org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not extract response: no suitable HttpMessageConverter found for response type [class java.lang.String] and content type [text/html;charset=UTF-8]
+			// org.springframework.web.client.RestClientException: Could not extract
+			// response: no suitable HttpMessageConverter found for response type [class
+			// java.lang.String] and content type [text/html;charset=UTF-8]
 //			messageConverters.add(new org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
 			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not extract response: no suitable HttpMessageConverter found for response type [class java.lang.String] and content type [text/html;charset=UTF-8]
+			// org.springframework.web.client.RestClientException: Could not extract
+			// response: no suitable HttpMessageConverter found for response type [class
+			// java.lang.String] and content type [text/html;charset=UTF-8]
 //			messageConverters.add(new org.springframework.http.converter.ResourceRegionHttpMessageConverter());
-			//org.springframework.web.client.RestClientException: Could not write request: no suitable HttpMessageConverter found for request type [org.springframework.util.LinkedMultiValueMap] and content type [application/x-www-form-urlencoded]
+			// org.springframework.web.client.RestClientException: Could not write request:
+			// no suitable HttpMessageConverter found for request type
+			// [org.springframework.util.LinkedMultiValueMap] and content type
+			// [application/x-www-form-urlencoded]
 			System.out.println("___________2____________");
 			for (HttpMessageConverter httpMessageConverter : messageConverters) {
 				System.out.println(httpMessageConverter);
@@ -311,7 +393,7 @@ temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leve
 			}
 			System.out.println("__________3_____________");
 
-			//Form Data
+			// Form Data
 //			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 //			map.add("url", "https://www.youtube.com/watch?v=J6zD3h_I3Lc&feature=share");
 //			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(SERVER_URI);
@@ -329,7 +411,8 @@ temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leve
 //			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 			HttpEntity<?> entity = new HttpEntity<>(headers);
 //			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, byte[].class);
-			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, byte[].class);
+			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
+					byte[].class);
 			System.out.println("response :" + response);
 
 //			RestTemplate template = new RestTemplate();
@@ -369,7 +452,7 @@ temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leve
 	public static String guessEncoding(byte[] bytes) {
 		String DEFAULT_ENCODING = "UTF-8";
 		org.mozilla.universalchardet.UniversalDetector detector = new org.mozilla.universalchardet.UniversalDetector(
-			null);
+				null);
 		detector.handleData(bytes, 0, bytes.length);
 		detector.dataEnd();
 		String encoding = detector.getDetectedCharset();
@@ -381,7 +464,7 @@ temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leve
 		return encoding;
 	}
 
-	//GZIPInputStream을 이용하여 byte배열 압축해제하기
+	// GZIPInputStream을 이용하여 byte배열 압축해제하기
 	public static String unzipStringFromBytes(byte[] bytes, String charset) throws IOException {
 
 		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
