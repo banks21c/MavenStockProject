@@ -40,7 +40,7 @@ import html.parsing.stock.util.StockUtil;
 public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 
 	final static String USER_HOME = System.getProperty("user.home");
-	private static Logger logger = null;
+	private Logger logger = LoggerFactory.getLogger(StockWeeks52NewLowHighPriceTodayOneFile.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -78,6 +78,9 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 	List<StockVO> kosdaqNewHighPriceList = new ArrayList<StockVO>();
 	String strFileName;
 
+	String strNidAut = "";
+	String strNidSes = "";
+
 	/**
 	 * @param args
 	 */
@@ -85,9 +88,6 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 		new StockWeeks52NewLowHighPriceTodayOneFile().start();
 //		new Weeks52NewLowHighPriceTodayOneFile(1);
 	}
-
-	private String strNidAut;
-	private String strNidSes;
 
 	StockWeeks52NewLowHighPriceTodayOneFile() {
 		logger = LoggerFactory.getLogger(this.getClass());

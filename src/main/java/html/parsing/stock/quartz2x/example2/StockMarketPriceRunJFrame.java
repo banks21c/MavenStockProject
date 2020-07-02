@@ -1,9 +1,7 @@
 package html.parsing.stock.quartz2x.example2;
 
+import html.parsing.stock.focus.*;
 import javax.swing.JOptionPane;
-
-import html.parsing.stock.focus.StockUnique_ReadTxtFile_ThreadCall;
-import html.parsing.stock.focus.StockWeeks52NewLowHighPriceTodayOneFile;
 
 /**
  * 유튜브에서 네이버로 공유할때 공유하기 화면
@@ -43,11 +41,10 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 	}
 
 	public void start() {
-		System.out.println("start1111111111111..........");
 		new StockUnique_ReadTxtFile_ThreadCall(strNidAut, strNidSes).start();
-//		new StockWeeks52NewLowHighPriceTodayOneFile(strNidAut, strNidSes).start();
+		new StockWeeks52NewLowHighPriceTodayOneFile(strNidAut, strNidSes).start();
 //		new StockPlusMinusDivide_ThreadCall(strNidAut,strNidSes).start();
-//		new StockPlusMinusDivide100(strNidAut, strNidSes).start();
+		new StockPlusMinusDivide100(strNidAut, strNidSes).start();
 	}
 
 	/**
@@ -57,112 +54,127 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 	 */
 	@SuppressWarnings("unchecked")
 	// <editor-fold defaultstate="collapsed" desc="Generated
-	// Code">//GEN-BEGIN:initComponents
-	private void initComponents() {
+        // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+        private void initComponents() {
 
-		jPanel1 = new javax.swing.JPanel();
-		jLabel3 = new javax.swing.JLabel();
-		jPanel6 = new javax.swing.JPanel();
-		jPanel2 = new javax.swing.JPanel();
-		jLabel1 = new javax.swing.JLabel();
-		jScrollPane1 = new javax.swing.JScrollPane();
-		nidAutTa = new javax.swing.JTextArea();
-		jPanel7 = new javax.swing.JPanel();
-		jButton4 = new javax.swing.JButton();
-		jPanel5 = new javax.swing.JPanel();
-		jLabel2 = new javax.swing.JLabel();
-		jScrollPane2 = new javax.swing.JScrollPane();
-		nidSesTa = new javax.swing.JTextArea();
-		jPanel4 = new javax.swing.JPanel();
-		jButton3 = new javax.swing.JButton();
-		jPanel3 = new javax.swing.JPanel();
-		jButton1 = new javax.swing.JButton();
+                jPanel1 = new javax.swing.JPanel();
+                jLabel3 = new javax.swing.JLabel();
+                jPanel6 = new javax.swing.JPanel();
+                jPanel2 = new javax.swing.JPanel();
+                jLabel1 = new javax.swing.JLabel();
+                jScrollPane1 = new javax.swing.JScrollPane();
+                nidAutTa = new javax.swing.JTextArea();
+                jPanel7 = new javax.swing.JPanel();
+                jButton6 = new javax.swing.JButton();
+                jPanel5 = new javax.swing.JPanel();
+                jLabel2 = new javax.swing.JLabel();
+                jScrollPane2 = new javax.swing.JScrollPane();
+                nidSesTa = new javax.swing.JTextArea();
+                jPanel4 = new javax.swing.JPanel();
+                jButton7 = new javax.swing.JButton();
+                jPanel3 = new javax.swing.JPanel();
+                jButton5 = new javax.swing.JButton();
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		setTitle("네이버 블로그 공유");
-		setPreferredSize(new java.awt.Dimension(800, 400));
+                setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                setTitle("네이버 블로그 공유");
+                setPreferredSize(new java.awt.Dimension(800, 400));
 
-		jPanel1.setLayout(new java.awt.GridLayout(2, 0));
+                jPanel1.setLayout(new java.awt.GridLayout(2, 0));
 
-		jLabel3.setText("주식 시세 조회,저장, 블로그에 글쓰기");
-		jPanel1.add(jLabel3);
+                jLabel3.setText("주식 시세 조회,저장, 블로그에 글쓰기");
+                jPanel1.add(jLabel3);
 
-		getContentPane().add(jPanel1, java.awt.BorderLayout.NORTH);
+                getContentPane().add(jPanel1, java.awt.BorderLayout.NORTH);
 
-		jPanel6.setPreferredSize(new java.awt.Dimension(1215, 160));
+                jPanel6.setPreferredSize(new java.awt.Dimension(1215, 160));
 
-		jPanel2.setPreferredSize(new java.awt.Dimension(600, 33));
-		jPanel2.setLayout(new java.awt.BorderLayout());
+                jPanel2.setPreferredSize(new java.awt.Dimension(600, 33));
+                jPanel2.setLayout(new java.awt.BorderLayout());
 
-		jLabel1.setText("NID_AUT");
-		jLabel1.setPreferredSize(new java.awt.Dimension(70, 15));
-		jPanel2.add(jLabel1, java.awt.BorderLayout.WEST);
+                jLabel1.setText("NID_AUT");
+                jLabel1.setPreferredSize(new java.awt.Dimension(70, 15));
+                jPanel2.add(jLabel1, java.awt.BorderLayout.WEST);
 
-		jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 106));
+                jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 106));
 
-		nidAutTa.setColumns(25);
-		nidAutTa.setLineWrap(true);
-		nidAutTa.setRows(1);
-		jScrollPane1.setViewportView(nidAutTa);
+                nidAutTa.setColumns(25);
+                nidAutTa.setLineWrap(true);
+                nidAutTa.setRows(1);
+                jScrollPane1.setViewportView(nidAutTa);
 
-		jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+                jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-		jButton4.setText("삭제");
-		jButton4.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton4ActionPerformed(evt);
-			}
-		});
-		jPanel7.add(jButton4);
+                jButton6.setText("삭제");
+                jButton6.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jButton6ActionPerformed(evt);
+                        }
+                });
+                jPanel7.add(jButton6);
 
-		jPanel2.add(jPanel7, java.awt.BorderLayout.EAST);
+                jPanel2.add(jPanel7, java.awt.BorderLayout.EAST);
 
-		jPanel6.add(jPanel2);
+                jPanel6.add(jPanel2);
 
-		jPanel5.setPreferredSize(new java.awt.Dimension(600, 200));
-		jPanel5.setLayout(new java.awt.BorderLayout());
+                jPanel5.setPreferredSize(new java.awt.Dimension(600, 200));
+                jPanel5.setLayout(new java.awt.BorderLayout());
 
-		jLabel2.setText("NID_SES");
-		jLabel2.setPreferredSize(new java.awt.Dimension(70, 15));
-		jPanel5.add(jLabel2, java.awt.BorderLayout.WEST);
+                jLabel2.setText("NID_SES");
+                jLabel2.setPreferredSize(new java.awt.Dimension(70, 15));
+                jPanel5.add(jLabel2, java.awt.BorderLayout.WEST);
 
-		jScrollPane2.setPreferredSize(new java.awt.Dimension(500, 250));
+                jScrollPane2.setPreferredSize(new java.awt.Dimension(500, 250));
 
-		nidSesTa.setColumns(25);
-		nidSesTa.setLineWrap(true);
-		nidSesTa.setRows(10);
-		jScrollPane2.setViewportView(nidSesTa);
+                nidSesTa.setColumns(25);
+                nidSesTa.setLineWrap(true);
+                nidSesTa.setRows(10);
+                jScrollPane2.setViewportView(nidSesTa);
 
-		jPanel5.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+                jPanel5.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-		jButton3.setText("삭제");
-		jButton3.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton3ActionPerformed(evt);
-			}
-		});
-		jPanel4.add(jButton3);
+                jButton7.setText("삭제");
+                jButton7.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jButton7ActionPerformed(evt);
+                        }
+                });
+                jPanel4.add(jButton7);
 
-		jPanel5.add(jPanel4, java.awt.BorderLayout.EAST);
+                jPanel5.add(jPanel4, java.awt.BorderLayout.EAST);
 
-		jPanel6.add(jPanel5);
+                jPanel6.add(jPanel5);
 
-		getContentPane().add(jPanel6, java.awt.BorderLayout.CENTER);
+                getContentPane().add(jPanel6, java.awt.BorderLayout.CENTER);
 
-		jButton1.setText("네이버 블로그에 업로드");
-		jButton1.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton1ActionPerformed(evt);
-			}
-		});
-		jPanel3.add(jButton1);
+                jButton5.setText("네이버 블로그에 업로드");
+                jButton5.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jButton5ActionPerformed(evt);
+                        }
+                });
+                jPanel3.add(jButton5);
 
-		getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
+                getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
 
-		getAccessibleContext().setAccessibleName("주식 시세 조회");
+                getAccessibleContext().setAccessibleName("주식 시세 조회");
 
-		pack();
-	}// </editor-fold>//GEN-END:initComponents
+                pack();
+        }// </editor-fold>//GEN-END:initComponents
+
+        private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+                // TODO add your handling code here:
+		execute();
+        }//GEN-LAST:event_jButton5ActionPerformed
+
+        private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+                // TODO add your handling code here:
+		nidAutTa.setText("");
+        }//GEN-LAST:event_jButton6ActionPerformed
+
+        private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+                // TODO add your handling code here:
+		nidSesTa.setText("");
+        }//GEN-LAST:event_jButton7ActionPerformed
 
 	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
 		// TODO add your handling code here:
@@ -220,25 +232,23 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 		});
 	}
 
-	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JButton jButton1;
-	private javax.swing.JButton jButton3;
-	private javax.swing.JButton jButton4;
-	private javax.swing.JLabel jLabel1;
-	private javax.swing.JLabel jLabel2;
-	private javax.swing.JLabel jLabel3;
-	private javax.swing.JPanel jPanel1;
-	private javax.swing.JPanel jPanel2;
-	private javax.swing.JPanel jPanel3;
-	private javax.swing.JPanel jPanel4;
-	private javax.swing.JPanel jPanel5;
-	private javax.swing.JPanel jPanel6;
-	private javax.swing.JPanel jPanel7;
-	private javax.swing.JScrollPane jScrollPane1;
-	private javax.swing.JScrollPane jScrollPane2;
-	private javax.swing.JTextArea nidAutTa;
-	private javax.swing.JTextArea nidSesTa;
-	// End of variables declaration//GEN-END:variables
-
-
+        // Variables declaration - do not modify//GEN-BEGIN:variables
+        private javax.swing.JButton jButton5;
+        private javax.swing.JButton jButton6;
+        private javax.swing.JButton jButton7;
+        private javax.swing.JLabel jLabel1;
+        private javax.swing.JLabel jLabel2;
+        private javax.swing.JLabel jLabel3;
+        private javax.swing.JPanel jPanel1;
+        private javax.swing.JPanel jPanel2;
+        private javax.swing.JPanel jPanel3;
+        private javax.swing.JPanel jPanel4;
+        private javax.swing.JPanel jPanel5;
+        private javax.swing.JPanel jPanel6;
+        private javax.swing.JPanel jPanel7;
+        private javax.swing.JScrollPane jScrollPane1;
+        private javax.swing.JScrollPane jScrollPane2;
+        private javax.swing.JTextArea nidAutTa;
+        private javax.swing.JTextArea nidSesTa;
+        // End of variables declaration//GEN-END:variables
 }

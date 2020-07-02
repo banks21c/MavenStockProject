@@ -13,7 +13,7 @@ public class StockPlusMinusDivide_ThreadCall extends Thread {
 		thread2.start();
 	}
 
-	StockPlusMinusDivide_ThreadCall(String strNidAut, String strNidSes) {
+	public StockPlusMinusDivide_ThreadCall(String strNidAut, String strNidSes) {
 		StockPlusMinusDivide_Thread thread1 = new StockPlusMinusDivide_Thread("kospi",strNidAut,strNidSes);
 		thread1.start();
 

@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 /**
  * 유튜브에서 네이버로 공유할때 공유하기 화면
  */
-public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
+public class StockWeeks52NewLowHighPriceTodayOneFileJFrame extends javax.swing.JFrame {
 
 	String strNidAut = "";
 	String strNidSes = "";
@@ -13,7 +13,7 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 	/**
 	 * Creates new form StockMarketPriceRunJFrame
 	 */
-	public StockMarketPriceRunJFrame() {
+	public StockWeeks52NewLowHighPriceTodayOneFileJFrame() {
 		initComponents();
 //		execute();
 	}
@@ -35,10 +35,7 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 	}
 
 	public void start() {
-		new StockUnique_ReadTxtFile_ThreadCall(strNidAut, strNidSes).start();
 		new StockWeeks52NewLowHighPriceTodayOneFile(strNidAut, strNidSes).start();
-//		new StockPlusMinusDivide_ThreadCall(strNidAut,strNidSes).start();
-		new StockPlusMinusDivide100(strNidAut, strNidSes).start();
 	}
 
 	/**
@@ -59,15 +56,15 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
                 jScrollPane1 = new javax.swing.JScrollPane();
                 nidAutTa = new javax.swing.JTextArea();
                 jPanel7 = new javax.swing.JPanel();
-                jButton6 = new javax.swing.JButton();
+                jButton4 = new javax.swing.JButton();
                 jPanel5 = new javax.swing.JPanel();
                 jLabel2 = new javax.swing.JLabel();
                 jScrollPane2 = new javax.swing.JScrollPane();
                 nidSesTa = new javax.swing.JTextArea();
                 jPanel4 = new javax.swing.JPanel();
-                jButton7 = new javax.swing.JButton();
+                jButton3 = new javax.swing.JButton();
                 jPanel3 = new javax.swing.JPanel();
-                jButton5 = new javax.swing.JButton();
+                jButton1 = new javax.swing.JButton();
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
                 setTitle("네이버 블로그 공유");
@@ -98,13 +95,13 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 
                 jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-                jButton6.setText("삭제");
-                jButton6.addActionListener(new java.awt.event.ActionListener() {
+                jButton4.setText("삭제");
+                jButton4.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton6ActionPerformed(evt);
+                                jButton4ActionPerformed(evt);
                         }
                 });
-                jPanel7.add(jButton6);
+                jPanel7.add(jButton4);
 
                 jPanel2.add(jPanel7, java.awt.BorderLayout.EAST);
 
@@ -126,13 +123,13 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 
                 jPanel5.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-                jButton7.setText("삭제");
-                jButton7.addActionListener(new java.awt.event.ActionListener() {
+                jButton3.setText("삭제");
+                jButton3.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton7ActionPerformed(evt);
+                                jButton3ActionPerformed(evt);
                         }
                 });
-                jPanel4.add(jButton7);
+                jPanel4.add(jButton3);
 
                 jPanel5.add(jPanel4, java.awt.BorderLayout.EAST);
 
@@ -140,13 +137,13 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 
                 getContentPane().add(jPanel6, java.awt.BorderLayout.CENTER);
 
-                jButton5.setText("네이버 블로그에 업로드");
-                jButton5.addActionListener(new java.awt.event.ActionListener() {
+                jButton1.setText("네이버 블로그에 업로드");
+                jButton1.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton5ActionPerformed(evt);
+                                jButton1ActionPerformed(evt);
                         }
                 });
-                jPanel3.add(jButton5);
+                jPanel3.add(jButton1);
 
                 getContentPane().add(jPanel3, java.awt.BorderLayout.SOUTH);
 
@@ -154,21 +151,6 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 
                 pack();
         }// </editor-fold>//GEN-END:initComponents
-
-        private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-                // TODO add your handling code here:
-		execute();
-        }//GEN-LAST:event_jButton5ActionPerformed
-
-        private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-                // TODO add your handling code here:
-		nidAutTa.setText("");
-        }//GEN-LAST:event_jButton6ActionPerformed
-
-        private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-                // TODO add your handling code here:
-		nidSesTa.setText("");
-        }//GEN-LAST:event_jButton7ActionPerformed
 
 	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
 		// TODO add your handling code here:
@@ -205,31 +187,31 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 				}
 			}
 		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(StockMarketPriceRunJFrame.class.getName())
+			java.util.logging.Logger.getLogger(StockWeeks52NewLowHighPriceTodayOneFileJFrame.class.getName())
 					.log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(StockMarketPriceRunJFrame.class.getName())
+			java.util.logging.Logger.getLogger(StockWeeks52NewLowHighPriceTodayOneFileJFrame.class.getName())
 					.log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(StockMarketPriceRunJFrame.class.getName())
+			java.util.logging.Logger.getLogger(StockWeeks52NewLowHighPriceTodayOneFileJFrame.class.getName())
 					.log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(StockMarketPriceRunJFrame.class.getName())
+			java.util.logging.Logger.getLogger(StockWeeks52NewLowHighPriceTodayOneFileJFrame.class.getName())
 					.log(java.util.logging.Level.SEVERE, null, ex);
 		}
 
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new StockMarketPriceRunJFrame().setVisible(true);
+				new StockWeeks52NewLowHighPriceTodayOneFileJFrame().setVisible(true);
 			}
 		});
 	}
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
-        private javax.swing.JButton jButton5;
-        private javax.swing.JButton jButton6;
-        private javax.swing.JButton jButton7;
+        private javax.swing.JButton jButton1;
+        private javax.swing.JButton jButton3;
+        private javax.swing.JButton jButton4;
         private javax.swing.JLabel jLabel1;
         private javax.swing.JLabel jLabel2;
         private javax.swing.JLabel jLabel3;
