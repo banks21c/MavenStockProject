@@ -23,8 +23,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.ClassForNameExample;
-import html.parsing.stock.util.DataSort.CompanyNameAscCompare;
 import html.parsing.stock.util.DataSort.StockNameAscCompare2;
 import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.StockUtil;
@@ -496,9 +494,9 @@ public class NewsReadAndMakeLinkFortune500ComV2 extends javax.swing.JFrame {
             //c.getDeclaredMethods()[0].invoke(object, Object... MethodArgs  );
             Method method = c.getDeclaredMethod("createHTMLFile", String.class);
             sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
-            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.INFO, sb.toString());
+            java.util.logging.Logger.getLogger(NewsReadAndMakeLinkFortune500ComV2.class.getName()).log(Level.INFO, sb.toString());
         } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
-            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewsReadAndMakeLinkFortune500ComV2.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         Document htmlDoc = Jsoup.parse(sb.toString());

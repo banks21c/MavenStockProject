@@ -28,7 +28,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.ClassForNameExample;
 import html.parsing.stock.util.DataSort.StockNameAscCompare2;
 import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
@@ -197,6 +196,13 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
                 nidSesTa = new javax.swing.JTextArea();
                 jPanel40 = new javax.swing.JPanel();
                 jButton5 = new javax.swing.JButton();
+                jPanel11 = new javax.swing.JPanel();
+                jPanel13 = new javax.swing.JPanel();
+                jLabel20 = new javax.swing.JLabel();
+                jPanel12 = new javax.swing.JPanel();
+                jComboBox1 = new javax.swing.JComboBox<>();
+                jPanel14 = new javax.swing.JPanel();
+                jButton2 = new javax.swing.JButton();
                 jPanel3 = new javax.swing.JPanel();
                 jScrollPane5 = new javax.swing.JScrollPane();
                 jList1 = new javax.swing.JList<>();
@@ -504,7 +510,7 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 
                 jPanel37.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
                 jPanel37.setMinimumSize(new java.awt.Dimension(1000, 300));
-                jPanel37.setPreferredSize(new java.awt.Dimension(1000, 230));
+                jPanel37.setPreferredSize(new java.awt.Dimension(1000, 250));
                 jPanel37.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
                 jPanel10.setPreferredSize(new java.awt.Dimension(990, 24));
@@ -536,7 +542,7 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 
                 jPanel37.add(jPanel10);
 
-                jPanel39.setPreferredSize(new java.awt.Dimension(990, 150));
+                jPanel39.setPreferredSize(new java.awt.Dimension(990, 130));
                 jPanel39.setLayout(new java.awt.BorderLayout());
 
                 jLabel21.setText("NID_SES");
@@ -563,6 +569,28 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
                 jPanel39.add(jPanel40, java.awt.BorderLayout.EAST);
 
                 jPanel37.add(jPanel39);
+
+                jPanel11.setPreferredSize(new java.awt.Dimension(990, 100));
+                jPanel11.setLayout(new java.awt.BorderLayout());
+
+                jLabel20.setText("Naver Category");
+                jPanel13.add(jLabel20);
+
+                jPanel11.add(jPanel13, java.awt.BorderLayout.WEST);
+
+                jPanel12.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+                jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                jPanel12.add(jComboBox1);
+
+                jPanel11.add(jPanel12, java.awt.BorderLayout.CENTER);
+
+                jButton2.setText("카테고리추출");
+                jPanel14.add(jButton2);
+
+                jPanel11.add(jPanel14, java.awt.BorderLayout.EAST);
+
+                jPanel37.add(jPanel11);
 
                 jPanel8.add(jPanel37);
 
@@ -1015,9 +1043,11 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
         private javax.swing.JTextPane extractedUrlTextPane;
         private javax.swing.Box.Filler filler1;
         private javax.swing.JButton jButton1;
+        private javax.swing.JButton jButton2;
         private javax.swing.JButton jButton3;
         private javax.swing.JButton jButton4;
         private javax.swing.JButton jButton5;
+        private javax.swing.JComboBox<String> jComboBox1;
         private javax.swing.JEditorPane jEditorPane1;
         private javax.swing.JEditorPane jEditorPane2;
         private javax.swing.JLabel jLabel1;
@@ -1032,6 +1062,7 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
         private javax.swing.JLabel jLabel18;
         private javax.swing.JLabel jLabel19;
         private javax.swing.JLabel jLabel2;
+        private javax.swing.JLabel jLabel20;
         private javax.swing.JLabel jLabel21;
         private javax.swing.JLabel jLabel3;
         private javax.swing.JLabel jLabel4;
@@ -1044,6 +1075,10 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
         private javax.swing.JList<String> jList2;
         private javax.swing.JPanel jPanel1;
         private javax.swing.JPanel jPanel10;
+        private javax.swing.JPanel jPanel11;
+        private javax.swing.JPanel jPanel12;
+        private javax.swing.JPanel jPanel13;
+        private javax.swing.JPanel jPanel14;
         private javax.swing.JPanel jPanel2;
         private javax.swing.JPanel jPanel3;
         private javax.swing.JPanel jPanel37;

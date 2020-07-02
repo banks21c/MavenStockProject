@@ -5,7 +5,6 @@
  */
 package html.parsing.stock.news;
 
-import html.parsing.stock.ClassForNameExample;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -729,9 +728,9 @@ public class NewsReader extends javax.swing.JFrame {
             //c.getDeclaredMethods()[0].invoke(object, Object... MethodArgs  );
             Method method = c.getDeclaredMethod("createHTMLFile", String.class);
             sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
-            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.INFO, sb.toString());
+            java.util.logging.Logger.getLogger(NewsReader.class.getName()).log(Level.INFO, sb.toString());
         } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
-            java.util.logging.Logger.getLogger(ClassForNameExample.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(NewsReader.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         Document htmlDoc = Jsoup.parse(sb.toString());
