@@ -26,8 +26,13 @@ import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.FileUtil;
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -55,6 +60,22 @@ public class AllStockDisplayBoardSaveStockListApp extends Application {
 
 		webengine.load("https://finance.daum.net/domestic/all_quotes");
 
+		TextField urlTf = new TextField();
+		urlTf.addEventHandler(javafx.scene.input.KeyEvent.KEY_PRESSED,
+			new EventHandler<javafx.scene.input.KeyEvent>() { // Was missing the <MouseEvent>
+			@Override
+			public void handle(javafx.scene.input.KeyEvent event) {
+				System.out.println("code:" + event.getCode());
+				System.out.println("code:" + event.getText());
+				System.out.println("code:" + event.getCharacter());
+				System.out.println("KeyCode.ENTER:" + KeyCode.ENTER);
+				System.out.println("event.getCode().equals(KeyCode.ENTER):" + event.getCode().equals(KeyCode.ENTER));
+				if (event.getCode().equals(KeyCode.ENTER)) {
+					webengine.load(urlTf.getText());
+				}
+			}
+		;
+		});
 		Button button1 = new Button("Save");
 		button1.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
 			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
@@ -66,11 +87,15 @@ public class AllStockDisplayBoardSaveStockListApp extends Application {
 				saveHtml(html, "전광판");
 			}
 		;
-
 		});
+		
+		Separator separator = new Separator();
+		separator.setOrientation(Orientation.VERTICAL);
 
-		VBox vBox = new VBox(webView, button1);
-		Scene scene = new Scene(vBox, 1600, 900);
+		VBox vBox = new VBox(urlTf, webView, separator, button1);
+		vBox.autosize();
+		vBox.setAlignment(Pos.TOP_CENTER);
+		Scene scene = new Scene(vBox, 1300, 800);
 		primaryStage.setScene(scene);
 
 		primaryStage.show();
