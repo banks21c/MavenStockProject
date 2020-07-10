@@ -15,14 +15,23 @@ public class StockMarketPriceRunJob extends Thread implements Job {
 	String strNidSes;
 	private static Logger logger = LoggerFactory.getLogger(StockMarketPriceRunJob.class);
 
+	public StockMarketPriceRunJob() {
+	}
+	
+	public StockMarketPriceRunJob(String strNidAut, String strNidSes) {
+		this.strNidAut = strNidAut;
+		this.strNidSes = strNidSes;
+	}
+
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		JobKey jobKey = context.getJobDetail().getKey();
 		logger.info("SimpleJob says: " + jobKey + " executing at " + new Date());
 
-		this.strNidAut = "J7aNAb3e4xK+3zRKEmqCrhV62qqew8NH1IOQe1KC1veyB6zspAdqcdyNYYmTJQCQ";
-		this.strNidSes = "AAABhj6FHNpQWb6I8nfio1e3o8LgjXWTGqAdQDw8VQ4WVcY8hRdJDmGE8yzFpnHYYAsDhOW3whQB5GQxXQQfzOkTh6fZuN3hA0jsnEQ8e3SbUZa0qyzB7Z9j2KwZG8ZYKGz72RKug5mD+ydwEFAlbDkY/qXeUxTEbcnC8bs/n4BC/4D8nEgTpy0OowAnhwkiJ+U25pf4U4mCRfH4giwoSn+aXK+dpYUkOTy74GJMxa5dEYZR63XsJcaYSDaHAFz7P979J+IF/KLm+taGiScKpHSLdHHLTKdMPakC9Uj8TdrvFEEIVOxD8Gpenb4IINklkUm7G3BEcWlPyze5NKf2O4SYZH8jKd9/VT+tH3p/7io1AHOhy+8YBxK9PjNqz2LTHOSKHHT7o8rzT4Dt4k67eJ5iB1GDpYvB/9Mrs03WPVvoouVQY9eNDoht2e7EsKGQCcGTeyXrAuy3X3kYa/TIBQwRKyzAAhURBUzq+UCd+jfHWjsE+X05aobR7QcTcCkyK8ne56gbVjYrIlhPQnFPpZc2vpA=";
-
+//		this.strNidAut = "/wvuIiNIdjodSe0A7Zdn6czwTTQyVa9rdzGre9mdEwDqND11/4JHayG3b+3qotvN";
+//		this.strNidSes = "AAABjalpBOZTh89KH4uMNvAD+2YrGdj8ZUVycycAj32FIAzXmIV1aqiljLGi9ifYgdY3nYYJxG/F7XDlKvAPQ69fiwgGvHOt22Q24KT2BIAzUQ8iZeaIHk09JUJDxOtcjGAEJXmEYFIJCdKze++QT68KnrTHMD+T7y43LFhYi/8/IfjstJ1mfGmD3K0rbwOMLhyCjc9jZiejpwdex/0M6MhN4uxK7qYcwMpS4ZQLBqZjOu78bdQV/rhYYAGwOfwVJ2U9hMQmoHnFpXk2Z3Ft8eEJt6BIQxEg+a4m2YBIQmWzS0RTTFJ6wBDZrKK1e7s83ex8eG2hLqHRXZDIpl6xnlVobcJNROzL5va6F8VHyNDJdQh46G1e/fsuHxYjzeKfTpAMaYr/gStiTG/+t9Jcy5/is04bFNJjSp5ZVUbV3CC5N6JK74aWRGc9VHTMM174+hgv3KDYJ9mbgdfvYkxb9KhDPrPdxpzZTE709DNYpQxDY8YxvlxldZeMIRBxDdsTIw2WuFlpcU+QlPzWGwQVoyoKl1s=";
+System.out.println("strNidAut:"+strNidAut);
+System.out.println("strNidSes:"+strNidSes);
 		StockMarketPriceRunJFrame jobThread = new StockMarketPriceRunJFrame(strNidAut, strNidSes);
 		jobThread.start();
 	}
