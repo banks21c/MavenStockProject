@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -20,8 +19,6 @@ import java.util.logging.Level;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.text.html.StyleSheet;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -34,24 +31,30 @@ import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.util.StockUtil;
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.NaverUtil;
+import static html.parsing.stock.util.NaverUtil.getNaverBlogLinkSharePage;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
  * @author banks
  */
-public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
+public class NewsReaderNaverLinkShareSimple extends javax.swing.JFrame {
+
+	String strNidAut = "";
+	String strNidSes = "";
 
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 5002886789046787575L;
-	private static org.slf4j.Logger logger = LoggerFactory.getLogger(NewsReaderNaverLinkShare.class);
+	private static org.slf4j.Logger logger = LoggerFactory.getLogger(NewsReaderNaverLinkShareSimple.class);
 	URI uri = null;
 
 	/**
 	 * Creates new form NewJFrame1
 	 */
-	public NewsReaderNaverLinkShare() {
+	public NewsReaderNaverLinkShareSimple() {
 		initComponents();
 		initList();
 	}
@@ -93,29 +96,7 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 			// vo.getStockName());
 			kosdaqs[i] = vo.getStockCode() + ", " + vo.getStockName();
 		}
-
-		jList1.setModel(new javax.swing.AbstractListModel<String>() {
-			@Override
-			public int getSize() {
-				return kospis.length;
-			}
-
-			@Override
-			public String getElementAt(int i) {
-				return kospis[i];
-			}
-		});
-		jList2.setModel(new javax.swing.AbstractListModel<String>() {
-			@Override
-			public int getSize() {
-				return kosdaqs.length;
-			}
-
-			@Override
-			public String getElementAt(int i) {
-				return kosdaqs[i];
-			}
-		});
+		
 	}
 
 	private static void open(URI uri) {
@@ -147,72 +128,37 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
                 jPanel9 = new javax.swing.JPanel();
                 executeBtn = new javax.swing.JButton();
                 extractImgBtn = new javax.swing.JButton();
-                jButton3 = new javax.swing.JButton();
+                initContainers = new javax.swing.JButton();
                 jPanel5 = new javax.swing.JPanel();
                 jPanel6 = new javax.swing.JPanel();
                 filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(25, 0), new java.awt.Dimension(25, 0), new java.awt.Dimension(25, 32767));
                 jScrollPane4 = new javax.swing.JScrollPane();
                 extractedUrlTextPane = new javax.swing.JTextPane();
-                jPanel2 = new javax.swing.JPanel();
-                jLabel1 = new javax.swing.JLabel();
-                jLabel2 = new javax.swing.JLabel();
-                jLabel14 = new javax.swing.JLabel();
-                jLabel3 = new javax.swing.JLabel();
-                jLabel4 = new javax.swing.JLabel();
-                jLabel5 = new javax.swing.JLabel();
-                jLabel11 = new javax.swing.JLabel();
-                jLabel12 = new javax.swing.JLabel();
-                jLabel13 = new javax.swing.JLabel();
-                jLabel8 = new javax.swing.JLabel();
-                jLabel9 = new javax.swing.JLabel();
-                jLabel10 = new javax.swing.JLabel();
-                jLabel6 = new javax.swing.JLabel();
-                jLabel7 = new javax.swing.JLabel();
-                jLabel15 = new javax.swing.JLabel();
-                jLabel16 = new javax.swing.JLabel();
-                jLabel17 = new javax.swing.JLabel();
-                jLabel18 = new javax.swing.JLabel();
-                jPanel1 = new javax.swing.JPanel();
-                jTabbedPane1 = new javax.swing.JTabbedPane();
-                jSplitPane1 = new javax.swing.JSplitPane();
-                jScrollPane1 = new javax.swing.JScrollPane();
-                newsTextArea = new javax.swing.JTextArea();
-                jScrollPane3 = new javax.swing.JScrollPane();
-                jEditorPane1 = new javax.swing.JEditorPane();
-                jScrollPane2 = new javax.swing.JScrollPane();
-                jEditorPane2 = new javax.swing.JEditorPane();
                 jPanel8 = new javax.swing.JPanel();
-                jButton1 = new javax.swing.JButton();
                 jPanel37 = new javax.swing.JPanel();
                 jPanel10 = new javax.swing.JPanel();
                 jLabel19 = new javax.swing.JLabel();
                 jScrollPane7 = new javax.swing.JScrollPane();
                 nidAutTa = new javax.swing.JTextArea();
                 jPanel38 = new javax.swing.JPanel();
-                jButton4 = new javax.swing.JButton();
+                delNidAutBtn = new javax.swing.JButton();
                 jPanel39 = new javax.swing.JPanel();
                 jLabel21 = new javax.swing.JLabel();
                 jScrollPane8 = new javax.swing.JScrollPane();
                 nidSesTa = new javax.swing.JTextArea();
                 jPanel40 = new javax.swing.JPanel();
-                jButton5 = new javax.swing.JButton();
+                delNidSesBtn = new javax.swing.JButton();
                 jPanel11 = new javax.swing.JPanel();
                 jPanel13 = new javax.swing.JPanel();
                 jLabel20 = new javax.swing.JLabel();
                 jPanel12 = new javax.swing.JPanel();
-                jComboBox1 = new javax.swing.JComboBox<>();
+                categoryListComboBox = new javax.swing.JComboBox<>();
                 jPanel14 = new javax.swing.JPanel();
-                jButton2 = new javax.swing.JButton();
-                jPanel3 = new javax.swing.JPanel();
-                jScrollPane5 = new javax.swing.JScrollPane();
-                jList1 = new javax.swing.JList<>();
-                jScrollPane6 = new javax.swing.JScrollPane();
-                jList2 = new javax.swing.JList<>();
+                extractCategoryBtn = new javax.swing.JButton();
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
                 setTitle("웹페이지 추출");
                 setMinimumSize(new java.awt.Dimension(500, 250));
-                setPreferredSize(new java.awt.Dimension(1000, 1000));
                 setSize(new java.awt.Dimension(1000, 1000));
 
                 jPanel7.setLayout(new java.awt.BorderLayout());
@@ -252,13 +198,13 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
                 });
                 jPanel9.add(extractImgBtn);
 
-                jButton3.setText("초기화");
-                jButton3.addActionListener(new java.awt.event.ActionListener() {
+                initContainers.setText("초기화");
+                initContainers.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton3ActionPerformed(evt);
+                                initContainersActionPerformed(evt);
                         }
                 });
-                jPanel9.add(jButton3);
+                jPanel9.add(initContainers);
 
                 jPanel4.add(jPanel9, java.awt.BorderLayout.EAST);
 
@@ -278,235 +224,6 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
                 jPanel7.add(jPanel4, java.awt.BorderLayout.SOUTH);
 
                 getContentPane().add(jPanel7, java.awt.BorderLayout.NORTH);
-
-                jPanel2.setOpaque(false);
-                jPanel2.setLayout(new java.awt.GridLayout(15, 2));
-
-                jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/hani_co_kr.png"))); // NOI18N
-                jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel1MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel1);
-
-                jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/khan_sub_logo.png"))); // NOI18N
-                jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel2MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel2);
-
-                jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/kmib_logo.png"))); // NOI18N
-                jLabel14.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel14.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel14MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel14);
-
-                jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/hkib.png"))); // NOI18N
-                jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel3MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel3);
-
-                jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/hankyung.png"))); // NOI18N
-                jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel4MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel4);
-
-                jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/sedaily.png"))); // NOI18N
-                jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel5MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel5);
-
-                jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/edaily.png"))); // NOI18N
-                jLabel11.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel11.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel11MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel11);
-
-                jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/etoday.png"))); // NOI18N
-                jLabel12.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel12.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel12MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel12);
-
-                jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/moneytoday.png"))); // NOI18N
-                jLabel13.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel13MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel13);
-
-                jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/mbc.png"))); // NOI18N
-                jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel8MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel8);
-
-                jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/kbs_logo_01.png"))); // NOI18N
-                jLabel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel9MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel9);
-
-                jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/sbs_news.png"))); // NOI18N
-                jLabel10.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel10MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel10);
-
-                jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/chosun_com.png"))); // NOI18N
-                jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel6MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel6);
-
-                jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/joins_gnb.png"))); // NOI18N
-                jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel7MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel7);
-
-                jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/donga_com.png"))); // NOI18N
-                jLabel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel15.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel15MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel15);
-
-                jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/news_tomato.png"))); // NOI18N
-                jLabel16.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel16.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel16MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel16);
-
-                jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo_maekyung.png"))); // NOI18N
-                jLabel17.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel17.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel17MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel17);
-
-                jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/fortune_500.png"))); // NOI18N
-                jLabel18.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-                jLabel18.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jLabel18MouseClicked(evt);
-                        }
-                });
-                jPanel2.add(jLabel18);
-
-                getContentPane().add(jPanel2, java.awt.BorderLayout.WEST);
-
-                jPanel1.setLayout(new java.awt.GridLayout(1, 0));
-
-                jSplitPane1.setDividerLocation(250);
-
-                jScrollPane1.setPreferredSize(new java.awt.Dimension(200, 106));
-
-                newsTextArea.setColumns(20);
-                newsTextArea.setRows(5);
-                jScrollPane1.setViewportView(newsTextArea);
-
-                jSplitPane1.setLeftComponent(jScrollPane1);
-
-                jScrollPane3.setPreferredSize(new java.awt.Dimension(200, 100));
-
-                jEditorPane1.setEditable(false);
-                jScrollPane3.setViewportView(jEditorPane1);
-                // add an html editor kit
-                HTMLEditorKit kit = new HTMLEditorKit();
-                jEditorPane1.setEditorKit(kit);
-
-                // add some styles to the html
-                StyleSheet styleSheet = kit.getStyleSheet();
-
-                // create a document, set it on the jeditorpane, then add the html
-                javax.swing.text.Document doc = kit.createDefaultDocument();
-                jEditorPane1.setDocument(doc);
-                //jEditorPane1.setText("blah blah blah");
-                // create some simple html as a string
-                String htmlString = "<html>\n"
-                + "<body>\n"
-                + "<h1>Welcome!</h1>\n"
-                + "<h2>This is an H2 header</h2>\n"
-                + "<p>This is some sample text</p>\n"
-                + "<p><a href=\"http://devdaily.com/blog/\">devdaily blog</a></p>\n"
-                + "</body>\n";
-                //jEditorPane1.setText(htmlString);
-
-                jSplitPane1.setRightComponent(jScrollPane3);
-
-                jTabbedPane1.addTab("소스보기", jSplitPane1);
-
-                try {
-                        jEditorPane2.setPage(new java.net.URL("http://www.google.com"));
-                } catch (java.io.IOException e1) {
-                        e1.printStackTrace();
-                }
-                jScrollPane2.setViewportView(jEditorPane2);
-
-                jTabbedPane1.addTab("브라우징", jScrollPane2);
-
-                jPanel1.add(jTabbedPane1);
-
-                getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
-
-                jButton1.setText("HTML View");
-                jButton1.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton1ActionPerformed(evt);
-                        }
-                });
-                jPanel8.add(jButton1);
 
                 jPanel37.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
                 jPanel37.setMinimumSize(new java.awt.Dimension(1000, 300));
@@ -530,13 +247,13 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 
                 jPanel10.add(jScrollPane7, java.awt.BorderLayout.CENTER);
 
-                jButton4.setText("삭제");
-                jButton4.addActionListener(new java.awt.event.ActionListener() {
+                delNidAutBtn.setText("삭제");
+                delNidAutBtn.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton4ActionPerformed(evt);
+                                delNidAutBtnActionPerformed(evt);
                         }
                 });
-                jPanel38.add(jButton4);
+                jPanel38.add(delNidAutBtn);
 
                 jPanel10.add(jPanel38, java.awt.BorderLayout.EAST);
 
@@ -558,13 +275,13 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 
                 jPanel39.add(jScrollPane8, java.awt.BorderLayout.CENTER);
 
-                jButton5.setText("삭제");
-                jButton5.addActionListener(new java.awt.event.ActionListener() {
+                delNidSesBtn.setText("삭제");
+                delNidSesBtn.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton5ActionPerformed(evt);
+                                delNidSesBtnActionPerformed(evt);
                         }
                 });
-                jPanel40.add(jButton5);
+                jPanel40.add(delNidSesBtn);
 
                 jPanel39.add(jPanel40, java.awt.BorderLayout.EAST);
 
@@ -580,13 +297,18 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 
                 jPanel12.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-                jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-                jPanel12.add(jComboBox1);
+                categoryListComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "266:쿠팡 상품 추천", "267:로켓배송", "268:로켓프레시", "269:로켓직구", "270:정기배송", "271:골드박스", "272:기획전", "274:카테고리별 베스트 상품", "275:PL 상품", "276:PL 브랜드별 상품", "277:추천 상품", "33:소개", "알림", "공지", "173:유행", "트렌드", "동향", "255:역사", "88:사회", "문화", "198:국정교과서", "216:혼이비정상", "31:정치", "정부", "정책", "180:선거", "7:국외", "해외", "국제", "세계", "249:북한", "236:미국", "228:중국", "237:일본", "2:경제", "산업", "256:삼성", "260:현대", "141:부동산", "238:가상(암호)화폐", "250:투자썰전", "47:IT(Info Tech)", "258:BT(Bio Tech)", "259:NT(Nano Tech)", "199:카페베네", "131:증권", "265:미국", "146:증권↑↓↗↘", "153:특징주", "164:신고", "신저가", "235:시간외단일가", "278:증권뉴스", "176:제약", "약품", "바이오", "264:IT(Info Tech)", "273:조선", "190:삼성주", "171:국민연금", "261:ETN", "ETF", "188:핸디소프트", "253:Entertainment", "166:외국인 보유", "170:PER", "172:상하한일수", "148:데이타", "155:Top 100", "159:기외 연속매수", "160:기외 연속매도", "156:기외 거래량", "161:기외 거래대금", "157:기외 양매수금", "162:기외 양매수량", "158:기외 양매도금", "163:기외 양매도량", "152:기획기사", "209:방송", "언론", "210:JTBC", "201:뉴스공장", "202:파파이스", "206:스포트라이트", "150:건강", "207:치매", "29:비타민", "140:운동", "151:식당", "208:마약", "263:질병", "132:Manuka Honey", "9:음식", "식료품", "262:환경", "142:사건", "사고", "182:세월호", "234:4대강", "204:5촌살인사건", "241:MeToo", "243:갑질", "244:댓글사건", "121:오늘의 잠언", "177:오늘의 계시", "128:오늘의 성경", "120:오늘의 말씀", "149:오늘의 사진", "123:오늘의 영어", "178:주일", "수요말씀", "245:인물", "197:문재인대통령", "189:노무현대통령", "225:인물1", "179:이승만", "183:박정희", "240:이명박", "185:박근혜", "193:이재명", "191:김기춘", "186:최태민", "200:김재규", "184:최순실", "229:장준하", "192:역사", "147:브렉시트", "145:자동차", "174:여행", "관광", "196:레져", "144:신앙", "181:종교", "230:과학", "111:LearningJava", "4Th", "94:자바 IO", "NIO NetPrg", "50:Node.js 프로그래밍", "70:막힘없이배우는Java프로그래밍", "89:HTML5를 활용한 모바일웹앱", "90:1부.HTML5주요기능", "91:2부. jQueryMobile", "92:3부.Sencha Touch", "5:웹 프로그래밍", "127:모바일 프로그래밍", "130:모던웹을위한HTML5프로그래밍", "35:연예", "엔터", "재미", "129:해외직구", "32:쇼핑", "135:문화", "예술", "3:음악", "139:미술", "49:영화", "6:연예", "8:책", "211:교양", "212:다큐", "213:교육", "46:보안", "24:패션", "37:뷰티", "19:디자인", "114:메르스", "25:생활", "10:스포츠", "30:동영상", "69:월남전", "43:영감의 시", "126:천국과지옥", "125:정명석선생님", "137:프로그램", "45:CSS", "87:Eclipse", "247:easyui", "93:Google", "44:HTML", "27:JavaScript", "26:Java", "42:jQuery", "248:NetBeans", "112:Node.js", "86:Spring", "246:Mybatis", "115:Swing", "39:Thymeleaf", "254:tomcat", "113:Software", "36:드라이버", "257:Freemarker", "133:데이터베이스", "41:Oracle", "48:MSSQL", "40:MySQL", "134:운영체제", "22:Windows", "21:Unix", "Linux", "175:레오사진", "233:광고" }));
+                jPanel12.add(categoryListComboBox);
 
                 jPanel11.add(jPanel12, java.awt.BorderLayout.CENTER);
 
-                jButton2.setText("카테고리추출");
-                jPanel14.add(jButton2);
+                extractCategoryBtn.setText("카테고리추출");
+                extractCategoryBtn.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                extractCategoryBtnActionPerformed(evt);
+                        }
+                });
+                jPanel14.add(extractCategoryBtn);
 
                 jPanel11.add(jPanel14, java.awt.BorderLayout.EAST);
 
@@ -594,65 +316,35 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 
                 jPanel8.add(jPanel37);
 
-                getContentPane().add(jPanel8, java.awt.BorderLayout.SOUTH);
-
-                jPanel3.setMinimumSize(new java.awt.Dimension(100, 100));
-                jPanel3.setPreferredSize(new java.awt.Dimension(300, 138));
-                jPanel3.setLayout(new java.awt.GridLayout(1, 2));
-
-                jScrollPane5.setMinimumSize(new java.awt.Dimension(100, 23));
-                jScrollPane5.setPreferredSize(new java.awt.Dimension(150, 138));
-
-                jList1.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "item 1" };
-                        public int getSize() { return strings.length; }
-                        public String getElementAt(int i) { return strings[i]; }
-                });
-                jList1.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jList1MouseClicked(evt);
-                        }
-                });
-                jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-                        public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                                jList1ValueChanged(evt);
-                        }
-                });
-                jScrollPane5.setViewportView(jList1);
-
-                jPanel3.add(jScrollPane5);
-
-                jScrollPane6.setMinimumSize(new java.awt.Dimension(100, 23));
-                jScrollPane6.setPreferredSize(new java.awt.Dimension(150, 138));
-
-                jList2.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "item 1" };
-                        public int getSize() { return strings.length; }
-                        public String getElementAt(int i) { return strings[i]; }
-                });
-                jList2.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                jList2MouseClicked(evt);
-                        }
-                });
-                jScrollPane6.setViewportView(jList2);
-
-                jPanel3.add(jScrollPane6);
-
-                getContentPane().add(jPanel3, java.awt.BorderLayout.EAST);
+                getContentPane().add(jPanel8, java.awt.BorderLayout.CENTER);
 
                 pack();
         }// </editor-fold>//GEN-END:initComponents
 
-        private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        private void delNidAutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delNidAutBtnActionPerformed
 		// TODO add your handling code here:
 		nidAutTa.setText("");
-        }//GEN-LAST:event_jButton4ActionPerformed
+        }//GEN-LAST:event_delNidAutBtnActionPerformed
 
-        private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        private void delNidSesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delNidSesBtnActionPerformed
 		// TODO add your handling code here:
 		nidSesTa.setText("");
-        }//GEN-LAST:event_jButton5ActionPerformed
+        }//GEN-LAST:event_delNidSesBtnActionPerformed
+
+        private void extractCategoryBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extractCategoryBtnActionPerformed
+		// TODO add your handling code here:
+		String strSelectedCategory = String.valueOf(categoryListComboBox.getSelectedItem());
+		String strSelectedCategoryArray[] =strSelectedCategory.split(":");
+		System.out.println("strSelectedCategoryArray[0]-------------->" + strSelectedCategoryArray[0]);
+		System.out.println("strSelectedCategoryArray[1]-------------->" + strSelectedCategoryArray[1]);
+		createCategoryListCombo();
+        }//GEN-LAST:event_extractCategoryBtnActionPerformed
+
+        private void initContainersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_initContainersActionPerformed
+		// TODO add your handling code here:
+		textFieldPopupMenuPanel1.getTextField().setText("");
+		extractedUrlTextPane.setText("");
+        }//GEN-LAST:event_initContainersActionPerformed
 
 	private void extractImgBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_extractImgBtnActionPerformed
 		try {
@@ -675,78 +367,6 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 
 	}// GEN-LAST:event_extractImgBtnActionPerformed
 
-	private void navigate(String url) {
-		try {
-			jEditorPane2.setPage(url);
-		} catch (IOException ex) {
-			java.util.logging.Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-		}
-	}
-
-	private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel1MouseClicked
-		navigate("http://www.hani.co.kr");
-	}// GEN-LAST:event_jLabel1MouseClicked
-
-	private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel2MouseClicked
-		navigate("http://www.khan.co.kr");
-	}// GEN-LAST:event_jLabel2MouseClicked
-
-	private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel14MouseClicked
-		navigate("http://www.kmib.co.kr");
-	}// GEN-LAST:event_jLabel14MouseClicked
-
-	private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel3MouseClicked
-		navigate("http://www.hankookilbo.com");
-	}// GEN-LAST:event_jLabel3MouseClicked
-
-	private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel4MouseClicked
-		navigate("http://www.hankyung.com/");
-	}// GEN-LAST:event_jLabel4MouseClicked
-
-	private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel5MouseClicked
-		navigate("http://www.sedaily.com/");
-	}// GEN-LAST:event_jLabel5MouseClicked
-
-	private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel6MouseClicked
-		navigate("http://www.chosun.com");
-	}// GEN-LAST:event_jLabel6MouseClicked
-
-	private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel7MouseClicked
-		navigate("http://www.joins.com");
-	}// GEN-LAST:event_jLabel7MouseClicked
-
-	private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel8MouseClicked
-		navigate("http://imnews.imbc.com");
-	}// GEN-LAST:event_jLabel8MouseClicked
-
-	private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel9MouseClicked
-		navigate("http://news.kbs.co.kr");
-	}// GEN-LAST:event_jLabel9MouseClicked
-
-	private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel10MouseClicked
-		navigate("http://www.sbs.co.kr/");
-	}// GEN-LAST:event_jLabel10MouseClicked
-
-	private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel11MouseClicked
-		navigate("http://www.edaily.co.kr");
-	}// GEN-LAST:event_jLabel11MouseClicked
-
-	private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel12MouseClicked
-		navigate("http://www.etoday.co.kr");
-	}// GEN-LAST:event_jLabel12MouseClicked
-
-	private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel13MouseClicked
-		navigate("http://www.mt.co.kr/");
-	}// GEN-LAST:event_jLabel13MouseClicked
-
-	private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel15MouseClicked
-		navigate("http://www.donga.com");
-	}// GEN-LAST:event_jLabel15MouseClicked
-
-	private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel16MouseClicked
-		navigate("http://www.newstomato.com");
-	}// GEN-LAST:event_jLabel16MouseClicked
-
 	private void executeBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_executeBtnActionPerformed
 		try {
 			extractedUrlTextPane.setText("");
@@ -756,39 +376,6 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 			java.util.logging.Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 	}// GEN-LAST:event_executeBtnActionPerformed
-
-	private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
-		textFieldPopupMenuPanel1.getTextField().setText("");
-		newsTextArea.setText("");
-		jEditorPane1.setText("");
-		extractedUrlTextPane.setText("");
-	}// GEN-LAST:event_jButton3ActionPerformed
-
-	private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {// GEN-FIRST:event_jList1ValueChanged
-
-	}// GEN-LAST:event_jList1ValueChanged
-
-	private void jList1MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jList1MouseClicked
-		String selected = jList1.getSelectedValue();
-		String stockCode = selected.split(",")[0];
-		try {
-			uri = new URI("https://finance.naver.com/item/main.nhn?code=" + stockCode);
-			open(uri);
-		} catch (URISyntaxException ex) {
-			java.util.logging.Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-		}
-	}// GEN-LAST:event_jList1MouseClicked
-
-	private void jList2MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jList2MouseClicked
-		String selected = jList2.getSelectedValue();
-		String stockCode = selected.split(",")[0];
-		try {
-			uri = new URI("https://finance.naver.com/item/main.nhn?code=" + stockCode);
-			open(uri);
-		} catch (URISyntaxException ex) {
-			java.util.logging.Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-		}
-	}// GEN-LAST:event_jList2MouseClicked
 
 	private void textFieldPopupMenuPanel1PropertyChange(java.beans.PropertyChangeEvent evt) {// GEN-FIRST:event_textFieldPopupMenuPanel1PropertyChange
 		textFieldPopupMenuPanel1.getTextField().addFocusListener(new java.awt.event.FocusAdapter() {
@@ -843,14 +430,6 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 		logger.debug("textFieldPopupMenuPanel1FocusLost");
 	}// GEN-LAST:event_textFieldPopupMenuPanel1FocusLost
 
-	private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel17MouseClicked
-		navigate("http://www.mk.co.kr");
-	}// GEN-LAST:event_jLabel17MouseClicked
-
-	private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_jLabel18MouseClicked
-		navigate("https://fortune.com/fortune500/");
-	}// GEN-LAST:event_jLabel18MouseClicked
-
 	public void createHTMLFile() {
 		String newsCompany = getSelectedButtonText(buttonGroup1);
 		System.out.println("newsCompany1:" + newsCompany);
@@ -880,7 +459,6 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 		// 페이지 추출 완료 라벨 초기화
 		extractedUrlTextPane.setText("");
 		// tab2에서 페이지 이동
-		navigate(url);
 		newsCompany = "";
 		int idx = 0;
 		for (NewsPublisher np : NewsPublisher.values()) {
@@ -899,8 +477,6 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 		if (newsCompany.equals("")) {
 			textFieldPopupMenuPanel1.getTextField().setText("");
 			extractedUrlTextPane.setText(url + " 추출실패");
-			newsTextArea.setText("");
-			jEditorPane1.setText("");
 			return;
 		}
 
@@ -912,33 +488,41 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 			// c.getDeclaredMethods()[0].invoke(object, Object... MethodArgs );
 			Method method = c.getDeclaredMethod("createHTMLFile", String.class);
 			sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
-			java.util.logging.Logger.getLogger(NewsReaderNaverLinkShare.class.getName()).log(Level.INFO, sb.toString());
+			java.util.logging.Logger.getLogger(NewsReaderNaverLinkShareSimple.class.getName()).log(Level.INFO, sb.toString());
 		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 			| NoSuchMethodException | SecurityException ex) {
-			java.util.logging.Logger.getLogger(NewsReaderNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(NewsReaderNaverLinkShareSimple.class.getName()).log(Level.SEVERE, null, ex);
 		}
 
 		Document htmlDoc = Jsoup.parse(sb.toString());
-		logger.debug("htmlDoc:"+htmlDoc.html());
-		newsTextArea.setText(htmlDoc.html());
+		logger.debug("htmlDoc:" + htmlDoc.html());
 
 		htmlDoc.select("meta").remove();
 		sb.delete(0, sb.length());
 		sb.setLength(0);
-		jEditorPane1.setText(htmlDoc.html());
 		textFieldPopupMenuPanel1.getTextField().setText("");
 		extractedUrlTextPane.setText(url + " 페이지 추출 완료");
 
+		String strCategoryNo = "33";
 		String strCategoryName = "증권";
+		String strSelectedCategory = String.valueOf(categoryListComboBox.getSelectedItem());
+		String strSelectedCategoryArray[] =strSelectedCategory.split(":");
+		if(strSelectedCategoryArray.length > 0){
+			strCategoryNo = strSelectedCategoryArray[0];
+			strCategoryName = strSelectedCategoryArray[1];
+			System.out.println("strSelectedCategoryArray[0]-------------->" + strSelectedCategoryArray[0]);
+			System.out.println("strSelectedCategoryArray[1]-------------->" + strSelectedCategoryArray[1]);
+		}
+		
 		String strShareTitle = htmlDoc.select("h2#title").text();
 		String strShareUrl = htmlDoc.select("a").first().attr("href");
 		StringBuilder contentSb = new StringBuilder();
 		contentSb.append(htmlDoc.html());
 		contentSb.toString();
-		
-		logger.debug("strShareTitle:"+strShareTitle);
-		logger.debug("strShareUrl:"+strShareUrl);
-		
+
+		logger.debug("strShareTitle:" + strShareTitle);
+		logger.debug("strShareUrl:" + strShareUrl);
+
 		naverBlogLinkShare(contentSb, strCategoryName, strShareTitle, strShareUrl);
 	}
 
@@ -964,37 +548,6 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 		}
 	}// GEN-LAST:event_urlTfKeyReleased
 
-	/*
-	 * // private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt)
-	 * {// GEN-FIRST:event_jRadioButton2ActionPerformed // // TODO add your handling
-	 * code here: // }// GEN-LAST:event_jRadioButton2ActionPerformed // // private
-	 * void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//
-	 * GEN-FIRST:event_jRadioButton1ActionPerformed // // TODO add your handling
-	 * code here: // }// GEN-LAST:event_jRadioButton1ActionPerformed // // private
-	 * void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//
-	 * GEN-FIRST:event_jRadioButton3ActionPerformed // // TODO add your handling
-	 * code here: // }// GEN-LAST:event_jRadioButton3ActionPerformed // // private
-	 * void jRadioButton10ActionPerformed(java.awt.event.ActionEvent evt) {//
-	 * GEN-FIRST:event_jRadioButton10ActionPerformed // // TODO add your handling
-	 * code here: // }// GEN-LAST:event_jRadioButton10ActionPerformed // // private
-	 * void jRadioButton11ActionPerformed(java.awt.event.ActionEvent evt) {//
-	 * GEN-FIRST:event_jRadioButton11ActionPerformed // // TODO add your handling
-	 * code here: // }// GEN-LAST:event_jRadioButton11ActionPerformed
-	 */
-	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-		// TODO add your handling code here:
-		String html = newsTextArea.getText();
-		jEditorPane1.setText(html);
-	}// GEN-LAST:event_jButton1ActionPerformed
-
-	private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-		// TODO add your handling code here:
-		textFieldPopupMenuPanel1.getTextField().setText("");
-		newsTextArea.setText("");
-		jEditorPane1.setText("");
-		extractedUrlTextPane.setText("");
-	}// GEN-LAST:event_jButton2ActionPerformed
-
 	/**
 	 * @param args the command line arguments
 	 */
@@ -1016,7 +569,7 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 			}
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 			| javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(NewsReaderNaverLinkShare.class.getName()).log(java.util.logging.Level.SEVERE,
+			java.util.logging.Logger.getLogger(NewsReaderNaverLinkShareSimple.class.getName()).log(java.util.logging.Level.SEVERE,
 				null, ex);
 		}
 
@@ -1024,63 +577,59 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new NewsReaderNaverLinkShare().setVisible(true);
+				new NewsReaderNaverLinkShareSimple().setVisible(true);
 			}
 		});
 	}
 
 	public void naverBlogLinkShare(StringBuilder contentSb, String strCategoryName, String strShareTitle, String strShareUrl) {
-		String strNidAut = nidAutTa.getText();
-		String strNidSes = nidSesTa.getText();
+		strNidAut = nidAutTa.getText();
+		strNidSes = nidSesTa.getText();
 		NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strCategoryName, contentSb, rootPane);
+	}
+
+	public void createCategoryListCombo() {
+		strNidAut = nidAutTa.getText();
+		strNidSes = nidSesTa.getText();
+		if (strNidAut.equals("") || strNidSes.equals("")) {
+			return;
+		}
+		Document linkSharePageDoc = getNaverBlogLinkSharePage(strNidAut, strNidSes);
+		Elements categoryListOptionEls = linkSharePageDoc.select("#_categoryList option");
+		System.out.println("categoryListOptionEls.size :" + categoryListOptionEls.size());
+		String[] categoryListOptionArray = new String[categoryListOptionEls.size()];
+		System.out.println("categoryListOptionArray.length :" + categoryListOptionArray.length);
+		int idx = 0;
+		for (Element categoryListOption : categoryListOptionEls) {
+			String categoryListOptionTxt = categoryListOption.text();
+			String categoryListOptionValue = categoryListOption.attr("value");
+			String optionValue = categoryListOptionValue + ":" + categoryListOptionTxt;
+			System.out.println("optionValue :" + optionValue);
+			categoryListOptionArray[idx] = optionValue;
+			idx++;
+		}
 	}
 
 	private String url = "http://news.mt.co.kr/newsPrint.html?no=2017051716214167566";
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.ButtonGroup buttonGroup1;
+        private javax.swing.JComboBox<String> categoryListComboBox;
+        private javax.swing.JButton delNidAutBtn;
+        private javax.swing.JButton delNidSesBtn;
         private javax.swing.JButton executeBtn;
+        private javax.swing.JButton extractCategoryBtn;
         private javax.swing.JButton extractImgBtn;
         private javax.swing.JTextPane extractedUrlTextPane;
         private javax.swing.Box.Filler filler1;
-        private javax.swing.JButton jButton1;
-        private javax.swing.JButton jButton2;
-        private javax.swing.JButton jButton3;
-        private javax.swing.JButton jButton4;
-        private javax.swing.JButton jButton5;
-        private javax.swing.JComboBox<String> jComboBox1;
-        private javax.swing.JEditorPane jEditorPane1;
-        private javax.swing.JEditorPane jEditorPane2;
-        private javax.swing.JLabel jLabel1;
-        private javax.swing.JLabel jLabel10;
-        private javax.swing.JLabel jLabel11;
-        private javax.swing.JLabel jLabel12;
-        private javax.swing.JLabel jLabel13;
-        private javax.swing.JLabel jLabel14;
-        private javax.swing.JLabel jLabel15;
-        private javax.swing.JLabel jLabel16;
-        private javax.swing.JLabel jLabel17;
-        private javax.swing.JLabel jLabel18;
+        private javax.swing.JButton initContainers;
         private javax.swing.JLabel jLabel19;
-        private javax.swing.JLabel jLabel2;
         private javax.swing.JLabel jLabel20;
         private javax.swing.JLabel jLabel21;
-        private javax.swing.JLabel jLabel3;
-        private javax.swing.JLabel jLabel4;
-        private javax.swing.JLabel jLabel5;
-        private javax.swing.JLabel jLabel6;
-        private javax.swing.JLabel jLabel7;
-        private javax.swing.JLabel jLabel8;
-        private javax.swing.JLabel jLabel9;
-        private javax.swing.JList<String> jList1;
-        private javax.swing.JList<String> jList2;
-        private javax.swing.JPanel jPanel1;
         private javax.swing.JPanel jPanel10;
         private javax.swing.JPanel jPanel11;
         private javax.swing.JPanel jPanel12;
         private javax.swing.JPanel jPanel13;
         private javax.swing.JPanel jPanel14;
-        private javax.swing.JPanel jPanel2;
-        private javax.swing.JPanel jPanel3;
         private javax.swing.JPanel jPanel37;
         private javax.swing.JPanel jPanel38;
         private javax.swing.JPanel jPanel39;
@@ -1091,17 +640,9 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
         private javax.swing.JPanel jPanel7;
         private javax.swing.JPanel jPanel8;
         private javax.swing.JPanel jPanel9;
-        private javax.swing.JScrollPane jScrollPane1;
-        private javax.swing.JScrollPane jScrollPane2;
-        private javax.swing.JScrollPane jScrollPane3;
         private javax.swing.JScrollPane jScrollPane4;
-        private javax.swing.JScrollPane jScrollPane5;
-        private javax.swing.JScrollPane jScrollPane6;
         private javax.swing.JScrollPane jScrollPane7;
         private javax.swing.JScrollPane jScrollPane8;
-        private javax.swing.JSplitPane jSplitPane1;
-        private javax.swing.JTabbedPane jTabbedPane1;
-        private javax.swing.JTextArea newsTextArea;
         private javax.swing.JTextArea nidAutTa;
         private javax.swing.JTextArea nidSesTa;
         private html.parsing.stock.TextFieldPopupMenuPanel textFieldPopupMenuPanel1;

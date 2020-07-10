@@ -76,6 +76,7 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 	TextField nidAutTf = new TextField();
 	TextArea nidSesTa = new TextArea();
 	Text shareResultTxt = new Text();
+
 	ComboBox<String> categoryListComboBox = new ComboBox<String>();
 
 	public static void main(String[] args) {
@@ -83,7 +84,7 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 	}
 
 	public void start(Stage primaryStage) {
-		primaryStage.setTitle("엔젤반 브라우저");
+		primaryStage.setTitle("엔젤 브라우저");
 		final String FONT_FAMILY = "Arial"; // define font family you need
 		final double MAX_FONT_SIZE = 20.0; // define max font size you need
 		final String FX_FONT_STYLE = "-fx-font-family: 'Arial';-fx-font-size: 20px;-fx-font-weight: bold;";
@@ -97,7 +98,9 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 		hSeparator.setPrefWidth(10);
 
 		// Top
-//		Text backTxt = new Text("←");
+		Text homeTxt = new Text("🏠");
+		homeTxt.setStyle(FX_FONT_STYLE);
+//		Text backTxt = new Text("←");🏠
 		Text backTxt = new Text("⇦");
 		backTxt.setStyle(FX_FONT_STYLE);
 //		Text forwardTxt = new Text("→");
@@ -140,7 +143,17 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 				System.out.println("KeyCode.ENTER:" + KeyCode.ENTER);
 				System.out.println("event.getCode().equals(KeyCode.ENTER):" + event.getCode().equals(KeyCode.ENTER));
 				if (event.getCode().equals(KeyCode.ENTER)) {
-					webengine.load(urlTf.getText());
+					String url = urlTf.getText();
+					System.out.println("url1:" + url);
+					if (!url.toLowerCase().startsWith("http") && !url.toLowerCase().startsWith("https")) {
+						if (!url.contains(".") || url.contains(" ")) {
+							url = "https://www.google.com/search?q=" + url + "&oq=" + url;
+						} else {
+							url = "http://" + url;
+						}
+					}
+					System.out.println("url2:" + url);
+					webengine.load(url);
 				}
 			}
 		});
@@ -155,28 +168,51 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
 			@Override
 			public void handle(javafx.scene.input.MouseEvent event) {
-				webengine.load(urlTf.getText());
+				String url = urlTf.getText();
+				System.out.println("url1:" + url);
+					if (!url.toLowerCase().startsWith("http") && !url.toLowerCase().startsWith("https")) {
+						if (!url.contains(".") || url.contains(" ")) {
+							url = "https://www.google.com/search?q=" + url + "&oq=" + url;
+						} else {
+							url = "http://" + url;
+						}
+					}
+				System.out.println("url2:" + url);
+				webengine.load(url);
 			}
 		});
 
 		Button shareBtn = new Button("네이버 블로그 글쓰기");
-		shareBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
-			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
+
+		shareBtn.setOnMouseReleased(new EventHandler<javafx.scene.input.MouseEvent>() {
 			@Override
 			public void handle(javafx.scene.input.MouseEvent event) {
+				shareResultTxt.setText("...");
+			}
+
+		});
+
+		shareBtn.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+			@Override
+			public void handle(javafx.scene.input.MouseEvent event) {
+				shareResultTxt.setText("...");
 				//네이버 블로그 공유
 				System.out.println("네이버 블로그 글쓰기");
-				shareResultTxt.setText("");
 				getNaverCookies();
 				logger.debug("strNidAut :" + strNidAut);
 				logger.debug("strNidSes :" + strNidSes);
 				if (!strNidAut.equals("") && !strNidSes.equals("")) {
 
 					String url = urlTf.getText();
-					logger.debug("url :" + url);
-					if (org.apache.commons.lang3.StringUtils.defaultString(url).equals("")) {
-						return;
+					System.out.println("url1:" + url);
+					if (!url.toLowerCase().startsWith("http") && !url.toLowerCase().startsWith("https")) {
+						if (!url.contains(".") || url.contains(" ")) {
+							url = "https://www.google.com/search?q=" + url + "&oq=" + url;
+						} else {
+							url = "http://" + url;
+						}
 					}
+					System.out.println("url2:" + url);
 					createHTMLFile(url);
 				} else {
 					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
@@ -184,10 +220,41 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 				}
 
 			}
+
 		});
 
+//		shareBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
+//			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
+//			@Override
+//			public void handle(javafx.scene.input.MouseEvent event) {
+//				//네이버 블로그 공유
+//				System.out.println("네이버 블로그 글쓰기");
+//				getNaverCookies();
+//				logger.debug("strNidAut :" + strNidAut);
+//				logger.debug("strNidSes :" + strNidSes);
+//				if (!strNidAut.equals("") && !strNidSes.equals("")) {
+//
+//					String url = urlTf.getText();
+//					System.out.println("url1:" + url);
+//					if (!url.toLowerCase().startsWith("http") && !url.toLowerCase().startsWith("https")) {
+//						if (!url.contains(".") || url.contains(" ")) {
+//							url = "https://www.google.com/search?q=" + url + "&oq=" + url;
+//						} else {
+//							url = "http://" + url;
+//						}
+//					}
+//					System.out.println("url2:" + url);
+//					createHTMLFile(url);
+//				} else {
+//					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
+//					return;
+//				}
+//
+//			}
+//		});
 //		HBox urlHBox = new HBox(backLbl, forwardLbl, reloadLbl, urlTf, goBtn);
 		HBox urlHBox = new HBox(10);
+		urlHBox.getChildren().addAll(homeTxt);
 		urlHBox.getChildren().addAll(hSeparator);
 		urlHBox.getChildren().addAll(backTxt);
 		urlHBox.getChildren().addAll(forwardTxt);
@@ -208,6 +275,13 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 			}
 		});
 
+		homeTxt.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
+			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
+			@Override
+			public void handle(javafx.scene.input.MouseEvent event) {
+				webView.getEngine().load("https://www.naver.com");
+			}
+		});
 		backTxt.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
 			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
 			@Override
@@ -554,7 +628,7 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 		if (url.equals("")) {
 			return;
 		}
-		System.out.println("url:" + url);
+		System.out.println("createHTMLFile url:" + url);
 		// tab2에서 페이지 이동
 		int idx = 0;
 		String newsCompany = "";
@@ -580,7 +654,6 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 		try {
 			c = Class.forName("html.parsing.stock.news." + newsCompany);
 			System.out.println("Class Name:" + c.getName());
-			System.out.println("url:" + url);
 			// c.getDeclaredMethods()[0].invoke(object, Object... MethodArgs );
 			Method method = c.getDeclaredMethod("createHTMLFile", String.class);
 			sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
@@ -612,12 +685,16 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 		}
 
 		String strShareTitle = htmlDoc.select("h2#title").text();
-		String strShareUrl = htmlDoc.select("a").first().attr("href");
+		logger.debug("strShareTitle:" + strShareTitle);
+		Elements shareUrlEls = htmlDoc.select("a");
+		String strShareUrl = "";
+		if (shareUrlEls.size() > 0) {
+			strShareUrl = htmlDoc.select("a").first().attr("href");
+		}
 		StringBuilder contentSb = new StringBuilder();
 		contentSb.append(htmlDoc.html());
 		contentSb.toString();
 
-		logger.debug("strShareTitle:" + strShareTitle);
 		logger.debug("strShareUrl:" + strShareUrl);
 
 		if (naverBlogLinkShare(contentSb, strCategoryName, strShareTitle, strShareUrl)) {

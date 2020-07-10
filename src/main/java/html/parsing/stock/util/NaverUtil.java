@@ -47,19 +47,19 @@ public class NaverUtil {
 		System.out.println(suffix);
 	}
 
-	public static void naverBlogLinkShare(String strNidAut, String strNidSes, String strUrl, String strTitle,
-			String categoryName, StringBuilder contentSb, JRootPane rootPane) {
+	public static boolean naverBlogLinkShare(String strNidAut, String strNidSes, String strUrl, String strTitle,
+		String categoryName, StringBuilder contentSb, JRootPane rootPane) {
 		if (strNidAut.equals("") || strNidSes.equals("")) {
 			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning",
-					JOptionPane.WARNING_MESSAGE);
-			return;
+				JOptionPane.WARNING_MESSAGE);
+			return false;
 		}
 
 		try {
 			HttpHeaders headers = new HttpHeaders();
 
 			headers.set("Accept",
-					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+				"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
 			headers.set("Accept-Encoding", "gzip, deflate");
 			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
 			headers.set("Cache-Control", "max-age=0");
@@ -89,7 +89,7 @@ public class NaverUtil {
 
 			headers.set("Upgrade-Insecure-Requests", "1");
 			headers.set("User-Agent",
-					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
 
 //			headers.set("X-Requested-With", "XMLHttpRequest");
 			headers.forEach((key, value) -> {
@@ -211,7 +211,6 @@ public class NaverUtil {
 
 			// String encoded = URLEncoder.encode(temp, "UTF8");
 			// System.out.println("encoded:"+encoded);
-
 			temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leverage\" s_subtype=\"oglink\" jsonvalue=\"테스트(test)\"></span>";
 			map.add("content", temp);
 			// 공개 여부(비공개),0:비공개, 1:이웃공개, 2: 전체공개, 3:서로이웃공개
@@ -245,10 +244,10 @@ public class NaverUtil {
 
 			System.out.println("uriComponents :" + uriComponents);
 			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map,
-					headers);
+				headers);
 //			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.POST, entity, byte[].class);
 			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity,
-					byte[].class);
+				byte[].class);
 			System.out.println("response :" + response);
 
 //			RestTemplate template = new RestTemplate();
@@ -277,7 +276,9 @@ public class NaverUtil {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 
 	public static Document getNaverBlogLinkSharePage(String strNidAut, String strNidSes) {
@@ -286,7 +287,7 @@ public class NaverUtil {
 			HttpHeaders headers = new HttpHeaders();
 
 			headers.set("Accept",
-					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+				"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
 			headers.set("Accept-Encoding", "gzip, deflate");
 			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
 			headers.set("Cache-Control", "max-age=0");
@@ -307,7 +308,7 @@ public class NaverUtil {
 			cookieSb.append(strNidAut + ";");
 			cookieSb.append("NID_SES=");
 			cookieSb.append(strNidSes + ";");
-
+			System.out.println("cookieSb.toString():" + cookieSb.toString());
 			headers.set("Cookie", cookieSb.toString());
 
 //			Cookie c = new Cookie();
@@ -316,7 +317,7 @@ public class NaverUtil {
 //			headers.set("Referer", "http://blog.naver.com/LinkShare.nhn?url=https%3A//www.youtube.com/watch%3Fv%3DaL55d6sDiGE%26feature%3Dshare");
 			headers.set("Upgrade-Insecure-Requests", "1");
 			headers.set("User-Agent",
-					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
 
 //			headers.set("X-Requested-With", "XMLHttpRequest");
 			headers.forEach((key, value) -> {
@@ -412,7 +413,7 @@ public class NaverUtil {
 			HttpEntity<?> entity = new HttpEntity<>(headers);
 //			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, byte[].class);
 			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
-					byte[].class);
+				byte[].class);
 			System.out.println("response :" + response);
 
 //			RestTemplate template = new RestTemplate();
@@ -452,7 +453,7 @@ public class NaverUtil {
 	public static String guessEncoding(byte[] bytes) {
 		String DEFAULT_ENCODING = "UTF-8";
 		org.mozilla.universalchardet.UniversalDetector detector = new org.mozilla.universalchardet.UniversalDetector(
-				null);
+			null);
 		detector.handleData(bytes, 0, bytes.length);
 		detector.dataEnd();
 		String encoding = detector.getDetectedCharset();

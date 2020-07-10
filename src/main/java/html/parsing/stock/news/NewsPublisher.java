@@ -4,7 +4,7 @@ package html.parsing.stock.news;
  *
  * @author David
  */
-enum NewsPublisher {
+public enum NewsPublisher {
 	// 상수("연결할 문자")
 	NewsEinfomaxCoKr("news.einfomax.co.kr"),
 	WwwTheBellCoKr("www.thebell.co.kr"),
@@ -45,7 +45,7 @@ enum NewsPublisher {
 	WwwEtodayCoKr("www.etoday.co.kr"),
 	WwwNewsisCom("www.newsis.com"),
 	NewsisCom("newsis.com"),
-	NewsPressian("www.pressian.com"),
+	NewsPressianCom("www.pressian.com"),
 	NewsSbsCoKr("news.sbs.co.kr"),
 	WwwFnnewsCom("www.fnnews.com"),
 	MFnnewsCom("m.fnnews.com"),
