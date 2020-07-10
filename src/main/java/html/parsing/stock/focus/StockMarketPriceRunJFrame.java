@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
  */
 public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 
+	private static final long serialVersionUID = 3522344316870662559L;
 	String strNidAut = "";
 	String strNidSes = "";
 

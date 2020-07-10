@@ -221,7 +221,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 		StringBuilder contentSb = html;
 		logger.debug("strNidAut:" + strNidAut);
 		logger.debug("strNidSes:" + strNidSes);
-		if (strNidAut != null && strNidSes != null) {
+				if (!StringUtils.defaultIfEmpty(strNidAut,"").equals("") && !StringUtils.defaultIfEmpty(strNidSes,"").equals("")) {
 			NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strUrl, strTitle, categoryName, contentSb, null);
 		}
 	}

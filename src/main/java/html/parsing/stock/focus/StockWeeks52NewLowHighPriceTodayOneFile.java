@@ -27,6 +27,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,7 +87,7 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 	 */
 	public static void main(String[] args) {
 		new StockWeeks52NewLowHighPriceTodayOneFile().start();
-//		new Weeks52NewLowHighPriceTodayOneFile(1);
+//		new StockWeeks52NewLowHighPriceTodayOneFile(1);
 	}
 
 	StockWeeks52NewLowHighPriceTodayOneFile() {
@@ -135,7 +136,8 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 
 		logger = LoggerFactory.getLogger(this.getClass());
 
-		readOne("001060", "JW중외제약", "P");
+//		readOne("001060", "JW중외제약", "코스피");
+		readOne("279410", "한화에이스스팩4호", "코스닥");
 		logger.debug("kospiStockDataList.size :" + kospiStockDataList.size());
 		logger.debug("kospiNewHighPriceList.size :" + kospiNewHighPriceList.size());
 		logger.debug("kospiNewLowPriceList.size :" + kospiNewLowPriceList.size());
@@ -193,7 +195,7 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 			logger.debug("======================================================================");
 			logger.debug("코스피." + (i + 1) + "." + svo.getStockCode() + "." + svo.getStockName());
 			logger.debug("======================================================================");
-			getStockInfo((i + 1), svo.getStockCode(), svo.getStockName(), "P");
+			getStockInfo((i + 1), svo.getStockCode(), svo.getStockName(), "코스피");
 		}
 		/*
 		 * Collections.sort(kospiStockDataList, new NameAscCompare());
@@ -213,7 +215,7 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 			logger.debug("======================================================================");
 			logger.debug("코스닥." + (i + 1) + "." + svo.getStockCode() + "." + svo.getStockName());
 			logger.debug("======================================================================");
-			getStockInfo((i + 1), svo.getStockCode(), svo.getStockName(), "D");
+			getStockInfo((i + 1), svo.getStockCode(), svo.getStockName(), "코스닥");
 		}
 		/*
 		 * Collections.sort(kosdaqStockDataList, new NameAscCompare());
@@ -232,10 +234,19 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 		Collections.sort(kospiNewLowPriceList, new NameAscCompare());
 		Collections.sort(kosdaqNewLowPriceList, new NameAscCompare());
 
+		logger.debug("kospiNewHighPriceList.size:"+kospiNewHighPriceList.size());
+		logger.debug("kosdaqNewHighPriceList.size:"+kosdaqNewHighPriceList.size());
+		logger.debug("kospiNewLowPriceList.size:"+kospiNewLowPriceList.size());
+
+		logger.debug("kosdaqNewLowPriceList.size:"+kosdaqNewLowPriceList.size());
+
 		newHighPriceList.addAll(kospiNewHighPriceList);
 		newHighPriceList.addAll(kosdaqNewHighPriceList);
 		newLowPriceList.addAll(kospiNewLowPriceList);
 		newLowPriceList.addAll(kosdaqNewLowPriceList);
+		
+		logger.debug("newHighPriceList.size:"+newHighPriceList.size());
+		logger.debug("newLowPriceList.size:"+newLowPriceList.size());
 
 		StringBuilder html;
 		if (newHighPriceList.size() > 0) {
@@ -325,10 +336,24 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 
 			// 거래량 체크, 거래량이 0이면 빠져나간다.
 			// Element tradeVolumeText = doc.select(".sp_txt9").get(0);
-			String tradeVolumeText = doc.select(".sp_txt9").get(0).parent().child(1).child(0).text();
-			logger.debug("tradeVolumeText:" + tradeVolumeText);
-
-			Element new_totalinfo = doc.select(".new_totalinfo").get(0);
+			Elements tradeVolumeTextEls = doc.select(".sp_txt9");
+			if (tradeVolumeTextEls.size() > 0) {
+				logger.debug("tradeVolume is 0(zero)");
+				logger.debug("tradeVolumeTextEls.size:" + tradeVolumeTextEls.size());
+				Element tradeVolumeTextEl = tradeVolumeTextEls.get(0);
+				Element parent = tradeVolumeTextEl.parent();
+				Element child1 = parent.child(1);
+				Element child0 = child1.child(0);
+				String tradeVolumeText = child0.text();
+//			String tradeVolumeText = doc.select(".sp_txt9").get(0).parent().child(1).child(0).text();
+				logger.debug("tradeVolumeText:" + tradeVolumeText);
+			}
+			Elements new_totalinfoEls = doc.select(".new_totalinfo");
+			if (tradeVolumeTextEls.size() <= 0) {
+				logger.debug("new_totalinfo.size is 0(zero)");
+				return;
+			}
+			Element new_totalinfo = new_totalinfoEls.get(0);
 			Document new_totalinfo_doc = Jsoup.parse(new_totalinfo.html());
 			Element blind = new_totalinfo_doc.select(".blind").get(0);
 			Elements edds = blind.select("dd");
@@ -513,7 +538,7 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 			// 신고가
 			if (stock.getiHighPrice() > iWeeks52MaxPrice) {
 				stock.setWeeks52NewHighPrice(true);
-				if (marketGubun.equals("P")) {
+				if (marketGubun.equals("코스피")) {
 					kospiNewHighPriceList.add(stock);
 					logger.debug(" kospiNewHighPriceList.size :" + kospiNewHighPriceList.size());
 				} else {
@@ -525,7 +550,7 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 			// 최저가=0 제외
 			if ((stock.getiLowPrice() != 0) && (stock.getiLowPrice() < iWeeks52MinPrice)) {
 				stock.setWeeks52NewLowPrice(true);
-				if (marketGubun.equals("P")) {
+				if (marketGubun.equals("코스피")) {
 					kospiNewLowPriceList.add(stock);
 					logger.debug(" kospiNewLowPriceList.size :" + kospiNewLowPriceList.size());
 				} else {
@@ -533,7 +558,7 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 					logger.debug(" kosdaqNewLowPriceList.size :" + kosdaqNewLowPriceList.size());
 				}
 			}
-			if (marketGubun.equals("P")) {
+			if (marketGubun.equals("코스피")) {
 				kospiStockDataList.add(stock);
 			} else {
 				kosdaqStockDataList.add(stock);
@@ -545,8 +570,8 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 		}
 	}
 
-	public StringBuilder createHtmlString(List<StockVO> stockList, String stockMarketGubun,
-			String lowHighGubun, String orderBy) {
+	public StringBuilder createHtmlString(List<StockVO> stockList, String stockMarketGubun, String lowHighGubun,
+			String orderBy) {
 		logger.debug("kospiKosdaqStockList.size :" + stockList.size());
 		String strFileNameSuffix = "";
 		if (lowHighGubun.equals("신고가")) {// 신고가
@@ -910,7 +935,7 @@ public class StockWeeks52NewLowHighPriceTodayOneFile extends Thread {
 		StringBuilder contentSb = html;
 		logger.debug("strNidAut:" + strNidAut);
 		logger.debug("strNidSes:" + strNidSes);
-		if (strNidAut != null && strNidSes != null) {
+		if (!StringUtils.defaultIfEmpty(strNidAut,"").equals("") && !StringUtils.defaultIfEmpty(strNidSes,"").equals("")) {
 			NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strUrl, strTitle, categoryName, contentSb, null);
 		}
 	}
