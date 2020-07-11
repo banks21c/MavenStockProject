@@ -223,6 +223,40 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 
 		});
 
+		Button stockPriceShareBtn = new Button("주식 시세 공유");
+
+		stockPriceShareBtn.setOnMouseReleased(new EventHandler<javafx.scene.input.MouseEvent>() {
+			@Override
+			public void handle(javafx.scene.input.MouseEvent event) {
+				shareResultTxt.setText("...");
+			}
+
+		});
+
+		stockPriceShareBtn.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+			@Override
+			public void handle(javafx.scene.input.MouseEvent event) {
+				shareResultTxt.setText("...");
+				//네이버 블로그 공유
+				System.out.println("주식 시세 공유");
+				getNaverCookies();
+				logger.debug("strNidAut :" + strNidAut);
+				logger.debug("strNidSes :" + strNidSes);
+				if (!strNidAut.equals("") && !strNidSes.equals("")) {
+
+					String url = urlTf.getText();
+					System.out.println("url1:" + url);
+					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strNidAut, strNidSes);
+					step2.schedulerStart();
+				} else {
+					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
+					return;
+				}
+
+			}
+
+		});
+
 //		shareBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
 //			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
 //			@Override
@@ -262,6 +296,7 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 		urlHBox.getChildren().addAll(urlTf);
 		urlHBox.getChildren().addAll(goBtn);
 		urlHBox.getChildren().addAll(shareBtn);
+		urlHBox.getChildren().addAll(stockPriceShareBtn);
 		urlHBox.getChildren().addAll(shareResultTxt);
 
 		WebView webView = new WebView();
@@ -316,17 +351,17 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 				try {
 					saveCookies();
 				} catch (NoSuchMethodException ex) {
-					java.util.logging.Logger.getLogger(JavaFxNewsReaderNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
+					java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 				} catch (InvocationTargetException ex) {
-					java.util.logging.Logger.getLogger(JavaFxNewsReaderNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
+					java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 				} catch (IllegalAccessException ex) {
-					java.util.logging.Logger.getLogger(JavaFxNewsReaderNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
+					java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 				} catch (NoSuchFieldException ex) {
-					java.util.logging.Logger.getLogger(JavaFxNewsReaderNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
+					java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 				} catch (ClassNotFoundException ex) {
-					java.util.logging.Logger.getLogger(JavaFxNewsReaderNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
+					java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 				} catch (IOException ex) {
-					java.util.logging.Logger.getLogger(JavaFxNewsReaderNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
+					java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 				}
 			}
 		;
@@ -581,15 +616,15 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 			nidAutTf.setText(strNidAut);
 			nidSesTa.setText(strNidSes);
 		} catch (NoSuchFieldException ex) {
-			java.util.logging.Logger.getLogger(JavaFxNewsReaderNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (SecurityException ex) {
-			java.util.logging.Logger.getLogger(JavaFxNewsReaderNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (IllegalArgumentException ex) {
-			java.util.logging.Logger.getLogger(JavaFxNewsReaderNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(JavaFxNewsReaderNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(JavaFxNewsReaderNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -657,10 +692,10 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 			// c.getDeclaredMethods()[0].invoke(object, Object... MethodArgs );
 			Method method = c.getDeclaredMethod("createHTMLFile", String.class);
 			sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
-			java.util.logging.Logger.getLogger(JavaFxNewsReaderNaverLinkShare.class.getName()).log(Level.INFO, sb.toString());
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.INFO, sb.toString());
 		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 			| NoSuchMethodException | SecurityException ex) {
-			java.util.logging.Logger.getLogger(JavaFxNewsReaderNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 			return;
 		}
 

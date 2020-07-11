@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
@@ -128,7 +127,7 @@ public class StockPlusMinusDivide100 extends Thread {
 		iExtractCount = 100;
 	}
 
-	StockPlusMinusDivide100(String strNidAut, String strNidSes) {
+	public StockPlusMinusDivide100(String strNidAut, String strNidSes) {
 		logger = LoggerFactory.getLogger(getClass());
 		this.strNidAut = strNidAut;
 		this.strNidSes = strNidSes;

@@ -45,7 +45,7 @@ public enum NewsPublisher {
 	WwwEtodayCoKr("www.etoday.co.kr"),
 	WwwNewsisCom("www.newsis.com"),
 	NewsisCom("newsis.com"),
-	NewsPressianCom("www.pressian.com"),
+	WwwPressianCom("www.pressian.com"),
 	NewsSbsCoKr("news.sbs.co.kr"),
 	WwwFnnewsCom("www.fnnews.com"),
 	MFnnewsCom("m.fnnews.com"),
@@ -98,6 +98,7 @@ public enum NewsPublisher {
 	WwwPharmnewsCom("www.pharmnews.com"),
 	WwwBusanCom("www.busan.com"),
 	HugsFnnewsCom("hugs.fnnews.com"),
+	WwwMbnCoKr("www.mbn.co.kr"),
 	WwwIlyoseoulCoKr("www.ilyoseoul.co.kr");
 
 	final private String name;

@@ -27,7 +27,7 @@ public class NewsMoneyToday extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = LoggerFactory.getLogger(NewsMoneyToday.class);
-	final static String userHome = System.getProperty("user.home");
+	final static String USER_HOME = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -273,15 +273,15 @@ public class NewsMoneyToday extends javax.swing.JFrame {
 			sb1.append("</html>\r\n");
 			// System.out.println(sb1.toString());
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

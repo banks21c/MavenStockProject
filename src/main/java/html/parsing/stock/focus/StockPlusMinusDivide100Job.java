@@ -1,4 +1,4 @@
-package html.parsing.stock.quartz2x.example2;
+package html.parsing.stock.focus;
 
 import java.util.Date;
 

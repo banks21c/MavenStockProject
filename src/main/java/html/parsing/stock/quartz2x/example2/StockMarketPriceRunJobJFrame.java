@@ -1,7 +1,8 @@
 package html.parsing.stock.quartz2x.example2;
 
-import html.parsing.stock.focus.*;
-
+import html.parsing.stock.focus.StockPlusMinusDivide100;
+import html.parsing.stock.focus.StockUnique_ReadTxtFile_ThreadCall;
+import html.parsing.stock.focus.StockWeeks52NewLowHighPriceTodayOneFile;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
