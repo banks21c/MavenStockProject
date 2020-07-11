@@ -1,4 +1,4 @@
-package html.parsing.stock.quartz2x.example2;
+package html.parsing.stock.javafx;
 
 
 import javax.swing.JOptionPane;
@@ -41,7 +41,6 @@ public class Step1_StockMarketPriceRunJFrame extends javax.swing.JFrame {
 		}
 
 		Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strNidAut, strNidSes);
-//		threadStart();
 		step2.schedulerStart();
 	}
 	/**

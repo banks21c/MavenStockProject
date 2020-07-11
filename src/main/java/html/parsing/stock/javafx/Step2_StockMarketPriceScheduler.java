@@ -1,4 +1,4 @@
-package html.parsing.stock.quartz2x.example2;
+package html.parsing.stock.javafx;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
