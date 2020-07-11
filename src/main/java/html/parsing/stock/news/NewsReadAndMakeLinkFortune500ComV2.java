@@ -451,24 +451,20 @@ public class NewsReadAndMakeLinkFortune500ComV2 extends javax.swing.JFrame {
         return sb.toString();
     }
 
-    private void createHTMLFile(String url) {
-        if (url.equals("")) {
+	private void createHTMLFile(String strUrl) {
+		createHTMLFile(strUrl,"");
+	}
+	private void createHTMLFile(String strUrl,String strMyComment) {
+        if (strUrl.equals("")) {
             return;
         }
-        createHTMLFile(url, "");
-    }
-
-    private void createHTMLFile(String url, String newsCompany) {
-        if (url.equals("")) {
-            return;
-        }
-        System.out.println("url:" + url);
-        newsCompany = "";
+        System.out.println("url:" + strUrl);
+        String newsCompany = "";
         int idx = 0;
         for (NewsPublisher np : NewsPublisher.values()) {
             String newsPublisherDomain = np.getName();
             idx = np.ordinal();
-            if (url.contains(newsPublisherDomain)) {
+            if (strUrl.contains(newsPublisherDomain)) {
                 System.out.println("idx:" + idx + " newsPublisherDomain:" + newsPublisherDomain);
                 System.out.println("주소가 일치합니다. idx:" + idx);
                 newsCompany = np.toString();
@@ -480,9 +476,9 @@ public class NewsReadAndMakeLinkFortune500ComV2 extends javax.swing.JFrame {
 
         StringBuilder sb = new StringBuilder();
         if (newsCompany.equals("BUSAN")) {
-            sb = WwwBusanCom.createHTMLFile(url);
+            sb = WwwBusanCom.createHTMLFile(strUrl);
         } else if (newsCompany.equals("WwwHanitvCom")) {
-            sb = WwwHanitvCom.createHTMLFile(url);
+            sb = WwwHanitvCom.createHTMLFile(strUrl);
         }
         if (newsCompany.equals("")) {
             return;
@@ -492,10 +488,12 @@ public class NewsReadAndMakeLinkFortune500ComV2 extends javax.swing.JFrame {
         try {
             c = Class.forName("html.parsing.stock.news." + newsCompany);
             System.out.println("Class Name:" + c.getName());
-            System.out.println("url:" + url);
+            System.out.println("url:" + strUrl);
             //c.getDeclaredMethods()[0].invoke(object, Object... MethodArgs  );
-            Method method = c.getDeclaredMethod("createHTMLFile", String.class);
-            sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
+//			Method method = c.getDeclaredMethod("createHTMLFile", String.class);
+//			sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
+			Method method = c.getDeclaredMethod("createHTMLFile", String.class, String.class);
+			sb = (StringBuilder) method.invoke(String.class, new Object[] { strUrl, strMyComment });
             java.util.logging.Logger.getLogger(NewsReadAndMakeLinkFortune500ComV2.class.getName()).log(Level.INFO, sb.toString());
         } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
             java.util.logging.Logger.getLogger(NewsReadAndMakeLinkFortune500ComV2.class.getName()).log(Level.SEVERE, null, ex);

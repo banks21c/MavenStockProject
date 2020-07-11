@@ -330,19 +330,15 @@ public class NewsReadAndMakeLinkFortune500Com extends javax.swing.JFrame {
         return sb.toString();
     }
 
-    private void createHTMLFile(String url) {
-        if (url.equals("")) {
-            return;
-        }
-        createHTMLFile(url, "");
-    }
-
-    private void createHTMLFile(String url, String newsCompany) {
+	private void createHTMLFile(String strUrl) {
+		createHTMLFile(strUrl,"");
+	}
+	private void createHTMLFile(String strUrl,String strMyComment) {
         if (url.equals("")) {
             return;
         }
         System.out.println("url:" + url);
-        newsCompany = "";
+        String newsCompany = "";
         int idx = 0;
         for (NewsPublisher np : NewsPublisher.values()) {
             String newsPublisherDomain = np.getName();
@@ -373,8 +369,10 @@ public class NewsReadAndMakeLinkFortune500Com extends javax.swing.JFrame {
             System.out.println("Class Name:" + c.getName());
             System.out.println("url:" + url);
             //c.getDeclaredMethods()[0].invoke(object, Object... MethodArgs  );
-            Method method = c.getDeclaredMethod("createHTMLFile", String.class);
-            sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
+//			Method method = c.getDeclaredMethod("createHTMLFile", String.class);
+//			sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
+			Method method = c.getDeclaredMethod("createHTMLFile", String.class, String.class);
+			sb = (StringBuilder) method.invoke(String.class, new Object[] { strUrl, strMyComment });
             java.util.logging.Logger.getLogger(NewsReadAndMakeLinkFortune500Com.class.getName()).log(Level.INFO, sb.toString());
         } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
             java.util.logging.Logger.getLogger(NewsReadAndMakeLinkFortune500Com.class.getName()).log(Level.SEVERE, null, ex);

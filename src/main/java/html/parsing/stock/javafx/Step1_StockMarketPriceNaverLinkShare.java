@@ -665,18 +665,21 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 		}
 	}
 
-	private void createHTMLFile(String url) {
-		if (url.equals("")) {
+	private void createHTMLFile(String strUrl) {
+		createHTMLFile(strUrl,"");
+	}
+	private void createHTMLFile(String strUrl,String strMyComment) {
+		if (strUrl.equals("")) {
 			return;
 		}
-		System.out.println("createHTMLFile url:" + url);
+		System.out.println("createHTMLFile url:" + strUrl);
 		// tab2에서 페이지 이동
 		int idx = 0;
 		String newsCompany = "";
 		for (NewsPublisher np : NewsPublisher.values()) {
 			String newsPublisherDomain = np.getName();
 			idx = np.ordinal();
-			if (url.contains(newsPublisherDomain)) {
+			if (strUrl.contains(newsPublisherDomain)) {
 				System.out.println("idx:" + idx + " newsPublisherDomain:" + newsPublisherDomain);
 				System.out.println("주소가 일치합니다. idx:" + idx);
 				newsCompany = np.toString();
@@ -696,8 +699,10 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 			c = Class.forName("html.parsing.stock.news." + newsCompany);
 			System.out.println("Class Name:" + c.getName());
 			// c.getDeclaredMethods()[0].invoke(object, Object... MethodArgs );
-			Method method = c.getDeclaredMethod("createHTMLFile", String.class);
-			sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
+//			Method method = c.getDeclaredMethod("createHTMLFile", String.class);
+//			sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
+			Method method = c.getDeclaredMethod("createHTMLFile", String.class, String.class);
+			sb = (StringBuilder) method.invoke(String.class, new Object[] { strUrl, strMyComment });
 			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.INFO, sb.toString());
 		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 			| NoSuchMethodException | SecurityException ex) {
