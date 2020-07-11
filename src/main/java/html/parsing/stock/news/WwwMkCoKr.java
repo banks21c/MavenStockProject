@@ -49,6 +49,7 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 	private javax.swing.JTextField urlTf;
 	private javax.swing.JPanel executeResultPnl;
 	private static javax.swing.JLabel executeResultLbl;
+	private static String strMyComment="";
 
 	WwwMkCoKr(int i) {
 		logger = LoggerFactory.getLogger(this.getClass());
@@ -322,7 +323,7 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
-			sb1.append(StockUtil.getMyCommentBox());
+			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
 			sb1.append("<div style='width:548px'>\r\n");
 

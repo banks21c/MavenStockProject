@@ -1862,14 +1862,23 @@ public class StockUtil {
 	}
 
 	public static String getMyCommentBox() {
-		StringBuffer sb1 = new StringBuffer();
+		StringBuilder sb1 = new StringBuilder();
 		sb1.append("<div style='border:1px solid #afaefe;width:548px;'>\r\n");
 		sb1.append("<span style='font:12px bold;border:1px solid #afaefe'>My Comment</span>\r\n");
-		sb1.append("<blockquote>\r\n");
 		sb1.append("<h3>\r\n");
 		sb1.append("<span style='background-color: rgb(51, 51, 51); color: rgb(255, 255, 0);'>~~~</span>\r\n");
 		sb1.append("</h3>\r\n");
-		sb1.append("</blockquote>\r\n");
+		sb1.append("</div>\r\n");
+		return sb1.toString();
+	}
+	
+	public static String getMyCommentBox(String strComment) {
+		StringBuilder sb1 = new StringBuilder();
+		sb1.append("<div style='border:1px solid #afaefe;width:548px;'>\r\n");
+		sb1.append("<span style='font:12px bold;border:1px solid #afaefe'>My Comment</span>\r\n");
+		sb1.append("<h3>\r\n");
+		sb1.append("<span style='background-color: rgb(51, 51, 51); color: rgb(255, 255, 0);'>").append(strComment).append("</span>\r\n");
+		sb1.append("</h3>\r\n");
 		sb1.append("</div>\r\n");
 		return sb1.toString();
 	}
