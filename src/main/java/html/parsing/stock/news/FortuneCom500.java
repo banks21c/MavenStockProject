@@ -56,7 +56,11 @@ public class FortuneCom500 extends News {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String strUrl) {
+	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String strUrl, String strMyComment) {
 		System.out.println("url:" + strUrl);
 		getURL(strUrl);
 
@@ -123,7 +127,7 @@ public class FortuneCom500 extends News {
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
-			sb1.append(StockUtil.getMyCommentBox());
+			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
 			sb1.append("<div style='width:548px'>\r\n");
 

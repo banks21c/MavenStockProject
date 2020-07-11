@@ -61,6 +61,11 @@ public class WwwMbnCoKr extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String strUrl) {
+		return createHTMLFile(strUrl, "");
+	}
+
+	public static StringBuilder createHTMLFile(String strUrl, String strMyComment) {
+
 		System.out.println("url:" + strUrl);
 		getURL(strUrl);
 
@@ -113,7 +118,7 @@ public class WwwMbnCoKr extends News {
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
 			System.out.println("strFileNameDate:" + strFileNameDate);
 
-			//Elements article = doc.select("#news_body_area");
+			// Elements article = doc.select("#news_body_area");
 //			Elements article = doc.select("#articleBody");
 			Elements article = doc.select("#article_2020 .detail");
 
@@ -162,15 +167,17 @@ public class WwwMbnCoKr extends News {
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
-			sb1.append(StockUtil.getMyCommentBox());
+			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
 			sb1.append("<div style='width:548px'>\r\n");
 
-			sb1.append("<h3> 기사주소:[<a href='").append(strUrl).append("' target='_sub'>").append(strUrl).append("</a>] </h3>\n");
+			sb1.append("<h3> 기사주소:[<a href='").append(strUrl).append("' target='_sub'>").append(strUrl)
+					.append("</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append("<h4>").append(strSubTitle).append("</h4>\n");
 			sb1.append("<span style='font-size:12px'>").append(writer).append("</span><br>\n");
@@ -187,10 +194,12 @@ public class WwwMbnCoKr extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

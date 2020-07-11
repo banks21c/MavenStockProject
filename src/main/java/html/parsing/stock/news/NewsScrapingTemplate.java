@@ -109,8 +109,12 @@ public class NewsScrapingTemplate extends javax.swing.JFrame {
             }
         }
     }// GEN-LAST:event_urlTfKeyReleased
+    
+	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
 
-    private StringBuilder createHTMLFile(String url) {
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 
         News gurl = new News();
         gurl.getURL(url);
@@ -146,7 +150,7 @@ public class NewsScrapingTemplate extends javax.swing.JFrame {
             sb1.append("</head>\r\n");
             sb1.append("<body>\r\n");
 
-            sb1.append(StockUtil.getMyCommentBox());
+            sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
             sb1.append("<div style='width:548px'>\r\n");
 

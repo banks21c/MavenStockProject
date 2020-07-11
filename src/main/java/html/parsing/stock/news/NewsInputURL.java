@@ -45,14 +45,18 @@ public class NewsInputURL extends News {
 
 	NewsInputURL(int i) {
 		logger = LoggerFactory.getLogger(NewsInputURL.class);
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url != null && !url.equals("")) {
 			createHTMLFile(url);
 		}
 	}
 
-	public StringBuilder createHTMLFile(String url) {
+	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 		System.out.println("url:" + url);
 		System.out.println("createHTMLFile protocol:" + protocol);
@@ -115,17 +119,19 @@ public class NewsInputURL extends News {
 			sb1.append("<!doctype html>\r\n");
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
-			sb1.append(StockUtil.getMyCommentBox());
+			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
 			sb1.append("<div style='width:548px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
-			//sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
+			// sb1.append("<span
+			// style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
 			sb1.append(strContent).append("<br><br>\n");
 			sb1.append(copyright).append("<br><br>\n");
 			sb1.append("</div>\r\n");
@@ -140,7 +146,8 @@ public class NewsInputURL extends News {
 
 			String fileName = "";
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

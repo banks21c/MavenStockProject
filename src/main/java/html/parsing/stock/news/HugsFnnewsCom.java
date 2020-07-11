@@ -153,7 +153,7 @@ public class HugsFnnewsCom extends News {
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
-			sb1.append(StockUtil.getMyCommentBox());
+			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
 			sb1.append("<div style='width:548px'>\r\n");
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
