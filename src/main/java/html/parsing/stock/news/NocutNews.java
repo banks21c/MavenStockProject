@@ -25,8 +25,8 @@ import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.util.StockUtil;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.StockUtil;
 
 public class NocutNews extends News {
 

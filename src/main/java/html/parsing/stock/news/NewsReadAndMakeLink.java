@@ -7,33 +7,34 @@ package html.parsing.stock.news;
 
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.slf4j.LoggerFactory;
-
-import html.parsing.stock.util.DataSort.StockNameAscCompare2;
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
-import html.parsing.stock.util.FileUtil;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.model.StockVO;
+import html.parsing.stock.util.DataSort.StockNameAscCompare2;
+import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
 
 /**
  *

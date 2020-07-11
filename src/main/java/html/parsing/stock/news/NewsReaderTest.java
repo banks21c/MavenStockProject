@@ -30,10 +30,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.util.DataSort.StockNameAscCompare2;
-import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.model.StockVO;
+import html.parsing.stock.util.DataSort.StockNameAscCompare2;
+import html.parsing.stock.util.GlobalVariables;
 
 /**
  *

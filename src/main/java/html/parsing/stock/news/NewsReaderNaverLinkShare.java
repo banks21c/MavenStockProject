@@ -5,6 +5,8 @@
  */
 package html.parsing.stock.news;
 
+import static html.parsing.stock.util.NaverUtil.getNaverBlogLinkSharePage;
+
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -26,17 +28,16 @@ import javax.swing.text.html.StyleSheet;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.slf4j.LoggerFactory;
-
-import html.parsing.stock.util.DataSort.StockNameAscCompare2;
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
-import html.parsing.stock.util.NaverUtil;
-import static html.parsing.stock.util.NaverUtil.getNaverBlogLinkSharePage;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import html.parsing.stock.model.StockVO;
+import html.parsing.stock.util.DataSort.StockNameAscCompare2;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.NaverUtil;
+import html.parsing.stock.util.StockUtil;
 
 /**
  *

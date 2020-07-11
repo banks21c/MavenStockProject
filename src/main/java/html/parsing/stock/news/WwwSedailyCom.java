@@ -1,7 +1,10 @@
 package html.parsing.stock.news;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,11 +24,8 @@ import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.util.StockUtil;
 import html.parsing.stock.util.FileUtil;
-import java.awt.Color;
-import java.awt.Font;
-import java.io.IOException;
+import html.parsing.stock.util.StockUtil;
 
 public class WwwSedailyCom extends javax.swing.JFrame {
 

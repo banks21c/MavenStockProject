@@ -1,17 +1,11 @@
 package html.parsing.stock.news;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import org.jsoup.Jsoup;
@@ -24,8 +18,8 @@ import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
-import html.parsing.stock.util.StockUtil;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.StockUtil;
 
 public class WwwDtCoKr extends News {
 
