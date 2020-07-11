@@ -64,6 +64,10 @@ public class HugsFnnewsCom extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 //        getURL(url);
 		getURL(url);
 

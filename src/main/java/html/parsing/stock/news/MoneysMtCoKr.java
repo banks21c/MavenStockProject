@@ -176,7 +176,7 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 
 	MoneysMtCoKr(int i) {
 
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL:");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL:");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://moneys.mt.co.kr/news/mwView.php?no=2019050721408048558&type=4&code=w0401&MTN";
@@ -185,6 +185,10 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		News gurl = new News();
 		gurl.getURL(url);
 		String protocol = gurl.getProtocol();
@@ -245,8 +249,8 @@ public class MoneysMtCoKr extends javax.swing.JFrame {
 			System.out.println("strContent:" + strContent);
 
 			String copyright = article.select(".copyright").outerHtml();
-			strContent = strContent+copyright;
-			
+			strContent = strContent + copyright;
+
 			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			sb1.append("<html lang='ko'>\r\n");

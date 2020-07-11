@@ -49,12 +49,12 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 	private javax.swing.JTextField urlTf;
 	private javax.swing.JPanel executeResultPnl;
 	private static javax.swing.JLabel executeResultLbl;
-	private static String strMyComment="";
+	private static String strMyComment = "";
 
 	WwwMkCoKr(int i) {
 		logger = LoggerFactory.getLogger(this.getClass());
 		logger.debug(this.getClass().getSimpleName());
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "https://www.mk.co.kr/news/society/view/2019/12/1091653/";
@@ -190,6 +190,10 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		News gurl = new News();
 		gurl.getURL(url);
 		String protocol = gurl.getProtocol();
@@ -256,12 +260,12 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 				dateElement = dateElements.get(0);
 			} else {
 				dateElements = doc.select(".news_title_author .lasttime1");
-				if(dateElements != null && dateElements.size() > 0) {
+				if (dateElements != null && dateElements.size() > 0) {
 					dateElement = doc.select(".news_title_author .lasttime1").get(0);
 				}
 			}
-			logger.debug("dateElements :"+dateElements);
-			if (dateElements == null ||dateElements.isEmpty() || dateElements.size() <= 0) {
+			logger.debug("dateElements :" + dateElements);
+			if (dateElements == null || dateElements.isEmpty() || dateElements.size() <= 0) {
 				dateElements = doc.select("#view_tit .sm_num");
 				if (dateElements != null && !dateElements.isEmpty() && dateElements.size() > 0) {
 					dateElement = dateElements.get(0);
@@ -276,9 +280,9 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 					strDate = strDate.substring(0, strDate.indexOf("수정"));
 				}
 				strDate = strDate.replace("&nbsp;", "").trim();
-				logger.debug("strDate :[" + strDate+"]");
+				logger.debug("strDate :[" + strDate + "]");
 				strDate = strDate.replace(".", "-");
-				logger.debug("strDate :[" + strDate+"]");
+				logger.debug("strDate :[" + strDate + "]");
 
 				strFileNameDate = strDate;
 				strFileNameDate = StockUtil.getDateForFileName(strDate);
@@ -294,32 +298,33 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 			if (contentEls.size() <= 0) {
 				contentEls = doc.select(".read_txt");
 			}
-						
+
 			Elements imgEls = contentEls.select("img");
-			for(Element imgEl:imgEls){
+			for (Element imgEl : imgEls) {
 				String imgUrl = imgEl.attr("src");
-				logger.debug("imgUrl:"+imgUrl);
-				if(!imgUrl.startsWith("http")) {
-					if(imgUrl.startsWith("//")) {
-						imgUrl = protocol+":"+imgUrl;
-					}else {					
-						imgUrl = protocolHost+imgUrl;
+				logger.debug("imgUrl:" + imgUrl);
+				if (!imgUrl.startsWith("http")) {
+					if (imgUrl.startsWith("//")) {
+						imgUrl = protocol + ":" + imgUrl;
+					} else {
+						imgUrl = protocolHost + imgUrl;
 					}
-				}				
-				imgEl = ImageUtil.getImageWithStyle(imgEl,imgUrl);
-				logger.debug("imgEl:"+imgEl);
+				}
+				imgEl = ImageUtil.getImageWithStyle(imgEl, imgUrl);
+				logger.debug("imgEl:" + imgEl);
 			}
-			
+
 			String strContent = contentEls.html();
-			strContent = strContent.replace("src=\"//", "src=\""+protocol+"://");
-			
+			strContent = strContent.replace("src=\"//", "src=\"" + protocol + "://");
+
 			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			String copyright = "";
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 

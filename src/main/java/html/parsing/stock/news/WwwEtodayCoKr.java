@@ -51,7 +51,7 @@ public class WwwEtodayCoKr extends News {
 
 	WwwEtodayCoKr(int i) {
 
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://www.etoday.co.kr/news/section/newsview.php?idxno=1600693";
@@ -60,6 +60,10 @@ public class WwwEtodayCoKr extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		System.out.println("url:" + url);
 		getURL(url);
 

@@ -195,6 +195,10 @@ public class NewsTomatoCom2 extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 
 		News gurl = new News();
 		gurl.getURL(url);

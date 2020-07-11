@@ -52,7 +52,7 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 	NewsMkCoKr(int i) {
 		logger = LoggerFactory.getLogger(this.getClass());
 		logger.debug(this.getClass().getSimpleName());
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://news.mk.co.kr/newsRead.php?sc=30000001&year=2018&no=251460";
@@ -188,6 +188,10 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		News gurl = new News();
 		gurl.getURL(url);
 		String protocol = gurl.getProtocol();
@@ -253,12 +257,12 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 				dateElement = dateElements.get(0);
 			} else {
 				dateElements = doc.select(".news_title_author .lasttime1");
-				if(dateElements != null && dateElements.size() > 0) {
+				if (dateElements != null && dateElements.size() > 0) {
 					dateElement = doc.select(".news_title_author .lasttime1").get(0);
 				}
 			}
-			logger.debug("dateElements :"+dateElements);
-			if (dateElements == null ||dateElements.isEmpty() || dateElements.size() <= 0) {
+			logger.debug("dateElements :" + dateElements);
+			if (dateElements == null || dateElements.isEmpty() || dateElements.size() <= 0) {
 				dateElements = doc.select("#view_tit .sm_num");
 				if (dateElements != null && !dateElements.isEmpty() && dateElements.size() > 0) {
 					dateElement = dateElements.get(0);
@@ -273,9 +277,9 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 					strDate = strDate.substring(0, strDate.indexOf("수정"));
 				}
 				strDate = strDate.replace("&nbsp;", "").trim();
-				logger.debug("strDate :[" + strDate+"]");
+				logger.debug("strDate :[" + strDate + "]");
 				strDate = strDate.replace(".", "-");
-				logger.debug("strDate :[" + strDate+"]");
+				logger.debug("strDate :[" + strDate + "]");
 
 				strFileNameDate = strDate;
 				strFileNameDate = StockUtil.getDateForFileName(strDate);
@@ -288,7 +292,7 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 				strContent = doc.select(".view_txt").html();
 			}
 			logger.debug("strContent:" + strContent);
-			if(strContent == null || strContent.trim().equals("")) {
+			if (strContent == null || strContent.trim().equals("")) {
 				strContent = doc.select(".read_txt").html();
 			}
 			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
@@ -297,7 +301,8 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 

@@ -62,6 +62,10 @@ public class MarketinsightHankyungCom extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 		System.out.println("url:" + url);
 		System.out.println("createHTMLFile protocol:" + protocol);
@@ -148,7 +152,8 @@ public class MarketinsightHankyungCom extends News {
 			sb1.append("<!doctype html>\r\n");
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
@@ -173,8 +178,9 @@ public class MarketinsightHankyungCom extends News {
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
-String fileName ="";
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = "";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

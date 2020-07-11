@@ -41,8 +41,7 @@ public class WwwDailianCoKr200430 extends News {
 
 	WwwDailianCoKr200430(int i) {
 
-
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "http://www.dailian.co.kr/news/view/850199";
@@ -52,6 +51,10 @@ public class WwwDailianCoKr200430 extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 //        getURL(url);
 		getURL(url);
 
@@ -126,7 +129,7 @@ public class WwwDailianCoKr200430 extends News {
 			strContent = strContent.replaceAll("<figcaption>", "<div>");
 			strContent = strContent.replaceAll("</figcaption>", "</div>");
 			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
-			//System.out.println("strContent:[" + strContent + "]strContent");
+			// System.out.println("strContent:[" + strContent + "]strContent");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			String copyright = "";
@@ -135,7 +138,8 @@ public class WwwDailianCoKr200430 extends News {
 			sb1.append("<!doctype html>\r\n");
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
@@ -157,10 +161,12 @@ public class WwwDailianCoKr200430 extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

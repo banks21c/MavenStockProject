@@ -54,6 +54,10 @@ public class NewsNewswayCoKr extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 		System.out.println("protocol1:" + protocol);
 		System.out.println("host1:" + host);
@@ -66,7 +70,7 @@ public class NewsNewswayCoKr extends News {
 		try {
 			doc = Jsoup.connect(url).get();
 			doc.select(".googlead").remove();
-			
+
 			System.out.println("a link:" + doc.select("a"));
 			// System.out.println("doc:[" + doc+"]");
 			strTitle = doc.select(".rl_pw h4").text();
@@ -74,7 +78,7 @@ public class NewsNewswayCoKr extends News {
 			strTitleForFileName = strTitle;
 			strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
 			System.out.println("strTitleForFileName:" + strTitleForFileName);
-			
+
 			strSubTitle = doc.select(".subTitle").outerHtml();
 
 			JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
@@ -87,7 +91,7 @@ public class NewsNewswayCoKr extends News {
 
 			Elements timeElement = doc.select(".reporterBox span");
 			String strDate = "";
-			if(timeElement.size() > 0) {
+			if (timeElement.size() > 0) {
 				strDate = timeElement.get(0).text();
 			}
 			System.out.println("timeElement:" + timeElement);
@@ -98,7 +102,7 @@ public class NewsNewswayCoKr extends News {
 
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
 			System.out.println("strFileNameDate:" + strFileNameDate);
-			/*본문*/
+			/* 본문 */
 			Elements article = doc.select("#articleText");
 			// article.select(".image-area").append("<br><br>");
 			article.select(".image-area").after("<br><br>");
@@ -169,7 +173,7 @@ public class NewsNewswayCoKr extends News {
 	public NewsNewswayCoKr(int i) {
 		logger = LoggerFactory.getLogger(this.getClass());
 
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://www.edaily.co.kr/news/news_detail.asp?newsId=01918806619115112&mediaCodeNo=257";

@@ -55,6 +55,10 @@ public class BizChosunCom extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		logger.debug("url:" + url);
 		getURL(url);
 

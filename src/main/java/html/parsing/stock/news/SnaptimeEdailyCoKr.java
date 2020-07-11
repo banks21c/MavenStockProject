@@ -49,8 +49,7 @@ public class SnaptimeEdailyCoKr extends News {
 
 	public SnaptimeEdailyCoKr(int i) {
 
-
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://snaptime.edaily.co.kr/2019/05/김보영의-키워드-우리는-왜-펭귄문제를-풀고-스냅챗/";
@@ -59,6 +58,10 @@ public class SnaptimeEdailyCoKr extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		try {
 			url = URLDecoder.decode(url, "UTF-8");
 			System.out.println("url:" + url);
@@ -90,11 +93,11 @@ public class SnaptimeEdailyCoKr extends News {
 			doc.select(".tex_l_box").remove();
 			doc.select(".tex_s_box").remove();
 			doc.select(".issue_more").remove();
-			doc.select("table").attr("width","548");
+			doc.select("table").attr("width", "548");
 			doc.select("div").removeAttr("style");
 //			doc.select("div").attr("style","width:548px");
 			System.out.println("a link:" + doc.select("a"));
-			//System.out.println("doc:[" + doc+"]");
+			// System.out.println("doc:[" + doc+"]");
 			strTitle = doc.select(".post-template-1 .single-post-title").text();
 			if (strTitle.equals("")) {
 				strTitle = doc.select(".news_titles h2").text();
@@ -119,7 +122,7 @@ public class SnaptimeEdailyCoKr extends News {
 			System.out.println("timeElement:" + timeElement);
 			timeElement.select("em").remove();
 			strDate = timeElement.text();
-                        strDate = strDate.replace("마지막 업데이트 ","");
+			strDate = strDate.replace("마지막 업데이트 ", "");
 			if (strDate == null || strDate.equals("")) {
 				String meta_published_time = "";
 				Elements metas = doc.select("meta");
@@ -155,10 +158,10 @@ public class SnaptimeEdailyCoKr extends News {
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
 			System.out.println("strFileNameDate:" + strFileNameDate);
 			Elements article = doc.select(".entry-content");
-                        article.select(".cosmosfarm-share-buttons-default.cosmosfarm-align-center").remove();
-                        article.select(".single-post-content .npqmgry").remove();
-                        article.select("div").removeAttr("style");
-                        article.select("div").attr("style","width:548px");
+			article.select(".cosmosfarm-share-buttons-default.cosmosfarm-align-center").remove();
+			article.select(".single-post-content .npqmgry").remove();
+			article.select("div").removeAttr("style");
+			article.select("div").attr("style", "width:548px");
 			if (article.isEmpty()) {
 				System.out.println("article is empty...");
 				article = doc.select(".article_news");
@@ -179,12 +182,14 @@ public class SnaptimeEdailyCoKr extends News {
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = strContent.replaceAll("figure", "div");
 			strContent = strContent.replaceAll("figcaption", "div");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);;
-			//Elements copyRightElement = doc.select(".txt_copyright");
-			//String copyRight = copyRightElement.text();
+			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			;
+			// Elements copyRightElement = doc.select(".txt_copyright");
+			// String copyRight = copyRightElement.text();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
@@ -196,7 +201,7 @@ public class SnaptimeEdailyCoKr extends News {
 			sb1.append("<span style='font-size:12px'>" + writer + "</span><br>\n");
 			sb1.append("<span style='font-size:12px'>" + strDate + "</span><br><br>\n");
 			sb1.append(strContent + "\n");
-			//sb1.append(copyRight);
+			// sb1.append(copyRight);
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
@@ -206,10 +211,12 @@ public class SnaptimeEdailyCoKr extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

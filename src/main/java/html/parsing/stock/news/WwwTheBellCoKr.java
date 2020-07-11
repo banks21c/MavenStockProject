@@ -50,8 +50,7 @@ public class WwwTheBellCoKr extends News {
 
 	WwwTheBellCoKr(int i) {
 
-
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://www.thebell.co.kr/free/content/ArticleView.asp?key=201908160100029190001805";
@@ -60,6 +59,10 @@ public class WwwTheBellCoKr extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 
 		StringBuilder sb1 = new StringBuilder();
@@ -133,7 +136,8 @@ public class WwwTheBellCoKr extends News {
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
@@ -158,10 +162,12 @@ public class WwwTheBellCoKr extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

@@ -63,6 +63,10 @@ public class KrInvestingCom extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		logger.debug("url:" + url);
 		getURL(url);
 
@@ -136,18 +140,18 @@ public class KrInvestingCom extends News {
 			article.select(".news_body .news_date").remove();
 
 			Elements imgEls = article.select("img");
-			for(Element imgEl:imgEls){
+			for (Element imgEl : imgEls) {
 				String imgUrl = imgEl.attr("src");
-				logger.debug("imgUrl:"+imgUrl);
-				if(!imgUrl.startsWith("http")) {
-					if(imgUrl.startsWith("//")) {
-						imgUrl = protocol+":"+imgUrl;
-					}else {					
-						imgUrl = getProtocolHost()+imgUrl;
+				logger.debug("imgUrl:" + imgUrl);
+				if (!imgUrl.startsWith("http")) {
+					if (imgUrl.startsWith("//")) {
+						imgUrl = protocol + ":" + imgUrl;
+					} else {
+						imgUrl = getProtocolHost() + imgUrl;
 					}
-				}				
-				imgEl = ImageUtil.getImageWithStyle(imgEl,imgUrl);
-				logger.debug("imgEl:"+imgEl);
+				}
+				imgEl = ImageUtil.getImageWithStyle(imgEl, imgUrl);
+				logger.debug("imgEl:" + imgEl);
 			}
 
 			article.attr("style", "width:548px");
@@ -159,7 +163,7 @@ public class KrInvestingCom extends News {
 
 			String strContent = articleHtml.replaceAll("640px", "548px");
 			strContent = strContent.replaceAll("<figure>", "");
-			strContent = strContent.replaceAll("\"/", "\""+getProtocolHost()+"/");
+			strContent = strContent.replaceAll("\"/", "\"" + getProtocolHost() + "/");
 			strContent = strContent.replaceAll("</figure>", "<br>");
 			strContent = strContent.replaceAll("<figcaption>", "");
 			strContent = strContent.replaceAll("</figcaption>", "<br>");

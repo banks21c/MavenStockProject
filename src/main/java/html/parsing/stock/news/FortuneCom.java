@@ -54,6 +54,10 @@ public class FortuneCom extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		System.out.println("url:" + url);
 		getURL(url);
 
@@ -75,7 +79,7 @@ public class FortuneCom extends News {
 
 			doc = Jsoup.connect("https://fortune.com/fortune500/2019/").get();
 			String strContent = StockUtil.makeStockLinkStringByExcel(doc.html());
-    		logger.debug("strContent:["+strContent+"]");
+			logger.debug("strContent:[" + strContent + "]");
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");

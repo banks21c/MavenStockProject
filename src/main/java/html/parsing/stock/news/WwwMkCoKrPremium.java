@@ -52,7 +52,7 @@ public class WwwMkCoKrPremium extends javax.swing.JFrame {
 	WwwMkCoKrPremium(int i) {
 		logger1 = LoggerFactory.getLogger(this.getClass());
 		logger1.debug(this.getClass().getSimpleName());
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "https://www.mk.co.kr/premium/special-report/view/2019/12/27289/";
@@ -72,9 +72,10 @@ public class WwwMkCoKrPremium extends javax.swing.JFrame {
 					break;
 				}
 			}
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| javax.swing.UnsupportedLookAndFeelException ex) {
 			java.util.logging.Logger.getLogger(NewsReader.class.getName()).log(java.util.logging.Level.SEVERE, null,
-				ex);
+					ex);
 		}
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
@@ -187,6 +188,10 @@ public class WwwMkCoKrPremium extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		News gurl = new News();
 		gurl.getURL(url);
 		String protocol = gurl.getProtocol();
@@ -200,15 +205,14 @@ public class WwwMkCoKrPremium extends javax.swing.JFrame {
 		try {
 			System.out.println("url:" + url);
 			doc = Jsoup.connect(url)
-				.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0")
-				.header("Accept-Language", "en")
-				.header("Accept-Encoding", "gzip,deflate,sdch").get();
+					.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0")
+					.header("Accept-Language", "en").header("Accept-Encoding", "gzip,deflate,sdch").get();
 			System.out.println("doc:[" + doc + "]");
 
-            JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
-            JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
-            JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
-            JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
+			JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
+			JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
+			JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
+			JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 
 			doc.select("iframe").remove();
 			doc.select("script").remove();
@@ -268,7 +272,8 @@ public class WwwMkCoKrPremium extends javax.swing.JFrame {
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
@@ -297,8 +302,10 @@ public class WwwMkCoKrPremium extends javax.swing.JFrame {
 //			String fileName = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
 //			FileUtil.fileWrite(fileName, doc.html());
 
-			System.out.println("fileName1:" + userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html");
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			System.out.println("fileName1:" + userHome + File.separator + "documents" + File.separator + strFileNameDate
+					+ "_" + strTitleForFileName + ".html");
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 //			System.out.println("fileName2:" + userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html");

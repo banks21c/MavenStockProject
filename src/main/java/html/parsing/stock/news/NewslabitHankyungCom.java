@@ -50,7 +50,7 @@ public class NewslabitHankyungCom extends News {
 
 	NewslabitHankyungCom(int i) {
 
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "http://newslabit.hankyung.com/article/201907154922G";
@@ -59,6 +59,10 @@ public class NewslabitHankyungCom extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 		System.out.println("url:" + url);
 		System.out.println("createHTMLFile protocol:" + protocol);
@@ -111,7 +115,7 @@ public class NewslabitHankyungCom extends News {
 				Element timeElement = timeElements.get(0);
 				timeElement.select("em").remove();
 				strDate = timeElement.text();
-		strDate = strDate.replace("입력","").trim();
+				strDate = strDate.replace("입력", "").trim();
 
 				System.out.println("strDate:" + strDate);
 			} else {
@@ -119,7 +123,7 @@ public class NewslabitHankyungCom extends News {
 				Element timeElement = timeElements.get(0);
 				timeElement.select("em").remove();
 				strDate = timeElement.text();
-		strDate = strDate.replace("입력","").trim();
+				strDate = strDate.replace("입력", "").trim();
 
 				System.out.println("strDate:" + strDate);
 			}

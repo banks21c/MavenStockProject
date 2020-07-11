@@ -59,6 +59,10 @@ public class WwwHankyungCom extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 		System.out.println("url:" + url);
 		System.out.println("createHTMLFile protocol:" + protocol);
@@ -111,7 +115,7 @@ public class WwwHankyungCom extends News {
 				Element timeElement = timeElements.get(0);
 				timeElement.select("em").remove();
 				strDate = timeElement.text();
-		strDate = strDate.replace("입력","").trim();
+				strDate = strDate.replace("입력", "").trim();
 
 				System.out.println("strDate:" + strDate);
 			} else {
@@ -119,7 +123,7 @@ public class WwwHankyungCom extends News {
 				Element timeElement = timeElements.get(0);
 				timeElement.select("em").remove();
 				strDate = timeElement.text();
-		strDate = strDate.replace("입력","").trim();
+				strDate = strDate.replace("입력", "").trim();
 
 				System.out.println("strDate:" + strDate);
 			}
@@ -193,10 +197,12 @@ public class WwwHankyungCom extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

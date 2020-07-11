@@ -198,6 +198,10 @@ public class WwwSedailyCom extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		logger = LoggerFactory.getLogger(WwwSedailyCom.class.getName());
 
 		News gurl = new News();

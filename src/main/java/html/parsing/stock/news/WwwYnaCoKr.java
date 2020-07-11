@@ -53,6 +53,10 @@ public class WwwYnaCoKr extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		logger = LoggerFactory.getLogger(WwwYnaCoKr.class);
 		// getURL(url);
 		getURL(url);
@@ -100,11 +104,10 @@ public class WwwYnaCoKr extends News {
 //				className = className.replace("-", "_");
 //				el.attr("class",className);
 //			}
-			
+
 			Elements article = doc.select(".article");
-			System.out.println("article:[" + article+"]\n\n");
-			
-			
+			System.out.println("article:[" + article + "]\n\n");
+
 			// article.select(".image-area").append("<br><br>");
 			article.select(".image-area").after("<br><br>");
 			article.removeAttr("class");

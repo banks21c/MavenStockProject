@@ -45,7 +45,7 @@ public class WwwKoreaKr extends News {
 
 	WwwKoreaKr(int i) {
 		logger = LoggerFactory.getLogger(WwwKoreaKr.class);
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "http://www.asiatoday.co.kr/view.php?key=20180411010006864";
@@ -54,6 +54,10 @@ public class WwwKoreaKr extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		System.out.println("url:" + url);
 		getURL(url);
 
@@ -81,7 +85,7 @@ public class WwwKoreaKr extends News {
 //            JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
 //            JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 			String date = doc.select(".article_head .info span").get(1).text();
-			logger.debug("date :"+date);
+			logger.debug("date :" + date);
 
 			if (date == null || date.equals("")) {
 				date = doc.select(".section_top_box dl dd .wr_day").text();
@@ -105,11 +109,11 @@ public class WwwKoreaKr extends News {
 			System.out.println("author:" + author);
 
 			Elements article = doc.select(".view_cont");
-			//System.out.println("article:[" + article+"]article");
+			// System.out.println("article:[" + article+"]article");
 
 			article.attr("style", "width:548px");
 			String articleHtml = article.outerHtml();
-			//System.out.println("articleHtml:[" + articleHtml+"]articleHtml");
+			// System.out.println("articleHtml:[" + articleHtml+"]articleHtml");
 
 			String copyright = "";
 			copyright = doc.select(".cont_copy").outerHtml();
@@ -121,12 +125,13 @@ public class WwwKoreaKr extends News {
 			strContent = strContent.replaceAll("<figcaption>", "");
 			strContent = strContent.replaceAll("</figcaption>", "<br>");
 			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
-			//System.out.println("content:[" + content + "]content");
+			// System.out.println("content:[" + content + "]content");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
@@ -137,7 +142,8 @@ public class WwwKoreaKr extends News {
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append("<span style='font-size:12px'>").append(author).append("</span><br><br>\n");
-			//sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
+			// sb1.append("<span
+			// style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
 			sb1.append(strContent).append("<br><br>\n");
 			sb1.append(copyright).append("<br><br>\n");
 			sb1.append("</div>\r\n");
@@ -150,10 +156,12 @@ public class WwwKoreaKr extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

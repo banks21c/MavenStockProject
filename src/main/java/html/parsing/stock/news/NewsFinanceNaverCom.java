@@ -44,7 +44,7 @@ public class NewsFinanceNaverCom extends News {
 
 	NewsFinanceNaverCom(int i) {
 		logger = LoggerFactory.getLogger(NewsFinanceNaverCom.class);
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "http://finance.naver.com/item/news_read.nhn?article_id=0004037813&office_id=008&code=192080&page=&sm=title_entity_id.basic";
@@ -53,6 +53,10 @@ public class NewsFinanceNaverCom extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 
 		StringBuilder sb1 = new StringBuilder();
@@ -68,7 +72,7 @@ public class NewsFinanceNaverCom extends News {
 			doc.select(".sns_share").remove();
 
 			strTitle = doc.select(".article_info h3").html();
-			if(strTitle.equals("")){
+			if (strTitle.equals("")) {
 				strTitle = doc.select(".p15").text();
 			}
 			System.out.println("title:" + strTitle);
@@ -110,10 +114,10 @@ public class NewsFinanceNaverCom extends News {
 			// String author = doc.select(".news_title_author a").text();
 			// System.out.println("author:" + author);
 			Elements article = doc.select(".articleCont");
-			if(article.html().equals("")){
+			if (article.html().equals("")) {
 				article = doc.select("#news_read");
 			}
-			logger.debug("articlehtml:"+article.html());
+			logger.debug("articlehtml:" + article.html());
 			article.select("#spiLayer").remove();
 			article.select(".link_news").remove();
 
@@ -136,9 +140,9 @@ public class NewsFinanceNaverCom extends News {
 			String articleHtml = article.outerHtml();
 			System.out.println("articleHtml:[" + articleHtml + "]articleHtml");
 
-			int indexOfCopyright = 	articleHtml.indexOf("ⓒ");
+			int indexOfCopyright = articleHtml.indexOf("ⓒ");
 			String copyright = "";
-			if(indexOfCopyright > 0){
+			if (indexOfCopyright > 0) {
 				copyright = articleHtml.substring(indexOfCopyright);
 			}
 			System.out.println("copyright:" + copyright);
@@ -157,9 +161,9 @@ public class NewsFinanceNaverCom extends News {
 			String copyRight = "";
 			if (copyRightElements.size() > 0) {
 				copyRightElement = copyRightElements.first();
-	            if (copyRightElement != null) {
-	                copyright = copyRightElement.text();
-	            }
+				if (copyRightElement != null) {
+					copyright = copyRightElement.text();
+				}
 			} else {
 				copyRightElements = doc.select("#newsView .copy");
 				copyRightElement = copyRightElements.first();
@@ -170,7 +174,8 @@ public class NewsFinanceNaverCom extends News {
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
@@ -196,10 +201,12 @@ public class NewsFinanceNaverCom extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

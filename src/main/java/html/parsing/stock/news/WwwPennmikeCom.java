@@ -53,7 +53,7 @@ public class WwwPennmikeCom extends News {
 
 	WwwPennmikeCom(int i) {
 
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "https://www.pennmike.com/news/articleView.html?idxno=27374";
@@ -62,6 +62,10 @@ public class WwwPennmikeCom extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		System.out.println("url:" + url);
 		try {
 			url = URLDecoder.decode(url, "UTF8");
@@ -77,7 +81,7 @@ public class WwwPennmikeCom extends News {
 		String strFileNameDate = "";
 		try {
 			doc = Jsoup.connect(url).get();
-			/*타이틀*/
+			/* 타이틀 */
 			strTitle = doc.select(".article-head-title").text();
 			System.out.println("title:" + strTitle);
 			strTitleForFileName = strTitle;

@@ -61,6 +61,10 @@ public class BizNewdailyCoKr extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		System.out.println("url:" + url);
 		getURL(url);
 
@@ -140,7 +144,7 @@ public class BizNewdailyCoKr extends News {
 			}
 			System.out.println("copyRight:" + copyRight);
 			article.select(".nd-by-line").first().remove();
-			
+
 			article.add(copyRightElement);
 
 			// System.out.println("imageArea:"+article.select(".image-area"));

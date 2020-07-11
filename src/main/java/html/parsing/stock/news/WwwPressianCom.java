@@ -61,6 +61,10 @@ public class WwwPressianCom extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		System.out.println("url:" + url);
 		getURL(url);
 
@@ -99,20 +103,20 @@ public class WwwPressianCom extends News {
 			}
 
 			Elements timeEls = doc.select(".article_view .view_header .box .byline span.date");
-			Element timeEl= null;
+			Element timeEl = null;
 			if (timeEls.size() > 0) {
-				timeEl= timeEls.first();
+				timeEl = timeEls.first();
 			}
 			timeEl.select("em").remove();
 			strDate = timeEl.text();
-			strDate = strDate.replace("기사입력","").trim();
+			strDate = strDate.replace("기사입력", "").trim();
 			System.out.println("strDate:" + strDate);
 			strFileNameDate = strDate;
 
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
 			System.out.println("strFileNameDate:" + strFileNameDate);
 
-			//Elements article = doc.select("#news_body_area");
+			// Elements article = doc.select("#news_body_area");
 //			Elements article = doc.select("#articleBody");
 			Elements article = doc.select(".article_body");
 			// article.select(".image-area").append("<br><br>");
@@ -146,7 +150,8 @@ public class WwwPressianCom extends News {
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
@@ -154,7 +159,8 @@ public class WwwPressianCom extends News {
 
 			sb1.append("<div style='width:548px'>\r\n");
 
-			sb1.append("<h3> 기사주소:[<a href='").append(url).append("' target='_sub'>").append(url).append("</a>] </h3>\n");
+			sb1.append("<h3> 기사주소:[<a href='").append(url).append("' target='_sub'>").append(url)
+					.append("</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append("<h4>").append(strSubTitle).append("</h4>\n");
 			sb1.append("<span style='font-size:12px'>").append(writer).append("</span><br>\n");
@@ -171,10 +177,12 @@ public class WwwPressianCom extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

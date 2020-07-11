@@ -48,7 +48,7 @@ public class HealthChosunCom extends News {
 
 	HealthChosunCom(int i) {
 		logger = LoggerFactory.getLogger(this.getClass());
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
 		if (url.equals("")) {
 			url = "http://health.chosun.com/site/data/html_dir/2020/05/07/2020050702591.html";
@@ -57,6 +57,10 @@ public class HealthChosunCom extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		logger.debug("url:" + url);
 		getURL(url);
 
@@ -76,7 +80,7 @@ public class HealthChosunCom extends News {
 //제목
 			strTitle = doc.select(".news_title_text h1").html();
 			logger.debug("title:" + strTitle);
-			if(strTitle.equals("")) {
+			if (strTitle.equals("")) {
 				strTitle = doc.select(".title_author_column h2").html();
 			}
 			strTitleForFileName = strTitle;
@@ -86,12 +90,12 @@ public class HealthChosunCom extends News {
 			logger.debug("strFileNameTitle:" + strTitleForFileName);
 //날짜
 			strDate = doc.select(".news_body .news_date").text();
-			if(strDate.equals("")) {
+			if (strDate.equals("")) {
 				strDate = doc.select(".title_author_column h2").html();
 			}
 			strDate = strDate.replace("입력 ", "");
 			logger.debug("strDate:" + strDate);
-			if(strDate.contains("|")) {
+			if (strDate.contains("|")) {
 				String strDateArray[] = strDate.split("\\|");
 				strDate = strDateArray[0].trim();
 			}
@@ -111,22 +115,22 @@ public class HealthChosunCom extends News {
 			logger.debug("article:" + article);
 			article.select(".news_body .news_date").remove();
 			article.attr("style", "width:548px");
-			
+
 			Elements imgEls = article.select("img");
-			for(Element imgEl:imgEls){
+			for (Element imgEl : imgEls) {
 				String imgUrl = imgEl.attr("src");
-				logger.debug("imgUrl:"+imgUrl);
-				if(!imgUrl.startsWith("http")) {
-					if(imgUrl.startsWith("//")) {
-						imgUrl = protocol+":"+imgUrl;
-					}else {					
-						imgUrl = getProtocolHost()+imgUrl;
+				logger.debug("imgUrl:" + imgUrl);
+				if (!imgUrl.startsWith("http")) {
+					if (imgUrl.startsWith("//")) {
+						imgUrl = protocol + ":" + imgUrl;
+					} else {
+						imgUrl = getProtocolHost() + imgUrl;
 					}
-				}				
-				imgEl = ImageUtil.getImageWithStyle(imgEl,imgUrl);
-				logger.debug("imgEl:"+imgEl);
+				}
+				imgEl = ImageUtil.getImageWithStyle(imgEl, imgUrl);
+				logger.debug("imgEl:" + imgEl);
 			}
-			
+
 			String articleHtml = article.outerHtml();
 			logger.debug("articleHtml:[" + articleHtml + "]articleHtml");
 

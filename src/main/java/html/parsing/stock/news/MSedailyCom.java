@@ -189,7 +189,11 @@ public class MSedailyCom extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
-		//메소드를 직접 호출할 경우, logger가 null이라서 새로 호출해줘야 한다.
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+		// 메소드를 직접 호출할 경우, logger가 null이라서 새로 호출해줘야 한다.
 		logger = LoggerFactory.getLogger(MSedailyCom.class);
 		logger.debug("url:" + url);
 

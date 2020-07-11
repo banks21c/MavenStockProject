@@ -62,9 +62,10 @@ public class NewsMoneyToday extends javax.swing.JFrame {
 					break;
 				}
 			}
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| javax.swing.UnsupportedLookAndFeelException ex) {
 			java.util.logging.Logger.getLogger(NewsReader.class.getName()).log(java.util.logging.Level.SEVERE, null,
-				ex);
+					ex);
 		}
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
@@ -84,8 +85,7 @@ public class NewsMoneyToday extends javax.swing.JFrame {
 
 		jPanel2 = new javax.swing.JPanel();
 		urlLbl = new javax.swing.JLabel();
-		urlTf = new javax.swing.JTextField(
-			"http://news.mt.co.kr/mtview.php?no=2018030111101822011&MT_T");
+		urlTf = new javax.swing.JTextField("http://news.mt.co.kr/mtview.php?no=2018030111101822011&MT_T");
 		jPanel1 = new javax.swing.JPanel(new java.awt.FlowLayout());
 		executeBtn = new javax.swing.JButton();
 		eraseBtn = new javax.swing.JButton();
@@ -188,6 +188,10 @@ public class NewsMoneyToday extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		News gurl = new News();
 		gurl.getURL(url);
 		String protocol = gurl.getProtocol();
@@ -278,10 +282,12 @@ public class NewsMoneyToday extends javax.swing.JFrame {
 				dir.mkdirs();
 			}
 
-			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

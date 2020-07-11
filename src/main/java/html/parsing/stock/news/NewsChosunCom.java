@@ -45,7 +45,7 @@ public class NewsChosunCom extends News {
 	}
 
 	NewsChosunCom(int i) {
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "http://news.chosun.com/site/data/html_dir/2017/02/24/2017022401428.html";
@@ -54,6 +54,10 @@ public class NewsChosunCom extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		logger.debug("url:" + url);
 		getURL(url);
 
@@ -113,7 +117,8 @@ public class NewsChosunCom extends News {
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 

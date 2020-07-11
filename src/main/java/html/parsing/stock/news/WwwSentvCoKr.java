@@ -194,6 +194,10 @@ public class WwwSentvCoKr extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 
 		News gurl = new News();
 		gurl.getURL(url);
@@ -249,7 +253,7 @@ public class WwwSentvCoKr extends javax.swing.JFrame {
 			Element content = doc.select(".new-view-wrap .section_2 .inner").get(0);
 			/* 배너 삭제 */
 			content.select(".newBanner.mid-banner-area").remove();
-			
+
 			Elements imgs = content.select("img");
 			System.out.println("imgs.size:" + imgs.size());
 			for (Element img : imgs) {
@@ -297,7 +301,7 @@ public class WwwSentvCoKr extends javax.swing.JFrame {
 					img.attr("style", ImageUtil.getImageStyle(imgSrc));
 				}
 			}
-			
+
 			String textBody = content.outerHtml();
 			// System.out.println("textBody:"+textBody);
 			Document textBodyDoc = Jsoup.parse(textBody);

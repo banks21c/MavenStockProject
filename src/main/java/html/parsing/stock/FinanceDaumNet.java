@@ -57,7 +57,7 @@ public class FinanceDaumNet extends News {
         createHTMLFile(url);
     }
 
-    public static StringBuilder createHTMLFile(String url) {
+    public static StringBuilder createHTMLFile(String url) {return createHTMLFile(url,"");}public static StringBuilder createHTMLFile(String url,String strMyComment) {
         System.out.println("createHTMLFile url:" + url);
         News gurl = new News();
         gurl.getURL(url);

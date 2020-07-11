@@ -51,7 +51,7 @@ public class NewsHeraldcorpCom extends News {
 
 	NewsHeraldcorpCom(int i) {
 		logger = LoggerFactory.getLogger(NewsHeraldcorpCom.class);
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		logger.debug("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://news.heraldcorp.com/view.php?ud=20190226000403";
@@ -60,6 +60,10 @@ public class NewsHeraldcorpCom extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		logger.debug("url:" + url);
 		getURL(url);
 
@@ -124,7 +128,7 @@ public class NewsHeraldcorpCom extends News {
 			String img = "";
 			logger.debug("img:" + img);
 			String strContent = doc.select("#articleText").outerHtml();
-			//strContent = StockUtil.makeStockLinkString(strContent);
+			// strContent = StockUtil.makeStockLinkString(strContent);
 			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 			logger.debug("strContent:" + strContent);
 
@@ -133,7 +137,8 @@ public class NewsHeraldcorpCom extends News {
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 

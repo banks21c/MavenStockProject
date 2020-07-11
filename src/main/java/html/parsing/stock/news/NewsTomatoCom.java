@@ -192,6 +192,10 @@ public class NewsTomatoCom extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 
 		News gurl = new News();
 		gurl.getURL(url);
@@ -240,7 +244,7 @@ public class NewsTomatoCom extends javax.swing.JFrame {
 			if (subTitle.size() > 0) {
 				strSubTitle = subTitle.outerHtml();
 			}
-			
+
 //			String strAuthor = doc.select(".author").html();
 			String strAuthor = doc.select(".header_wrap_b .h_top .h_left ul li.name").html();
 			if (strAuthor.equals("")) {

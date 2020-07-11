@@ -48,7 +48,7 @@ public class WebCrawler20191230 extends javax.swing.JFrame {
 	WebCrawler20191230(int i) {
 		logger = LoggerFactory.getLogger(this.getClass());
 		logger.debug(this.getClass().getSimpleName());
-		inputUrl = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		inputUrl = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		logger.debug("url:[" + inputUrl + "]");
 		if (inputUrl.equals("")) {
 			inputUrl = defaultUrl;
@@ -161,7 +161,7 @@ public class WebCrawler20191230 extends javax.swing.JFrame {
 		String url = urlTf.getText();
 		if (url != null && !url.equals("")) {
 			createHTMLFile(url);
-		}else {
+		} else {
 			logger.debug("기본 url 추출");
 			createHTMLFile(defaultUrl);
 		}
@@ -187,6 +187,10 @@ public class WebCrawler20191230 extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		News gurl = new News();
 		gurl.getURL(url);
 		String protocol = gurl.getProtocol();
@@ -199,7 +203,8 @@ public class WebCrawler20191230 extends javax.swing.JFrame {
 
 		sb1.append("<html lang='ko'>\r\n");
 		sb1.append("<head>\r\n");
-		//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+		// sb1.append("<meta http-equiv=\"Content-Type\"
+		// content=\"text/html;charset=utf-8\">\r\n");
 		sb1.append("</head>\r\n");
 		sb1.append("<body>\r\n");
 		Document doc = null;

@@ -49,7 +49,7 @@ public class WwwDtCoKr extends News {
 
 	WwwDtCoKr(int i) {
 		logger = LoggerFactory.getLogger(WwwDtCoKr.class);
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (url == null || url.equals("")) {
 			url = "http://www.dt.co.kr/contents.html?article_no=2019061902101132049001";
@@ -58,6 +58,10 @@ public class WwwDtCoKr extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 		System.out.println("url:" + url);
 		System.out.println("createHTMLFile protocol:" + protocol);
@@ -121,7 +125,7 @@ public class WwwDtCoKr extends News {
 				article = doc.select("#news_body_id");
 				System.out.println("article14:[" + article + "]");
 			}
-			//System.out.println("article:[" + article+"]article");
+			// System.out.println("article:[" + article+"]article");
 
 			article.attr("style", "width:548px");
 			String articleHtml = article.outerHtml();
@@ -135,7 +139,7 @@ public class WwwDtCoKr extends News {
 			strContent = strContent.replaceAll("<figcaption>", "<div>");
 			strContent = strContent.replaceAll("</figcaption>", "</div>");
 			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
-			//System.out.println("strContent:[" + strContent + "]strContent");
+			// System.out.println("strContent:[" + strContent + "]strContent");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			String copyRight = "";
@@ -143,7 +147,8 @@ public class WwwDtCoKr extends News {
 			sb1.append("<!doctype html>\r\n");
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
@@ -156,7 +161,8 @@ public class WwwDtCoKr extends News {
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append("<span style='font-size:12px'>").append(writer).append("</span><br><br>\n");
-			//sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
+			// sb1.append("<span
+			// style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
 			sb1.append(strContent).append("<br><br>\n");
 			sb1.append(copyRight).append("<br><br>\n");
 			sb1.append("</div>\r\n");
@@ -169,10 +175,12 @@ public class WwwDtCoKr extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

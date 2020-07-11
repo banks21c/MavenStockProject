@@ -193,6 +193,10 @@ public class WwwAsiaeCoKr extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 
 		News gurl = new News();
 		gurl.getURL(url);
@@ -256,18 +260,18 @@ public class WwwAsiaeCoKr extends javax.swing.JFrame {
 
 			Elements contentEls = doc.select(".article_view");
 			Elements imgEls = contentEls.select("img");
-			for(Element imgEl:imgEls){
+			for (Element imgEl : imgEls) {
 				String imgUrl = imgEl.attr("src");
-				logger.debug("imgUrl:"+imgUrl);
-				if(!imgUrl.startsWith("http")) {
-					if(imgUrl.startsWith("//")) {
-						imgUrl = protocol+":"+imgUrl;
-					}else {					
-						imgUrl = protocolHost+imgUrl;
+				logger.debug("imgUrl:" + imgUrl);
+				if (!imgUrl.startsWith("http")) {
+					if (imgUrl.startsWith("//")) {
+						imgUrl = protocol + ":" + imgUrl;
+					} else {
+						imgUrl = protocolHost + imgUrl;
 					}
-				}				
-				imgEl = ImageUtil.getImageWithStyle(imgEl,imgUrl);
-				logger.debug("imgEl:"+imgEl);
+				}
+				imgEl = ImageUtil.getImageWithStyle(imgEl, imgUrl);
+				logger.debug("imgEl:" + imgEl);
 			}
 
 			String strContent = contentEls.html();

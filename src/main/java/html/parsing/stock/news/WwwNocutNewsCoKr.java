@@ -51,8 +51,7 @@ public class WwwNocutNewsCoKr extends News {
 
 	WwwNocutNewsCoKr(int i) {
 
-
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://www.nocutnews.co.kr/news/4945666";
@@ -61,6 +60,10 @@ public class WwwNocutNewsCoKr extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 
 		StringBuilder sb1 = new StringBuilder();
@@ -112,7 +115,7 @@ public class WwwNocutNewsCoKr extends News {
 			System.out.println("strFileNameDate:" + strFileNameDate);
 
 			// Elements article = doc.select("#newsView");
-			//Elements article = doc.select("#pnlContent");
+			// Elements article = doc.select("#pnlContent");
 			Elements article = doc.select(".content .viewbox");
 			if (article.size() <= 0) {
 				article = doc.select("#newsView");
@@ -145,7 +148,7 @@ public class WwwNocutNewsCoKr extends News {
 			article.select("div.viewpic.pic-center").attr("style", "width:548px");
 			article.select("img").parents().parents().attr("style", "width:548px");
 			article.select("div").removeAttr("style");
-			article.select("div").attr("style","width:548px");
+			article.select("div").attr("style", "width:548px");
 
 			String articleHtml = article.outerHtml();
 			System.out.println("articleHtml:[" + articleHtml + "]articleHtml");
@@ -176,7 +179,8 @@ public class WwwNocutNewsCoKr extends News {
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
@@ -203,10 +207,12 @@ public class WwwNocutNewsCoKr extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {

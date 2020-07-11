@@ -62,6 +62,10 @@ public class Ttalgi21KhanKr extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 		Document doc;
 		StringBuilder sb1 = new StringBuilder();
@@ -106,7 +110,7 @@ public class Ttalgi21KhanKr extends News {
 					iHeight = Integer.parseInt(imgHeight);
 					if (iWidth > 548) {
 						changeWidth = 548;
-						changeHeight = 548*iHeight/iWidth;
+						changeHeight = 548 * iHeight / iWidth;
 					} else {
 						changeWidth = iWidth;
 						changeHeight = iHeight;
@@ -118,7 +122,7 @@ public class Ttalgi21KhanKr extends News {
 				imgElement.attr("data-origin-height", strChangeHeight);
 				imgElement.attr("width", strChangeWidth);
 				imgElement.attr("height", strChangeHeight);
-				logger.debug("image parent parent:"+imgElement.parent().parent());
+				logger.debug("image parent parent:" + imgElement.parent().parent());
 				imgElement.parent().parent().replaceWith(imgElement);
 
 			}

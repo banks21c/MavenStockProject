@@ -179,7 +179,7 @@ public class WwwMtCoKr extends javax.swing.JFrame {
 
 	WwwMtCoKr(int i) {
 
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName()+" URL을 입력하여 주세요.");
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
 			url = "http://stylem.mt.co.kr/stylemView.php?no=2018020809234688426";
@@ -189,6 +189,10 @@ public class WwwMtCoKr extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		News gurl = new News();
 		gurl.getURL(url);
 		String protocol = gurl.getProtocol();
@@ -251,8 +255,8 @@ public class WwwMtCoKr extends javax.swing.JFrame {
 			System.out.println("strContent:" + strContent);
 
 			String copyright = article.select(".copyright").outerHtml();
-			strContent = strContent+copyright;
-			
+			strContent = strContent + copyright;
+
 			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
 			sb1.append("<html lang='ko'>\r\n");
