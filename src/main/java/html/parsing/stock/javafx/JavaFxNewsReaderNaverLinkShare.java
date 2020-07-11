@@ -75,6 +75,8 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 
 	TextField nidAutTf = new TextField();
 	TextArea nidSesTa = new TextArea();
+	TextArea myCommentTa = new TextArea();
+
 	Text shareResultTxt = new Text();
 
 	ComboBox<String> categoryListComboBox = new ComboBox<String>();
@@ -85,6 +87,7 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("엔젤 브라우저");
+//		primaryStage.sizeToScene();
 		final String FONT_FAMILY = "Arial"; // define font family you need
 		final double MAX_FONT_SIZE = 20.0; // define max font size you need
 		final String FX_FONT_STYLE = "-fx-font-family: 'Arial';-fx-font-size: 20px;-fx-font-weight: bold;";
@@ -205,17 +208,17 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 				logger.debug("strNidSes :" + strNidSes);
 				if (!strNidAut.equals("") && !strNidSes.equals("")) {
 
-					String url = urlTf.getText();
-					System.out.println("url1:" + url);
-					if (!url.toLowerCase().startsWith("http") && !url.toLowerCase().startsWith("https")) {
-						if (!url.contains(".") || url.contains(" ")) {
-							url = "https://www.google.com/search?q=" + url + "&oq=" + url;
+					String strUrl = urlTf.getText();
+					System.out.println("url1:" + strUrl);
+					if (!strUrl.toLowerCase().startsWith("http") && !strUrl.toLowerCase().startsWith("https")) {
+						if (!strUrl.contains(".") || strUrl.contains(" ")) {
+							strUrl = "https://www.google.com/search?q=" + strUrl + "&oq=" + strUrl;
 						} else {
-							url = "http://" + url;
+							strUrl = "http://" + strUrl;
 						}
 					}
-					System.out.println("url2:" + url);
-					createHTMLFile(url);
+					System.out.println("url2:" + strUrl);
+					createHTMLFile(strUrl,myCommentTa.getText());
 				} else {
 					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
 					return;
@@ -302,6 +305,11 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 		urlHBox.getChildren().addAll(shareResultTxt);
 
 		WebView webView = new WebView();
+//		webView.setPrefHeight(800);
+		webView.setMinHeight(800);
+		webView.setPrefHeight(800);
+		webView.setMaxHeight(1600);
+//		webView.autosize();
 		webengine = webView.getEngine();
 
 //		webengine.load("https://finance.daum.net/domestic/all_quotes");
@@ -375,22 +383,13 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 		nidAutTf.setPrefWidth(800);
 		nidAutTf.setPrefHeight(25);
 		nidAutTf.setAlignment(Pos.TOP_LEFT);
-		HBox nidAutBox = new HBox(nidAutTxt, nidAutTf);
-
-		Text nidSesTxt = new Text("NID_SES");
-		nidSesTxt.setStyle(FX_FONT_STYLE);
-
-		nidSesTa = new TextArea();
-		nidSesTa.setPrefWidth(800);
-		nidSesTa.setPrefHeight(125);
-		nidSesTa.setWrapText(true);
 
 		categoryListComboBox.getItems().addAll("266:쿠팡 상품 추천", "267:로켓배송", "268:로켓프레시", "269:로켓직구", "270:정기배송",
 				"271:골드박스", "272:기획전", "274:카테고리별 베스트 상품", "275:PL 상품", "276:PL 브랜드별 상품", "277:추천 상품", "33:소개, 알림, 공지",
 				"173:유행, 트렌드, 동향", "255:역사", "88:사회, 문화", "198:국정교과서", "216:혼이비정상", "31:정치, 정부, 정책", "180:선거",
-				"7:국외, 해외, 국제, 세계", "249:북한", "236:미국", "228:중국", "237:일본", "2:경제, 산업", "256:삼성", "260:현대", "141:부동산",
+				"7:국외, 해외, 국제, 세계", "249:북한", "236:미국", "228:중국", "237:일본", "2:경제,산업", "256:삼성", "260:현대", "141:부동산",
 				"238:가상(암호)화폐", "250:투자썰전", "47:IT(Info Tech)", "258:BT(Bio Tech)", "259:NT(Nano Tech)", "199:카페베네",
-				"131:증권", "265:미국", "146:증권↑↓↗↘", "153:특징주", "164:신고, 신저가", "235:시간외단일가", "278:증권뉴스", "176:제약,약품, 바이오",
+				"131:증권", "265:미국", "146:증권↑↓↗↘", "153:특징주", "164:신고, 신저가", "235:시간외단일가", "278:증권뉴스", "176:제약,약품,바이오",
 				"264:IT(Info Tech)", "273:조선", "190:삼성주", "171:국민연금", "261:ETN, ETF", "188:핸디소프트", "253:Entertainment",
 				"166:외국인 보유", "170:PER", "172:상하한일수", "148:데이타", "155:Top 100", "159:기외 연속매수", "160:기외 연속매도",
 				"156:기외 거래량", "161:기외 거래대금", "157:기외 양매수금", "162:기외 양매수량", "158:기외 양매도금", "163:기외 양매도량", "152:기획기사",
@@ -411,9 +410,27 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 				"134:운영체제", "22:Windows", "21:Unix, Linux", "175:레오사진", "233:광고");
 		categoryListComboBox.setPromptText("Please select one");
 
-		HBox nidSesBox = new HBox(nidSesTxt, nidSesTa, categoryListComboBox);
+		HBox nidAutBox = new HBox(nidAutTxt, nidAutTf, categoryListComboBox);
 
-		VBox nidBox = new VBox(nidAutBox, nidSesBox, saveBtn);
+		Text nidSesTxt = new Text("NID_SES");
+		nidSesTxt.setStyle(FX_FONT_STYLE);
+
+		nidSesTa = new TextArea();
+		nidSesTa.setPrefWidth(800);
+		nidSesTa.setPrefHeight(50);
+		nidSesTa.setWrapText(true);
+		HBox nidSesBox = new HBox(nidSesTxt, nidSesTa);
+
+		Text myCommentTxt = new Text("My Comment");
+		nidSesTxt.setStyle(FX_FONT_STYLE);
+
+		myCommentTa = new TextArea();
+		myCommentTa.setPrefWidth(800);
+		myCommentTa.setPrefHeight(50);
+		myCommentTa.setWrapText(true);
+		HBox myCommentBox = new HBox(myCommentTxt, myCommentTa);
+
+		VBox nidBox = new VBox(nidAutBox, nidSesBox, myCommentBox, saveBtn);
 
 		VBox saveBtnBox = new VBox(saveBtn);
 		saveBtnBox.setAlignment(Pos.CENTER);
@@ -422,7 +439,7 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 //		VBox vBox = new VBox(urlTf, webView, separator, saveBtn);
 //		vBox.autosize();
 		vBox.setAlignment(Pos.TOP_LEFT);
-		Scene scene = new Scene(vBox, 1300, 800);
+		Scene scene = new Scene(vBox, 1300, 1000);
 		primaryStage.setScene(scene);
 
 		primaryStage.show();
@@ -676,13 +693,14 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 	}
 
 	private void createHTMLFile(String strUrl) {
-		createHTMLFile(strUrl,"");
+		createHTMLFile(strUrl,myCommentTa.getText());
 	}
-	private void createHTMLFile(String strUrl,String strMyComment) {
+
+	private void createHTMLFile(String strUrl, String strMyComment) {
 		if (strUrl.equals("")) {
 			return;
 		}
-		System.out.println("createHTMLFile url:" + strUrl);
+		System.out.println("createHTMLFile strUrl:" + strUrl);
 		// tab2에서 페이지 이동
 		int idx = 0;
 		String newsCompany = "";
@@ -742,10 +760,16 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 
 		String strShareTitle = htmlDoc.select("h2#title").text();
 		logger.debug("strShareTitle:" + strShareTitle);
+		if (strShareTitle.equals("")) {
+			return;
+		}
 		Elements shareUrlEls = htmlDoc.select("a");
 		String strShareUrl = "";
 		if (shareUrlEls.size() > 0) {
 			strShareUrl = htmlDoc.select("a").first().attr("href");
+		}
+		if (strShareUrl.equals("")) {
+			return;
 		}
 		StringBuilder contentSb = new StringBuilder();
 		contentSb.append(htmlDoc.html());
