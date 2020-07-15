@@ -1,8 +1,8 @@
 package html.parsing.stock.javafx;
 
+import html.parsing.stock.focus.MStockWeeks52NewLowHighPriceOneFile;
 import html.parsing.stock.focus.StockPlusMinusDivide100;
 import html.parsing.stock.focus.StockUnique_ReadTxtFile_ThreadCall;
-import html.parsing.stock.focus.StockWeeks52NewLowHighPriceTodayOneFile;
 
 public class Step4_StockMarketPriceRun{
 
@@ -26,7 +26,7 @@ public class Step4_StockMarketPriceRun{
 
 	public void start() {
 		new StockUnique_ReadTxtFile_ThreadCall(strNidAut, strNidSes).start();
-		new StockWeeks52NewLowHighPriceTodayOneFile(strNidAut, strNidSes).start();
+		new MStockWeeks52NewLowHighPriceOneFile(strNidAut, strNidSes).start();
 //		new StockPlusMinusDivide_ThreadCall(strNidAut,strNidSes).start();
 		new StockPlusMinusDivide100(strNidAut, strNidSes).start();
 	}
