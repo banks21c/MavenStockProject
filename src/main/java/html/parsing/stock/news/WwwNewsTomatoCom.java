@@ -1,17 +1,13 @@
 package html.parsing.stock.news;
 
 import java.awt.event.KeyEvent;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
@@ -25,16 +21,13 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
-import html.parsing.stock.JsoupChangeImageElementsAttribute;
-import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
-import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class VipMkCoKr extends javax.swing.JFrame {
+public class WwwNewsTomatoCom extends javax.swing.JFrame {
 
-	private static Logger logger = LoggerFactory.getLogger(VipMkCoKr.class);
+	private static final long serialVersionUID = -1577789706191487340L;
+	private static Logger logger = LoggerFactory.getLogger(WwwNewsTomatoCom.class);
 	final static String userHome = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -56,13 +49,18 @@ public class VipMkCoKr extends javax.swing.JFrame {
 	private javax.swing.JPanel executeResultPnl;
 	private static javax.swing.JLabel executeResultLbl;
 
-	VipMkCoKr(int i) {
+	public WwwNewsTomatoCom(int i) {
 
 		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
-			url = "http://vip.mk.co.kr/newSt/news/news_view.php?p_page=&sCode=122&t_uid=22&c_uid=136511&topGubun=";
+			url = "http://www.newstomato.com/ReadNews.aspx?no=819904";
 		}
+		createHTMLFile(url);
+	}
+
+	public WwwNewsTomatoCom(String url) {
+
 		createHTMLFile(url);
 	}
 
@@ -87,12 +85,12 @@ public class VipMkCoKr extends javax.swing.JFrame {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new VipMkCoKr().setVisible(true);
+				new WwwNewsTomatoCom().setVisible(true);
 			}
 		});
 	}
 
-	public VipMkCoKr() {
+	public WwwNewsTomatoCom() {
 
 		initComponents();
 	}
@@ -169,7 +167,7 @@ public class VipMkCoKr extends javax.swing.JFrame {
 
 	private void executeBtnActionPerformed(java.awt.event.ActionEvent evt) {
 		String url = urlTf.getText();
-		if (url != "") {
+		if (url != null && !url.equals("")) {
 			createHTMLFile(url);
 		}
 	}
@@ -197,9 +195,10 @@ public class VipMkCoKr extends javax.swing.JFrame {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String strUrl, String strMyComment) {
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+
 		News gurl = new News();
-		gurl.getURL(strUrl);
+		gurl.getURL(url);
 		String protocol = gurl.getProtocol();
 		String host = gurl.getHost();
 		String path = gurl.getPath();
@@ -210,93 +209,110 @@ public class VipMkCoKr extends javax.swing.JFrame {
 		String strTitleForFileName;
 		FileWriter fw;
 		try {
-			System.out.println("url:" + strUrl);
-			doc = Jsoup.connect(strUrl)
-					.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0")
-					.header("Accept-Language", "en").header("Accept-Encoding", "gzip,deflate,sdch").get();
+			doc = Jsoup.connect(url).get();
 			System.out.println("doc:[" + doc + "]");
 
-			JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
-			JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
-			JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
-			JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
-
+//            JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
+//            JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
+//            JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
+//            JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 			doc.select("iframe").remove();
 			doc.select("script").remove();
+			doc.select("#tomatoAdIframe_0").remove();
+			doc.select("#ad_wrap_2_10").remove();
+			doc.select(".rns_controll").remove();
+			doc.select(".carousel_wrap").remove();
+			doc.select("#ctl00_ContentPlaceHolder1_WebNewsView_lblHTS").remove();
+			doc.select("#ctl00_ContentPlaceHolder1_WebNewsView_hyHTS").remove();
+			doc.select("#ctl00_ContentPlaceHolder1_WebNewsView_NewsReporterSns").remove();
+			doc.select("input#a").remove();
 
-			String fileName2 = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
-			System.out.println("fileName2:" + fileName2);
-			Writer bw = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
-			bw.write(doc.html());
-			bw.close();
-
-			Elements title;
-			Element tableEl;
-			String strAuthor = null;
-			Elements subTitle;
-			String strDate = null;
-			Node lastPNode;
-			Element contentEl;
-			if (strUrl.contains("planning_news_view")) {
-				title = doc.select(".headtitle");
-				tableEl = doc.select(".headtitle").get(0).parent().parent().parent().parent();
-				Node authorNode = tableEl.select("br").last().previousSibling();
-				strAuthor = authorNode.toString();
-				strAuthor = strAuthor.replace("[", "").replace("]", "");
-				lastPNode = tableEl.select("p").last();
-				lastPNode = lastPNode.childNode(0);
-				System.out.println("lastPNode:" + lastPNode);
-				strDate = lastPNode.outerHtml();
-				strDate = strDate.replace("입력", "").trim();
-				System.out.println("strDate:" + strDate);
-				contentEl = tableEl; 
-			} else {
-				title = doc.select("div#Titless");
-				contentEl = doc.select("div#Conts").get(0);
-			}
+			Elements title = doc.select("div.rn_stitle");
 			System.out.println("title:" + strTitle);
 			if (title != null && title.size() > 0) {
 				strTitle = title.get(0).text();
+			} else {
+				strTitle = doc.select(".cc_title").text();
 			}
 			System.out.println("title:" + strTitle);
 			strTitleForFileName = strTitle;
 			strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
 			System.out.println("strTitleForFileName:" + strTitleForFileName);
 
-			subTitle = doc.select("h2.sub_title1");
+			Elements subTitle = doc.select("div.rn_sstitle");
 			String strSubTitle = "";
 			if (subTitle.size() > 0) {
 				strSubTitle = subTitle.outerHtml();
 			}
 
+//			String strAuthor = doc.select(".author").html();
+			String strAuthor = doc.select(".header_wrap_b .h_top .h_left ul li.name").html();
 			if (strAuthor.equals("")) {
-				strAuthor = doc.select(".author").html();
+				System.out.println(doc.select("#cc_textarea div"));
+				System.out.println(doc.select("#cc_textarea div").last());
+				Element authorElement = doc.select("#cc_textarea div").last();
+				if (authorElement != null) {
+					strAuthor = authorElement.text();
+				}
 			}
 			System.out.println("strAuthor:[" + strAuthor + "]");
 
-			if (strDate.equals("")) {
-				strDate = title.get(0).parent().nextElementSibling().text();
+			Elements rn_sdates = doc.select(".rn_sdate");
+			System.out.println("rn_sdates:[" + rn_sdates + "]");
+			Element rn_sdate = null;
+			if (rn_sdates.size() > 0) {
+				rn_sdate = rn_sdates.get(0);
+				List<Node> childNodes = rn_sdate.childNodes();
+				int childNodeSize = rn_sdate.childNodeSize();
+				System.out.println("childNodeSize:" + childNodeSize);
+				for (Node n : childNodes) {
+					String nodehtml = n.toString();
+					System.out.println("nodehtml:" + nodehtml);
+				}
+				strDate = rn_sdate.childNode(0).toString().trim();
+				strDate = strDate.replaceAll("입력 : ", "").trim();
+				System.out.println("strDate:[" + strDate + "]");
+			} else {
+				rn_sdate = doc.select(".cc_date").get(0);
+				strDate = rn_sdate.text();
 			}
-			if (strDate.equals("")) {
-				strDate = title.get(0).parent().nextElementSibling().nextElementSibling().text();
-			}
-			String strDateArray[] = strDate.split("\\|");
-			if (strDateArray.length == 3) {
-				strDate = strDateArray[2];
-				strDate = strDate.replace("_", " ").trim();
-			}
-			String strFileNameDate = strDate;
-			strFileNameDate = StockUtil.getDateForFileName(strDate);
-			System.out.println("strFileNameDate:" + strFileNameDate);
 
-			contentEl.select(".con_txt_new").remove();
-			contentEl.select("spacer").remove();
-			String strContent = contentEl.outerHtml();
-			System.out.println("strContent:" + strContent);
+			String strFileNameDate = strDate;
+			System.out.println("strFileNameDate1:" + strFileNameDate);
+			strFileNameDate = StockUtil.getDateForFileName(strDate);
+			System.out.println("strFileNameDate2:" + strFileNameDate);
+
+			Elements contentElements = doc.select(".rns_text");
+			contentElements.select(".ct_controll").remove();
+			Elements divElements = contentElements.select("div");
+			for (Element div : divElements) {
+				System.out.println("div.text:" + div.text());
+				System.out.println("div.parent:" + div.parent());
+				// div.parent().text(div.text());
+				Element node = doc.createElement("span");
+				node.text(div.text());
+				div.replaceWith(node);
+			}
+			String strContent = "";
+			if (!contentElements.text().equals("")) {
+				strContent = contentElements.outerHtml();
+			} else {
+				contentElements = doc.select("#cc_textarea");
+				contentElements.select(".ct_controll").remove();
+				Element br = doc.createElement("br");
+				Elements divs = contentElements.select("div");
+				for (Element div : divs) {
+					div.removeAttr("style");
+					div.before(br);
+					div.after(br);
+				}
+				strContent = contentElements.outerHtml();
+			}
+			strContent = strContent.replaceAll("<div>[\r\n]*[ ]*&nbsp;[\r\n]*[ ]*</div>", "<br/>");
+			System.out.println("strContent:[" + strContent + "]");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
 
-			String copyright = "";
+//			String copyright = doc.select(".desc").html();
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
@@ -309,12 +325,12 @@ public class VipMkCoKr extends javax.swing.JFrame {
 
 			sb1.append("<div style='width:548px'>\r\n");
 
-			sb1.append("<h3> 기사주소:[<a href='" + strUrl + "' target='_sub'>" + strUrl + "</a>] </h3>\n");
+			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append(strSubTitle + "<br>\r\n");
 			sb1.append(strAuthor + "<br>\r\n");
 			sb1.append(strContent + "<br>\r\n");
-			sb1.append(copyright + "<br>\r\n");
+//			sb1.append(copyright + "<br>\r\n");
 
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");

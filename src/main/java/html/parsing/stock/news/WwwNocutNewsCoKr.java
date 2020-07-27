@@ -1,6 +1,7 @@
 package html.parsing.stock.news;
 
 import java.io.File;
+import java.net.URLDecoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -190,6 +191,7 @@ public class WwwNocutNewsCoKr extends News {
 
 			doc.select(".news_date").remove();
 
+			url = URLDecoder.decode(url,"UTF-8");
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append("<span style='font-size:12px'>" + writer + "</span><br>\n");

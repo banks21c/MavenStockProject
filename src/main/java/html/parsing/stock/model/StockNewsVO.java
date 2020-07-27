@@ -1,4 +1,4 @@
-package html.parsing.stock;
+package html.parsing.stock.model;
 
 import html.parsing.stock.model.StockVO;
 import java.lang.reflect.Field;

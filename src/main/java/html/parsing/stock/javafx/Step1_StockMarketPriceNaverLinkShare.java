@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.CookieHandler;
+import java.net.CookiePolicy;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -40,7 +41,8 @@ import html.parsing.stock.news.NewsPublisher;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.NaverUtil;
 import javafx.application.Application;
-import javafx.concurrent.Worker;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -49,6 +51,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -163,6 +167,13 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 
 		urlTf.textProperty().addListener((observable, oldValue, newValue) -> {
 			System.out.println("textfield changed from " + oldValue + " to " + newValue);
+			shareResultTxt.setText("...");
+			if (oldValue.equals("https://nid.naver.com/signin/v3/finalize?url=https%3A%2F%2Fwww.naver.com&svctype=1")
+				&& newValue.equals("https://www.naver.com/")) {
+				System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+				// 네이버에 로그인하여 주소창에 주소가 변경되면 네이버 쿠키를 가져온다.
+				getNaverCookies();
+			}
 		});
 
 		Button goBtn = new Button("GO");
@@ -226,21 +237,12 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 		});
 
 		Button stockPriceShareBtn = new Button("주식 시세 공유");
-
-		stockPriceShareBtn.setOnMouseReleased(new EventHandler<javafx.scene.input.MouseEvent>() {
-			@Override
-			public void handle(javafx.scene.input.MouseEvent event) {
-				shareResultTxt.setText("...");
-			}
-
-		});
-
 		stockPriceShareBtn.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
 			@Override
 			public void handle(javafx.scene.input.MouseEvent event) {
 				shareResultTxt.setText("...");
 				// 네이버 블로그 공유
-				System.out.println("주식 시세 공유");
+				System.out.println("네이버 블로그 공유");
 				getNaverCookies();
 				logger.debug("strNidAut :" + strNidAut);
 				logger.debug("strNidSes :" + strNidSes);
@@ -249,6 +251,32 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 					String url = urlTf.getText();
 					System.out.println("url1:" + url);
 					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strNidAut, strNidSes);
+					step2.schedulerStart();
+				} else {
+					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
+					return;
+				}
+
+			}
+
+		});
+
+		Button instantShareBtn = new Button("즉시 공유");
+		instantShareBtn.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+			@Override
+			public void handle(javafx.scene.input.MouseEvent event) {
+				shareResultTxt.setText("...");
+				// 네이버 블로그 공유
+				System.out.println("네이버 블로그 공유");
+				getNaverCookies();
+				logger.debug("strNidAut :" + strNidAut);
+				logger.debug("strNidSes :" + strNidSes);
+				if (!strNidAut.equals("") && !strNidSes.equals("")) {
+
+					String url = urlTf.getText();
+					System.out.println("url1:" + url);
+					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strNidAut, strNidSes,
+						true);
 					step2.schedulerStart();
 				} else {
 					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
@@ -299,6 +327,7 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 		urlHBox.getChildren().addAll(goBtn);
 		urlHBox.getChildren().addAll(shareBtn);
 		urlHBox.getChildren().addAll(stockPriceShareBtn);
+		urlHBox.getChildren().addAll(instantShareBtn);
 		urlHBox.getChildren().addAll(shareResultTxt);
 
 		WebView webView = new WebView();
@@ -311,12 +340,21 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 
 //		webengine.load("https://finance.daum.net/domestic/all_quotes");
 		webengine.load("https://www.naver.com");
-		webengine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
-			if (Worker.State.SUCCEEDED.equals(newValue)) {
-				urlTf.setText(webengine.getLocation());
+//		webengine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
+//			logger.debug("oldValue :" + oldValue + " newValue:" + newValue);
+//			if (Worker.State.SUCCEEDED.equals(newValue)) {
+//				logger.debug("webengine.getLocation:" + webengine.getLocation());
+//				urlTf.setText(webengine.getLocation());
+//			}
+//		});
+		webengine.getLoadWorker().stateProperty().addListener(new javafx.beans.value.ChangeListener<State>() {
+			@Override
+			public void changed(ObservableValue ov, State oldState, State newState) {
+				if (newState == State.SUCCEEDED) {
+					urlTf.setText(webengine.getLocation());
+				}
 			}
 		});
-
 		homeTxt.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
 			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
 			@Override
@@ -389,7 +427,7 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 			"238:가상(암호)화폐", "250:투자썰전", "47:IT(Info Tech)", "258:BT(Bio Tech)", "259:NT(Nano Tech)", "199:카페베네",
 			"131:증권", "265:미국", "146:증권↑↓↗↘", "153:특징주", "164:신고,신저가", "235:시간외단일가", "278:증권뉴스", "176:제약,약품,바이오",
 			"264:IT(Info Tech)", "273:조선", "190:삼성주", "171:국민연금", "261:ETN,ETF", "188:핸디소프트", "253:Entertainment",
-			"166:외국인 보유", "170:PER", "172:상하한일수", "148:데이타", "155:Top 100", "159:기외 연속매수", "160:기외 연속매도",
+			"166:외국인 보유", "170:리포트,리서치", "172:상하한일수", "148:데이타", "155:Top 100", "159:기외 연속매수", "160:기외 연속매도",
 			"156:기외 거래량", "161:기외 거래대금", "157:기외 양매수금", "162:기외 양매수량", "158:기외 양매도금", "163:기외 양매도량", "152:기획기사",
 			"209:방송,언론", "210:JTBC", "201:뉴스공장", "202:파파이스", "206:스포트라이트", "150:건강", "207:치매", "29:비타민", "140:운동",
 			"151:식당", "208:마약", "263:질병", "132:Manuka Honey", "9:음식,식료품", "262:환경", "142:사건,사고", "182:세월호",
@@ -438,6 +476,7 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 //		vBox.autosize();
 		vBox.setAlignment(Pos.TOP_LEFT);
 		Scene scene = new Scene(vBox, 1300, 1000);
+
 		primaryStage.setScene(scene);
 
 		primaryStage.show();
@@ -596,7 +635,9 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 		for (Object o : buckets.entrySet()) {
 			Map.Entry pair = (Map.Entry) o;
 			String key = (String) pair.getKey();
+			System.out.println("key:" + key);
 			Map cookies = (Map) pair.getValue();
+			System.out.println("cookies.values():" + cookies.values());
 			cookiesToSave.put(key, cookies.values());
 		}
 
@@ -780,6 +821,8 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 		} else {
 			shareResultTxt.setText("블로그 글쓰기 실패");
 		}
+		myCommentTa.setText("...");
+
 	}
 
 	public boolean naverBlogLinkShare(StringBuilder contentSb, String strCategoryName, String strShareTitle,

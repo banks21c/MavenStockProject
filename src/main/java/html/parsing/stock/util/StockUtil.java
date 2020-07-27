@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -54,7 +55,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 
-import html.parsing.stock.StockNewsVO;
+import html.parsing.stock.model.StockNewsVO;
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.StockNameLengthDescCompare;
 
@@ -73,9 +74,9 @@ public class StockUtil {
 	String strDefaultDate = sdf.format(new Date());
 	// String strYyyyMmDd = new SimpleDateFormat("yyyy년 M월 d일
 	// E",Locale.KOREAN).format(new Date());
-//	int iYmd = Integer.parseInt(strDefaultDate.replaceAll("\\.", ""));
-//	String strYmdDash = strDefaultDate.replaceAll("\\.", "-");
-//	String strYmdDashBracket = "[" + strDefaultDate.replaceAll("\\.", "-") + "]";
+	int iYmd = Integer.parseInt(strDefaultDate.replaceAll("\\.", ""));
+	String strYmdDash = strDefaultDate.replaceAll("\\.", "-");
+	String strYmdDashBracket = "[" + strDefaultDate.replaceAll("\\.", "-") + "]";
 	public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36 NetHelper70";
 
 	// STOCK_LIST_TYPE
@@ -535,13 +536,47 @@ public class StockUtil {
 		String strStockLinkString = stockLinkString(sb.toString(), stockList);
 		return new StringBuilder(strStockLinkString);
 	}
+	
+	public static List<String> exceptWordList() {
+		List<String> exceptWordList = new ArrayList<String>();
+		FileReader fr = null;
+		BufferedReader br = null;
+		try {
+			// jar를 실행하였을 경우는 jar와 동일 경로
+			// ide에서 실행하였을 경우에는 프로젝트 경로
+			// 프로젝트 경로에 있는 파일들은 jar파일에 묶이지 않는다.
+			File f = new File("./StockExtractExceptWord.txt");
+//			System.out.println("f.exists1:"+f.exists());
+			if (f.exists()) {
+				fr = new FileReader(f);
+				br = new BufferedReader(fr);
+			} else {
+				// classes root 경로
+				f = new File("/StockExtractExceptWord.txt");
+//				System.out.println("f.exists2:"+f.exists());
+				fr = new FileReader(f);
+				br = new BufferedReader(fr);
+			}
 
+			String strLine = "";
+			while ((strLine = br.readLine()) != null) {
+				exceptWordList.add(strLine);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return exceptWordList;
+	}
+	
 	public static String stockTitleLinkString(String textBodyHtml, List<StockVO> stockList) {
 		logger.debug("stockLinkString.....................");
 		String strNews = textBodyHtml;
 		strNews = strNews.replaceAll("&amp;", "&");
 		// logger.debug("strNews:[" + strNews + "]");
 		// logger.debug("stockList.size():[" + stockList.size() + "]");
+		List<String> exceptWordList = exceptWordList();
+		
 		Document doc = null;
 		List<StockVO> newsStockList = new ArrayList<StockVO>();
 		for (int i = 0; i < stockList.size(); i++) {
@@ -592,7 +627,7 @@ public class StockUtil {
 						continue;
 					}
 				}
-				if (StockExtractExceptWord.dupCheck(stockName, strNews)) {
+				if (StockExtractExceptWord.dupCheck(exceptWordList,stockName, strNews)) {
 					logger.debug("예외어 발견.....");
 					break;
 				}
@@ -615,6 +650,8 @@ public class StockUtil {
 		strNews = strNews.replaceAll("&amp;", "&");
 		// logger.debug("strNews:[" + strNews + "]");
 		// logger.debug("stockList.size():[" + stockList.size() + "]");
+		List<String> exceptWordList = exceptWordList();
+
 		Document doc = null;
 		List<StockVO> newsStockList = new ArrayList<StockVO>();
 		for (int i = 0; i < stockList.size(); i++) {
@@ -669,7 +706,7 @@ public class StockUtil {
 						continue;
 					}
 				}
-				if (StockExtractExceptWord.dupCheck(stockName, strNews)) {
+				if (StockExtractExceptWord.dupCheck(exceptWordList,stockName, strNews)) {
 					logger.debug("예외어 발생.....");
 					continue;
 				}
@@ -827,13 +864,11 @@ public class StockUtil {
 			// Closing the workbook
 			workbook.close();
 		} catch (EncryptedDocumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return svoList;
@@ -1912,6 +1947,8 @@ public class StockUtil {
 			logger.debug("companyInfoUrl:" + companyInfoUrl);
 
 			doc = Jsoup.connect(companyInfoUrl).get();
+//			StringBuffer sb = sendPost(companyInfoUrl, "UTF-8");
+//			doc = Jsoup.parse(sb.toString());
 			String strDoc = doc.html();
 			if (strDoc.equals("")) {
 				return "";
@@ -2755,6 +2792,7 @@ public class StockUtil {
 //		wr.writeBytes(urlParameters);
 		wr.flush();
 		wr.close();
+		logger.debug("sendPost wr2 : " + wr);
 
 		int responseCode = con.getResponseCode();
 		logger.debug("\nSending 'POST' request to URL : " + url);
@@ -2768,11 +2806,11 @@ public class StockUtil {
 		StringBuffer sb = new StringBuffer();
 
 		while ((inputLine = in.readLine()) != null) {
-//			logger.debug("inputLine:" + inputLine);
+			logger.debug("inputLine:" + inputLine);
 			sb.append(inputLine + "\r\n");
 		}
 		in.close();
-		logger.debug(sb.toString());
+		// logger.debug(sb.toString());
 		return sb;
 	}
 

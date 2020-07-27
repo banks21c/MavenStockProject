@@ -213,8 +213,6 @@ public class WwwSeoulCoKr extends javax.swing.JFrame {
 			doc = Jsoup.connect(url).get();
 			doc.select("iframe").remove();
 			doc.select("#seoulAdTable").remove();
-			System.out.println(doc.select(".v_photoarea div div").get(1).html());
-			doc.select(".v_photoarea div div").get(1).remove();
 
 			Elements photoareaDiv = doc.select(".v_photoarea div");
 			String imgHtml = doc.select(".v_photoarea img").outerHtml();
@@ -246,14 +244,14 @@ public class WwwSeoulCoKr extends javax.swing.JFrame {
 			String strAuthor = "";
 			System.out.println("strAuthor:[" + strAuthor + "]");
 
-			Element date = doc.select(".v_days span").get(0);
+			Element date = doc.select(".S20_v_snt .option span.w_date span").get(0);
 			String strDate = date.text();
 			System.out.println("strDate:[" + strDate + "]");
 			String strFileNameDate = strDate;
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
 			System.out.println("strFileNameDate:" + strFileNameDate);
 
-			Elements contents = doc.select(".v_article");
+			Elements contents = doc.select(".S20_v_article");
 			String strContent = contents.outerHtml();
 			System.out.println("strContent:" + strContent);
 			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);

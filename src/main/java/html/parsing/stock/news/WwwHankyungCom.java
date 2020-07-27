@@ -120,11 +120,12 @@ public class WwwHankyungCom extends News {
 				System.out.println("strDate:" + strDate);
 			} else {
 				timeElements = doc.select(".date-published .num");
-				Element timeElement = timeElements.get(0);
-				timeElement.select("em").remove();
-				strDate = timeElement.text();
-				strDate = strDate.replace("입력", "").trim();
-
+				if (timeElements.size() > 0) {
+					Element timeElement = timeElements.get(0);
+					timeElement.select("em").remove();
+					strDate = timeElement.text();
+					strDate = strDate.replace("입력", "").trim();
+				}
 				System.out.println("strDate:" + strDate);
 			}
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
@@ -198,11 +199,11 @@ public class WwwHankyungCom extends News {
 			}
 
 			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
-					+ strTitleForFileName + ".html";
+				+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
-					+ strTitleForFileName + ".html";
+				+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (Exception e) {
