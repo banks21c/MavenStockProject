@@ -1818,10 +1818,12 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		strNidSes2 = nidSesTa2.getText();
 
 		if (strNidAut2.equals("")) {
-			JOptionPane.showMessageDialog(null, "NID_AUT를 입력하여 주세요.", "주의", JOptionPane.ERROR_MESSAGE);
+//			JOptionPane.showMessageDialog(null, "NID_AUT를 입력하여 주세요.", "주의", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해 주세요.", "주의", JOptionPane.ERROR_MESSAGE);
 			return;
 		} else if (strNidSes2.equals("")) {
-			JOptionPane.showMessageDialog(null, "NID_SES를 입력하여 주세요.", "주의", JOptionPane.ERROR_MESSAGE);
+//			JOptionPane.showMessageDialog(null, "NID_SES를 입력하여 주세요.", "주의", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해 주세요.", "주의", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 
