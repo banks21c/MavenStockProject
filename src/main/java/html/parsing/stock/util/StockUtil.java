@@ -536,7 +536,7 @@ public class StockUtil {
 		String strStockLinkString = stockLinkString(sb.toString(), stockList);
 		return new StringBuilder(strStockLinkString);
 	}
-	
+
 	public static List<String> exceptWordList() {
 		List<String> exceptWordList = new ArrayList<String>();
 		FileReader fr = null;
@@ -568,15 +568,14 @@ public class StockUtil {
 		}
 		return exceptWordList;
 	}
-	
-	public static String stockTitleLinkString(String textBodyHtml, List<StockVO> stockList) {
+
+	public static String stockTitleLinkString(String strNews, List<StockVO> stockList) {
 		logger.debug("stockLinkString.....................");
-		String strNews = textBodyHtml;
 		strNews = strNews.replaceAll("&amp;", "&");
 		// logger.debug("strNews:[" + strNews + "]");
 		// logger.debug("stockList.size():[" + stockList.size() + "]");
 		List<String> exceptWordList = exceptWordList();
-		
+
 		Document doc = null;
 		List<StockVO> newsStockList = new ArrayList<StockVO>();
 		for (int i = 0; i < stockList.size(); i++) {
@@ -627,7 +626,7 @@ public class StockUtil {
 						continue;
 					}
 				}
-				if (StockExtractExceptWord.dupCheck(exceptWordList,stockName, strNews)) {
+				if (StockExtractExceptWord.dupCheck(exceptWordList, stockName, strNews)) {
 					logger.debug("예외어 발견.....");
 					break;
 				}
@@ -644,9 +643,8 @@ public class StockUtil {
 		return strNews;
 	}
 
-	public static String stockLinkString(String textBodyHtml, List<StockVO> stockList) {
+	public static String stockLinkString(String strNews, List<StockVO> stockList) {
 		logger.debug("stockLinkString.....................");
-		String strNews = textBodyHtml;
 		strNews = strNews.replaceAll("&amp;", "&");
 		// logger.debug("strNews:[" + strNews + "]");
 		// logger.debug("stockList.size():[" + stockList.size() + "]");
@@ -706,7 +704,7 @@ public class StockUtil {
 						continue;
 					}
 				}
-				if (StockExtractExceptWord.dupCheck(exceptWordList,stockName, strNews)) {
+				if (StockExtractExceptWord.dupCheck(exceptWordList, stockName, strNews)) {
 					logger.debug("예외어 발생.....");
 					continue;
 				}
@@ -1906,13 +1904,14 @@ public class StockUtil {
 		sb1.append("</div>\r\n");
 		return sb1.toString();
 	}
-	
+
 	public static String getMyCommentBox(String strComment) {
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("<div style='border:1px solid #afaefe;width:548px;'>\r\n");
 		sb1.append("<span style='font:12px bold;border:1px solid #afaefe'>My Comment</span>\r\n");
 		sb1.append("<h3>\r\n");
-		sb1.append("<span style='background-color: rgb(51, 51, 51); color: rgb(255, 255, 0);'>").append(strComment).append("</span>\r\n");
+		sb1.append("<span style='background-color: rgb(51, 51, 51); color: rgb(255, 255, 0);'>").append(strComment)
+				.append("</span>\r\n");
 		sb1.append("</h3>\r\n");
 		sb1.append("</div>\r\n");
 		return sb1.toString();
@@ -2867,21 +2866,23 @@ public class StockUtil {
 		String strStockCode;
 		String strStockName;
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy", Locale.KOREAN);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.KOREAN);
 		String strDefaultDate = sdf.format(new Date());
 		int iYmd = Integer.parseInt(strDefaultDate);
 
 		for (StockVO vo : allStockList) {
 			strStockCode = vo.getStockCode();
 			strStockName = vo.getStockName();
+			logger.debug(strStockName + ":" + strStockCode);
 
 			// 종합정보
 			Document doc;
 			try {
 				// 5페이지 정도 돌면서 오늘 기사를 가져온다.
 				for (int page = 1; page <= 5; page++) {
-					doc = Jsoup.connect(
-							"http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=" + page).get();
+					String strUrl = "http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page="
+							+ page;
+					doc = Jsoup.connect(strUrl).get();
 					Elements types = doc.select(".type5");
 					if (types.size() <= 0) {
 						return sb1;
@@ -2909,28 +2910,39 @@ public class StockUtil {
 						if (a1 == null) {
 							continue;
 						}
-						logger.debug("a:" + a1);
-						logger.debug("source:" + source);
-						logger.debug("dayTime:" + dayTime);
-						logger.debug("title:" + a1.html());
-						logger.debug("href:" + a1.attr("href"));
-						logger.debug("source:" + source.html());
-						logger.debug("dayTime:" + dayTime.html());
-						logger.debug("dayTime:" + dayTime.text());
 
 						String strTitle = a1.html();
-						String strLink = a1.attr("href");
+						String strHref = a1.attr("href");
 						String strSource = source.html();
 						String strDayTime = dayTime.html();
 						String strYmd2 = strDayTime.substring(0, 10);
 						int iYmd2 = Integer.parseInt(strYmd2.replaceAll("\\.", ""));
 
+						logger.debug("a:" + a1);
+						logger.debug("source:" + source);
+						logger.debug("dayTime:" + dayTime);
+						logger.debug("title:" + strTitle);
+						logger.debug("href:" + strHref);
+						logger.debug("source:" + strSource);
+						logger.debug("dayTime:" + strDayTime);
+						logger.debug("dayTime:" + dayTime.text());
+						logger.debug("strYmd2:" + strYmd2);
+						logger.debug("iYmd:" + iYmd);
+						logger.debug("iYmd2:" + iYmd2);
+						logger.debug("iYmd == iYmd2 :" + (iYmd == iYmd2));
+
 						// 기사를 쓴 날이 오늘이면 가져온다.
 						if (iYmd == iYmd2) {
+							String newsReadUrl = "http://finance.naver.com" + strHref;
+							logger.debug("newsReadUrl:" + newsReadUrl);
+
+							sb1.append("<br><br>\r\n");
+							sb1.append("기사주소:[<a href='" + newsReadUrl + "'>" + newsReadUrl + "</a>]\r\n");
+							sb1.append("<br><br>\r\n");
 							sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
 									+ strStockName + "(" + strStockCode + ")</a></h3>");
 
-							doc = Jsoup.connect("http://finance.naver.com" + strLink).get();
+							doc = Jsoup.connect(newsReadUrl).get();
 							Elements link_news_elements = doc.select(".link_news");
 							if (link_news_elements != null) {
 								link_news_elements.remove();

@@ -99,6 +99,7 @@ public enum NewsPublisher {
 	WwwBusanCom("www.busan.com"),
 	HugsFnnewsCom("hugs.fnnews.com"),
 	WwwMbnCoKr("www.mbn.co.kr"),
+	WwwBusinesspostCoKr("www.businesspost.co.kr"),
 	WwwIlyoseoulCoKr("www.ilyoseoul.co.kr");
 
 	final private String name;

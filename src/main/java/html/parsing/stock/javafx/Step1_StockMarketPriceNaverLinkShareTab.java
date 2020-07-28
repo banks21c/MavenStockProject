@@ -44,6 +44,8 @@ import html.parsing.stock.model.StockVO;
 import html.parsing.stock.news.NewsPublisher;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.NaverUtil;
+import html.parsing.stock.util.StockUtil;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -829,7 +831,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		nBlogCategoryListComboBox1 = new ComboBox<String>();
 		nBlogCategoryListComboBox1.getItems().addAll("266:쿠팡 상품 추천", "267:로켓배송", "268:로켓프레시", "269:로켓직구", "270:정기배송",
 				"271:골드박스", "272:기획전", "274:카테고리별 베스트 상품", "275:PL 상품", "276:PL 브랜드별 상품", "277:추천 상품", "33:소개,알림,공지",
-				"173:유행,트렌드,동향", "255:역사", "88:사회, 문화", "198:국정교과서", "216:혼이비정상", "31:정치,정부,정책", "180:선거",
+				"173:유행,트렌드,동향", "255:역사", "88:사회,문화", "198:국정교과서", "216:혼이비정상", "31:정치,정부,정책", "180:선거",
 				"7:국외,해외,국제,세계", "249:북한", "236:미국", "228:중국", "237:일본", "2:경제,산업", "256:삼성", "260:현대", "141:부동산",
 				"238:가상(암호)화폐", "250:투자썰전", "47:IT(Info Tech)", "258:BT(Bio Tech)", "259:NT(Nano Tech)", "199:카페베네",
 				"131:증권", "265:미국", "146:증권↑↓↗↘", "153:특징주", "164:신고,신저가", "235:시간외단일가", "278:증권뉴스", "176:제약,약품,바이오",
@@ -1140,7 +1142,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		nBlogCategoryListComboBox2 = new ComboBox<String>();
 		nBlogCategoryListComboBox2.getItems().addAll("266:쿠팡 상품 추천", "267:로켓배송", "268:로켓프레시", "269:로켓직구", "270:정기배송",
 				"271:골드박스", "272:기획전", "274:카테고리별 베스트 상품", "275:PL 상품", "276:PL 브랜드별 상품", "277:추천 상품", "33:소개,알림,공지",
-				"173:유행,트렌드,동향", "255:역사", "88:사회, 문화", "198:국정교과서", "216:혼이비정상", "31:정치,정부,정책", "180:선거",
+				"173:유행,트렌드,동향", "255:역사", "88:사회,문화", "198:국정교과서", "216:혼이비정상", "31:정치,정부,정책", "180:선거",
 				"7:국외,해외,국제,세계", "249:북한", "236:미국", "228:중국", "237:일본", "2:경제,산업", "256:삼성", "260:현대", "141:부동산",
 				"238:가상(암호)화폐", "250:투자썰전", "47:IT(Info Tech)", "258:BT(Bio Tech)", "259:NT(Nano Tech)", "199:카페베네",
 				"131:증권", "265:미국", "146:증권↑↓↗↘", "153:특징주", "164:신고,신저가", "235:시간외단일가", "278:증권뉴스", "176:제약,약품,바이오",
@@ -1714,7 +1716,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		if (!strNidAut.equals("") && !strNidSes.equals("")) {
 			return NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strCategoryName,
 					contentSb, null);
-		}else {
+		} else {
 			return false;
 		}
 	}
@@ -2415,6 +2417,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			contentHtml = contentHtml.replace("\'/", "\'" + strProtocol + "://" + strHost + "/");
 			sb.append(contentHtml);
 
+			List<StockVO> list = new ArrayList<StockVO>();
 			Document doc = Jsoup.parse(sb.toString());
 			doc.select("i").tagName("b");
 			String mktType = doc.select(".tab .on a").text();
@@ -2422,7 +2425,34 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			String upDownType = doc.select("ul.box_tabs .on").get(0).text();
 			logger.debug("upDownType:" + upDownType);
 
-			Element table = doc.select(".box_contents table").first();
+			Element table = null;
+			if (upDownType.equals("상승")) {
+				table = doc.select(".box_contents table").get(0);
+			} else if (upDownType.equals("하락")) {
+				table = doc.select(".box_contents table").get(1);
+			} else {
+				table = doc.select(".box_contents table").get(2);
+			}
+
+			Elements aEls = table.select("a");
+			for (Element aEl : aEls) {
+				String strStockName = aEl.text();
+				String strHref = aEl.attr("href");
+				String strStockCode = strHref.substring(strHref.lastIndexOf("/") + 1);
+				logger.debug(strStockCode + ":" + strStockName);
+				if (strStockCode.contains("javascript")) {
+					continue;
+				}
+				if (strStockCode.startsWith("A")) {
+					strStockCode = strStockCode.substring(1);
+					StockVO svo = new StockVO();
+					svo.setStockCode(strStockCode);
+					svo.setStockName(strStockName);
+					list.add(svo);
+				}
+			}
+			logger.debug("list.size:" + list.size());
+
 			Elements spanEls = table.select("span");
 			for (Element spanEl : spanEls) {
 				String spanElClass = spanEl.attr("class");
@@ -2442,18 +2472,21 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			sb.append("<h1>").append(strYmd).append(" ").append(mktType).append(" ").append(title).append("(")
 					.append(upDownType).append(")").append("</h1>\r\n");
 			sb.append(table.outerHtml());
-			System.out.println("시간외단일가 HTML:" + sb.toString());
+
+			StringBuilder newsAddedStockList = StockUtil.getNews(list);
+			System.out.println("newsAddedStockList:" + newsAddedStockList);
+			sb.append(newsAddedStockList.toString());
 
 			String strBlogCategoryName = "시간외단일가";
 			String shareTitle = strYmdBlacket + " " + mktType + " 시간외단일가(" + upDownType + ")";
-			
+
 //			strNidAut = nidAutTf1.getText();
 //			strNidSes = nidSesTa1.getText();
 			if (!strNidAut.equals("") && !strNidSes.equals("")) {
-				if(naverBlogLinkShare(sb, strBlogCategoryName, shareTitle,"")) {
+				if (naverBlogLinkShare(sb, strBlogCategoryName, shareTitle, "")) {
 					JOptionPane.showMessageDialog(null, shareTitle + " 데이터를 공유하였습니다.");
 				}
-			}else {
+			} else {
 				JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해 주세요.");
 			}
 		} catch (IOException e) {
