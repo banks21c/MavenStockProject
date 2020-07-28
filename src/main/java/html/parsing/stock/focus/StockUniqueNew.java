@@ -1,13 +1,9 @@
 package html.parsing.stock.focus;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
@@ -27,8 +23,11 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
 
 public class StockUniqueNew extends Thread {
 
@@ -178,7 +177,8 @@ public class StockUniqueNew extends Thread {
 
 	public void execute1() {
 		try {
-			kospiStockList = StockUtil.readKospiStockCodeNameList();
+//			kospiStockList = StockUtil.readKospiStockCodeNameList();
+			kospiStockList = StockUtil.readStockCodeNameList("코스피");
 			strYmdDashBracket = StockUtil.getDateInfo(kospiStockList.get(0).getStockCode());
 		} catch (Exception ex) {
 			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -202,7 +202,8 @@ public class StockUniqueNew extends Thread {
 
 	public void execute2() {
 		try {
-			kosdaqStockList = StockUtil.readKosdaqStockCodeNameList();
+//			kosdaqStockList = StockUtil.readKosdaqStockCodeNameList();
+			kosdaqStockList = StockUtil.readStockCodeNameList("코스닥");
 		} catch (Exception ex) {
 			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 //    		kosdaqStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr(kosdaqStockList, "kosdaqMkt");
@@ -602,106 +603,6 @@ public class StockUniqueNew extends Thread {
 				+ ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 		} finally {
-		}
-	}
-
-
-	public void readNews(List<StockVO> allStockList) {
-
-		int cnt = 1;
-
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
-			String strDate = sdf.format(new Date());
-
-			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\NewsTest." + strDate + ".html");
-			StringBuilder sb1 = new StringBuilder();
-
-			for (StockVO vo : allStockList) {
-				strStockCode = vo.getStockCode();
-				strStockName = vo.getStockName();
-
-				logger.debug(cnt + "." + strStockCode + "." + strStockName);
-
-				// 종합정보
-				// http://finance.naver.com/item/news.nhn?code=246690
-				logger.debug("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
-
-				Document doc = Jsoup
-					.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=")
-					.get();
-				// http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
-				doc.select("script").remove();
-				Element e1 = doc.select(".type5").get(0);
-
-				Elements trs = e1.getElementsByTag("tr");
-
-				for (int i = 0; i < trs.size(); i++) {
-					Element tr = trs.get(i);
-
-					Elements tds = tr.getElementsByTag("td");
-					if (tds.size() < 3) {
-						continue;
-					}
-
-					Element a1 = tr.getElementsByTag("a").first();
-					Element source = tr.getElementsByTag("td").get(2);
-					Element dayTime = tr.getElementsByTag("span").first();
-
-					logger.debug("title:" + a1.html());
-					logger.debug("href:" + a1.attr("href"));
-					logger.debug("source:" + source.html());
-					logger.debug("dayTime:" + dayTime.html());
-
-					String strTitle = a1.html();
-					String strLink = a1.attr("href");
-					String strSource = source.html();
-					String strDayTime = dayTime.html();
-					String strYmd2 = strDayTime.substring(0, 10);
-					int iYmd2 = Integer.parseInt(strYmd2.replaceAll("\\.", ""));
-
-					// sb1.append("<h3>"+ strTitle +"</h3>\n");
-					// sb1.append("<div>"+ strSource+" | "+ strDayTime
-					// +"</div>\n");
-					if (iYmd <= iYmd2) {
-						// sb1.append("<h3>"+ strTitle +"</h3>\n");
-						// sb1.append("<div>"+ strSource+" | "+ strDayTime
-						// +"</div>\n");
-						sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-							+ strStockName + "(" + strStockCode + ")" + "</a></h3>\n");
-
-						doc = Jsoup.connect("http://finance.naver.com" + strLink).get();
-						Elements link_news_elements = doc.select(".link_news");
-						if (link_news_elements != null) {
-							link_news_elements.remove();
-						}
-						Elements naver_splugin = doc.select(".naver-splugin");
-						logger.debug("naver_splugin:" + naver_splugin);
-						if (naver_splugin != null) {
-							naver_splugin.remove();
-						}
-						Element view = doc.select(".view").get(0);
-
-						String strView = view.toString();
-						strView = strView.replaceAll(strStockName,
-							"<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-							+ strStockName + "</a>");
-
-						sb1.append(strView);
-						sb1.append("<br><br>\n");
-
-						logger.debug("view:" + view);
-					}
-				}
-			}
-
-			logger.debug(sb1.toString());
-
-			fw.write(sb1.toString());
-			fw.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
