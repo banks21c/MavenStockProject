@@ -39,6 +39,7 @@ public enum NewsPublisher {
 	WwwWikitreeCoKr("www.wikitree.co.kr"),
 	WwwEdailyCoKr("www.edaily.co.kr"),
 	WwwSedailyCom("www.sedaily.com"),
+	SignalSedailyCom("signal.sedaily.com"),
 	MSedailyCom("m.sedaily.com"),
 	WwwSentvCoKr("www.sentv.co.kr"),
 	SnaptimeEdailyCoKr("snaptime.edaily.co.kr"),
