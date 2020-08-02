@@ -295,7 +295,10 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 			if (strContent == null || strContent.trim().equals("")) {
 				strContent = doc.select(".read_txt").html();
 			}
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			String copyright = "";
 

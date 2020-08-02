@@ -1120,7 +1120,10 @@ public class NownewsSeoulCoKr extends javax.swing.JFrame {
 //			System.out.println("s11:[" + strEncoded + "]");
 //			strTitleForFileName = URLDecoder.decode(strEncoded, "UTF8");
 
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			sb1.append("<!DOCTYPE html>\r\n");
 			sb1.append("<html lang='ko'>\r\n");

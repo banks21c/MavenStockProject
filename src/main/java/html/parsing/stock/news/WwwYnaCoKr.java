@@ -147,7 +147,10 @@ public class WwwYnaCoKr extends News {
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
 			// System.out.println("strContent:[" + strContent + "]strContent");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			String copyright = article.select(".txt-copyright").html();
 			System.out.println("copyright:" + copyright);

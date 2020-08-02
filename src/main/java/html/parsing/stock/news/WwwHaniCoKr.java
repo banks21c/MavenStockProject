@@ -162,7 +162,10 @@ public class WwwHaniCoKr extends News {
 			String strContent = article.html().replaceAll("640px", "548px");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");

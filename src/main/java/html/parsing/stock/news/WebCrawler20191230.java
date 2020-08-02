@@ -233,7 +233,10 @@ public class WebCrawler20191230 extends javax.swing.JFrame {
 			}
 
 			strContent = temp.toString();
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			sb1.append(strContent);
 			sb1.append("</div>\r\n");

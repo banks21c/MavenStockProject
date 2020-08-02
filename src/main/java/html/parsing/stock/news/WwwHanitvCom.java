@@ -108,7 +108,10 @@ public class WwwHanitvCom extends News {
 			String img = doc.select("#imgVodThumbnail").outerHtml();
 			System.out.println("img:" + img);
 			String strContent = doc.select(".inner_newstext").outerHtml();
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			String copyright = "";
 			System.out.println("copyright:" + copyright);

@@ -291,7 +291,10 @@ public class WwwSedailyCom extends javax.swing.JFrame {
 			textBodyDoc.select(".lmbox1").attr("style", "font-size:10pt;color:gray;");
 			String strContent = textBodyDoc.html();
 			System.out.println("strContent:" + strContent);
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			Elements copyrightEls = doc.select(".copyright");
 			String copyright = "";

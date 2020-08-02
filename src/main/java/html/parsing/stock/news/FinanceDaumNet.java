@@ -64,6 +64,14 @@ public class FinanceDaumNet extends News {
 	}
 
 	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+		return createHTMLFile(url, "", strMyComment);
+	}
+
+	public static StringBuilder parseHTMLFile(String url, String html, String strMyComment) {
+		return createHTMLFile(url, html, strMyComment);
+	}
+
+	public static StringBuilder createHTMLFile(String url, String html, String strMyComment) {
 		System.out.println("createHTMLFile url:" + url);
 		News gurl = new News();
 		gurl.getURL(url);
@@ -77,15 +85,40 @@ public class FinanceDaumNet extends News {
 		String strTitleForFileName = "";
 		String strFileNameDate = "";
 		try {
-			doc = Jsoup.connect(url).get();
+//			html = html.replace("dmcf-pid","dmcf_pid");
+//			html = html.replace("dmcf-ptype","dmcf_ptype");
+			if (html.equals("")) {
+				doc = Jsoup.connect(url).get();
+			} else {
+				doc = Jsoup.parse(html);
+			}
 			System.out.println("doc:" + doc);
 			doc.select("iframe").remove();
 			doc.select("script").remove();
+			doc.select("p").removeAttr("dmcf-pid");
+			doc.select("p").removeAttr("dmcf-ptype");
+			doc.select("section").removeAttr("dmcf-sid");
+			doc.select("div").removeAttr("dmcf-pid");
+			doc.select("div").removeAttr("dmcf-ptype");
+			doc.select("img").removeAttr("dmcf-mid");
+			doc.select("img").removeAttr("dmcf-mtype");
+
+			Elements strongEls = doc.select("strong");
+			for (Element strongEl : strongEls) {
+				String strStrong = strongEl.text();
+				if (strStrong.equals("[관련기사]")) {
+					strongEl.parent().remove();
+					break;
+				}
+			}
 
 			System.out.println("title1:" + doc.select(".finance"));
 			System.out.println("title2:" + doc.select(".finance .head"));
 			System.out.println("title3:" + doc.select(".finance .head .titView"));
 			strTitle = doc.select(".finance .head .titView h5").text();
+			if (strTitle == null || strTitle.equals("")) {
+				return sb1;
+			}
 			System.out.println("title:" + strTitle);
 			strTitleForFileName = strTitle;
 			strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
@@ -98,9 +131,9 @@ public class FinanceDaumNet extends News {
 
 			Elements writerElements = doc.select(".finance .head .infoView p");
 			System.out.println("writerElements:" + writerElements);
-			String author = "";
+			String writer = "";
 			if (writerElements.size() > 0) {
-				author = writerElements.get(0).text();
+				writer = writerElements.get(0).text();
 			}
 
 			Elements timeElements = doc.select(".finance .head .infoView p");
@@ -137,7 +170,10 @@ public class FinanceDaumNet extends News {
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = strContent.replaceAll("figure", "div");
 			strContent = strContent.replaceAll("figcaption", "div");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			String copyright = "";
 
@@ -152,11 +188,12 @@ public class FinanceDaumNet extends News {
 
 			sb1.append("<div style='width:548px'>\r\n");
 
-			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-			sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");
-			sb1.append("<span style='font-size:12px'>" + author + "</span><br>\n");
-			sb1.append("<span style='font-size:12px'>" + strDate + "</span><br><br>\n");
-			sb1.append(strContent + "\n");
+			sb1.append("<h3> 기사주소:[<a href='").append(url).append("' target='_sub'>").append(url)
+					.append("</a>] </h3>\n");
+			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
+			sb1.append("<span style='font-size:12px'>").append(writer).append("</span><br>\n");
+			sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
+			sb1.append(strContent).append("\n");
 			sb1.append(copyright);
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
@@ -167,8 +204,8 @@ public class FinanceDaumNet extends News {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + host + File.separator
-					+ strFileNameDate + "_" + strTitleForFileName + ".html";
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"

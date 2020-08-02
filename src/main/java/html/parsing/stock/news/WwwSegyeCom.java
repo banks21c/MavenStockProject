@@ -133,7 +133,10 @@ public class WwwSegyeCom extends News {
 			strContent = strContent.replaceAll("<figcaption>", "<div>");
 			strContent = strContent.replaceAll("</figcaption>", "</div>");
 			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			String copyright = "";
 			System.out.println("copyright:" + copyright);

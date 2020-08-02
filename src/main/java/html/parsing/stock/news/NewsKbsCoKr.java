@@ -124,7 +124,10 @@ public class NewsKbsCoKr extends News {
 			String strContent2 = doc.select(".det-news .detail-body").outerHtml();
 			strContent = strContent1 + strContent2;
 
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			String copyright = "";
 			System.out.println("copyright:" + copyright);

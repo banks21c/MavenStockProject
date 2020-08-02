@@ -110,7 +110,10 @@ public class WwwBusanCom extends News {
 			System.out.println("article:[" + article + "]");
 			String strContent = article.html();
 			System.out.println("content:[" + strContent + "]");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			String copyRight = "";
 

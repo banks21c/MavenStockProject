@@ -257,7 +257,10 @@ public class WwwMtCoKr extends javax.swing.JFrame {
 			String copyright = article.select(".copyright").outerHtml();
 			strContent = strContent + copyright;
 
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");

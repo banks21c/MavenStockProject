@@ -103,7 +103,10 @@ public class NewsStyleM extends News {
 			textBodyDoc.select("div").get(0).attr("style", "font-size:11pt");
 			textBodyDoc.select(".lmbox1").attr("style", "font-size:10pt;color:gray;");
 			String strContent = textBodyDoc.html();
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			String copyright = content.select(".copyright").outerHtml();
 

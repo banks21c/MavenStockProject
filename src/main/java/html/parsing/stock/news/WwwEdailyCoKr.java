@@ -33,9 +33,9 @@ public class WwwEdailyCoKr extends News {
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
 	static String strYMD = "";
-	static String strDate = null;
-	static String strTitle = null;
-	static String strSubTitle = null;
+	static String strDate = "";
+	static String strTitle = "";
+	static String strSubTitle = "";
 
 	public static void main(String[] args) {
 		new WwwEdailyCoKr(1);
@@ -182,8 +182,10 @@ public class WwwEdailyCoKr extends News {
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = strContent.replaceAll("figure", "div");
 			strContent = strContent.replaceAll("figcaption", "div");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
-			;
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 			// Elements copyRightElement = doc.select(".txt_copyright");
 			// String copyRight = copyRightElement.text();
 			sb1.append("<html lang='ko'>\r\n");
@@ -197,7 +199,7 @@ public class WwwEdailyCoKr extends News {
 
 			sb1.append("<div style='width:548px'>\r\n");
 			sb1.append("<h3> 기사주소:[<a href='").append(strUrl).append("' target='_sub'>").append(strUrl)
-					.append("</a>] </h3>\n");
+				.append("</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append(strSubTitle).append("\r\n");
 			sb1.append("<span style='font-size:12px'>").append(writer).append("</span><br>\n");
@@ -214,11 +216,11 @@ public class WwwEdailyCoKr extends News {
 			}
 
 			strFileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
-					+ strTitleForFileName + ".html";
+				+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(strFileName, sb1.toString());
 
 			strFileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
-					+ strTitleForFileName + ".html";
+				+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(strFileName, sb1.toString());
 
 		} catch (Exception e) {

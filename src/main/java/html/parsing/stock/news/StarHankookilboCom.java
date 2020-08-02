@@ -110,7 +110,10 @@ public class StarHankookilboCom extends News {
 			String strContent = article.outerHtml();
 			System.out.println("strContent:" + strContent);
 			strContent = strContent.replaceAll("640px", "548px");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			String copyright = doc.select(".news-writer").get(1).html();
 			System.out.println("copyright:" + copyright);

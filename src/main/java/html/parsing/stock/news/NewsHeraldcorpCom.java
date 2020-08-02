@@ -129,7 +129,10 @@ public class NewsHeraldcorpCom extends News {
 			logger.debug("img:" + img);
 			String strContent = doc.select("#articleText").outerHtml();
 			// strContent = StockUtil.makeStockLinkString(strContent);
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 			logger.debug("strContent:" + strContent);
 
 			String copyright = "";

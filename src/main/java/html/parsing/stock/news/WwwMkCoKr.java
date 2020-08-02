@@ -317,7 +317,10 @@ public class WwwMkCoKr extends javax.swing.JFrame {
 			String strContent = contentEls.html();
 			strContent = strContent.replace("src=\"//", "src=\"" + protocol + "://");
 
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			String copyright = "";
 

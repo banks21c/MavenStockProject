@@ -79,9 +79,9 @@ public class VipMkCoKr extends javax.swing.JFrame {
 				}
 			}
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| javax.swing.UnsupportedLookAndFeelException ex) {
+			| javax.swing.UnsupportedLookAndFeelException ex) {
 			java.util.logging.Logger.getLogger(NewsReader.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
+				ex);
 		}
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
@@ -212,8 +212,8 @@ public class VipMkCoKr extends javax.swing.JFrame {
 		try {
 			System.out.println("url:" + strUrl);
 			doc = Jsoup.connect(strUrl)
-					.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0")
-					.header("Accept-Language", "en").header("Accept-Encoding", "gzip,deflate,sdch").get();
+				.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0")
+				.header("Accept-Language", "en").header("Accept-Encoding", "gzip,deflate,sdch").get();
 			System.out.println("doc:[" + doc + "]");
 
 			JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
@@ -227,15 +227,15 @@ public class VipMkCoKr extends javax.swing.JFrame {
 			String fileName2 = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
 			System.out.println("fileName2:" + fileName2);
 			Writer bw = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
+				new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
 			bw.write(doc.html());
 			bw.close();
 
 			Elements title;
 			Element tableEl;
-			String strAuthor = null;
+			String strAuthor = "";
 			Elements subTitle;
-			String strDate = null;
+			String strDate = "";
 			Node lastPNode;
 			Element contentEl;
 			if (strUrl.contains("planning_news_view")) {
@@ -250,7 +250,7 @@ public class VipMkCoKr extends javax.swing.JFrame {
 				strDate = lastPNode.outerHtml();
 				strDate = strDate.replace("입력", "").trim();
 				System.out.println("strDate:" + strDate);
-				contentEl = tableEl; 
+				contentEl = tableEl;
 			} else {
 				title = doc.select("div#Titless");
 				contentEl = doc.select("div#Conts").get(0);
@@ -270,11 +270,6 @@ public class VipMkCoKr extends javax.swing.JFrame {
 				strSubTitle = subTitle.outerHtml();
 			}
 
-			if (strAuthor.equals("")) {
-				strAuthor = doc.select(".author").html();
-			}
-			System.out.println("strAuthor:[" + strAuthor + "]");
-
 			if (strDate.equals("")) {
 				strDate = title.get(0).parent().nextElementSibling().text();
 			}
@@ -290,11 +285,26 @@ public class VipMkCoKr extends javax.swing.JFrame {
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
 			System.out.println("strFileNameDate:" + strFileNameDate);
 
+			System.out.println("contentEl1:[" + contentEl + "]:contentEl1");
 			contentEl.select(".con_txt_new").remove();
 			contentEl.select("spacer").remove();
+			contentEl.select("style").remove();
+			contentEl.select("table").remove();
+			System.out.println("contentEl2:[" + contentEl + "]:contentEl2");
+
+			if (strAuthor.equals("")) {
+//				strAuthor = doc.select(".author").html();
+				strAuthor = contentEl.select("br").last().previousSibling().toString();
+				contentEl.select("br").last().previousSibling().remove();
+			}
+			System.out.println("strAuthor:[" + strAuthor + "]");
+
 			String strContent = contentEl.outerHtml();
 			System.out.println("strContent:" + strContent);
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			String copyright = "";
 
@@ -312,6 +322,7 @@ public class VipMkCoKr extends javax.swing.JFrame {
 			sb1.append("<h3> 기사주소:[<a href='" + strUrl + "' target='_sub'>" + strUrl + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append(strSubTitle + "<br>\r\n");
+//			sb1.append(strDate + "<br>\r\n");
 			sb1.append(strAuthor + "<br>\r\n");
 			sb1.append(strContent + "<br>\r\n");
 			sb1.append(copyright + "<br>\r\n");
@@ -327,15 +338,15 @@ public class VipMkCoKr extends javax.swing.JFrame {
 			}
 
 			System.out.println("fileName1:" + userHome + File.separator + "documents" + File.separator + strFileNameDate
-					+ "_" + strTitleForFileName + ".html");
+				+ "_" + strTitleForFileName + ".html");
 			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
-					+ strTitleForFileName + ".html";
+				+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 			System.out.println("fileName2:" + userHome + File.separator + "documents" + File.separator + strFileNameDate
-					+ "_" + strTitleForFileName + ".html");
+				+ "_" + strTitleForFileName + ".html");
 			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
-					+ strTitleForFileName + ".html";
+				+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (IOException e) {

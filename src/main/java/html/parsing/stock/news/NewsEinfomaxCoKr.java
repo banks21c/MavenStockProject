@@ -133,7 +133,10 @@ public class NewsEinfomaxCoKr extends News {
 			System.out.println("article2:" + article);
 
 			String strContent = article.html();
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");

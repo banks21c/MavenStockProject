@@ -125,7 +125,10 @@ public class ImnewsImbcCom extends News {
 					strContent = contentEl.outerHtml();
 				}
 			}
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 			System.out.println("content:" + strContent);
 
 			Elements divs = doc.select(".news_cont .news_img");

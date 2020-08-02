@@ -165,7 +165,10 @@ public class WwwNocutNewsCoKr extends News {
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = strContent.replaceAll("figure", "div");
 			strContent = strContent.replaceAll("figcaption", "div");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			Elements copyRightElements = doc.select(".news_copyright");
 			Element copyRightElement = null;
@@ -191,7 +194,7 @@ public class WwwNocutNewsCoKr extends News {
 
 			doc.select(".news_date").remove();
 
-			url = URLDecoder.decode(url,"UTF-8");
+			url = URLDecoder.decode(url, "UTF-8");
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
 			sb1.append("<span style='font-size:12px'>" + writer + "</span><br>\n");

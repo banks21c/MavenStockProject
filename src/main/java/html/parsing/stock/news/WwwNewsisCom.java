@@ -122,7 +122,10 @@ public class WwwNewsisCom extends News {
 			strContent = strContent.replaceAll("<figcaption>", "<div>");
 			strContent = strContent.replaceAll("</figcaption>", "</div>");
 			strContent = strContent.replaceAll("src=\"//image", "src=\"http://image");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			Element copyRightElement = doc.select("div.copy").first();
 			String copyRight = "";

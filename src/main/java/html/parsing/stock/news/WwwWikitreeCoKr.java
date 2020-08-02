@@ -112,7 +112,10 @@ public class WwwWikitreeCoKr extends News {
 			System.out.println("copyright:" + copyright);
 
 			String strContent = articleHtml.replaceAll("640px", "548px");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");

@@ -23,6 +23,7 @@ import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
+import org.jsoup.Jsoup;
 
 public class BizKhanCoKr extends News {
 
@@ -164,7 +165,10 @@ public class BizKhanCoKr extends News {
 			String strContent = article.html().replaceAll("640px", "548px");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			String copyright = doc.select(".art_copyright").text();
 

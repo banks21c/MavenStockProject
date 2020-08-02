@@ -125,7 +125,10 @@ public class NewsSedaily extends News {
 			strContent = strContent.replaceAll("</figure>", "</div>");
 			strContent = strContent.replaceAll("<figcaption>", "<div>");
 			strContent = strContent.replaceAll("</figcaption>", "</div>");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			Element copyRightElement = doc.select(".txt_copyright").first();
 			String copyRight = copyRightElement.text();

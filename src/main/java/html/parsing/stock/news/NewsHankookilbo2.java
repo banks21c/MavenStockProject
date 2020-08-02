@@ -208,7 +208,10 @@ public class NewsHankookilbo2 extends javax.swing.JFrame {
 			String strContent = articleHtml.replaceAll("640px", "548px");
 			strContent = strContent.replaceAll("<p></p>", "<br><br><p>");
 			strContent = strContent.replaceAll("</article>", "</article><br>");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(strContent);
+			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
+			Document contentDoc = Jsoup.parse(strContent);
+			contentDoc.select("#myCommentDiv").remove();
+			strContent = contentDoc.select("body").html();
 
 			sb1.append("<!DOCTYPE html>\r\n");
 			sb1.append("<html lang='ko'>\r\n");

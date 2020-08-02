@@ -1,18 +1,13 @@
 package html.parsing.stock.news;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
@@ -21,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,18 +27,23 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class NewsStockAsiaeCoKr extends javax.swing.JFrame {
+public class SedailyCom extends javax.swing.JFrame {
 
-	private static Logger logger = LoggerFactory.getLogger(NewsStockAsiaeCoKr.class);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 590660743475607524L;
+	private static Logger logger = null;
 	final static String userHome = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
 
-	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.ss.SSS", Locale.KOREAN).format(new Date());
+	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
+	// Locale.KOREAN).format(new Date());
+	static String strYMD = "";
 	static String strDate = null;
 	static String strTitle = null;
-	static String strSubTitle = null;
 
 	DecimalFormat df = new DecimalFormat("###.##");
 
@@ -57,16 +56,21 @@ public class NewsStockAsiaeCoKr extends javax.swing.JFrame {
 	private javax.swing.JPanel executeResultPnl;
 	private static javax.swing.JLabel executeResultLbl;
 
-	NewsStockAsiaeCoKr(int i) {
+	public SedailyCom() {
+		logger = LoggerFactory.getLogger(this.getClass());
+
+		initComponents();
+	}
+
+	SedailyCom(int i) {
+		logger = LoggerFactory.getLogger(this.getClass());
 
 		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
 		if (StringUtils.defaultString(url).equals("")) {
-			url = "http://www.asiae.co.kr/news/view.htm?idxno=2018041911043434606";
+			url = "http://www.sedaily.com/NewsView/1RVOCVY2MC";
 		}
-		if (url != null && !url.equals("")) {
-			createHTMLFile(url);
-		}
+		createHTMLFile(url);
 	}
 
 	/**
@@ -90,14 +94,9 @@ public class NewsStockAsiaeCoKr extends javax.swing.JFrame {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new NewsStockAsiaeCoKr().setVisible(true);
+				new SedailyCom().setVisible(true);
 			}
 		});
-	}
-
-	public NewsStockAsiaeCoKr() {
-
-		initComponents();
 	}
 
 	private void initComponents() {
@@ -180,6 +179,8 @@ public class NewsStockAsiaeCoKr extends javax.swing.JFrame {
 	private void eraseBtnActionPerformed(java.awt.event.ActionEvent evt) {
 		urlTf.setText("");
 		executeResultLbl.setText("추출준비");
+		Font ft = new Font(Font.SERIF, Font.PLAIN, 10);
+		executeResultLbl.setForeground(Color.black);
 	}
 
 	private void urlTfActionPerformed(java.awt.event.ActionEvent evt) {
@@ -201,6 +202,7 @@ public class NewsStockAsiaeCoKr extends javax.swing.JFrame {
 	}
 
 	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+		logger = LoggerFactory.getLogger(SedailyCom.class.getName());
 
 		News gurl = new News();
 		gurl.getURL(url);
@@ -210,63 +212,100 @@ public class NewsStockAsiaeCoKr extends javax.swing.JFrame {
 		String protocolHost = gurl.getProtocolHost();
 
 		StringBuilder sb1 = new StringBuilder();
-		Document doc = null;
+		Document doc;
 		String strTitleForFileName;
-		FileWriter fw;
 		try {
 			doc = Jsoup.connect(url).get();
+			doc.select("iframe").remove();
+			doc.select("script").remove();
+			doc.select("ins").remove();
+			doc.select(".btn_info").remove();
 
 			JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
 			JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
 			JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
 			JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 
-			doc.select("iframe").remove();
-			doc.select("script").remove();
-
-			String fileName2 = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
-			System.out.println("fileName2:" + fileName2);
-			Writer bw = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
-			bw.write(doc.html());
-			bw.close();
-
-			Elements title = doc.select(".area_title h1");
-			System.out.println("title:" + strTitle);
-			if (title != null && title.size() > 0) {
-				strTitle = title.get(0).text();
+			Elements title = doc.select("#v-left-scroll-in h2");
+			if (title.size() <= 0) {
+				title = doc.select(".article_head .art_tit");
 			}
+			strTitle = title.get(0).text();
 			System.out.println("title:" + strTitle);
 			strTitleForFileName = strTitle;
 			strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
 			System.out.println("strTitleForFileName:" + strTitleForFileName);
 
-			String strAuthor = doc.select(".e_article").text();
-			System.out.println("strAuthor:[" + strAuthor + "]");
-
-			Element paragraph = doc.select(".area_title p").get(0);
-			List<Node> childNodes = paragraph.childNodes();
-			int childNodeSize = paragraph.childNodeSize();
-			System.out.println("childNodeSize:" + childNodeSize);
-			for (Node n : childNodes) {
-				String nodehtml = n.toString();
-				System.out.println("nodehtml:" + nodehtml);
+			Elements authorEls = doc.select("#v-left-scroll-in .view_top ul");
+			String strAuthor = "";
+			String authorAndTime = "";
+			String strDate = "";
+			if (authorEls.size() > 0) {
+				strAuthor = authorEls.select("li").get(0).text();
+				authorAndTime = authorEls.outerHtml();
+				strDate = authorEls.select("li").get(1).text();
+				strDate = strDate.replace("입력", "");
+			} else {
+				authorEls = doc.select(".article_head .article_info");
+				strAuthor = authorEls.select("span").get(2).text();
+				authorAndTime = authorEls.outerHtml();
+				strDate = authorEls.select("span").get(0).text();
+				strDate = strDate.replace("입력", "");
 			}
-			String strDate = paragraph.childNode(2).toString().trim();
+			System.out.println("authorEls:[" + authorEls + "]");
+			System.out.println("strAuthor:[" + strAuthor + "]");
+			System.out.println("authorAndTime:[" + authorAndTime + "]");
 			System.out.println("strDate:[" + strDate + "]");
 
 			String strFileNameDate = strDate;
 			strFileNameDate = StockUtil.getDateForFileName(strDate);
 			System.out.println("strFileNameDate:" + strFileNameDate);
 
-			String strContent = doc.select("#bodyContents").html();
+			Elements contentEls = doc.select(".view_con");
+			System.out.println("contentEls:" + contentEls);
+			System.out.println("contentEls.size:" + contentEls.size());
+			Element contentEl;
+			String strArticleSummary = "";
+			String strArticle = "";
+			logger.debug("ssssssssssssssssssssssssss");
+			if (contentEls.size() > 0) {
+				contentEl = doc.select(".view_con").get(0);
+				strArticle = contentEl.outerHtml();
+			} else {
+				logger.debug("elseeeeeeeeeeeeee");
+				Elements articleSummaryEls = doc.select(".article_summary");
+				logger.debug("articleSummaryEls:" + articleSummaryEls);
+				if (articleSummaryEls.size() > 0) {
+					Element articleSummaryEl = articleSummaryEls.get(0);
+					logger.debug("articleSummaryEl:" + articleSummaryEl);
+					articleSummaryEl.removeAttr("style");
+					articleSummaryEl.attr("style",
+							"font-family: 'Noto Sans KR', sans-serif;margin-bottom: 6px;font-weight: bold;line-height: 1.2em;letter-spacing: 0 !important;");
+					strArticleSummary = articleSummaryEl.outerHtml();
+				}
+				contentEl = doc.select(".article_view").get(0);
+				strArticle = contentEl.outerHtml();
+			}
+			// System.out.println("textBody:"+textBody);
+			Document textBodyDoc = Jsoup.parse(strArticleSummary + strArticle);
+			textBodyDoc.select(".lmbox1").attr("style", "font-size:10pt;color:gray;");
+			String strContent = textBodyDoc.html();
 			System.out.println("strContent:" + strContent);
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
 			Document contentDoc = Jsoup.parse(strContent);
 			contentDoc.select("#myCommentDiv").remove();
 			strContent = contentDoc.select("body").html();
 
+			Elements copyrightEls = doc.select(".copyright");
 			String copyright = "";
+			if (copyrightEls.size() > 0) {
+				copyright = copyrightEls.get(0).outerHtml();
+			} else {
+				copyrightEls = doc.select(".article_copy");
+				if (copyrightEls.size() > 0) {
+					copyright = copyrightEls.get(0).outerHtml();
+				}
+			}
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
@@ -281,8 +320,8 @@ public class NewsStockAsiaeCoKr extends javax.swing.JFrame {
 
 			sb1.append("<h3> 기사주소:[<a href='").append(url).append("' target='_sub'>").append(url)
 					.append("</a>] </h3>\n");
-			sb1.append("<h2 id='title'>[").append(strDate).append("]").append(strTitle).append("</h2><br>\r\n");
-			sb1.append(strAuthor).append("<br>\r\n");
+			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
+			sb1.append(authorAndTime).append("<br>\r\n");
 			sb1.append(strContent).append("<br>\r\n");
 			sb1.append(copyright).append("<br>\r\n");
 
@@ -290,20 +329,15 @@ public class NewsStockAsiaeCoKr extends javax.swing.JFrame {
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			System.out.println("fileDir:" + userHome + File.separator + "documents" + File.separator + host);
 			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			System.out.println("fileName1:" + userHome + File.separator + "documents" + File.separator + strFileNameDate
-					+ "_" + strTitleForFileName + ".html");
 			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			System.out.println("fileName2:" + userHome + File.separator + "documents" + File.separator + strFileNameDate
-					+ "_" + strTitleForFileName + ".html");
 			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
@@ -314,6 +348,8 @@ public class NewsStockAsiaeCoKr extends javax.swing.JFrame {
 			System.out.println("추출완료");
 			if (executeResultLbl != null) {
 				executeResultLbl.setText("추출완료");
+				Font ft = new Font(Font.SERIF, Font.PLAIN, 10);
+				executeResultLbl.setForeground(Color.red);
 			}
 		}
 		return sb1;
