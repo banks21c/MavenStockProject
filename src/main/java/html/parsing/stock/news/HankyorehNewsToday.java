@@ -1,4 +1,4 @@
-package html.parsing.stock;
+package html.parsing.stock.news;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;

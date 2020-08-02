@@ -1,4 +1,4 @@
-package html.parsing.stock;
+package html.parsing.stock.news;
 
 import html.parsing.stock.util.StockUtil;
 import java.awt.event.KeyEvent;
@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import html.parsing.stock.news.News;
 import html.parsing.stock.util.FileUtil;
 
 /**
@@ -203,6 +202,10 @@ public class MoneyToday extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MoneyToday.class.getName()).log(java.util.logging.Level.SEVERE, null,
                     ex);
         }
+        // </editor-fold>
+        // </editor-fold>
+        // </editor-fold>
+        // </editor-fold>
         // </editor-fold>
         // </editor-fold>
         // </editor-fold>

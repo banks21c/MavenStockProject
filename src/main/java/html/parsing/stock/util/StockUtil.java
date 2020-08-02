@@ -547,16 +547,11 @@ public class StockUtil {
 			// 프로젝트 경로에 있는 파일들은 jar파일에 묶이지 않는다.
 			File f = new File("./StockExtractExceptWord.txt");
 //			System.out.println("f.exists1:"+f.exists());
-			if (f.exists()) {
-				fr = new FileReader(f);
-				br = new BufferedReader(fr);
-			} else {
-				// classes root 경로
+			if (!f.exists()) {
 				f = new File("/StockExtractExceptWord.txt");
 //				System.out.println("f.exists2:"+f.exists());
-				fr = new FileReader(f);
-				br = new BufferedReader(fr);
 			}
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
 			String strLine = "";
 			while ((strLine = br.readLine()) != null) {
@@ -1896,7 +1891,7 @@ public class StockUtil {
 
 	public static String getMyCommentBox() {
 		StringBuilder sb1 = new StringBuilder();
-		sb1.append("<div style='border:1px solid #afaefe;width:548px;'>\r\n");
+		sb1.append("<div id='myCommentDiv' style='border:1px solid #afaefe;width:548px;'>\r\n");
 		sb1.append("<span style='font:12px bold;border:1px solid #afaefe'>My Comment</span>\r\n");
 		sb1.append("<h3>\r\n");
 		sb1.append("<span style='background-color: rgb(51, 51, 51); color: rgb(255, 255, 0);'>~~~</span>\r\n");
@@ -1907,12 +1902,11 @@ public class StockUtil {
 
 	public static String getMyCommentBox(String strComment) {
 		StringBuilder sb1 = new StringBuilder();
-		sb1.append("<div style='border:1px solid #afaefe;width:548px;'>\r\n");
+		sb1.append("<div id='myCommentDiv' style='border:1px solid #afaefe;width:548px;'>\r\n");
 		sb1.append("<span style='font:12px bold;border:1px solid #afaefe'>My Comment</span>\r\n");
-		sb1.append("<h3>\r\n");
-		sb1.append("<span style='background-color: rgb(51, 51, 51); color: rgb(255, 255, 0);'>").append(strComment)
-				.append("</span>\r\n");
-		sb1.append("</h3>\r\n");
+		sb1.append("<br>\r\n");
+		sb1.append("<div style='color: rgb(0, 0, 0);font-size:15px;font-weight:bold;font-style:italic;'>").append(strComment)
+				.append("</div>\r\n");
 		sb1.append("</div>\r\n");
 		return sb1.toString();
 	}
