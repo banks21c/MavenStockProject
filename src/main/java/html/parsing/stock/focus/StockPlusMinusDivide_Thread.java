@@ -233,12 +233,12 @@ public class StockPlusMinusDivide_Thread extends Thread {
 		String strUrl = "";
 		String strTitle = Jsoup.parse(html.toString()).select("h2#title").text();
 		logger.debug("strTitle:"+strTitle);
-		String categoryName = "증권↑↓↗↘";
+		String strBlogCategoryNo = "146";//증권↑↓↗↘";
 		StringBuilder contentSb = html;
 		logger.debug("strNidAut:" + strNidAut);
 		logger.debug("strNidSes:" + strNidSes);
 				if (!StringUtils.defaultIfEmpty(strNidAut,"").equals("") && !StringUtils.defaultIfEmpty(strNidSes,"").equals("")) {
-			NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strUrl, strTitle, categoryName, contentSb, null);
+			NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strUrl, strTitle, strBlogCategoryNo, contentSb, null);
 		}
 	}
 

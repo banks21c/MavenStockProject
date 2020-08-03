@@ -1955,8 +1955,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append(data);
 		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
 
-		String strBlogCategoryName = "카테고리별 베스트 상품";
-		naverBlogLinkShare(sb, strBlogCategoryName, shareTitle);
+		String strBlogCategoryNo = "274";// "카테고리별 베스트 상품";
+		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
 
 		return true;
 	}
@@ -1996,8 +1996,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
 
 		String shareTitle = strYmdBlacket + " " + "카테고리별 베스트상품";
-		String strBlogCategoryName = "카테고리별 베스트 상품";
-		naverBlogLinkShare(sb, strBlogCategoryName, shareTitle);
+		String strBlogCategoryNo = "274";//카테고리별 베스트 상품
+		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
 
 		return true;
 	}
@@ -2016,8 +2016,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
 
 		String shareTitle = strYmdBlacket + " " + "WOW 와우회원 전용 매일 오전 7시 골드박스 1일특가";
-		String strBlogCategoryName = "골드박스";
-		naverBlogLinkShare(sb, strBlogCategoryName, shareTitle);
+		String strBlogCategoryNo = "271";//골드박스
+		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
 
 		return true;
 	}
@@ -2036,8 +2036,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
 
 		String shareTitle = strYmdBlacket + " " + "쿠팡 PL 상품 TOP" + limit;
-		String strBlogCategoryName = "PL 상품";
-		naverBlogLinkShare(sb, strBlogCategoryName, shareTitle);
+		String strBlogCategoryNo = "275";//PL 상품
+		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
 
 		return true;
 	}
@@ -2055,8 +2055,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append(data);
 
 		String shareTitle = strYmdBlacket + " " + "쿠팡 PL 브랜드별(" + brandNm + ") 상품 TOP" + limit;
-		String strBlogCategoryName = "PL 브랜드별 상품";
-		naverBlogLinkShare(sb, strBlogCategoryName, shareTitle);
+		String strBlogCategoryNo = "276";// "PL 브랜드별 상품";
+		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
 		return true;
 	}
 
@@ -2095,8 +2095,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
 
 		String shareTitle = strYmdBlacket + " " + "쿠팡 PL 브랜드별 상품 TOP" + limit;
-		String strBlogCategoryName = "PL 브랜드별 상품";
-		naverBlogLinkShare(sb, strBlogCategoryName, shareTitle);
+		String strBlogCategoryNo = "276";// "PL 브랜드별 상품";
+		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
 
 		return true;
 	}
@@ -2123,8 +2123,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
 
 		String shareTitle = strYmdBlacket + " " + "상품검색";
-		String strBlogCategoryName = "추천 상품";
-		naverBlogLinkShare(sb, strBlogCategoryName, shareTitle);
+		String strBlogCategoryNo = "277";// "추천 상품";
+		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
 		return true;
 	}
 
@@ -2509,11 +2509,11 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			System.out.println("newsAddedStockList:" + newsAddedStockList);
 			sb.append(newsAddedStockList.toString());
 
-			String strBlogCategoryName = "시간외단일가";
+			String strBlogCategoryNo = "235";// "시간외단일가";
 			String shareTitle = strYmdBlacket + " " + mktType + " 시간외단일가(" + upDownType + ")";
 
 			if (!strNidAut.equals("") && !strNidSes.equals("")) {
-				if (naverBlogLinkShare(sb, strBlogCategoryName, shareTitle, "")) {
+				if (naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle, "")) {
 					JOptionPane.showMessageDialog(null, shareTitle + " 데이터를 공유하였습니다.");
 				}
 			} else {

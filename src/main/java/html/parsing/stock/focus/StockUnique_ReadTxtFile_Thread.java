@@ -217,12 +217,12 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 			JOptionPane.showMessageDialog(null, "제목을 입력해주세요.");
 			strTitle = "특징주";
 		}
-		String categoryName = "특징주";
+		String strBlogCategoryNo = "153";//특징주
 		StringBuilder contentSb = html;
 		logger.debug("strNidAut:" + strNidAut);
 		logger.debug("strNidSes:" + strNidSes);
 				if (!StringUtils.defaultIfEmpty(strNidAut,"").equals("") && !StringUtils.defaultIfEmpty(strNidSes,"").equals("")) {
-			NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strUrl, strTitle, categoryName, contentSb, null);
+			NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strUrl, strTitle, strBlogCategoryNo, contentSb, null);
 		}
 	}
 

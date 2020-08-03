@@ -51,6 +51,8 @@ public class NaverUtil {
 
 	public static boolean naverBlogLinkShare(String strNidAut, String strNidSes, String strUrl, String strTitle,
 		String strCategoryNo, StringBuilder contentSb, JRootPane rootPane) {
+		System.out.println("contentSb :["+contentSb+"]:contentSb");
+		System.out.println("strCategoryNo :["+strCategoryNo+"]:strCategoryNo");
 		if (strNidAut.equals("") || strNidSes.equals("")) {
 			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning",
 				JOptionPane.WARNING_MESSAGE);
@@ -180,7 +182,9 @@ public class NaverUtil {
 			map.add("url", strEncodedUrl);
 			map.add("blogId", "banks");
 			map.add("title", strEncodedTitle);
-
+//			temp += contentSb.toString();
+//			temp = URLEncoder.encode(temp, "UTF8");
+			map.add("content",URLEncoder.encode(contentSb.toString(), "UTF8"));
 			String temp = "";
 
 			temp = "%3Cspan%20id%3D%22se_object_1592901264185%22%20class%3D%22__se_object%22%20s_type%3D%22leverage%22%20s_subtype%3D%22oglink%22%20jsonvalue%3D%22%257B%2522url%2522%253A%2522https%253A%252F%252Fwww.youtube.com%252Fwatch%253Fv%253DJ6zD3h_I3Lc%2526feature%253Dshare%2522%252C%2522domain%2522%253A%2522www.youtube.com%2522%252C%2522title%2522%253A%2522%25EC%25A3%25BD%25EC%259D%2584%2520%25EB%25BB%2594%2520%25ED%2595%259C%2520%25EC%2595%2584%25EA%25B8%25B0%2520%25EC%2588%2598%25EB%258B%25AC%25EC%259D%2584%2520%25EC%2582%25B4%25EB%25A0%25A4%25EC%25A4%25AC%25EB%258D%2594%25EB%258B%2588%2520%25EC%2583%259D%25EA%25B8%25B4%2520%25EC%259D%25BC%2520%25E3%2585%25A3%2520What%2520Happened%2520After%2520Rescuing%2520A%2520Nearly%2520Dying%2520Baby%2520Otter%2520Is..%2522%252C%2522description%2522%253A%2522%25ED%2595%2598%25EB%258A%2594%2520%25EC%25A7%2593%25EB%25A7%2588%25EB%258B%25A4%2520%25EB%25A9%258D%25EB%25AD%2589%25EB%25AF%25B8%2520%25EB%2584%2598%25EC%25B9%2598%25EB%258A%2594%2520%25EC%2588%2598%25EB%258B%25AC%2520%2526%252339%253B%25ED%2596%2587%25EB%258B%2598%25EC%259D%25B4%2526%252339%253B%2520%25ED%2596%2587%25EB%258B%2598%25EC%259D%25B4%25EA%25B0%2580%2520%25EC%2582%25AC%25EC%259C%25A1%25EC%2582%25AC%25EB%25A5%25BC%2520%25EB%2594%25B0%25EB%25A5%25B4%25EA%25B8%25B0%2520%25EC%258B%259C%25EC%259E%2591%25ED%2595%259C%2520%25EC%259D%25B4%25EC%259C%25A0%25EB%258A%2594..%2520%2523%25EB%258F%2599%25EB%25AC%25BC%25EB%2586%258D%25EC%259E%25A5%2520%2523%25EC%2595%25A0%25EB%258B%2588%25EB%25A9%2580%25EB%25B4%2590%25EC%2588%2598%25EB%258B%25AC%2520%2523%25EA%25B0%259C%25EC%2588%2598%25EB%258B%25AC%25ED%2596%2587%25EB%258B%2598%25EC%259D%25B4%2520-------------------------------------------------%2520%25EC%2595%25A0%25EB%258B%2588%25EB%25A9%2580%25EB%25B4%2590%25EC%2599%2580%2520%25ED%2595%259C%25EB%25B0%25B0%25ED%2583%2580%25EA%25B3%25A0%25E2%259B%25B5%2520%25E2%2598%259E%2520https%253A%252F%252Fgoo.gl%252FWL9mGy%2520%25ED%2596%2587...%2522%252C%2522type%2522%253A%2522video%2522%252C%2522image%2522%253A%257B%2522url%2522%253A%2522https%253A%252F%252Fi.ytimg.com%252Fvi%252FJ6zD3h_I3Lc%252Fhqdefault.jpg%2522%252C%2522width%2522%253A480%252C%2522height%2522%253A360%257D%252C%2522allImages%2522%253A%255B%257B%2522url%2522%253A%2522https%253A%252F%252Fi.ytimg.com%252Fvi%252FJ6zD3h_I3Lc%252Fhqdefault.jpg%2522%252C%2522width%2522%253A480%252C%2522height%2522%253A360%257D%255D%252C%2522video%2522%253A%2522https%253A%252F%252Fwww.youtube.com%252Fembed%252FJ6zD3h_I3Lc%2522%252C%2522site%2522%253A%2522YouTube%2522%252C%2522layoutType%2522%253A1%257D%22%3E%3C%2Fspan%3E%3Cbr%3E%EA%B7%80%EC%97%AC%EC%9B%8C%EC%9A%94...";
@@ -215,7 +219,7 @@ public class NaverUtil {
 
 			// 아래의 span 태그가 없으면 공유실패함..
 			temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leverage\" s_subtype=\"oglink\" jsonvalue=\"테스트(test)\"></span>";
-			temp += contentSb.toString();
+//			temp += contentSb.toString();
 			
 			temp = URLEncoder.encode(temp, "UTF8");
 			map.add("content", temp);

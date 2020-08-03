@@ -1112,15 +1112,15 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 		sb.delete(0, sb.length());
 		sb.setLength(0);
 
-		String strCategoryNo = "33";
-		String strCategoryName = "증권";
+		String strBlogCategoryNo = "33";
+		String strBlogCategoryName = "증권";
 		String strSelectedCategory = String.valueOf(cCategoryListComboBox.getSelectionModel().getSelectedItem());
 		System.out.println("strSelectedCategory :" + strSelectedCategory);
 		String strSelectedCategoryArray[] = strSelectedCategory.split(":");
 		System.out.println("strSelectedCategoryArray.length :" + strSelectedCategoryArray.length);
 		if (strSelectedCategoryArray.length > 1) {
-			strCategoryNo = strSelectedCategoryArray[0];
-			strCategoryName = strSelectedCategoryArray[1];
+			strBlogCategoryNo = strSelectedCategoryArray[0];
+			strBlogCategoryName = strSelectedCategoryArray[1];
 			System.out.println("strSelectedCategoryArray[0]-------------->" + strSelectedCategoryArray[0]);
 			System.out.println("strSelectedCategoryArray[1]-------------->" + strSelectedCategoryArray[1]);
 		}
@@ -1144,7 +1144,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 
 		logger.debug("strShareUrl:" + strShareUrl);
 
-		if (naverBlogLinkShare(contentSb, strCategoryName, strShareTitle, strShareUrl)) {
+		if (naverBlogLinkShare(contentSb, strBlogCategoryNo, strShareTitle, strShareUrl)) {
 			shareResultTxt.setText("블로그 글쓰기 성공");
 		} else {
 			shareResultTxt.setText("블로그 글쓰기 실패");
@@ -1153,11 +1153,11 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 
 	}
 
-	public boolean naverBlogLinkShare(StringBuilder contentSb, String strCategoryName, String strShareTitle,
+	public boolean naverBlogLinkShare(StringBuilder contentSb, String strBlogCategoryNo, String strShareTitle,
 		String strShareUrl) {
 		strNidAut = nidAutTf.getText();
 		strNidSes = nidSesTa.getText();
-		return NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strCategoryName,
+		return NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strBlogCategoryNo,
 			contentSb, null);
 	}
 
@@ -1720,11 +1720,11 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 		return sb.toString();
 	}
 
-	public void naverBlogLinkShare(StringBuilder contentSb, String strCategoryName, String strShareTitle) {
+	public void naverBlogLinkShare(StringBuilder contentSb, String strBlogCategoryNo, String strShareTitle) {
 		strNidAut = nidAutTf.getText();
 		strNidSes = nidSesTa.getText();
 		String strShareUrl = "";
-		NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strCategoryName, contentSb, null);
+		NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strBlogCategoryNo, contentSb, null);
 	}
 
 	/**

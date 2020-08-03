@@ -894,12 +894,12 @@ public class MStockWeeks52NewLowHighPriceOneFile extends Thread {
 	public void naverBlogLinkShare(StringBuilder html) {
 		String strUrl = "";
 		String strTitle = Jsoup.parse(html.toString()).select("h2#title").text();
-		String categoryName = "신고,신저가";
+		String strBlogCategoryNo = "164";//신고,신저가
 		StringBuilder contentSb = html;
 		logger.debug("strNidAut:" + strNidAut);
 		logger.debug("strNidSes:" + strNidSes);
 		if (!StringUtils.defaultIfEmpty(strNidAut, "").equals("") && !StringUtils.defaultIfEmpty(strNidSes, "").equals("")) {
-			NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strUrl, strTitle, categoryName, contentSb, null);
+			NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strUrl, strTitle, strBlogCategoryNo, contentSb, null);
 		}
 	}
 }
