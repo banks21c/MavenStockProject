@@ -55,7 +55,7 @@ public class AllStockForeignOrganBothDailyV2_ThreadCall {
 
 	AllStockForeignOrganBothDailyV2_ThreadCall() {
 		// 주간 거래일을 알아낸다.
-		getFirstLastDayOfWeek();
+//		getFirstLastDayOfWeek();
 
 		thread1 = new AllStockForeignOrganBothDailyV2_Thread("코스피", iFirstDayOfWeek, iLastDayOfWeek);
 		thread1.start();
