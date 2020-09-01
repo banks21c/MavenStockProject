@@ -80,7 +80,7 @@ public class Weeks52NewLowHighPriceInput {
 	Weeks52NewLowHighPriceInput(int i) {
 
 		logger1 = LoggerFactory.getLogger(this.getClass());
-		// MakeKospiKosdaqList.makeKospiKosdaqList();
+		
 		String strInputDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDefaultDate);
 		System.out.println("strInputDate:" + strInputDate);
 		if (strInputDate != null) {
@@ -436,7 +436,7 @@ public class Weeks52NewLowHighPriceInput {
 					sb1.append("<tr>\r\n");
 					String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
 					sb1.append("<td>" + cnt++ + "</td>\r\n");
-					sb1.append("<td><a href='" + url + "'>" + s.getStockName() + "</a></td>\r\n");
+					sb1.append("<td><a href='" + url + "' target='_new'>" + s.getStockName() + "</a></td>\r\n");
 
 					String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
 					String varyPrice = s.getVaryPrice();

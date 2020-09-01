@@ -65,7 +65,7 @@ public class Weeks52MinMax50P100P {
 
     Weeks52MinMax50P100P(int i) {
 
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+        
 
         // 모든 주식 정보를 조회한다.
         // 코스피
@@ -393,7 +393,7 @@ public class Weeks52MinMax50P100P {
                     sb1.append("<tr>\r\n");
                     String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
                     sb1.append("<td>" + cnt++ + "</td>\r\n");
-                    sb1.append("<td><a href='" + url + "'>" + s.getStockName() + "</a></td>\r\n");
+                    sb1.append("<td><a href='" + url + "' target='_new'>" + s.getStockName() + "</a></td>\r\n");
 
                     sb1.append("<td style='text-align:right'>" + s.getCurPrice() + "</td>\r\n");
                     if (gubun.equals("ALL")) {

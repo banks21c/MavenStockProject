@@ -92,7 +92,7 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 
 		logger = LoggerFactory.getLogger(this.getClass());
 		logger.debug(this.getClass().getSimpleName() + " .execute started");
-		// MakeKospiKosdaqList.makeKospiKosdaqList();
+		
 
 		Properties props = new Properties();
 		try {
@@ -118,10 +118,6 @@ public class Weeks52NewLowHighPriceToday extends Thread {
 		PropertyConfigurator.configure(absolutePath);
 
 		// 모든 주식 정보를 조회한다.
-		// 코스피
-//        readFile("코스피", kospiFileName);
-		// 코스피 신저가
-//		newLowPriceList = StockUtil.getAllStockInfo(kospiFileName);
 		try {
 			kospiStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
 			logger.debug("kospiStockList.size1 :" + kospiStockList.size());

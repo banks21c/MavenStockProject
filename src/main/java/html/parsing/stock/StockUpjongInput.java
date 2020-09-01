@@ -87,7 +87,7 @@ public class StockUpjongInput extends News {
 
     StockUpjongInput(int i) {
 
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+        
         strDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDefaultDate);
         strDate = StringUtils.defaultString(strDate);
         if (strDate.equals("")) {

@@ -53,7 +53,7 @@ public class StockLinkMakeWithCode {
 
     StockLinkMakeWithCode(int i) {
 
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+        
 
         String kospiFileName = GlobalVariables.kospiFileName;
         String kosdaqFileName = GlobalVariables.kosdaqFileName;
@@ -175,7 +175,7 @@ public class StockLinkMakeWithCode {
 
                 sb1.append("<tr>\r\n");
                 String url = "http://finance.naver.com/item/main.nhn?code=" + code;
-                sb1.append("<td><a href='" + url + "'>" + key + " (" + code + ")" + "</a></td>\r\n");
+                sb1.append("<td><a href='" + url + "' target='_new'>" + key + " (" + code + ")" + "</a></td>\r\n");
                 sb1.append("</tr>\r\n");
             }
             sb1.append("</body>\r\n");
@@ -224,7 +224,7 @@ public class StockLinkMakeWithCode {
 
                 sb1.append("<tr>\r\n");
                 String url = "http://finance.naver.com/item/main.nhn?code=" + code;
-                sb1.append("<td><a href='" + url + "'>" + key + " (" + code + ")" + "</a></td>\r\n");
+                sb1.append("<td><a href='" + url + "' target='_new'>" + key + " (" + code + ")" + "</a></td>\r\n");
                 sb1.append("</tr>\r\n");
             }
             sb1.append("</body>\r\n");

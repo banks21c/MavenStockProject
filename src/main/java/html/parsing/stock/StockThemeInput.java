@@ -88,7 +88,7 @@ public class StockThemeInput extends News {
 	}
 
 	StockThemeInput(int i) throws Exception {
-		// MakeKospiKosdaqList.makeKospiKosdaqList();
+		
 		strDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDefaultDate);
 		strDate = strDate.trim();
 		strDate = StringUtils.defaultString(strDate);

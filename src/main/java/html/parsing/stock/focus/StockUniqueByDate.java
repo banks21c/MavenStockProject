@@ -152,7 +152,7 @@ public class StockUniqueByDate {
     }
 
     StockUniqueByDate(int i) {
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+        
         
         logger1 = LoggerFactory.getLogger(this.getClass());
 

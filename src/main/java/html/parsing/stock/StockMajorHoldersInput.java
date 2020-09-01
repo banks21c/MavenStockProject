@@ -69,7 +69,7 @@ public class StockMajorHoldersInput {
 
 	StockMajorHoldersInput(int i) {
 
-		// MakeKospiKosdaqList.makeKospiKosdaqList();
+		
 
 		String kospiFileName = "new_kospi_우선주제외.html";
 		String kosdaqFileName = "new_kosdaq_우선주제외.html";

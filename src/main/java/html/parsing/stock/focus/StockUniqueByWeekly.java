@@ -105,7 +105,7 @@ public class StockUniqueByWeekly {
     }
 
     StockUniqueByWeekly() {
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+        
         
         logger1 = LoggerFactory.getLogger(this.getClass());
 
@@ -242,7 +242,7 @@ public class StockUniqueByWeekly {
     }
 
     StockUniqueByWeekly(int i) {
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+        
         
         logger1 = LoggerFactory.getLogger(this.getClass());
 

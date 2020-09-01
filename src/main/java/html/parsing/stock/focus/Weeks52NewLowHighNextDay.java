@@ -79,7 +79,7 @@ public class Weeks52NewLowHighNextDay {
     Weeks52NewLowHighNextDay(int i) {
         
         logger1 = LoggerFactory.getLogger(this.getClass());
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+        
 
         Properties props = new Properties();
         try {

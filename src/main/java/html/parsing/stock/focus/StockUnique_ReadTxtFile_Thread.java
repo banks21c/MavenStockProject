@@ -289,7 +289,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 
 			Elements new_totalinfos = doc.select(".new_totalinfo");
 
-			if (new_totalinfos == null || new_totalinfos.size() == 0) {
+			if (new_totalinfos == null || new_totalinfos.isEmpty()) {
 				return stock;
 			}
 

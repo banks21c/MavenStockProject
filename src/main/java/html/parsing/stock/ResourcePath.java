@@ -11,16 +11,17 @@ import java.net.URL;
  *
  * @author parsing-25
  */
-public class NewClass {
+public class ResourcePath {
 
-    public NewClass() {
-        URL resource = getClass().getResource(".");
-        System.out.println("path1:" + resource.getPath());
-        System.out.println("path2:" + getClass().getResource("/").getPath());
+	public ResourcePath() {
+		URL resource1 = getClass().getResource(".");
+		System.out.println("path1:" + resource1.getPath());
+		URL resource2 = getClass().getResource("/");
+		System.out.println("path2:" + resource2.getPath());
 
-    }
+	}
 
-    public static void main(String a[]) {
-        new NewClass();
-    }
+	public static void main(String a[]) {
+		new ResourcePath();
+	}
 }

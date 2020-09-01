@@ -42,7 +42,7 @@ public class WoosunStock {
 
     WoosunStock(int i) {
 
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+        
 
         String kospiFileName = GlobalVariables.kospiFileName;
         String kosdaqFileName = GlobalVariables.kosdaqFileName;

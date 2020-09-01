@@ -87,7 +87,7 @@ public class StockThemeAll {
 
 	StockThemeAll(int i) {
 
-		// MakeKospiKosdaqList.makeKospiKosdaqList();
+		
 		strDate = strDefaultDate;
 		String year = strDate.substring(0, 4);
 		String month = strDate.substring(5, 7);

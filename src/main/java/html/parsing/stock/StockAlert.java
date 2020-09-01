@@ -88,7 +88,7 @@ public class StockAlert {
 	}
 
 	StockAlert(int i) {
-		// MakeKospiKosdaqList.makeKospiKosdaqList();
+		
 		logger = LoggerFactory.getLogger(this.getClass());
 
 		File log4jfile = new File("log4j.properties");
@@ -326,7 +326,7 @@ public class StockAlert {
 					sb1.append("<tr>\r\n");
 					String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
 					sb1.append("<td>" + s.getStockGubun() + "</td>\r\n");
-					sb1.append("<td><a href='" + url + "'>" + s.getStockName() + "</a></td>\r\n");
+					sb1.append("<td><a href='" + url + "' target='_new'>" + s.getStockName() + "</a></td>\r\n");
 					sb1.append("<td style='text-align:right'>" + s.getCurPrice() + "</td>\r\n");
 
 					String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");

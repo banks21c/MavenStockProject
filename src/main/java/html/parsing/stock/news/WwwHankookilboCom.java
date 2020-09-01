@@ -90,7 +90,9 @@ public class WwwHankookilboCom extends News {
 			System.out.println("strTitleForFileName:" + strTitleForFileName);
 
 			// Element timeElement = doc.select(".writeOption p").get(0);
-			Element timeElement = doc.select(".article-header .info p").get(0);
+//			Element timeElement = doc.select(".article-header .info p").get(0);
+			Element timeElement = doc.select(".end .end-top .col-main .info dd").get(0);
+			
 			System.out.println("time html:" + timeElement);
 
 			// strDate =
@@ -108,10 +110,18 @@ public class WwwHankookilboCom extends News {
 			String dateTime = timeElement.html();
 			System.out.println("dateTime:" + dateTime);
 
-			String author = doc.select(".article-footer .reporter .name").text() + " 기자";
+//			String author = doc.select(".article-footer .reporter .name").text() + " 기자";
+			String author = doc.select(".end .end-body .col-main .writer .name").text();
 			System.out.println("author:" + author);
 
-			Elements article = doc.select(".article-story");
+//			Elements article = doc.select(".article-story");
+			Elements article = doc.select(".end .end-body .col-main");
+			article.select(".end .end-body .col-main .btn-area").remove();
+			article.select(".end .end-body .col-main .naver-banner").remove();
+			article.select(".btn-area").remove();
+			article.select(".naver-banner").remove();
+			article.select("#fileServer").remove();
+			
 			article.attr("style", "width:548px");
 			String articleHtml = article.outerHtml();
 			System.out.println("articleHtml:" + articleHtml);

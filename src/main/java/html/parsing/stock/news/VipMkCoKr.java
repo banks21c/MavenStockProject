@@ -55,15 +55,17 @@ public class VipMkCoKr extends javax.swing.JFrame {
 	private javax.swing.JTextField urlTf;
 	private javax.swing.JPanel executeResultPnl;
 	private static javax.swing.JLabel executeResultLbl;
-
+//	String strUrl = "http://vip.mk.co.kr/newSt/news/news_view.php?p_page=&sCode=122&t_uid=22&c_uid=136511&topGubun=";
+	String strDefaultUrl = "http://vip.mk.co.kr/news/view/21/20/1820410.html";
+	String strUrl;
+	
 	VipMkCoKr(int i) {
-
-		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
-		System.out.println("url:[" + url + "]");
-		if (StringUtils.defaultString(url).equals("")) {
-			url = "http://vip.mk.co.kr/newSt/news/news_view.php?p_page=&sCode=122&t_uid=22&c_uid=136511&topGubun=";
+		strUrl = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
+		System.out.println("url:[" + strUrl + "]");
+		if (StringUtils.defaultString(strUrl).equals("")) {
+			strUrl = strDefaultUrl;
 		}
-		createHTMLFile(url);
+		createHTMLFile(strUrl);
 	}
 
 	/**
@@ -168,8 +170,9 @@ public class VipMkCoKr extends javax.swing.JFrame {
 	}
 
 	private void executeBtnActionPerformed(java.awt.event.ActionEvent evt) {
-		String url = urlTf.getText();
-		if (url != "") {
+		String url = StringUtils.defaultString(urlTf.getText(), "");
+		System.out.println("url==>" + url);
+		if (!url.equals("")) {
 			createHTMLFile(url);
 		}
 	}
@@ -210,7 +213,7 @@ public class VipMkCoKr extends javax.swing.JFrame {
 		String strTitleForFileName;
 		FileWriter fw;
 		try {
-			System.out.println("url:" + strUrl);
+			System.out.println("strUrl:" + strUrl);
 			doc = Jsoup.connect(strUrl)
 				.userAgent("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0")
 				.header("Accept-Language", "en").header("Accept-Encoding", "gzip,deflate,sdch").get();
@@ -223,13 +226,6 @@ public class VipMkCoKr extends javax.swing.JFrame {
 
 			doc.select("iframe").remove();
 			doc.select("script").remove();
-
-			String fileName2 = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
-			System.out.println("fileName2:" + fileName2);
-			Writer bw = new BufferedWriter(
-				new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
-			bw.write(doc.html());
-			bw.close();
 
 			Elements title;
 			Element tableEl;
@@ -254,7 +250,12 @@ public class VipMkCoKr extends javax.swing.JFrame {
 			} else {
 				title = doc.select("div#Titless");
 				contentEl = doc.select("div#Conts").get(0);
+				System.out.println("div#Conts => "+contentEl);
 			}
+			
+			contentEl.select("nobr").attr("style","white-space:nowrap");
+			contentEl.select("nobr").tagName("div");
+			
 			System.out.println("title:" + strTitle);
 			if (title != null && title.size() > 0) {
 				strTitle = title.get(0).text();
@@ -289,7 +290,6 @@ public class VipMkCoKr extends javax.swing.JFrame {
 			contentEl.select(".con_txt_new").remove();
 			contentEl.select("spacer").remove();
 			contentEl.select("style").remove();
-			contentEl.select("table").remove();
 			System.out.println("contentEl2:[" + contentEl + "]:contentEl2");
 
 			if (strAuthor.equals("")) {

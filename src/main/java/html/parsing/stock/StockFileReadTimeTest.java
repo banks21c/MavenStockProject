@@ -44,7 +44,7 @@ public class StockFileReadTimeTest {
     }
 
     StockFileReadTimeTest(int i) {
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+        
 
         Properties props = new Properties();
         try {

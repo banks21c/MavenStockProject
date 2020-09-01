@@ -176,6 +176,13 @@ public class WwwEdailyCoKr extends News {
 			article.attr("style", "width:548px");
 			// article.select("img").attr("style", "width:548px");
 			article.select(".txt_caption.default_figure").attr("style", "width:548px");
+			Elements aEls = article.select("a");
+			for(Element aEl:aEls){
+				String strHref = aEl.attr("href");
+				if(strHref.contains("https://www.edaily.co.kr/newsplus")){
+					aEl.parent().remove();
+				}
+			}
 			// System.out.println("imageArea:"+article.select(".image-area"));
 			String strContent = article.html().replaceAll("640px", "548px");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");

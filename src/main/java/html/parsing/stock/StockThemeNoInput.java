@@ -93,7 +93,7 @@ public class StockThemeNoInput extends News {
     }
 
     StockThemeNoInput(int i) throws Exception {
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+        
         strDate = strDefaultDate;
         String year = strDate.substring(0, 4);
         String month = strDate.substring(5, 7);

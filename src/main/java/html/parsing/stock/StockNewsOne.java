@@ -92,7 +92,7 @@ public class StockNewsOne extends News {
 
 	StockNewsOne(int i) {
 
-		// MakeKospiKosdaqList.makeKospiKosdaqList();
+		
 		strDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDate);
 		strDate2 = strDate.replaceAll("\\.", "-");
 		logger.debug("strDate:" + strDate);
