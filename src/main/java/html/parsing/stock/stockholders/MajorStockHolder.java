@@ -69,14 +69,14 @@ public class MajorStockHolder {
 		StockVO svo4Date = kospiAllStockList.get(0);
 		strYmdDashBracket = StockUtil.getDateInfo(svo4Date.getStockCode());
 
-		kospiAllStockList = StockUtil.getAllStockInfo(kospiAllStockList);
+		kospiAllStockList = getAllStockInfo(kospiAllStockList);
 		System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
 
 		// 코스닥
 		List<StockVO> kosdaqAllStockList = new ArrayList<StockVO>();
 		kosdaqAllStockList = StockUtil.readStockCodeNameList("kosdaq");
-		logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());		
-		kosdaqAllStockList = StockUtil.getAllStockInfo(kosdaqAllStockList);
+		logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());
+		kosdaqAllStockList = getAllStockInfo(kosdaqAllStockList);
 		System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
 
 		Collections.sort(kospiAllStockList, new RetainRatioDescCompare());
@@ -294,7 +294,7 @@ public class MajorStockHolder {
 			// sb1.append("<td
 			// style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>현재가</td>\r\n");
 			sb1.append(
-					"<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>총금액(백만)</td>\r\n");
+				"<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>총금액(백만)</td>\r\n");
 			sb1.append("</tr>\r\n");
 
 			int cnt = 1;
@@ -304,7 +304,7 @@ public class MajorStockHolder {
 					sb1.append("<tr>\r\n");
 					String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
 					sb1.append("<td>" + cnt++ + "</td>\r\n");
-					sb1.append("<td><a href='" + url + "'>" + s.getStockName() + "</a></td>\r\n");
+					sb1.append("<td><a href='" + url + "' target='_new'>" + s.getStockName() + "</a></td>\r\n");
 					// sb1.append("<td
 					// style='text-align:center'>"+s.getStockCode()+"</td>\r\n");
 					sb1.append("<td style='text-align:right'>" + s.getRetainVolume() + "</td>\r\n");
@@ -322,7 +322,7 @@ public class MajorStockHolder {
 			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strDate + "_" + title + ".html");
 			fw.write(sb1.toString());
 			fw.close();
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e1) {
@@ -332,4 +332,25 @@ public class MajorStockHolder {
 		}
 	}
 
+	public static List<StockVO> getAllStockInfo(List<StockVO> stockList) {
+		List<StockVO> svoList = new ArrayList<>();
+		int cnt = 0;
+		for (StockVO svo : stockList) {
+			cnt++;
+			String stockCode = svo.getStockCode();
+			String stockName = svo.getStockName();
+			System.out.println("_______________________________________");
+			System.out.println(cnt + "." + stockCode + "\t" + stockName);
+			System.out.println("_______________________________________");
+			StockVO vo = StockUtil.getStockInfo(cnt, stockCode, stockName);
+			if (vo != null) {
+				svoList.add(vo);
+			} else {
+				logger.debug("vo##########:" + vo);
+				logger.debug(stockName + "(" + stockCode + ") is null");
+//				stockList.remove(svo);
+			}
+		}
+		return svoList;
+	}
 }

@@ -1,13 +1,14 @@
-package html.parsing.stock.util;
+package test.calendar;
 
+import html.parsing.stock.util.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class CalendarTest {
+public class CalendarTest3 {
 
-	public CalendarTest() {
+	public CalendarTest3() {
 		// TODO Auto-generated constructor stub
 	}
 	public static void main(String args[]) {

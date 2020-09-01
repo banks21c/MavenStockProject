@@ -315,44 +315,6 @@ public class AllStockForeignOrganNew20191231 {
 		return result;
 	}
 
-	public static List<StockVO> getAllStockInfo(String kospidaq, String fileName) {
-		List<StockVO> stocks = new ArrayList<StockVO>();
-
-		File f = new File(userHome + "\\Downloads\\" + fileName);
-		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
-
-			String read = null;
-			String stockCode = null;
-			String stockName = null;
-			int cnt = 1;
-			while ((read = reader.readLine()) != null) {
-				logger.debug(cnt + "." + read);
-				stockCode = read.split("\t")[0];
-				stockName = read.split("\t")[1];
-				logger.debug(stockCode + "\t" + stockName);
-
-				if (stockCode.length() != 6) {
-					continue;
-				}
-
-				StockVO stock = getStockInfo(cnt, stockCode, stockName);
-				if (stock != null) {
-					stock.setStockName(stockName);
-					stocks.add(stock);
-				}
-				cnt++;
-			}
-			reader.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} finally {
-		}
-		return stocks;
-	}
-
 	public static StockVO getStockInfo(int cnt, String code, String name) {
 		Document doc;
 		StockVO stock = new StockVO();
@@ -404,7 +366,7 @@ public class AllStockForeignOrganNew20191231 {
 
 					String txts[] = text.split(" ");
 					curPrice = txts[1];
-					stock.setCurPrice(txts[1]);
+					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
 							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
@@ -642,7 +604,7 @@ public class AllStockForeignOrganNew20191231 {
 					sb1.append("<tr>\r\n");
 					String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
 					sb1.append("<td>" + cnt++ + "</td>\r\n");
-					sb1.append("<td><a href='" + url + "'>" + s.getStockName() + "</a></td>\r\n");
+					sb1.append("<td><a href='" + url + "' target='_new'>" + s.getStockName() + "</a></td>\r\n");
 					sb1.append("<td style='text-align:right'>" + s.getCurPrice() + "</td>\r\n");
 
 					String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
@@ -736,7 +698,7 @@ public class AllStockForeignOrganNew20191231 {
 				sb1.append("<tr>\r\n");
 				String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
 				sb1.append("<td>" + cnt++ + "</td>\r\n");
-				sb1.append("<td><a href='" + url + "'>" + s.getStockName() + "</a></td>\r\n");
+				sb1.append("<td><a href='" + url + "' target='_new'>" + s.getStockName() + "</a></td>\r\n");
 				sb1.append("<td style='text-align:right'>" + s.getCurPrice() + "</td>\r\n");
 
 				String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");

@@ -1,18 +1,9 @@
 package html.parsing.stock.stockholders;
 
-import javax.swing.JOptionPane;
-
-import org.apache.commons.lang3.StringUtils;
-
-public class NationalPensionThreadCall {
-
-	static String chosenDay = "";
-	static String thisYearFirstTradeDay = "2020.01.02";
-
-	static String majorStockHolders = "";
+public class NationalPensionSimpleThreadCall {
 
 	public static void main(String args[]) {
-		NationalPensionThreadCall threadCall = new NationalPensionThreadCall();
+		NationalPensionSimpleThreadCall threadCall = new NationalPensionSimpleThreadCall();
 		try {
 			threadCall.readAndWriteMajorStockHolders();
 		} catch (Exception e) {
@@ -21,16 +12,9 @@ public class NationalPensionThreadCall {
 	}
 	
 	public void readAndWriteMajorStockHolders() throws Exception {
-		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
-		if (majorStockHolders.equals(""))
-			majorStockHolders = "국민연금공단";
-		chosenDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
-		if (chosenDay.equals(""))
-			chosenDay = thisYearFirstTradeDay;
-
-		NationalPensionThread thread1 = new NationalPensionThread("kospi",majorStockHolders,chosenDay);
+		NationalPensionSimpleThread thread1 = new NationalPensionSimpleThread("kospi");
 		thread1.start();
-		NationalPensionThread thread2 = new NationalPensionThread("kosdaq",majorStockHolders,chosenDay);
+		NationalPensionSimpleThread thread2 = new NationalPensionSimpleThread("kosdaq");
 		thread2.start();
 
 	}

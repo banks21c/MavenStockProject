@@ -30,10 +30,10 @@ import html.parsing.stock.util.DataSort.OrganTradingAmountAscCompare;
 import html.parsing.stock.util.DataSort.OrganTradingAmountDescCompare;
 import html.parsing.stock.util.StockUtil;
 
-public class AllStockForeignOrganDailySimpleAll30 {
+public class AllStockForeignOrganDailySimpleAll30_Thread extends Thread {
 
 	final static String USER_HOME = System.getProperty("user.home");
-	private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrganDailySimpleAll30.class);
+	private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrganDailySimpleAll30_Thread.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -43,30 +43,27 @@ public class AllStockForeignOrganDailySimpleAll30 {
 	static String strYMD = "";
 	static DecimalFormat df = new DecimalFormat("#,##0.####");
 
-	List<StockVO> kospiForeignDescList = new ArrayList();
-	List<StockVO> kospiForeignAscList = new ArrayList();
-	List<StockVO> kospiOrganDescList = new ArrayList();
-	List<StockVO> kospiOrganAscList = new ArrayList();
-
-	List<StockVO> kosdaqForeignDescList = new ArrayList();
-	List<StockVO> kosdaqForeignAscList = new ArrayList();
-	List<StockVO> kosdaqOrganDescList = new ArrayList();
-	List<StockVO> kosdaqOrganAscList = new ArrayList();
+	List<StockVO> foreignDescList = new ArrayList();
+	List<StockVO> foreignAscList = new ArrayList();
+	List<StockVO> organDescList = new ArrayList();
+	List<StockVO> organAscList = new ArrayList();
 
 	static int iFirstDayOfWeek;
 	static int iLastDayOfWeek;
 	String strDailyOrWeekly = "일간(Daily) ";
 	static int extractDayCount = 1;
 	String marketType = "";
+	long start = 0;
+	long end = 0;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new AllStockForeignOrganDailySimpleAll30();
+		new AllStockForeignOrganDailySimpleAll30_Thread();
 	}
 
-	AllStockForeignOrganDailySimpleAll30() {
+	AllStockForeignOrganDailySimpleAll30_Thread() {
 		// 주간 거래일을 알아낸다.
 		// getFirstLastDayOfWeek();
 
@@ -85,8 +82,8 @@ public class AllStockForeignOrganDailySimpleAll30 {
 
 		logger.debug("실행시간 : " + hour + " 시간 " + minute + " 분 " + second + " 초");
 	}
-	
-	AllStockForeignOrganDailySimpleAll30(String marketType){
+
+	AllStockForeignOrganDailySimpleAll30_Thread(String marketType) {
 		this.marketType = marketType;
 	}
 
@@ -98,45 +95,59 @@ public class AllStockForeignOrganDailySimpleAll30 {
 	}
 
 	void real() {
+		start();
+	}
+
+	public long getThreadStartTime() {
+		return start;
+	}
+
+	public long getThreadEndTime() {
+		return end;
+	}
+
+	public void run() {
+		start = System.currentTimeMillis();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");    
+		Date startDate = new Date(start);
+		logger.debug("start time:"+sdf.format(startDate));
+		
+		logger.debug("실행시간 : " + (start) / 1000 + "초");
+
 		// 모든 주식 정보를 조회한다.
 		// 코스피
-		List<StockVO> kospiAllStockList = StockUtil.readStockCodeNameList("kospi");
-		kospiAllStockList = getAllStockInfo(kospiAllStockList);
-		System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
-		kospiAllStockList = getAllStockTrade(kospiAllStockList);
+		List<StockVO> allStockList = StockUtil.readStockCodeNameList(marketType);
+		allStockList = getAllStockInfo(allStockList);
+		System.out.println("allStockList.size :" + allStockList.size());
+		allStockList = getAllStockTrade(allStockList);
 
-		kospiForeignDescList.addAll(kospiAllStockList);
-		kospiForeignAscList.addAll(kospiAllStockList);
-		kospiOrganDescList.addAll(kospiAllStockList);
-		kospiOrganAscList.addAll(kospiAllStockList);
+		foreignDescList.addAll(allStockList);
+		foreignAscList.addAll(allStockList);
+		organDescList.addAll(allStockList);
+		organAscList.addAll(allStockList);
 
 		// 코스피 외국인 거래대금순 정렬
-		Collections.sort(kospiForeignDescList, new ForeignTradingAmountDescCompare());
-		Collections.sort(kospiForeignAscList, new ForeignTradingAmountAscCompare());
+		Collections.sort(foreignDescList, new ForeignTradingAmountDescCompare());
+		Collections.sort(foreignAscList, new ForeignTradingAmountAscCompare());
 		// 코스피 기관 거래대금순 정렬
-		Collections.sort(kospiOrganDescList, new OrganTradingAmountDescCompare());
-		Collections.sort(kospiOrganAscList, new OrganTradingAmountAscCompare());
-		writeFile("코스피");
+		Collections.sort(organDescList, new OrganTradingAmountDescCompare());
+		Collections.sort(organAscList, new OrganTradingAmountAscCompare());
+		writeFile();
 
-		// 코스닥
-		List<StockVO> kosdaqAllStockList = StockUtil.readStockCodeNameList("kosdaq");
-		kosdaqAllStockList = getAllStockInfo(kosdaqAllStockList);
-		System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
-		kosdaqAllStockList = getAllStockTrade(kosdaqAllStockList);
+		end = System.currentTimeMillis();
+		Date endDate = new Date(end);
+		logger.debug("end time:"+sdf.format(endDate));
 
-		kosdaqForeignDescList.addAll(kosdaqAllStockList);
-		kosdaqForeignAscList.addAll(kosdaqAllStockList);
-		kosdaqOrganDescList.addAll(kosdaqAllStockList);
-		kosdaqOrganAscList.addAll(kosdaqAllStockList);
+		
+		long timeElapsed = end - start;
+		logger.debug("실행시간 : " + (end - start) / 1000 + "초");
 
-		// 코스닥 기관 거래대금순 정렬
-		Collections.sort(kosdaqForeignDescList, new ForeignTradingAmountDescCompare());
-		Collections.sort(kosdaqForeignAscList, new ForeignTradingAmountAscCompare());
-		// 코스닥 기관 거래대금순 정렬
-		Collections.sort(kosdaqOrganDescList, new OrganTradingAmountDescCompare());
-		Collections.sort(kosdaqOrganAscList, new OrganTradingAmountAscCompare());
-		writeFile("코스닥");
+		int second = (int) timeElapsed / 1000 % 60;
+		int minute = (int) timeElapsed / (1000 * 60) % 60;
+		int hour = (int) timeElapsed / (1000 * 60 * 60);
 
+		logger.debug("실행시간 : " + hour + " 시간 " + minute + " 분 " + second + " 초");
 	}
 
 	public static List<StockVO> readOne(String stockCode, String stockName) {
@@ -587,23 +598,7 @@ public class AllStockForeignOrganDailySimpleAll30 {
 		}
 	}
 
-	public void writeFile(String marketType) {
-		List<StockVO> foreignDescList = null;
-		List<StockVO> foreignAscList = null;
-		List<StockVO> organDescList = null;
-		List<StockVO> organAscList = null;
-
-		if (marketType.equals("kospi") || marketType.equals("코스피")) {
-			foreignDescList = kospiForeignDescList;
-			foreignAscList = kospiForeignAscList;
-			organDescList = kospiOrganDescList;
-			organAscList = kospiOrganAscList;
-		} else {
-			foreignDescList = kosdaqForeignDescList;
-			foreignAscList = kosdaqForeignAscList;
-			organDescList = kosdaqOrganDescList;
-			organAscList = kosdaqOrganAscList;
-		}
+	public void writeFile() {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 			String strDate = sdf.format(new Date());

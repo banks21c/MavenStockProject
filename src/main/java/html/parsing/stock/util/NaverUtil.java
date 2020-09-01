@@ -268,7 +268,7 @@ public class NaverUtil {
 
 			String unzipString = NaverUtil.unzipStringFromBytes(response.getBody(), "UTF8");
 
-			System.out.println("body:" + unzipString);
+			System.out.println("unzipString :" + unzipString);
 			System.out.println("finished");
 
 		} catch (Exception e) {

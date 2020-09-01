@@ -60,7 +60,7 @@ public class AllStockHomepage {
 
     AllStockHomepage(int i) {
 
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+        
 
         // 모든 주식 정보를 조회한다.
 		try {
@@ -155,7 +155,7 @@ public class AllStockHomepage {
                     sb1.append("<tr>\r\n");
                     String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
                     sb1.append("<td>" + cnt++ + "</td>\r\n");
-                    sb1.append("<td><a href='" + url + "'>" + s.getStockName() + "</a></td>\r\n");
+                    sb1.append("<td><a href='" + url + "' target='_new'>" + s.getStockName() + "</a></td>\r\n");
                     // sb1.append("<td
                     // style='text-align:center'>"+s.getStockCode()+"</td>\r\n");
                     if (!s.getHomePage().equals("")) {
@@ -374,7 +374,7 @@ public class AllStockHomepage {
                     sb1.append("<tr>\r\n");
                     String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
                     sb1.append("<td>" + cnt++ + "</td>\r\n");
-                    sb1.append("<td><a href='" + url + "'>" + s.getStockName() + "</a></td>\r\n");
+                    sb1.append("<td><a href='" + url + "' target='_new'>" + s.getStockName() + "</a></td>\r\n");
                     sb1.append("<td style='text-align:left'>" + s.getFoundDay() + "</td>\r\n");
                     sb1.append("<td style='text-align:left'>" + s.getListedDay() + "</td>\r\n");
                     sb1.append("</tr>\r\n");

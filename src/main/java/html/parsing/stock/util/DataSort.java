@@ -296,12 +296,30 @@ public class DataSort {
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getlForeignTradingAmount() > arg1.getlForeignTradingAmount() ? -1
-                    : arg0.getlForeignTradingAmount() < arg1.getlForeignTradingAmount() ? 1 : 0;
+            return arg0.getdForeignTradingAmount() > arg1.getdForeignTradingAmount() ? -1
+                    : arg0.getdForeignTradingAmount() < arg1.getdForeignTradingAmount() ? 1 : 0;
         }
 
     }
+    
+    /**
+     * 외국인 거래금액 오름차순
+     *
+     * @author banks
+     *
+     */
+    public static class ForeignTradingAmountAscCompare implements Comparator<StockVO> {
 
+        /**
+         * 오름차순(ASC)
+         */
+        @Override
+        public int compare(StockVO arg0, StockVO arg1) {
+            return arg0.getdForeignTradingAmount() < arg1.getdForeignTradingAmount() ? -1
+                    : arg0.getdForeignTradingAmount() > arg1.getdForeignTradingAmount() ? 1 : 0;
+        }
+    }
+    
     /**
      * 외국인 거래량 내림차순
      *
@@ -315,8 +333,8 @@ public class DataSort {
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getiForeignTradingVolume() > arg1.getiForeignTradingVolume() ? -1
-                    : arg0.getiForeignTradingVolume() < arg1.getiForeignTradingVolume() ? 1 : 0;
+            return arg0.getlForeignTradingVolume() > arg1.getlForeignTradingVolume() ? -1
+                    : arg0.getlForeignTradingVolume() < arg1.getlForeignTradingVolume() ? 1 : 0;
         }
     }
 
@@ -333,8 +351,8 @@ public class DataSort {
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getiForeignTradingVolume() < arg1.getiForeignTradingVolume() ? -1
-                    : arg0.getiForeignTradingVolume() > arg1.getiForeignTradingVolume() ? 1 : 0;
+            return arg0.getlForeignTradingVolume() < arg1.getlForeignTradingVolume() ? -1
+                    : arg0.getlForeignTradingVolume() > arg1.getlForeignTradingVolume() ? 1 : 0;
         }
     }
 
@@ -351,11 +369,27 @@ public class DataSort {
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getlOrganTradingAmount() > arg1.getlOrganTradingAmount() ? -1
-                    : arg0.getlOrganTradingAmount() < arg1.getlOrganTradingAmount() ? 1 : 0;
+            return arg0.getdOrganTradingAmount() > arg1.getdOrganTradingAmount() ? -1
+                    : arg0.getdOrganTradingAmount() < arg1.getdOrganTradingAmount() ? 1 : 0;
         }
     }
+    /**
+     * 기관 거래금액 오름차순
+     *
+     * @author banks
+     *
+     */
+    public static class OrganTradingAmountAscCompare implements Comparator<StockVO> {
 
+        /**
+         * 오름차순(ASC)
+         */
+        @Override
+        public int compare(StockVO arg0, StockVO arg1) {
+            return arg0.getdOrganTradingAmount() < arg1.getdOrganTradingAmount() ? -1
+                    : arg0.getdOrganTradingAmount() > arg1.getdOrganTradingAmount() ? 1 : 0;
+        }
+    }
     /**
      * 기관 거래량 내림차순
      *
@@ -369,8 +403,8 @@ public class DataSort {
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getiOrganTradingVolume() > arg1.getiOrganTradingVolume() ? -1
-                    : arg0.getiOrganTradingVolume() < arg1.getiOrganTradingVolume() ? 1 : 0;
+            return arg0.getlOrganTradingVolume() > arg1.getlOrganTradingVolume() ? -1
+                    : arg0.getlOrganTradingVolume() < arg1.getlOrganTradingVolume() ? 1 : 0;
         }
     }
 
@@ -387,8 +421,8 @@ public class DataSort {
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getiOrganTradingVolume() < arg1.getiOrganTradingVolume() ? -1
-                    : arg0.getiOrganTradingVolume() > arg1.getiOrganTradingVolume() ? 1 : 0;
+            return arg0.getlOrganTradingVolume() < arg1.getlOrganTradingVolume() ? -1
+                    : arg0.getlOrganTradingVolume() > arg1.getlOrganTradingVolume() ? 1 : 0;
         }
     }
 
@@ -405,8 +439,8 @@ public class DataSort {
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getiForeignOrganTradingVolume() > arg1.getiForeignOrganTradingVolume() ? -1
-                    : arg0.getiForeignOrganTradingVolume() < arg1.getiForeignOrganTradingVolume() ? 1 : 0;
+            return arg0.getlForeignOrganTradingVolume() > arg1.getlForeignOrganTradingVolume() ? -1
+                    : arg0.getlForeignOrganTradingVolume() < arg1.getlForeignOrganTradingVolume() ? 1 : 0;
         }
 
     }
@@ -424,8 +458,8 @@ public class DataSort {
          */
         @Override
         public int compare(StockVO arg0, StockVO arg1) {
-            return arg0.getiForeignOrganTradingVolume() < arg1.getiForeignOrganTradingVolume() ? -1
-                    : arg0.getiForeignOrganTradingVolume() > arg1.getiForeignOrganTradingVolume() ? 1 : 0;
+            return arg0.getlForeignOrganTradingVolume() < arg1.getlForeignOrganTradingVolume() ? -1
+                    : arg0.getlForeignOrganTradingVolume() > arg1.getlForeignOrganTradingVolume() ? 1 : 0;
         }
     }
 

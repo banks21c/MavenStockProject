@@ -1,5 +1,6 @@
-package html.parsing.stock;
+package test.calendar;
 
+import html.parsing.stock.*;
 import java.util.Calendar;
 
 public class CalendarEx2 {

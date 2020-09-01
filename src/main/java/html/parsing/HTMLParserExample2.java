@@ -289,7 +289,7 @@ public class HTMLParserExample2 {
                     String url = "http://finance.naver.com/item/main.nhn?code=" + read;
                     sb1.append("<td>" + htable.get("lineUp") + "</td>\r\n");
                     sb1.append("<td>" + htable.get("구분") + "</td>\r\n");
-                    sb1.append("<td><a href='" + url + "'>" + htable.get("종목명") + "</a></td>\r\n");
+                    sb1.append("<td><a href='" + url + "' target='_new'>" + htable.get("종목명") + "</a></td>\r\n");
                     sb1.append("<td style='text-align:right'>" + htable.get("curPrice") + "</td>\r\n");
                     String chgPrice = htable.get("chgPrice");
                     System.out.println("chgPrice1:::" + chgPrice);

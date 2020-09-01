@@ -24,10 +24,10 @@ import html.parsing.stock.util.DataSort.ForeignOrganTradingAmountAscCompare;
 import html.parsing.stock.util.DataSort.ForeignOrganTradingAmountDescCompare;
 import html.parsing.stock.util.StockUtil;
 
-public class AllStockForeignOrganBothDailyV1 {
+public class AllStockForeignOrganBothWeeklyV2 {
 
 	final static String USER_HOME = System.getProperty("user.home");
-	private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrganBothDailyV1.class);
+	private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrganBothWeeklyV2.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -36,35 +36,43 @@ public class AllStockForeignOrganBothDailyV1 {
 	// Locale.KOREAN).format(new Date());
 	static String strYMD = "";
 	static DecimalFormat df = new DecimalFormat("#,##0");
-	String strDailyOrWeekly = "일간(Daily) ";
-	static int extractDayCount = 1;
+	String strDailyOrWeekly = "주간(Weekly) ";
+	static int extractDayCount = 5;
 
-	// 코스피 일간(Daily) 외인,기관 양매수 거래대금
+	// 코스피 주간(Weekly) 외인,기관 양매수 거래대금
 	List<StockVO> kospiAllStockBuyList = null;
-	// 코스피 일간(Daily) 외인,기관 양매도 거래대금
+	// 코스피 주간(Weekly) 외인,기관 양매도 거래대금
 	List<StockVO> kospiAllStockSellList = null;
-	// 코스닥 일간(Daily) 외인,기관 양매수 거래대금
+	// 코스닥 주간(Weekly) 외인,기관 양매수 거래대금
 	List<StockVO> kosdaqAllStockBuyList = null;
-	// 코스닥 일간(Daily) 외인,기관 양매도 거래대금
+	// 코스닥 주간(Weekly) 외인,기관 양매도 거래대금
 	List<StockVO> kosdaqAllStockSellList = null;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new AllStockForeignOrganBothDailyV1();
+		new AllStockForeignOrganBothWeeklyV2();
 	}
 
-	AllStockForeignOrganBothDailyV1() {
-		// test();
+	AllStockForeignOrganBothWeeklyV2() {
+//		test();
 		real();
 	}
 
 	void test() {
-		List<StockVO> kospiStockList = readOne("005930", "삼성전자");
+//		List<StockVO> kospiStockList = readOne("005930", "삼성전자");
+		List<StockVO> kospiStockList = readOne("034120", "SBS");
 		kospiStockList = getAllStockInfo(kospiStockList);
-		writeFile(kospiStockList, strDailyOrWeekly + "코스피 외인,기관 양매수 거래대금");
-		writeFile(kospiStockList, strDailyOrWeekly + "코스피 외인,기관 양매도 거래대금");
+
+		kospiStockList = getAllStockTrade(kospiStockList);
+		// 코스피 주간(Weekly) 외인,기관 양매수 거래대금
+		kospiAllStockBuyList = getAllStockList(kospiStockList, "buy");
+		// 코스피 주간(Weekly) 외인,기관 양매도 거래대금
+		kospiAllStockSellList = getAllStockList(kospiStockList, "sell");
+		if (kospiAllStockBuyList.size() > 0) {
+			writeFile(strDailyOrWeekly + "코스피 외인,기관 양매수,양매도 거래량");
+		}
 	}
 
 	void real() {
@@ -75,9 +83,9 @@ public class AllStockForeignOrganBothDailyV1 {
 		System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
 
 		kospiAllStockList = getAllStockTrade(kospiAllStockList);
-		// 코스피 일간(Daily) 외인,기관 양매수 거래대금
+		// 코스피 주간(Weekly) 외인,기관 양매수 거래대금
 		kospiAllStockBuyList = getAllStockList(kospiAllStockList, "buy");
-		// 코스피 일간(Daily) 외인,기관 양매도 거래대금
+		// 코스피 주간(Weekly) 외인,기관 양매도 거래대금
 		kospiAllStockSellList = getAllStockList(kospiAllStockList, "sell");
 
 		// 코스피 외인,기관 양매수,양매도 거래대금순 정렬
@@ -90,20 +98,15 @@ public class AllStockForeignOrganBothDailyV1 {
 		System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
 
 		kosdaqAllStockList = getAllStockTrade(kosdaqAllStockList);
-		// 코스닥 일간(Daily) 외인,기관 양매수 거래대금
+		// 코스닥 주간(Weekly) 외인,기관 양매수 거래대금
 		kosdaqAllStockBuyList = getAllStockList(kosdaqAllStockList, "buy");
-		// 코스닥 일간(Daily) 외인,기관 양매도 거래대금
+		// 코스닥 주간(Weekly) 외인,기관 양매도 거래대금
 		kosdaqAllStockSellList = getAllStockList(kosdaqAllStockList, "sell");
 
 		// 코스닥 외인,기관 양매수,양매도 거래대금순 정렬
 		Collections.sort(kosdaqAllStockBuyList, new ForeignOrganTradingAmountDescCompare());
 		Collections.sort(kosdaqAllStockSellList, new ForeignOrganTradingAmountAscCompare());
-
-		writeFile(kospiAllStockBuyList, strDailyOrWeekly + "코스피 외인,기관 양매수 거래대금");
-		writeFile(kospiAllStockSellList, strDailyOrWeekly + "코스피 외인,기관 양매도 거래대금");
-
-		writeFile(kosdaqAllStockBuyList, strDailyOrWeekly + "코스닥 외인,기관 양매수 거래대금");
-		writeFile(kosdaqAllStockSellList, strDailyOrWeekly + "코스닥 외인,기관 양매도 거래대금");
+		writeFile(strDailyOrWeekly + "코스피,코스닥 외인,기관 양매수,양매도 거래대금");
 	}
 
 	public static List<StockVO> readOne(String stockCode, String stockName) {
@@ -484,8 +487,15 @@ public class AllStockForeignOrganBothDailyV1 {
 		return stocks;
 	}
 
-	public void writeFile(List<StockVO> list, String title) {
-		System.out.println("list.size:" + list.size());
+	public void writeFile(String title) {
+		int kospiAllStockBuyListSize1 = kospiAllStockBuyList.size();
+		int kospiAllStockSellListSize1 = kospiAllStockSellList.size();
+		int kosdaqAllStockBuyListSize1 = kosdaqAllStockBuyList.size();
+		int kosdaqAllStockSellListSize1 = kosdaqAllStockSellList.size();
+		logger.debug("kospiAllStockBuyListSize1 :" + kospiAllStockBuyListSize1);
+		logger.debug("kospiAllStockSellListSize1 :" + kospiAllStockSellListSize1);
+		logger.debug("kosdaqAllStockBuyListSize1 :" + kosdaqAllStockBuyListSize1);
+		logger.debug("kosdaqAllStockSellListSize1 :" + kosdaqAllStockSellListSize1);
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 			String strDate = sdf.format(new Date());
@@ -499,7 +509,10 @@ public class AllStockForeignOrganBothDailyV1 {
 			sb1.append("</style>\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
-			sb1.append("\t<font size=5>" + strYMD + " " + title + "</font>");
+			sb1.append("\t<div><font size=5>").append(strYMD).append(" ").append(title).append("</font></div>\r\n");
+
+			sb1.append("\t<div><font size=3>").append(strDailyOrWeekly + "코스피 외인,기관 양매수,양매도 거래대금")
+					.append("</font><div>\r\n");
 			sb1.append("<table>\r\n");
 			sb1.append("<tr>\r\n");
 			sb1.append(
@@ -509,9 +522,14 @@ public class AllStockForeignOrganBothDailyV1 {
 			sb1.append(
 					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
 			sb1.append(
-					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
+					"<td colspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(만원)</td>\r\n");
 			sb1.append(
-					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락률</td>\r\n");
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>합계(만원)</td>\r\n");
+
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
 			sb1.append(
 					"<td colspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(만원)</td>\r\n");
 			sb1.append(
@@ -521,53 +539,236 @@ public class AllStockForeignOrganBothDailyV1 {
 			sb1.append("<tr>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관</td>\r\n");
 			sb1.append("</tr>\r\n");
 
 			int cnt = 1;
-			for (StockVO svo : list) {
-				sb1.append("<tr>\r\n");
-				String url = "http://finance.naver.com/item/main.nhn?code=" + svo.getStockCode();
-				sb1.append("<td>" + cnt++ + "</td>\r\n");
-				sb1.append("<td><a href='" + url + "' target='_new'>" + svo.getStockName() + "</a></td>\r\n");
-				sb1.append("<td style='text-align:right'>" + svo.getCurPrice() + "</td>\r\n");
 
-				String specialLetter = StringUtils.defaultIfEmpty(svo.getSpecialLetter(), "");
-				String varyPrice = svo.getVaryPrice();
+			int maxCount1 = 0;
+			int kospiAllStockBuyListSize = kospiAllStockBuyList.size();
+			int kospiAllStockSellListSize = kospiAllStockSellList.size();
+			int listGap1 = Math.abs(kospiAllStockBuyListSize - kospiAllStockSellListSize);
+
+			if (kospiAllStockBuyListSize > kospiAllStockSellListSize) {
+				maxCount1 = kospiAllStockSellListSize;
+				for (int i = 0; i < listGap1; i++) {
+					kospiAllStockBuyList.add(new StockVO());
+				}
+			} else {
+				maxCount1 = kospiAllStockBuyListSize;
+				for (int i = 0; i < listGap1; i++) {
+					kospiAllStockBuyList.add(new StockVO());
+				}
+			}
+			logger.debug("maxCount1 :" + maxCount1);
+			
+			logger.debug("kospiAllStockBuyListSize1 :" + kospiAllStockBuyList.size());
+			logger.debug("kospiAllStockSellListSize1 :" + kospiAllStockSellList.size());
+			
+//			for (int i = 0; i < maxCount1; i++) {
+			for (int i = 0; i < kospiAllStockBuyList.size(); i++) {
+				// 코스피 주간(Weekly) 외인,기관 양매수 거래대금
+				StockVO svo1 = kospiAllStockBuyList.get(i);
+				// 코스피 주간(Weekly) 외인,기관 양매도 거래대금
+				StockVO svo2 = kospiAllStockSellList.get(i);
+
+				sb1.append("<tr>\r\n");
+				// 순매수
+				String url1 = "http://finance.naver.com/item/main.nhn?code=" + svo1.getStockCode();
+				sb1.append("<td>" + cnt++ + "</td>\r\n");
+				sb1.append("<td><a href='" + url1 + "' target='_new'>" + svo1.getStockName() + "</a></td>\r\n");
+
+				String specialLetter = StringUtils.defaultIfEmpty(svo1.getSpecialLetter(), "");
+				String strCurPrice = svo1.getCurPrice();
+				String curPrice1FontColor = "";
 				if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲") || specialLetter.startsWith("+")) {
-					sb1.append("<td style='text-align:right'><font color='red'>" + specialLetter + " " + varyPrice
-							+ "</font></td>\r\n");
+					curPrice1FontColor = "color:red";
 				} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
 						|| specialLetter.startsWith("-")) {
-					sb1.append("<td style='text-align:right'><font color='blue'>" + specialLetter + " " + varyPrice
-							+ "</font></td>\r\n");
+					curPrice1FontColor = "color:blue";
 				} else {
-					sb1.append("<td style='text-align:right'>0</td>\r\n");
+					curPrice1FontColor = "color:black";
 				}
+				sb1.append("<td style='text-align:right;" + curPrice1FontColor + "'><font color='red'>" + strCurPrice
+						+ "</font></td>\r\n");
 
-				String varyRatio = StringUtils.defaultIfEmpty(svo.getVaryRatio(), "");
-				if (varyRatio.startsWith("+")) {
-					sb1.append("<td style='text-align:right;color:red;'><font color='red'>" + varyRatio
-							+ "</font></td>\r\n");
-				} else if (varyRatio.startsWith("-")) {
-					sb1.append("<td style='text-align:right;color:red;'><font color='blue'>" + varyRatio
-							+ "</font></td>\r\n");
+				long lForeignTradingAmount1 = svo1.getlForeignTradingAmount();
+				String amount1FontColor = "color:metal";
+				if (lForeignTradingAmount1 < 0) {
+					amount1FontColor = "color:blue";
+				} else if (lForeignTradingAmount1 > 0) {
+					amount1FontColor = "color:red";
+				}
+				sb1.append("<td style='text-align:right;" + amount1FontColor + ";'>" + svo1.getForeignTradingAmount()
+						+ "</td>\r\n");
+				sb1.append("<td style='text-align:right;" + amount1FontColor + ";'>" + svo1.getOrganTradingAmount()
+						+ "</td>\r\n");
+				sb1.append("<td style='text-align:right;" + amount1FontColor + ";'>"
+						+ svo1.getForeignOrganTradingAmount() + "</td>\r\n");
+
+				// 순매도
+				String url2 = "http://finance.naver.com/item/main.nhn?code=" + svo2.getStockCode();
+				sb1.append("<td><a href='" + url2 + "' target='_new'>" + svo2.getStockName() + "</a></td>\r\n");
+
+				String specialLetter2 = StringUtils.defaultIfEmpty(svo2.getSpecialLetter(), "");
+				String strCurPrice2 = svo2.getCurPrice();
+				String curPrice2FontColor = "";
+				if (specialLetter2.startsWith("↑") || specialLetter2.startsWith("▲")
+						|| specialLetter2.startsWith("+")) {
+					curPrice2FontColor = "color:red";
+				} else if (specialLetter2.startsWith("↓") || specialLetter2.startsWith("▼")
+						|| specialLetter2.startsWith("-")) {
+					curPrice2FontColor = "color:blue";
 				} else {
-					sb1.append("<td style='text-align:right;color:black;'><font color='black'>" + varyRatio
-							+ "</font></td>\r\n");
+					curPrice2FontColor = "color:black";
 				}
-				long lForeignTradingAmount = svo.getlForeignTradingAmount();
-				String fontColor = "metal";
-				if (lForeignTradingAmount < 0) {
-					fontColor = "blue";
-				} else if (lForeignTradingAmount > 0) {
-					fontColor = "red";
+				sb1.append("<td style='text-align:right;" + curPrice2FontColor + "'>" + strCurPrice2 + "</td>\r\n");
+
+				long lForeignTradingAmount2 = svo2.getlForeignTradingAmount();
+				String amount2FontColor = "color:metal";
+				if (lForeignTradingAmount2 < 0) {
+					amount2FontColor = "color:blue";
+				} else if (lForeignTradingAmount2 > 0) {
+					amount2FontColor = "color:red";
 				}
-				sb1.append("<td style='text-align:right;color:" + fontColor + ";'>" + svo.getForeignTradingAmount()
+				sb1.append("<td style='text-align:right;" + amount2FontColor + ";'>" + svo2.getForeignTradingAmount()
 						+ "</td>\r\n");
-				sb1.append("<td style='text-align:right;color:" + fontColor + ";'>" + svo.getOrganTradingAmount()
+				sb1.append("<td style='text-align:right;" + amount2FontColor + ";'>" + svo2.getOrganTradingAmount()
 						+ "</td>\r\n");
-				sb1.append("<td style='text-align:right;color:" + fontColor + ";'>" + svo.getForeignOrganTradingAmount()
+				sb1.append("<td style='text-align:right;" + amount2FontColor + ";'>"
+						+ svo2.getForeignOrganTradingAmount() + "</td>\r\n");
+
+				sb1.append("</tr>\r\n");
+			}
+			sb1.append("</table>\r\n");
+			sb1.append("<br><br>\r\n");
+
+			sb1.append("\t<div><font size=3>").append(strDailyOrWeekly + "코스닥 외인,기관 양매수,양매도 거래대금")
+					.append("</font></div>");
+			sb1.append("<table>\r\n");
+			sb1.append("<tr>\r\n");
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
+			sb1.append(
+					"<td colspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(만원)</td>\r\n");
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>합계(만원)</td>\r\n");
+
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
+			sb1.append(
+					"<td colspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(만원)</td>\r\n");
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>합계(만원)</td>\r\n");
+			sb1.append("</tr>\r\n");
+
+			sb1.append("<tr>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관</td>\r\n");
+			sb1.append("</tr>\r\n");
+
+			cnt = 1;
+
+			int maxCount2 = 0;
+			int kosdaqAllStockBuyListSize = kosdaqAllStockBuyList.size();
+			int kosdaqAllStockSellListSize = kosdaqAllStockSellList.size();
+			int listGap2 = Math.abs(kosdaqAllStockBuyListSize - kosdaqAllStockSellListSize);
+			if (kosdaqAllStockBuyListSize > kosdaqAllStockSellListSize) {
+				maxCount2 = kosdaqAllStockSellListSize;
+				for (int i = 0; i < listGap2; i++) {
+					kosdaqAllStockSellList.add(new StockVO());
+				}
+			} else {
+				maxCount2 = kosdaqAllStockBuyListSize;
+				for (int i = 0; i < listGap2; i++) {
+					kosdaqAllStockBuyList.add(new StockVO());
+				}
+			}
+			logger.debug("kosdaqAllStockBuyListSize1 :" + kosdaqAllStockBuyList.size());
+			logger.debug("kosdaqAllStockSellListSize1 :" + kosdaqAllStockSellList.size());
+			
+//			for (int i = 0; i < maxCount2; i++) {
+			for (int i = 0; i < kosdaqAllStockBuyList.size(); i++) {
+				// 코스닥 주간(Weekly) 외인,기관 양매수 거래대금
+				StockVO svo1 = kosdaqAllStockBuyList.get(i);
+				// 코스닥 주간(Weekly) 외인,기관 양매도 거래대금
+				StockVO svo2 = kosdaqAllStockSellList.get(i);
+
+				sb1.append("<tr>\r\n");
+				// 순매수
+				String url1 = "http://finance.naver.com/item/main.nhn?code=" + svo1.getStockCode();
+				sb1.append("<td>" + cnt++ + "</td>\r\n");
+				sb1.append("<td><a href='" + url1 + "' target='_new'>" + svo1.getStockName() + "</a></td>\r\n");
+
+				String specialLetter = StringUtils.defaultIfEmpty(svo1.getSpecialLetter(), "");
+				String strCurPrice = svo1.getCurPrice();
+				String curPrice1FontColor = "";
+				if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲") || specialLetter.startsWith("+")) {
+					curPrice1FontColor = "color:red";
+				} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
+						|| specialLetter.startsWith("-")) {
+					curPrice1FontColor = "color:blue";
+				} else {
+					curPrice1FontColor = "color:black";
+				}
+				sb1.append("<td style='text-align:right;" + curPrice1FontColor + "'><font color='red'>" + strCurPrice
+						+ "</font></td>\r\n");
+
+				long lForeignTradingAmount1 = svo1.getlForeignTradingAmount();
+				String amount1FontColor = "color:metal";
+				if (lForeignTradingAmount1 < 0) {
+					amount1FontColor = "color:blue";
+				} else if (lForeignTradingAmount1 > 0) {
+					amount1FontColor = "color:red";
+				}
+				sb1.append("<td style='text-align:right;" + amount1FontColor + ";'>" + svo1.getForeignTradingAmount()
 						+ "</td>\r\n");
+				sb1.append("<td style='text-align:right;" + amount1FontColor + ";'>" + svo1.getOrganTradingAmount()
+						+ "</td>\r\n");
+				sb1.append("<td style='text-align:right;" + amount1FontColor + ";'>"
+						+ svo1.getForeignOrganTradingAmount() + "</td>\r\n");
+
+				// 순매도
+				String url2 = "http://finance.naver.com/item/main.nhn?code=" + svo2.getStockCode();
+				sb1.append("<td><a href='" + url2 + "' target='_new'>" + svo2.getStockName() + "</a></td>\r\n");
+
+				String specialLetter2 = StringUtils.defaultIfEmpty(svo2.getSpecialLetter(), "");
+				String strCurPrice2 = svo2.getCurPrice();
+				String curPrice2FontColor = "";
+				if (specialLetter2.startsWith("↑") || specialLetter2.startsWith("▲")
+						|| specialLetter2.startsWith("+")) {
+					curPrice2FontColor = "color:red";
+				} else if (specialLetter2.startsWith("↓") || specialLetter2.startsWith("▼")
+						|| specialLetter2.startsWith("-")) {
+					curPrice2FontColor = "color:blue";
+				} else {
+					curPrice2FontColor = "color:black";
+				}
+				sb1.append("<td style='text-align:right;" + curPrice2FontColor + "'>" + strCurPrice2 + "</td>\r\n");
+
+				long lForeignTradingAmount2 = svo2.getlForeignTradingAmount();
+				String amount2FontColor = "color:metal";
+				if (lForeignTradingAmount2 < 0) {
+					amount2FontColor = "color:blue";
+				} else if (lForeignTradingAmount2 > 0) {
+					amount2FontColor = "color:red";
+				}
+				sb1.append("<td style='text-align:right;" + amount2FontColor + ";'>" + svo2.getForeignTradingAmount()
+						+ "</td>\r\n");
+				sb1.append("<td style='text-align:right;" + amount2FontColor + ";'>" + svo2.getOrganTradingAmount()
+						+ "</td>\r\n");
+				sb1.append("<td style='text-align:right;" + amount2FontColor + ";'>"
+						+ svo2.getForeignOrganTradingAmount() + "</td>\r\n");
+
 				sb1.append("</tr>\r\n");
 			}
 			sb1.append("</table>\r\n");

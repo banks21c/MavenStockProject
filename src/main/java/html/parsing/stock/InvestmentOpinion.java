@@ -57,7 +57,7 @@ public class InvestmentOpinion {
 
     InvestmentOpinion(int i) {
 
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+        
 
         String kospiFileName = "new_kospi_우선주제외.html";
         String kosdaqFileName = "new_kosdaq_우선주제외.html";
@@ -286,7 +286,7 @@ public class InvestmentOpinion {
                     sb1.append("<tr>\r\n");
                     String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
                     sb1.append("<td>" + cnt++ + "</td>\r\n");
-                    sb1.append("<td><a href='" + url + "'>" + s.getStockName() + "</a></td>\r\n");
+                    sb1.append("<td><a href='" + url + "' target='_new'>" + s.getStockName() + "</a></td>\r\n");
                     sb1.append("<td align='right'>" + s.getCurPrice() + "</td>\r\n");
                     sb1.append("<td align='right'>" + s.getStrScore() + "</td>\r\n");
                     sb1.append("<td align='right'>" + s.getStrTargetPrice() + "</td>\r\n");

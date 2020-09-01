@@ -337,7 +337,7 @@ public class MajorStockHoldersInput {
 				String url = "http://finance.naver.com/item/main.nhn?code=" + svo.getStockCode();
 				sb1.append("<td rowspan=" + listSize + ">" + cnt++ + "</td>\r\n");
 				sb1.append(
-					"<td rowspan=" + listSize + "><a href='" + url + "'>" + svo.getStockName() + "</a></td>\r\n");
+					"<td rowspan=" + listSize + "><a href='" + url + "' target='_new'>" + svo.getStockName() + "</a></td>\r\n");
 
 				for (int i = 0; i < listSize; i++) {
 					if (i > 0) {

@@ -30,45 +30,111 @@ import html.parsing.stock.util.DataSort.OrganTradingAmountAscCompare;
 import html.parsing.stock.util.DataSort.OrganTradingAmountDescCompare;
 import html.parsing.stock.util.StockUtil;
 
-public class AllStockForeignOrganDailySimpleAll30 {
+public class AllStockForeignOrganWeeklySimpleAll30_Thread_AIO {
 
-	final static String USER_HOME = System.getProperty("user.home");
-	private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrganDailySimpleAll30.class);
+	AllStockForeignOrganWeeklySimpleAll_AIO_Thread thread1 = null;
+	AllStockForeignOrganWeeklySimpleAll_AIO_Thread thread2 = null;
+
+	int iFirstDayOfWeek;
+	int iLastDayOfWeek;
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new AllStockForeignOrganWeeklySimpleAll30_Thread_AIO();
+	}
+
+	AllStockForeignOrganWeeklySimpleAll30_Thread_AIO() {
+
+		// 주간 거래일을 알아낸다.
+		getFirstLastDayOfWeek();
+
+		thread1 = new AllStockForeignOrganWeeklySimpleAll_AIO_Thread("코스피", iFirstDayOfWeek, iLastDayOfWeek);
+		thread1.start();
+
+		thread2 = new AllStockForeignOrganWeeklySimpleAll_AIO_Thread("코스닥", iFirstDayOfWeek, iLastDayOfWeek);
+		thread2.start();
+
+		System.out.println("getThread1State :" + getThread1State());
+		System.out.println("getThread2State :" + getThread2State());
+	}
+
+	public Thread.State getThread1State() {
+		if (thread1 != null) {
+			return thread1.getState();
+		} else {
+			return null;
+		}
+	}
+
+	public Thread.State getThread2State() {
+		if (thread2 != null) {
+			return thread2.getState();
+		} else {
+			return null;
+		}
+	}
+
+	public void getFirstLastDayOfWeek() {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+		Date date = null;
+		StringBuilder dialogMsg = new StringBuilder();
+		dialogMsg.append("날짜를 년월일로 8자리 입력하여 주세요. 양식)YYYYMMDD ex)20200815");
+		dialogMsg.append("\n입력하지 않을 경우 오늘 날짜 기준으로 데이터를 추출합니다.");
+		dialogMsg.append("\n주의 시작 요일은 일요읿니다.일요일~토요일");
+		String ymd = JOptionPane.showInputDialog(dialogMsg.toString());
+		System.out.println("ymd:" + ymd);
+		if (!ymd.equals("")) {
+			try {
+				date = simpleDateFormat.parse(ymd);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		} else {
+			date = new Date();
+		}
+		Calendar cal = Calendar.getInstance(Locale.KOREA);
+		cal.setTime(date);
+		cal.add(Calendar.DATE, 1 - cal.get(Calendar.DAY_OF_WEEK));
+		String strFirstDayOfWeek = simpleDateFormat.format(cal.getTime());
+		iFirstDayOfWeek = Integer.parseInt(strFirstDayOfWeek);
+		System.out.println("첫번째 요일(일요일) 날짜 : " + simpleDateFormat.format(cal.getTime()));
+		cal.setTime(date);
+		cal.add(Calendar.DATE, 7 - cal.get(Calendar.DAY_OF_WEEK));
+		String strLastDayOfWeek = simpleDateFormat.format(cal.getTime());
+		iLastDayOfWeek = Integer.parseInt(strLastDayOfWeek);
+		System.out.println("마지막 요일(토요일) 날짜 : " + simpleDateFormat.format(cal.getTime()));
+	}
+}
+
+class AllStockForeignOrganWeeklySimpleAll_AIO_Thread extends Thread {
+
+	final String USER_HOME = System.getProperty("user.home");
+	private Logger logger = LoggerFactory.getLogger(AllStockForeignOrganWeeklySimpleAll_AIO_Thread.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
 
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
-	static String strYMD = "";
-	static DecimalFormat df = new DecimalFormat("#,##0.####");
+	String strYMD = "";
+	DecimalFormat df = new DecimalFormat("#,##0.####");
 
-	List<StockVO> kospiForeignDescList = new ArrayList();
-	List<StockVO> kospiForeignAscList = new ArrayList();
-	List<StockVO> kospiOrganDescList = new ArrayList();
-	List<StockVO> kospiOrganAscList = new ArrayList();
+	List<StockVO> foreignDescList = new ArrayList();
+	List<StockVO> foreignAscList = new ArrayList();
+	List<StockVO> organDescList = new ArrayList();
+	List<StockVO> organAscList = new ArrayList();
 
-	List<StockVO> kosdaqForeignDescList = new ArrayList();
-	List<StockVO> kosdaqForeignAscList = new ArrayList();
-	List<StockVO> kosdaqOrganDescList = new ArrayList();
-	List<StockVO> kosdaqOrganAscList = new ArrayList();
-
-	static int iFirstDayOfWeek;
-	static int iLastDayOfWeek;
-	String strDailyOrWeekly = "일간(Daily) ";
-	static int extractDayCount = 1;
+	int iFirstDayOfWeek;
+	int iLastDayOfWeek;
+	String strDailyOrWeekly = "주간(Weekly) ";
+	int extractDayCount = 5;
 	String marketType = "";
+	long start = 0;
+	long end = 0;
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		new AllStockForeignOrganDailySimpleAll30();
-	}
-
-	AllStockForeignOrganDailySimpleAll30() {
-		// 주간 거래일을 알아낸다.
-		// getFirstLastDayOfWeek();
+	AllStockForeignOrganWeeklySimpleAll_AIO_Thread() {
 
 		// test();
 		long start = System.currentTimeMillis();
@@ -85,9 +151,11 @@ public class AllStockForeignOrganDailySimpleAll30 {
 
 		logger.debug("실행시간 : " + hour + " 시간 " + minute + " 분 " + second + " 초");
 	}
-	
-	AllStockForeignOrganDailySimpleAll30(String marketType){
+
+	AllStockForeignOrganWeeklySimpleAll_AIO_Thread(String marketType, int iFirstDayOfWeek, int iLastDayOfWeek) {
 		this.marketType = marketType;
+		this.iFirstDayOfWeek = iFirstDayOfWeek;
+		this.iLastDayOfWeek = iLastDayOfWeek;
 	}
 
 	void test() {
@@ -98,48 +166,61 @@ public class AllStockForeignOrganDailySimpleAll30 {
 	}
 
 	void real() {
-		// 모든 주식 정보를 조회한다.
-		// 코스피
-		List<StockVO> kospiAllStockList = StockUtil.readStockCodeNameList("kospi");
-		kospiAllStockList = getAllStockInfo(kospiAllStockList);
-		System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
-		kospiAllStockList = getAllStockTrade(kospiAllStockList);
-
-		kospiForeignDescList.addAll(kospiAllStockList);
-		kospiForeignAscList.addAll(kospiAllStockList);
-		kospiOrganDescList.addAll(kospiAllStockList);
-		kospiOrganAscList.addAll(kospiAllStockList);
-
-		// 코스피 외국인 거래대금순 정렬
-		Collections.sort(kospiForeignDescList, new ForeignTradingAmountDescCompare());
-		Collections.sort(kospiForeignAscList, new ForeignTradingAmountAscCompare());
-		// 코스피 기관 거래대금순 정렬
-		Collections.sort(kospiOrganDescList, new OrganTradingAmountDescCompare());
-		Collections.sort(kospiOrganAscList, new OrganTradingAmountAscCompare());
-		writeFile("코스피");
-
-		// 코스닥
-		List<StockVO> kosdaqAllStockList = StockUtil.readStockCodeNameList("kosdaq");
-		kosdaqAllStockList = getAllStockInfo(kosdaqAllStockList);
-		System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
-		kosdaqAllStockList = getAllStockTrade(kosdaqAllStockList);
-
-		kosdaqForeignDescList.addAll(kosdaqAllStockList);
-		kosdaqForeignAscList.addAll(kosdaqAllStockList);
-		kosdaqOrganDescList.addAll(kosdaqAllStockList);
-		kosdaqOrganAscList.addAll(kosdaqAllStockList);
-
-		// 코스닥 기관 거래대금순 정렬
-		Collections.sort(kosdaqForeignDescList, new ForeignTradingAmountDescCompare());
-		Collections.sort(kosdaqForeignAscList, new ForeignTradingAmountAscCompare());
-		// 코스닥 기관 거래대금순 정렬
-		Collections.sort(kosdaqOrganDescList, new OrganTradingAmountDescCompare());
-		Collections.sort(kosdaqOrganAscList, new OrganTradingAmountAscCompare());
-		writeFile("코스닥");
-
+		start();
 	}
 
-	public static List<StockVO> readOne(String stockCode, String stockName) {
+	public long getThreadStartTime() {
+		return start;
+	}
+
+	public long getThreadEndTime() {
+		return end;
+	}
+
+	public void run() {
+		start = System.currentTimeMillis();
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date startDate = new Date(start);
+		logger.debug("start time:" + sdf.format(startDate));
+
+		logger.debug("실행시간 : " + (start) / 1000 + "초");
+
+		// 모든 주식 정보를 조회한다.
+		// 코스피
+		List<StockVO> allStockList = StockUtil.readStockCodeNameList(marketType);
+		allStockList = getAllStockInfo(allStockList);
+		System.out.println("allStockList.size :" + allStockList.size());
+		allStockList = getAllStockTrade(allStockList);
+
+		foreignDescList.addAll(allStockList);
+		foreignAscList.addAll(allStockList);
+		organDescList.addAll(allStockList);
+		organAscList.addAll(allStockList);
+
+		// 코스피 외국인 거래대금순 정렬
+		Collections.sort(foreignDescList, new ForeignTradingAmountDescCompare());
+		Collections.sort(foreignAscList, new ForeignTradingAmountAscCompare());
+		// 코스피 기관 거래대금순 정렬
+		Collections.sort(organDescList, new OrganTradingAmountDescCompare());
+		Collections.sort(organAscList, new OrganTradingAmountAscCompare());
+		writeFile();
+
+		end = System.currentTimeMillis();
+		Date endDate = new Date(end);
+		logger.debug("end time:" + sdf.format(endDate));
+
+		long timeElapsed = end - start;
+		logger.debug("실행시간 : " + (end - start) / 1000 + "초");
+
+		int second = (int) timeElapsed / 1000 % 60;
+		int minute = (int) timeElapsed / (1000 * 60) % 60;
+		int hour = (int) timeElapsed / (1000 * 60 * 60);
+
+		logger.debug("실행시간 : " + hour + " 시간 " + minute + " 분 " + second + " 초");
+	}
+
+	public List<StockVO> readOne(String stockCode, String stockName) {
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
 		StockVO svo = new StockVO();
@@ -149,7 +230,7 @@ public class AllStockForeignOrganDailySimpleAll30 {
 		return stocks;
 	}
 
-	public static List<StockVO> getAllStockInfo(List<StockVO> stockList) {
+	public List<StockVO> getAllStockInfo(List<StockVO> stockList) {
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
 		String stockCode = null;
@@ -173,7 +254,7 @@ public class AllStockForeignOrganDailySimpleAll30 {
 		return stocks;
 	}
 
-	public static StockVO getStockInfo(String strStockCode, String strStockName) {
+	public StockVO getStockInfo(String strStockCode, String strStockName) {
 		Document doc;
 		StockVO svo = new StockVO();
 		svo.setStockCode(strStockCode);
@@ -308,7 +389,7 @@ public class AllStockForeignOrganDailySimpleAll30 {
 		return svo;
 	}
 
-	public static List<StockVO> getAllStockTrade(List<StockVO> stockList) {
+	public List<StockVO> getAllStockTrade(List<StockVO> stockList) {
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
 		String stockCode = null;
@@ -331,7 +412,7 @@ public class AllStockForeignOrganDailySimpleAll30 {
 		return stocks;
 	}
 
-	public static StockVO getStockTrade(StockVO svo) {
+	public StockVO getStockTrade(StockVO svo) {
 		try {
 			String strStockCode = svo.getStockCode();
 			// =========================================================
@@ -393,7 +474,7 @@ public class AllStockForeignOrganDailySimpleAll30 {
 					System.out.println("iFirstDayOfWeek:" + iFirstDayOfWeek);
 					System.out.println("iLastDayOfWeek:" + iLastDayOfWeek);
 					if (iTradeDay < iFirstDayOfWeek || iTradeDay > iLastDayOfWeek) {
-						// break;
+						break;
 					}
 
 					strEndPrice = StringUtils.defaultIfEmpty(tdElements.get(1).text(), "0");
@@ -587,23 +668,7 @@ public class AllStockForeignOrganDailySimpleAll30 {
 		}
 	}
 
-	public void writeFile(String marketType) {
-		List<StockVO> foreignDescList = null;
-		List<StockVO> foreignAscList = null;
-		List<StockVO> organDescList = null;
-		List<StockVO> organAscList = null;
-
-		if (marketType.equals("kospi") || marketType.equals("코스피")) {
-			foreignDescList = kospiForeignDescList;
-			foreignAscList = kospiForeignAscList;
-			organDescList = kospiOrganDescList;
-			organAscList = kospiOrganAscList;
-		} else {
-			foreignDescList = kosdaqForeignDescList;
-			foreignAscList = kosdaqForeignAscList;
-			organDescList = kosdaqOrganDescList;
-			organAscList = kosdaqOrganAscList;
-		}
+	public void writeFile() {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 			String strDate = sdf.format(new Date());
@@ -686,7 +751,9 @@ public class AllStockForeignOrganDailySimpleAll30 {
 				}
 			}
 			sb1.append("</table>\r\n");
+
 			sb1.append("<br>\r\n");
+
 			sb1.append("\t<font size=3>").append(" ").append(strDailyOrWeekly + marketType + " 기관 순매매(거래대금순)")
 					.append("</font>");
 			sb1.append("<table>\r\n");
@@ -755,6 +822,7 @@ public class AllStockForeignOrganDailySimpleAll30 {
 				}
 			}
 			sb1.append("</table>\r\n");
+
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strDate + "_" + strDailyOrWeekly + marketType
@@ -767,36 +835,5 @@ public class AllStockForeignOrganDailySimpleAll30 {
 			e1.printStackTrace();
 		} finally {
 		}
-	}
-
-	public void getFirstLastDayOfWeek() {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-		Date date = null;
-		StringBuilder dialogMsg = new StringBuilder();
-		dialogMsg.append("날짜를 년월일로 8자리 입력하여 주세요. 양식)YYYYMMDD ex)20200815");
-		dialogMsg.append("\n입력하지 않을 경우 오늘 날짜 기준으로 데이터를 추출합니다.");
-		dialogMsg.append("\n주의 시작 요일은 일요읿니다.일요일~토요일");
-		String ymd = JOptionPane.showInputDialog(dialogMsg.toString());
-		System.out.println("ymd:" + ymd);
-		if (!ymd.equals("")) {
-			try {
-				date = simpleDateFormat.parse(ymd);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		} else {
-			date = new Date();
-		}
-		Calendar cal = Calendar.getInstance(Locale.KOREA);
-		cal.setTime(date);
-		cal.add(Calendar.DATE, 1 - cal.get(Calendar.DAY_OF_WEEK));
-		String strFirstDayOfWeek = simpleDateFormat.format(cal.getTime());
-		iFirstDayOfWeek = Integer.parseInt(strFirstDayOfWeek);
-		System.out.println("첫번째 요일(일요일) 날짜 : " + simpleDateFormat.format(cal.getTime()));
-		cal.setTime(date);
-		cal.add(Calendar.DATE, 7 - cal.get(Calendar.DAY_OF_WEEK));
-		String strLastDayOfWeek = simpleDateFormat.format(cal.getTime());
-		iLastDayOfWeek = Integer.parseInt(strLastDayOfWeek);
-		System.out.println("마지막 요일(토요일) 날짜 : " + simpleDateFormat.format(cal.getTime()));
 	}
 }

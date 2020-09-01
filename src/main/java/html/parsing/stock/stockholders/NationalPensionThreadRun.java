@@ -32,13 +32,10 @@ public class NationalPensionThreadRun {
 
 	private static final Logger logger = LoggerFactory.getLogger(NationalPensionThreadRun.class);
 
-	final static String userHome = System.getProperty("user.home");
+	final static String USER_HOME = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
-
-	String kospiFileName = GlobalVariables.kospiFileName;
-	String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
 	static String chosenDay = "";
 	static String thisYearFirstTradeDay = "2020.01.02";
@@ -56,11 +53,13 @@ public class NationalPensionThreadRun {
 	@Test
 	public void readAndWriteMajorStockHolders() throws Exception {
 		majorStockHolders = StringUtils.defaultString(JOptionPane.showInputDialog("대주주명을 입력해주세요.")).trim();
-		if (majorStockHolders.equals(""))
+		if (majorStockHolders.equals("")) {
 			majorStockHolders = "국민연금공단";
+		}
 		chosenDay = StringUtils.defaultString(JOptionPane.showInputDialog("기준일을 입력해주세요.")).trim();
-		if (chosenDay.equals(""))
+		if (chosenDay.equals("")) {
 			chosenDay = thisYearFirstTradeDay;
+		}
 
 		NationalPensionThread thread1 = new NationalPensionThread("kospi");
 		thread1.start();
@@ -75,12 +74,12 @@ public class NationalPensionThreadRun {
 		String strYMD = "";
 		boolean inputWordIsSameAsMajorStockHolders = false;
 
-		String marketGubun;
+		String strMarketType;
 		List<StockVO> stockList = new ArrayList<StockVO>();
 
-		NationalPensionThread(String marketGubun) {
-			this.marketGubun = marketGubun;
-			logger.debug("marketGubun:" + this.marketGubun);
+		NationalPensionThread(String strMarketType) {
+			this.strMarketType = strMarketType;
+			logger.debug("strMarketType:" + this.strMarketType);
 		}
 
 		public void run() {
@@ -107,10 +106,10 @@ public class NationalPensionThreadRun {
 		public void readAndWriteMajorStockHolders() throws Exception {
 			String strMarketGubun = "";
 			String krxMarketGubun = "";
-			if (marketGubun.equals("kospi")) {
+			if (strMarketType.equals("kospi")) {
 				strMarketGubun = "코스피";
 				krxMarketGubun = "stockMkt";
-			} else if (marketGubun.equals("kosdaq")) {
+			} else if (strMarketType.equals("kosdaq")) {
 				strMarketGubun = "코스닥";
 				krxMarketGubun = "kosdaqMkt";
 			}
@@ -177,23 +176,24 @@ public class NationalPensionThreadRun {
 				return null;
 			}
 
-			StockVO stock = new StockVO();
-			stock.setListedDay(listedDay);
+			StockVO svo = new StockVO();
+			svo.setListedDay(listedDay);
 
 			// 기준일가 또는 올해 상장했을 경우 상장일가 구하기
 			chosenDay = StockUtil.getChosenDay(chosenDay, listedDay);
 			logger.debug("chosenDay :" + chosenDay);
-			stock.setChosenDay(chosenDay);
+			svo.setChosenDay(chosenDay);
 			String chosenDayEndPrice = StockUtil.getChosenDayEndPrice(strStockCode, strStockName, chosenDay);
 			logger.debug("chosenDayEndPrice1 :" + chosenDayEndPrice);
-			stock.setChosenDayEndPrice(chosenDayEndPrice);
+			svo.setChosenDayEndPrice(chosenDayEndPrice);
 
 			chosenDayEndPrice = chosenDayEndPrice.replaceAll(",", "");
 			logger.debug("chosenDayEndPrice2 :" + chosenDayEndPrice);
-			if (chosenDayEndPrice.equals(""))
+			if (chosenDayEndPrice.equals("")) {
 				chosenDayEndPrice = "0";
+			}
 			int iChosenDayEndPrice = Integer.parseInt(chosenDayEndPrice);
-			stock.setiChosenDayEndPrice(iChosenDayEndPrice);
+			svo.setiChosenDayEndPrice(iChosenDayEndPrice);
 			logger.debug("iChosenDayEndPrice :" + iChosenDayEndPrice);
 			// ===========================================================================
 
@@ -203,15 +203,14 @@ public class NationalPensionThreadRun {
 				logger.debug("itemMainUrl1:" + itemMainUrl);
 
 //				Document doc = Jsoup.connect(itemMainUrl).get();
-
 				StringBuffer sb;
 				Document doc = null;
 				sb = StockUtil.sendPost(itemMainUrl, "UTF-8");
 				doc = Jsoup.parse(sb.toString());
 
 				logger.debug("doc.title:" + doc.title());
-				stock.setStockCode(strStockCode);
-				stock.setStockName(strStockName);
+				svo.setStockCode(strStockCode);
+				svo.setStockName(strStockName);
 				logger.debug("strStockCode:" + strStockCode);
 				logger.debug("strStockName:" + strStockName);
 
@@ -235,12 +234,13 @@ public class NationalPensionThreadRun {
 				}
 				String curPriceWithComma = blindElements.get(0).text();
 				logger.debug("curPriceWithComma:" + curPriceWithComma);
-				if (curPriceWithComma.contains(" "))
+				if (curPriceWithComma.contains(" ")) {
 					curPriceWithComma = curPriceWithComma.split(" ")[0];
+				}
 				String curPriceWithoutComma = curPriceWithComma.replace(",", "");
 				iCurPrice = Integer.parseInt(curPriceWithoutComma);
-				stock.setCurPrice(curPriceWithComma);
-				stock.setiCurPrice(iCurPrice);
+				svo.setCurPrice(curPriceWithComma);
+				svo.setiCurPrice(iCurPrice);
 
 				// ===========================================================================
 				double upDownRatio = 0d;
@@ -256,7 +256,7 @@ public class NationalPensionThreadRun {
 					}
 				}
 				logger.debug("특정일 대비 up,down 비율:" + upDownRatio + "%");
-				stock.setChosenDayEndPriceVsCurPriceUpDownRatio(upDownRatio);
+				svo.setChosenDayEndPriceVsCurPriceUpDownRatio(upDownRatio);
 				// ===========================================================================
 
 				Elements no_exday = doc.select(".no_exday");
@@ -297,8 +297,8 @@ public class NationalPensionThreadRun {
 
 				// 종목분석-기업현황
 				doc = Jsoup
-						.connect("http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + strStockCode)
-						.get();
+					.connect("http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + strStockCode)
+					.get();
 				if (cnt == 1) {
 					// logger.debug("title:" + doc.title());
 					// logger.debug(doc.html());
@@ -317,7 +317,7 @@ public class NationalPensionThreadRun {
 				logger.debug("aElem:" + aElem);
 
 				Elements trElem = aElem.select("tr");
-				stock.setMajorStockHolderList(new Vector<MajorStockHolderVO>());
+				svo.setMajorStockHolderList(new Vector<MajorStockHolderVO>());
 
 				long lRetainAmountTotal = 0;
 				long lRetainVolumeTotal = 0;
@@ -348,8 +348,9 @@ public class NationalPensionThreadRun {
 						// 주요주주
 						String majorStockHolderName = td.get(0).attr("title");
 						logger.debug("majorStockHolderName:" + majorStockHolderName);
-						if (majorStockHolderName.equals(""))
+						if (majorStockHolderName.equals("")) {
 							break;
+						}
 						if (majorStockHolderName.equals(majorStockHolders)) {
 							inputWordIsSameAsMajorStockHolders = true;
 							logger.debug("inputWordIsSameAsMajorStockHolders:" + inputWordIsSameAsMajorStockHolders);
@@ -421,27 +422,27 @@ public class NationalPensionThreadRun {
 
 							long lChosenDayVsCurDayGapAmountByMillion = lChosenDayVsCurDayGapAmount / 1000000;
 							String chosenDayVsCurDayGapAmountByMillion = df
-									.format(lChosenDayVsCurDayGapAmountByMillion);
+								.format(lChosenDayVsCurDayGapAmountByMillion);
 							majorStockHolderVO
-									.setlChosenDayVsCurDayGapAmountByMillion(lChosenDayVsCurDayGapAmountByMillion);
+								.setlChosenDayVsCurDayGapAmountByMillion(lChosenDayVsCurDayGapAmountByMillion);
 							majorStockHolderVO
-									.setChosenDayVsCurDayGapAmountByMillion(chosenDayVsCurDayGapAmountByMillion);
+								.setChosenDayVsCurDayGapAmountByMillion(chosenDayVsCurDayGapAmountByMillion);
 							logger.debug("majorStockHolderVO :" + majorStockHolderVO);
 
-							stock.getMajorStockHolderList().add(majorStockHolderVO);
-							logger.debug(stock.getMajorStockHolderList().toString());
+							svo.getMajorStockHolderList().add(majorStockHolderVO);
+							logger.debug(svo.getMajorStockHolderList().toString());
 						}
 					}
 				}
 
-				stock.setlRetainVolume(lRetainVolumeTotal);
-				stock.setlRetainAmount(lRetainAmountTotal);
-				stock.setfRetainRatio(fRetainRatioTotal);
+				svo.setlRetainVolume(lRetainVolumeTotal);
+				svo.setlRetainAmount(lRetainAmountTotal);
+				svo.setfRetainRatio(fRetainRatioTotal);
 
-				logger.debug("stock.getMajorStockHolderList().size() :" + stock.getMajorStockHolderList().size());
+				logger.debug("stock.getMajorStockHolderList().size() :" + svo.getMajorStockHolderList().size());
 
-				if (stock.getMajorStockHolderList().size() > 0) {
-					return stock;
+				if (svo.getMajorStockHolderList().size() > 0) {
+					return svo;
 				} else {
 					logger.debug("stock.getMajorStockHolderList().size() is less than 0");
 					return null;
@@ -515,11 +516,11 @@ public class NationalPensionThreadRun {
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유주식수</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유율</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재총금액(" + moneyUnit
-					+ ")</td>\r\n");
+				+ ")</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 <br/>총금액(" + moneyUnit
-					+ ")</td>\r\n");
+				+ ")</td>\r\n");
 			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比 <br/>총액차(" + moneyUnit
-					+ ")</td>\r\n");
+				+ ")</td>\r\n");
 			sb1.append("</tr>\r\n");
 
 			int cnt = 1;
@@ -535,11 +536,11 @@ public class NationalPensionThreadRun {
 						if (i == 0) {
 							sb1.append("<td rowspan=" + listSize + ">" + cnt++ + "</td>\r\n");
 							sb1.append("<td rowspan=" + listSize + "><a href='" + itemMainUrl + "'>"
-									+ svo.getStockName() + "</a></td>\r\n");
+								+ svo.getStockName() + "</a></td>\r\n");
 							sb1.append("<td rowspan=" + listSize + " style='text-align:right'>" + svo.getCurPrice()
-									+ "</td>\r\n");
+								+ "</td>\r\n");
 							sb1.append("<td rowspan=" + listSize + " style='text-align:right'>")
-									.append(svo.getChosenDayEndPrice()).append("</td>\r\n");
+								.append(svo.getChosenDayEndPrice()).append("</td>\r\n");
 
 							String strColor = "color:black";
 							double rate = svo.getChosenDayEndPriceVsCurPriceUpDownRatio();
@@ -550,8 +551,8 @@ public class NationalPensionThreadRun {
 							}
 
 							sb1.append("<td rowspan=" + listSize + " style='text-align:right;" + strColor + "'>")
-									.append(svo.getChosenDayEndPriceVsCurPriceUpDownRatio() + "%")
-									.append("</td>\r\n");
+								.append(svo.getChosenDayEndPriceVsCurPriceUpDownRatio() + "%")
+								.append("</td>\r\n");
 						}
 
 						MajorStockHolderVO holderVO = (MajorStockHolderVO) vt.get(i);
@@ -562,22 +563,21 @@ public class NationalPensionThreadRun {
 						sb1.append("<td style='text-align:right'>" + holderVO.getRetainRatio() + "%</td>\r\n");
 						sb1.append("<td style='text-align:right'>" + holderVO.getRetainAmount() + "</td>\r\n");
 						sb1.append(
-								"<td style='text-align:right'>" + holderVO.getChosenDayRetainAmount() + "</td>\r\n");
+							"<td style='text-align:right'>" + holderVO.getChosenDayRetainAmount() + "</td>\r\n");
 						sb1.append("<td style='text-align:right'>" + holderVO.getChosenDayVsCurDayGapAmount()
-								+ "</td>\r\n");
+							+ "</td>\r\n");
 
 //					sb1.append("<td style='text-align:right'>" + holderVO.getRetainAmount() + "</td>\r\n");
 //					sb1.append("<td style='text-align:right'>" + holderVO.getChosenDayRetainAmount() + "</td>\r\n");
 //					sb1.append("<td style='text-align:right'>" + holderVO.getChosenDayVsCurDayGapAmount() + "</td>\r\n");
-
 						sb1.append("<td style='text-align:right'>"
-								+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlRetainAmount()) + "</td>\r\n");
+							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlRetainAmount()) + "</td>\r\n");
 						sb1.append("<td style='text-align:right'>"
-								+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayRetainAmount())
-								+ "</td>\r\n");
+							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayRetainAmount())
+							+ "</td>\r\n");
 						sb1.append("<td style='text-align:right'>"
-								+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayVsCurDayGapAmount())
-								+ "</td>\r\n");
+							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayVsCurDayGapAmount())
+							+ "</td>\r\n");
 
 						sb1.append("</tr>\r\n");
 					}
@@ -588,7 +588,7 @@ public class NationalPensionThreadRun {
 
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
-			String fileName = userHome + "\\documents\\" + strDate + "_" + title + ".html";
+			String fileName = USER_HOME + "\\documents\\" + strDate + "_" + title + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 		}
 	}

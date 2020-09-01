@@ -101,7 +101,7 @@ public class AllStockPriceByDate extends Thread {
     }
 
     AllStockPriceByDate(int i) {
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+        
         strDefaultDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDefaultDate);
         String year = strDefaultDate.substring(0, 4);
         String month = strDefaultDate.substring(5, 7);

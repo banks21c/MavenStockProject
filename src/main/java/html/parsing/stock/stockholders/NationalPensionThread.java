@@ -34,7 +34,6 @@ class NationalPensionThread extends Thread {
 	int iYear = Integer.parseInt(strYear);
 
 	String baseDay = "";
-	String chosenDay = "";
 	static String thisYearFirstTradeDay = "2020.01.02";
 	static String thisYearPeakTradeDay = "2020.01.20";// 2020년 최고지수 2277.23
 	static String lastYearFirstTradeDay = "2019.01.02";// 2019년 첫 거래일
@@ -42,7 +41,7 @@ class NationalPensionThread extends Thread {
 	static String twoYearAgoFirstTradeDay = "2018.01.02";// 2018년 첫 거래일
 	static String twoYearAgoPeakTradeDay = "2018.01.29";// 2018년 최고지수 2607.20
 
-	String marketType = "";
+	String strMarketType = "";
 	String majorStockHolders = "";
 
 	static DecimalFormat df = new DecimalFormat("#,##0");
@@ -58,24 +57,27 @@ class NationalPensionThread extends Thread {
 //		NationalPensionThread thread2 = new NationalPensionThread("kosdaq", "국민연금공단", "2020.01.02");
 //		thread2.start();
 
-		NationalPensionThread thread2 = new NationalPensionThread("kosdaq", "국민연금공단", "2020.01.02");
+		NationalPensionThread thread1 = new NationalPensionThread("kospi", "국민연금공단", "2020.08.14");
+		NationalPensionThread thread2 = new NationalPensionThread("kosdaq", "국민연금공단", "2020.08.14");
 		try {
-			thread2.readAndWriteMajorStockHoldersTest();
+//			thread2.readAndWriteMajorStockHoldersTest();
+			thread1.start();
+			thread2.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	NationalPensionThread(String marketType) {
-		this.marketType = marketType;
-		logger.debug("marketType:" + this.marketType);
+	NationalPensionThread(String strMarketType) {
+		this.strMarketType = strMarketType;
+		logger.debug("strMarketType:" + this.strMarketType);
 	}
 
-	NationalPensionThread(String marketType, String majorStockHolders, String baseDay) {
-		this.marketType = marketType;
+	NationalPensionThread(String strMarketType, String majorStockHolders, String baseDay) {
+		this.strMarketType = strMarketType;
 		this.majorStockHolders = majorStockHolders;
 		this.baseDay = baseDay;
-		logger.debug("marketType:" + this.marketType);
+		logger.debug("strMarketType:" + this.strMarketType);
 		logger.debug("majorStockHolders:" + this.majorStockHolders);
 		logger.debug("baseDay:" + this.baseDay);
 	}
@@ -100,7 +102,7 @@ class NationalPensionThread extends Thread {
 
 		logger.debug("실행시간 : " + hour + " 시간 " + minute + " 분 " + second + " 초");
 	}
-	
+
 	public void readAndWriteMajorStockHoldersTest() throws Exception {
 		List<StockVO> stockList = new ArrayList<StockVO>();
 		StockVO svo = new StockVO();
@@ -112,19 +114,19 @@ class NationalPensionThread extends Thread {
 
 		Collections.sort(stockList, new ChosenDayVsCurPriceUpDownRatioDescCompare());
 
-		writeFile(stockList, marketType + " " + majorStockHolders + " 투자현황");
+		writeFile(stockList, strMarketType + " " + majorStockHolders + " 투자현황");
 	}
 
 	public void readAndWriteMajorStockHolders() throws Exception {
 
-		stockList = StockUtil.readStockCodeNameList(marketType);
+		stockList = StockUtil.readStockCodeNameList(strMarketType);
 		logger.debug("stockList.size2 :" + stockList.size());
 
 		stockList = getAllStockInfo(stockList);
 
 		Collections.sort(stockList, new ChosenDayVsCurPriceUpDownRatioDescCompare());
 
-		writeFile(stockList, marketType + " " + majorStockHolders + " 투자현황");
+		writeFile(stockList, strMarketType + " " + majorStockHolders + " 투자현황");
 	}
 
 	public List<StockVO> readOne(String stockCode, String stockName) throws Exception {
@@ -314,7 +316,7 @@ class NationalPensionThread extends Thread {
 
 			// 종목분석-기업현황
 			doc = Jsoup.connect("http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + strStockCode)
-					.get();
+				.get();
 			if (cnt == 1) {
 				// logger.debug("title:" + doc.title());
 				// logger.debug(doc.html());
@@ -438,11 +440,11 @@ class NationalPensionThread extends Thread {
 
 						long lChosenDayVsCurDayGapAmountByMillion = lChosenDayVsCurDayGapAmount / 1000000;
 						String chosenDayVsCurDayGapAmountByMillion = df
-								.format(lChosenDayVsCurDayGapAmountByMillion);
+							.format(lChosenDayVsCurDayGapAmountByMillion);
 						majorStockHolderVO
-								.setlChosenDayVsCurDayGapAmountByMillion(lChosenDayVsCurDayGapAmountByMillion);
+							.setlChosenDayVsCurDayGapAmountByMillion(lChosenDayVsCurDayGapAmountByMillion);
 						majorStockHolderVO
-								.setChosenDayVsCurDayGapAmountByMillion(chosenDayVsCurDayGapAmountByMillion);
+							.setChosenDayVsCurDayGapAmountByMillion(chosenDayVsCurDayGapAmountByMillion);
 						logger.debug("majorStockHolderVO :" + majorStockHolderVO);
 
 						svo.getMajorStockHolderList().add(majorStockHolderVO);
@@ -489,7 +491,7 @@ class NationalPensionThread extends Thread {
 		sb1.append("</head>\r\n");
 		sb1.append("<body>\r\n");
 		sb1.append("\t<h2>" + strYMD + title + "</h2>");
-		sb1.append("\t<h3>비교 대상 기준일 :" + chosenDay + "</h3>");
+		sb1.append("\t<h3>비교 대상 기준일 :" + baseDay + "</h3>");
 
 		long lTotalChosenDayVsCurDayGapAmount = 0;
 		long lTotalChosenDayRetainAmount = 0;
@@ -524,23 +526,23 @@ class NationalPensionThread extends Thread {
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
 		sb1.append(
-				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가(원)</td>\r\n");
+			"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가(원)</td>\r\n");
 		sb1.append(
-				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일가(원)</td>\r\n");
+			"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일가(원)</td>\r\n");
 		sb1.append(
-				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比<br/>등락율</td>\r\n");
+			"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比<br/>등락율</td>\r\n");
 		if (!inputWordIsSameAsMajorStockHolders) {
 			sb1.append(
-					"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>주요주주</td>\r\n");
+				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>주요주주</td>\r\n");
 		}
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유주식수</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유율</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재총금액("
-				+ moneyUnit + ")</td>\r\n");
+			+ moneyUnit + ")</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 <br/>총금액("
-				+ moneyUnit + ")</td>\r\n");
+			+ moneyUnit + ")</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比 <br/>총액차("
-				+ moneyUnit + ")</td>\r\n");
+			+ moneyUnit + ")</td>\r\n");
 		sb1.append("</tr>\r\n");
 
 		int cnt = 1;
@@ -555,12 +557,12 @@ class NationalPensionThread extends Thread {
 					sb1.append("<tr>\r\n");
 					if (i == 0) {
 						sb1.append("<td rowspan=" + listSize + ">" + cnt++ + "</td>\r\n");
-						sb1.append("<td rowspan=" + listSize + "><a href='" + itemMainUrl + "'>" + svo.getStockName()
-								+ "</a></td>\r\n");
+						sb1.append("<td rowspan=" + listSize + "><a href='" + itemMainUrl + "' target='new'>" + svo.getStockName()
+							+ "</a></td>\r\n");
 						sb1.append("<td rowspan=" + listSize + " style='text-align:right'>" + svo.getCurPrice()
-								+ "</td>\r\n");
+							+ "</td>\r\n");
 						sb1.append("<td rowspan=" + listSize + " style='text-align:right'>")
-								.append(svo.getChosenDayEndPrice()).append("</td>\r\n");
+							.append(svo.getChosenDayEndPrice()).append("</td>\r\n");
 
 						String strColor = "color:black";
 						double rate = svo.getChosenDayEndPriceVsCurPriceUpDownRatio();
@@ -571,7 +573,7 @@ class NationalPensionThread extends Thread {
 						}
 
 						sb1.append("<td rowspan=" + listSize + " style='text-align:right;" + strColor + "'>")
-								.append(rate + "%").append("</td>\r\n");
+							.append(rate + "%").append("</td>\r\n");
 					}
 
 					MajorStockHolderVO holderVO = (MajorStockHolderVO) vt.get(i);
@@ -584,13 +586,13 @@ class NationalPensionThread extends Thread {
 //					sb1.append("<td style='text-align:right'>" + holderVO.getChosenDayRetainAmount() + "</td>\r\n");
 //					sb1.append("<td style='text-align:right'>" + holderVO.getChosenDayVsCurDayGapAmount() + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>"
-							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlRetainAmount()) + "</td>\r\n");
+						+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlRetainAmount()) + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>"
-							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayRetainAmount())
-							+ "</td>\r\n");
+						+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayRetainAmount())
+						+ "</td>\r\n");
 					sb1.append("<td style='text-align:right'>"
-							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayVsCurDayGapAmount())
-							+ "</td>\r\n");
+						+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayVsCurDayGapAmount())
+						+ "</td>\r\n");
 
 					sb1.append("</tr>\r\n");
 				}

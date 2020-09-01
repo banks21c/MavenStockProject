@@ -1,14 +1,9 @@
 package html.parsing.stock;
 
-import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.model.StockVO;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,443 +24,454 @@ import html.parsing.stock.util.DataSort.ForeignTradingAmountDescCompare;
 import html.parsing.stock.util.DataSort.ForeignTradingVolumeDescCompare;
 import html.parsing.stock.util.DataSort.OrganTradingAmountDescCompare;
 import html.parsing.stock.util.DataSort.OrganTradingVolumeDescCompare;
+import html.parsing.stock.util.StockUtil;
 
 public class AllStockForeignOrgan {
 
-    final static String userHome = System.getProperty("user.home");
-    private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrgan.class);
+	final static String USER_HOME = System.getProperty("user.home");
+	private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrgan.class);
 
-    String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
-    int iYear = Integer.parseInt(strYear);
+	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
+	int iYear = Integer.parseInt(strYear);
 
-    // String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
-    // Locale.KOREAN).format(new Date());
-    static String strYMD = "";
+	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
+	// Locale.KOREAN).format(new Date());
+	static String strYMD = "";
+	static DecimalFormat df = new DecimalFormat("#,##0");
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        new AllStockForeignOrgan(1);
-    }
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new AllStockForeignOrgan(1);
+	}
 
-    AllStockForeignOrgan() {
+	AllStockForeignOrgan() {
 
-        String kospiFileName = GlobalVariables.kospiFileName;
-        String kosdaqFileName = GlobalVariables.kosdaqFileName;
+		List<StockVO> kospiStockList = readOne("049180");
+		kospiStockList = getAllStockInfo(kospiStockList);
+		writeFile(kospiStockList, "코스피", true, "거래량");
+	}
 
-        List<StockVO> kospiStockList = readOne("049180");
-        writeFile(kospiStockList, kospiFileName, "코스피", true, "거래량");
-    }
+	AllStockForeignOrgan(int i) {
+		// 모든 주식 정보를 조회한다.
+		// 코스피
+		//List<StockVO> kospiAllStockList = getAllStockInfo("코스피", kospiFileName);
+		List<StockVO> kospiAllStockList = StockUtil.readStockCodeNameList("kospi");
+		kospiAllStockList = getAllStockInfo(kospiAllStockList);
 
-    AllStockForeignOrgan(int i) {
+		// 코스닥
+		// List<StockVO> kosdaqAllStockList = getAllStockInfo("코스닥", kosdaqFileName);
+		List<StockVO> kosdaqAllStockList = StockUtil.readStockCodeNameList("kosdaq");
+		kosdaqAllStockList = getAllStockInfo(kosdaqAllStockList);
+		
+		System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
+		System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
 
-        // MakeKospiKosdaqList.makeKospiKosdaqList();
+		// 1.외국인 거래량순 정렬
+		Collections.sort(kospiAllStockList, new ForeignTradingVolumeDescCompare());
+		Collections.sort(kosdaqAllStockList, new ForeignTradingVolumeDescCompare());
 
-        String kospiFileName = GlobalVariables.kospiFileName;
-        String kosdaqFileName = GlobalVariables.kosdaqFileName;
+		writeFile(kospiAllStockList, "코스피 외국인 거래량", true, "거래량");
+		writeFile(kosdaqAllStockList, "코스닥 외국인 거래량", true, "거래량");
 
-        // 모든 주식 정보를 조회한다.
-        // 코스피
-        List<StockVO> kospiAllStockList = getAllStockInfo("코스피", kospiFileName);
-        System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
+		// 2.외국인 거래대금순 정렬
+		Collections.sort(kospiAllStockList, new ForeignTradingAmountDescCompare());
+		Collections.sort(kosdaqAllStockList, new ForeignTradingAmountDescCompare());
 
-        // 코스닥
-        List<StockVO> kosdaqAllStockList = getAllStockInfo("코스닥", kosdaqFileName);
-        System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
+		writeFile(kospiAllStockList, "코스피 외국인 거래대금", true, "거래대금");
+		writeFile(kosdaqAllStockList, "코스닥 외국인 거래대금", true, "거래대금");
 
-        // 1.외국인 거래량순 정렬
-        Collections.sort(kospiAllStockList, new ForeignTradingVolumeDescCompare());
-        Collections.sort(kosdaqAllStockList, new ForeignTradingVolumeDescCompare());
+		// 3.기관 거래량순 정렬
+		Collections.sort(kospiAllStockList, new OrganTradingVolumeDescCompare());
+		Collections.sort(kosdaqAllStockList, new OrganTradingVolumeDescCompare());
 
-        writeFile(kospiAllStockList, kospiFileName, "코스피 외국인 거래량", true, "거래량");
-        writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 외국인 거래량", true, "거래량");
+		writeFile(kospiAllStockList, "코스피 기관 거래량", false, "거래량");
+		writeFile(kosdaqAllStockList, "코스닥 기관 거래량", false, "거래량");
 
-        // 2.외국인 거래대금순 정렬
-        Collections.sort(kospiAllStockList, new ForeignTradingAmountDescCompare());
-        Collections.sort(kosdaqAllStockList, new ForeignTradingAmountDescCompare());
+		// 4.기관 거래대금순 정렬
+		Collections.sort(kospiAllStockList, new OrganTradingAmountDescCompare());
+		Collections.sort(kosdaqAllStockList, new OrganTradingAmountDescCompare());
 
-        writeFile(kospiAllStockList, kospiFileName, "코스피 외국인 거래대금", true, "거래대금");
-        writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 외국인 거래대금", true, "거래대금");
+		writeFile(kospiAllStockList, "코스피 기관 거래대금", false, "거래대금");
+		writeFile(kosdaqAllStockList, "코스닥 기관 거래대금", false, "거래대금");
 
-        // 3.기관 거래량순 정렬
-        Collections.sort(kospiAllStockList, new OrganTradingVolumeDescCompare());
-        Collections.sort(kosdaqAllStockList, new OrganTradingVolumeDescCompare());
+	}
 
-        writeFile(kospiAllStockList, kospiFileName, "코스피 기관 거래량", false, "거래량");
-        writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 기관 거래량", false, "거래량");
+	public static List<StockVO> readOne(String stockCode) {
+		List<StockVO> stocks = new ArrayList<StockVO>();
 
-        // 4.기관 거래대금순 정렬
-        Collections.sort(kospiAllStockList, new OrganTradingAmountDescCompare());
-        Collections.sort(kosdaqAllStockList, new OrganTradingAmountDescCompare());
+		int cnt = 1;
+		StockVO stock = getStockInfo(cnt, stockCode, "");
+		if (stock != null) {
+			stocks.add(stock);
+		}
+		return stocks;
+	}
 
-        writeFile(kospiAllStockList, kospiFileName, "코스피 기관 거래대금", false, "거래대금");
-        writeFile(kosdaqAllStockList, kosdaqFileName, "코스닥 기관 거래대금", false, "거래대금");
+	public static List<StockVO> getAllStockInfo(List<StockVO> stockList) {
+		List<StockVO> stocks = new ArrayList<StockVO>();
 
-    }
+		String stockCode = null;
+		String stockName = null;
+		int cnt = 1;
+		for (StockVO svo : stockList) {
+			stockCode = svo.getStockCode();
+			stockName = svo.getStockName();
+			System.out.println("_______________________________________");
+			System.out.println(cnt + "." + stockCode + "\t" + stockName);
+			System.out.println("_______________________________________");
 
-    public static List<StockVO> readOne(String stockCode) {
-        List<StockVO> stocks = new ArrayList<StockVO>();
+			StockVO stock = getStockInfo(cnt, stockCode, stockName);
+			if (stock != null) {
+				stock.setStockName(stockName);
+				stocks.add(stock);
+			}
+			cnt++;
+		}
+		return stocks;
+	}
 
-        int cnt = 1;
-        StockVO stock = getStockInfo(cnt, stockCode, "");
-        if (stock != null) {
-            stocks.add(stock);
-        }
-        return stocks;
-    }
+	public static StockVO getStockInfo(int cnt, String strStockCode, String strStockName) {
+		Document doc;
+		StockVO stock = new StockVO();
+		stock.setStockCode(strStockCode);
+		stock.setStockName(strStockName);
+		try {
+			// 종합정보
+			doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + strStockCode).get();
 
-    public static List<StockVO> getAllStockInfo(String kospidaq, String fileName) {
-        List<StockVO> stocks = new ArrayList<StockVO>();
+			Elements dates = doc.select(".date");
+			if (dates != null) {
+				if (dates.size() > 0) {
+					Element date = dates.get(0);
+					strYMD = date.ownText();
+					strYMD = date.childNode(0).toString().trim();
+					strYMD = "[" + strYMD.replaceAll("\\.", "-") + "] ";
+				}
+			}
+			Elements new_totalinfos = doc.select(".new_totalinfo");
 
-        File f = new File(userHome + "\\documents\\" + fileName);
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f),"UTF8"));
+			if (new_totalinfos == null || new_totalinfos.isEmpty()) {
+				return stock;
+			}
 
-            String read = null;
-            String stockCode = null;
-            String stockName = null;
-            int cnt = 1;
-            while ((read = reader.readLine()) != null) {
-                System.out.println(cnt + "." + read);
-                stockCode = read.split("\t")[0];
-                stockName = read.split("\t")[1];
-                System.out.println(stockCode + "\t" + stockName);
+			Element new_totalinfo = new_totalinfos.get(0);
+			Document new_totalinfo_doc = Jsoup.parse(new_totalinfo.html());
+			Element blind = new_totalinfo_doc.select(".blind").get(0);
 
-                if (stockCode.length() != 6) {
-                    continue;
-                }
+			if (blind == null) {
+				return stock;
+			}
 
-                StockVO stock = getStockInfo(cnt, stockCode, stockName);
-                if (stock != null) {
-                    stock.setStockName(stockName);
-                    stocks.add(stock);
-                }
-                cnt++;
-            }
-            reader.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } finally {
-        }
-        return stocks;
-    }
+			Elements edds = blind.select("dd");
 
-    public static StockVO getStockInfo(int cnt, String code, String name) {
-        Document doc;
-        StockVO stock = new StockVO();
-        try {
-            // 종합정보
-            doc = Jsoup.connect("http://finance.naver.com/item/main.nhn?code=" + code).get();
-            if (cnt == 1) {
-                // System.out.println(doc.title());
-                // System.out.println(doc.html());
-            }
-            stock.setStockCode(code);
+			String specialLetter = "";
+			String sign = "";
+			String curPrice = "";
+			String varyPrice = "";
+			String varyRatio = "";
 
-            Elements dates = doc.select(".date");
-            if (dates != null) {
-                if (dates.size() > 0) {
-                    Element date = dates.get(0);
-                    strYMD = date.ownText();
-                    strYMD = date.childNode(0).toString().trim();
-                    strYMD = "[" + strYMD.replaceAll("\\.", "-") + "] ";
-                }
-            }
-            Element new_totalinfo = doc.select(".new_totalinfo").get(0);
-            Document new_totalinfo_doc = Jsoup.parse(new_totalinfo.html());
-            Element blind = new_totalinfo_doc.select(".blind").get(0);
-            Elements edds = blind.select("dd");
+			int iCurPrice = 0;
+			int iVaryPrice = 0;
 
-            String specialLetter = "";
-            String sign = "";
-            String curPrice = "";
-            String varyRatio = "";
+			for (int i = 0; i < edds.size(); i++) {
+				Element dd = edds.get(i);
+				String text = dd.text();
+				System.out.println("data:" + text);
 
-            int iCurPrice = 0;
-            int iVaryPrice = 0;
+				if (text.startsWith("현재가")) {
+					System.out.println("data1:" + dd.text());
+					text = text.replaceAll("플러스", "+");
+					text = text.replaceAll("마이너스", "-");
+					text = text.replaceAll("상승", "▲");
+					text = text.replaceAll("하락", "▼");
+					text = text.replaceAll("퍼센트", "%");
 
-            for (int i = 0; i < edds.size(); i++) {
-                Element dd = edds.get(i);
-                String text = dd.text();
-                System.out.println("data:" + text);
+					String txts[] = text.split(" ");
+					curPrice = txts[1];
+					stock.setCurPrice(curPrice);
+					stock.setiCurPrice(
+						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+					iCurPrice = stock.getiCurPrice();
 
-                if (text.startsWith("현재가")) {
-                    System.out.println("data1:" + dd.text());
-                    text = text.replaceAll("플러스", "+");
-                    text = text.replaceAll("마이너스", "-");
-                    text = text.replaceAll("상승", "▲");
-                    text = text.replaceAll("하락", "▼");
-                    text = text.replaceAll("퍼센트", "%");
+					// 특수문자
+					specialLetter = txts[3].replaceAll("보합", "");
+					stock.setSpecialLetter(specialLetter);
 
-                    String txts[] = text.split(" ");
-                    curPrice = txts[1];
-                    stock.setCurPrice(txts[1]);
-                    stock.setiCurPrice(
-                            Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
-                    iCurPrice = stock.getiCurPrice();
+					varyPrice = txts[4];
+					stock.setVaryPrice(varyPrice);
+					stock.setiVaryPrice(Integer
+						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+					iVaryPrice = stock.getiVaryPrice();
 
-                    // 특수문자
-                    specialLetter = txts[3].replaceAll("보합", "");
-                    stock.setSpecialLetter(specialLetter);
+					// +- 부호
+					sign = txts[5];
+					stock.setSign(sign);
+					System.out.println("txts.length:" + txts.length);
+					if (txts.length == 7) {
+						stock.setVaryRatio(txts[5] + txts[6]);
+					} else if (txts.length == 8) {
+						stock.setVaryRatio(txts[5] + txts[6] + txts[7]);
+					}
+					varyRatio = stock.getVaryRatio();
+					stock.setfVaryRatio(Float.parseFloat(varyRatio.replaceAll("%", "")));
+					System.out.println("상승률:" + stock.getVaryRatio());
+				}
 
-                    String varyPrice = txts[4];
-                    stock.setVaryPrice(varyPrice);
-                    stock.setiVaryPrice(Integer
-                            .parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
-                    iVaryPrice = stock.getiVaryPrice();
+				if (text.startsWith("전일가")) {
+					stock.setBeforePrice(text.split(" ")[1]);
+					stock.setiBeforePrice(Integer.parseInt(stock.getBeforePrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("시가")) {
+					stock.setStartPrice(text.split(" ")[1]);
+					stock.setiStartPrice(Integer.parseInt(stock.getStartPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("고가")) {
+					stock.setHighPrice(text.split(" ")[1]);
+					stock.setiHighPrice(Integer.parseInt(stock.getHighPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("상한가")) {
+					stock.setMaxPrice(text.split(" ")[1]);
+					stock.setiMaxPrice(Integer.parseInt(stock.getMaxPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("저가")) {
+					stock.setLowPrice(text.split(" ")[1]);
+					stock.setiLowPrice(Integer.parseInt(stock.getLowPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("하한가")) {
+					stock.setMinPrice(text.split(" ")[1]);
+					stock.setiMinPrice(Integer.parseInt(stock.getMinPrice().replaceAll(",", "")));
+				}
+				if (text.startsWith("거래량")) {
+					stock.setTradingVolume(text.split(" ")[1]);
+					stock.setlTradingVolume(Long.parseLong(stock.getTradingVolume().replaceAll(",", "")));
+				}
+				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
+					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
+					stock.setlTradingAmount(Integer
+						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+				}
+			}
 
-                    // +- 부호
-                    sign = txts[5];
-                    stock.setSign(sign);
-                    System.out.println("txts.length:" + txts.length);
-                    if (txts.length == 7) {
-                        stock.setVaryRatio(txts[5] + txts[6]);
-                    } else if (txts.length == 8) {
-                        stock.setVaryRatio(txts[5] + txts[6] + txts[7]);
-                    }
-                    varyRatio = stock.getVaryRatio();
-                    stock.setfVaryRatio(Float.parseFloat(varyRatio.replaceAll("%", "")));
-                    System.out.println("상승률:" + stock.getVaryRatio());
-                }
+			String upDown = doc.select(".no_exday").get(0).select("em span").get(0).text();
+			if (upDown.equals("상한가")) {
+				specialLetter = "↑";
+			} else if (upDown.equals("하한가")) {
+				specialLetter = "↓";
+			}
+			stock.setSpecialLetter(specialLetter);
 
-                if (text.startsWith("전일가")) {
-                    stock.setBeforePrice(text.split(" ")[1]);
-                    stock.setiBeforePrice(Integer.parseInt(stock.getBeforePrice().replaceAll(",", "")));
-                }
-                if (text.startsWith("시가")) {
-                    stock.setStartPrice(text.split(" ")[1]);
-                    stock.setiStartPrice(Integer.parseInt(stock.getStartPrice().replaceAll(",", "")));
-                }
-                if (text.startsWith("고가")) {
-                    stock.setHighPrice(text.split(" ")[1]);
-                    stock.setiHighPrice(Integer.parseInt(stock.getHighPrice().replaceAll(",", "")));
-                }
-                if (text.startsWith("상한가")) {
-                    stock.setMaxPrice(text.split(" ")[1]);
-                    stock.setiMaxPrice(Integer.parseInt(stock.getMaxPrice().replaceAll(",", "")));
-                }
-                if (text.startsWith("저가")) {
-                    stock.setLowPrice(text.split(" ")[1]);
-                    stock.setiLowPrice(Integer.parseInt(stock.getLowPrice().replaceAll(",", "")));
-                }
-                if (text.startsWith("하한가")) {
-                    stock.setMinPrice(text.split(" ")[1]);
-                    stock.setiMinPrice(Integer.parseInt(stock.getMinPrice().replaceAll(",", "")));
-                }
-                if (text.startsWith("거래량")) {
-                    stock.setTradingVolume(text.split(" ")[1]);
-                    stock.setlTradingVolume(Long.parseLong(stock.getTradingVolume().replaceAll(",", "")));
-                }
-                if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
-                    stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
-                    stock.setlTradingAmount(Integer
-                            .parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
-                }
-            }
+			// =========================================================
+			// 투자자별 매매동향 - 외국인 보유주수, 보유율
+			// http://finance.naver.com/item/frgn.nhn?code=102460&page=1
+			// http://finance.naver.com/item/frgn.nhn?code=102460&page=2
+			doc = Jsoup.connect("http://finance.naver.com/item/frgn.nhn?code=" + strStockCode).get();
 
-            String upDown = doc.select(".no_exday").get(0).select("em span").get(0).text();
-            if (upDown.equals("상한가")) {
-                specialLetter = "↑";
-            } else if (upDown.equals("하한가")) {
-                specialLetter = "↓";
-            }
-            stock.setSpecialLetter(specialLetter);
+			String foreignTradingVolume = "";
+			String organTradingVolume = "";
+			long lForeignTradingVolume = 0;
+			long lOrganTradingVolume = 0;
 
-            doc = Jsoup.connect("http://finance.naver.com/item/frgn.nhn?code=" + code).get();
+			Elements type2Elements = doc.select(".type2");
+			Element type2Element = type2Elements.get(1);
+			System.out.println("type2:" + type2Element);
+			// 외국인 기관 순매매 거래량에 관한표이며 날짜별로 정보를 제공합니다.
+			// tr
+			Elements trElements = type2Element.select("tr");
+			int dayCnt = 0;
+			for (Element trElement : trElements) {
+				// td
+				Elements tdElements = trElement.select("td");
+				if (tdElements.size() == 9) {
+					if (dayCnt == 1) {
+						break;
+					}
+					// 기관순매매량
+					organTradingVolume = tdElements.get(5).text();
+					organTradingVolume = organTradingVolume.replace(",", "");
+					if (organTradingVolume.matches(".*[0-9]+.*")) {
+						lForeignTradingVolume += Long.parseLong(organTradingVolume);
+					}
+					// 외인순매매량
+					foreignTradingVolume = tdElements.get(6).text();
+					foreignTradingVolume = foreignTradingVolume.replace(",", "");
+					if (organTradingVolume.matches(".*[0-9]+.*")) {
+						lOrganTradingVolume += Long.parseLong(foreignTradingVolume);
+					}
+					dayCnt++;
+				}
+			}
 
-            String foreignTradingVolume = "";
-            String organTradingVolume = "";
+			foreignTradingVolume = df.format(lForeignTradingVolume);
+			organTradingVolume = df.format(lOrganTradingVolume);
 
-            Elements type2Elements = doc.select(".type2");
-            Element element2 = type2Elements.get(1);
-            // 외국인 기관 순매매 거래량에 관한표이며 날짜별로 정보를 제공합니다.
-            // tr
-            Elements trElements = element2.select("tr");
-            for (Element trElement : trElements) {
-                // td
-                Elements tdElements = trElement.select("td");
-                if (tdElements.size() == 9) {
-                    // 기관순매매량
-                    organTradingVolume = tdElements.get(5).text();
-                    // 외인순매매량
-                    foreignTradingVolume = tdElements.get(6).text();
-                    break;
-                }
-            }
+			foreignTradingVolume = StringUtils.defaultIfEmpty(foreignTradingVolume, "0");
+			organTradingVolume = StringUtils.defaultIfEmpty(organTradingVolume, "0");
+			// foreignTradingVolume = StringUtils.defaultIfEmpty(foreignTradingVolume,
+			// "0").replaceAll("\\+", "");
+			// organTradingVolume = StringUtils.defaultIfEmpty(organTradingVolume,
+			// "0").replaceAll("\\+", "");
 
-            foreignTradingVolume = StringUtils.defaultIfEmpty(foreignTradingVolume, "0");
-            organTradingVolume = StringUtils.defaultIfEmpty(organTradingVolume, "0");
-            // foreignTradingVolume = StringUtils.defaultIfEmpty(foreignTradingVolume,
-            // "0").replaceAll("\\+", "");
-            // organTradingVolume = StringUtils.defaultIfEmpty(organTradingVolume,
-            // "0").replaceAll("\\+", "");
+			System.out.println("foreignTradingVolume:" + foreignTradingVolume);
+			System.out.println("organTradingVolume:" + organTradingVolume);
 
-            System.out.println("foreignTradingVolume:" + foreignTradingVolume);
-            System.out.println("organTradingVolume:" + organTradingVolume);
+			long lForeignOrganTradingVolume = 0L;
+			lForeignOrganTradingVolume = lForeignTradingVolume + lOrganTradingVolume;
 
-            int iForeignTradingVolume = Integer.parseInt(foreignTradingVolume.replaceAll(",", ""));
-            int iOrganTradingVolume = Integer.parseInt(organTradingVolume.replaceAll(",", ""));
-            int iForeignOrganTradingVolume = iForeignTradingVolume + iOrganTradingVolume;
+			System.out.println("iForeignTradingVolume:" + lForeignTradingVolume);
+			System.out.println("iOrganTradingVolume:" + lOrganTradingVolume);
+			System.out.println("iForeignOrganTradingVolume:" + lForeignOrganTradingVolume);
 
-            System.out.println("iForeignTradingVolume:" + iForeignTradingVolume);
-            System.out.println("iOrganTradingVolume:" + iOrganTradingVolume);
+			long standardPrice = 0;
+			if (sign.equals("+")) {
+				standardPrice = iCurPrice - iVaryPrice / 2;
+			}
+			if (sign.equals("-")) {
+				standardPrice = iCurPrice + iVaryPrice / 2;
+			}
+			if (sign.equals("")) {
+				standardPrice = iCurPrice;
+			}
 
-            long standardPrice = 0;
-            if (sign.equals("+")) {
-                standardPrice = iCurPrice - iVaryPrice / 2;
-            }
-            if (sign.equals("-")) {
-                standardPrice = iCurPrice + iVaryPrice / 2;
-            }
-            if (sign.equals("")) {
-                standardPrice = iCurPrice;
-            }
+			System.out.println("standardPrice :" + standardPrice);
 
-            System.out.println("standardPrice :" + standardPrice);
+			long lForeignTradeAmount = lForeignTradingVolume * standardPrice;
+			long lOrganTradeAmount = lOrganTradingVolume * standardPrice;
+			// 금액은 만 단위
+			lForeignTradeAmount = lForeignTradeAmount / 10000;
+			lOrganTradeAmount = lOrganTradeAmount / 10000;
 
-            long iForeignTradeAmount = iForeignTradingVolume * standardPrice;
-            long iOrganTradeAmount = iOrganTradingVolume * standardPrice;
-            // 금액은 만 단위
-            iForeignTradeAmount = iForeignTradeAmount / 10000;
-            iOrganTradeAmount = iOrganTradeAmount / 10000;
+			System.out.println("외인거래금액 :" + lForeignTradeAmount);
+			System.out.println("기관거래금액 :" + lOrganTradeAmount);
 
-            System.out.println("외인거래금액 :" + iForeignTradeAmount);
-            System.out.println("기관거래금액 :" + iOrganTradeAmount);
+			stock.setlForeignTradingAmount(lForeignTradeAmount);
+			stock.setlOrganTradingAmount(lOrganTradeAmount);
+			stock.setlForeignOrganTradingAmount((lForeignTradeAmount + lOrganTradeAmount));
 
-            stock.setlForeignTradingAmount(iForeignTradeAmount);
-            stock.setlOrganTradingAmount(iOrganTradeAmount);
-            stock.setlForeignOrganTradingAmount((iForeignTradeAmount + iOrganTradeAmount));
+			String foreignTradeAmount = df.format(lForeignTradeAmount);
+			String organTradeAmount = df.format(lOrganTradeAmount);
+			String foreignOrganTradingVolume = df.format(lForeignOrganTradingVolume);
+			String foreignOrganTradingAmount = df.format((lForeignTradeAmount + lOrganTradeAmount));
 
-            DecimalFormat df = new DecimalFormat("#,##0");
-            String foreignTradeAmount = df.format(iForeignTradeAmount);
-            String organTradeAmount = df.format(iOrganTradeAmount);
-            String foreignOrganTradingVolume = df.format(iForeignOrganTradingVolume);
-            String foreignOrganTradingAmount = df.format((iForeignTradeAmount + iOrganTradeAmount));
+			stock.setForeignTradingAmount(foreignTradeAmount);
+			stock.setOrganTradingAmount(organTradeAmount);
+			stock.setForeignOrganTradingAmount(foreignOrganTradingAmount);
 
-            stock.setForeignTradingAmount(foreignTradeAmount);
-            stock.setOrganTradingAmount(organTradeAmount);
-            stock.setForeignOrganTradingAmount(foreignOrganTradingAmount);
+			stock.setForeignTradingVolume(foreignTradingVolume);
+			stock.setOrganTradingVolume(organTradingVolume);
+			stock.setForeignOrganTradingVolume(foreignOrganTradingVolume);
 
-            stock.setForeignTradingVolume(foreignTradingVolume);
-            stock.setOrganTradingVolume(organTradingVolume);
-            stock.setForeignOrganTradingVolume(foreignOrganTradingVolume);
+			stock.setlForeignTradingVolume(lForeignTradingVolume);
+			stock.setlOrganTradingVolume(lOrganTradingVolume);
+			stock.setlForeignOrganTradingVolume(lForeignOrganTradingVolume);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return stock;
+	}
 
-            stock.setiForeignTradingVolume(iForeignTradingVolume);
-            stock.setiOrganTradingVolume(iOrganTradingVolume);
-            stock.setiForeignOrganTradingVolume(iForeignOrganTradingVolume);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return stock;
-    }
+	public void writeFile(List<StockVO> list, String title, boolean isForeign, String gubun) {
+		System.out.println("list.size:" + list.size());
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
+			String strDate = sdf.format(new Date());
 
-    public void writeFile(List<StockVO> list, String fileName, String title, boolean isForeign, String gubun) {
-        File f = new File(userHome + "\\documents\\" + fileName);
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
-            String strDate = sdf.format(new Date());
+			StringBuilder sb1 = new StringBuilder();
+			sb1.append("<html lang='ko'>\r\n");
+			sb1.append("<head>\r\n");
+			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			sb1.append("<style>\r\n");
+			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
+			sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
+			sb1.append("</style>\r\n");
+			sb1.append("</head>\r\n");
+			sb1.append("<body>\r\n");
+			sb1.append("\t<font size=5>" + strYMD + " " + title + "</font>");
+			sb1.append("<table>\r\n");
+			sb1.append("<tr>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락률</td>\r\n");
+			if (gubun.equals("등락률")) {
+			} else if (gubun.equals("거래량")) {
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래량</td>\r\n");
+			} else if (gubun.equals("거래대금")) {
+				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(만원)</td>\r\n");
+			}
+			sb1.append("</tr>\r\n");
 
-            FileWriter fw = new FileWriter(userHome + "\\documents\\" + strDate + "_" + title + ".html");
-            StringBuilder sb1 = new StringBuilder();
-            sb1.append("<html lang='ko'>\r\n");
-            sb1.append("<head>\r\n");
-            //sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
-            sb1.append("<style>\r\n");
-            sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
-            sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
-            sb1.append("</style>\r\n");
-            sb1.append("</head>\r\n");
-            sb1.append("<body>\r\n");
-            sb1.append("\t<font size=5>" + strYMD + title + "</font>");
-            sb1.append("<table>\r\n");
-            sb1.append("<tr>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
-            sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락률</td>\r\n");
-            if (gubun.equals("등락률")) {
-            } else if (gubun.equals("거래량")) {
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래량</td>\r\n");
-            } else if (gubun.equals("거래대금")) {
-                sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(만원)</td>\r\n");
-            }
-            sb1.append("</tr>\r\n");
+			int cnt = 1;
+			for (StockVO svo : list) {
+				// 거래량(거래금액)이 없으면 건너뛴다.
+				if (isForeign) {
+					if (svo.getlForeignTradingVolume() == 0) {
+						continue;
+					}
+				} else {
+					if (svo.getlOrganTradingVolume() == 0) {
+						continue;
+					}
+				}
 
-            int cnt = 1;
-            for (StockVO s : list) {
-                // 거래량(거래금액)이 없으면 건너뛴다.
-                if (isForeign) {
-                    if (s.getiForeignTradingVolume() == 0) {
-                        continue;
-                    }
-                } else {
-                    if (s.getiOrganTradingVolume() == 0) {
-                        continue;
-                    }
-                }
+				if (svo != null) {
+					sb1.append("<tr>\r\n");
+					String url = "http://finance.naver.com/item/main.nhn?code=" + svo.getStockCode();
+					sb1.append("<td>" + cnt++ + "</td>\r\n");
+					sb1.append("<td><a href='" + url + "' target='_new'>" + svo.getStockName() + "</a></td>\r\n");
+					sb1.append("<td style='text-align:right'>" + svo.getCurPrice() + "</td>\r\n");
 
-                if (s != null) {
-                    sb1.append("<tr>\r\n");
-                    String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
-                    sb1.append("<td>" + cnt++ + "</td>\r\n");
-                    sb1.append("<td><a href='" + url + "'>" + s.getStockName() + "</a></td>\r\n");
-                    sb1.append("<td style='text-align:right'>" + s.getCurPrice() + "</td>\r\n");
+					String specialLetter = StringUtils.defaultIfEmpty(svo.getSpecialLetter(), "");
+					String varyPrice = svo.getVaryPrice();
+					if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
+						|| specialLetter.startsWith("+")) {
+						sb1.append("<td style='text-align:right'><font color='red'>" + specialLetter + " " + varyPrice
+							+ "</font></td>\r\n");
+					} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
+						|| specialLetter.startsWith("-")) {
+						sb1.append("<td style='text-align:right'><font color='blue'>" + specialLetter + " " + varyPrice
+							+ "</font></td>\r\n");
+					} else {
+						sb1.append("<td style='text-align:right'>0</td>\r\n");
+					}
 
-                    String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
-                    String varyPrice = s.getVaryPrice();
-                    if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
-                            || specialLetter.startsWith("+")) {
-                        sb1.append("<td style='text-align:right'><font color='red'>" + specialLetter + " " + varyPrice
-                                + "</font></td>\r\n");
-                    } else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
-                            || specialLetter.startsWith("-")) {
-                        sb1.append("<td style='text-align:right'><font color='blue'>" + specialLetter + " " + varyPrice
-                                + "</font></td>\r\n");
-                    } else {
-                        sb1.append("<td style='text-align:right'>0</td>\r\n");
-                    }
-
-                    String varyRatio = StringUtils.defaultIfEmpty(s.getVaryRatio(), "");
-                    if (varyRatio.startsWith("+")) {
-                        sb1.append("<td style='text-align:right'><font color='red'>" + varyRatio + "</font></td>\r\n");
-                    } else if (varyRatio.startsWith("-")) {
-                        sb1.append("<td style='text-align:right'><font color='blue'>" + varyRatio + "</font></td>\r\n");
-                    } else {
-                        sb1.append(
-                                "<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
-                    }
-                    if (gubun.equals("등락률")) {
-                    } else if (gubun.equals("거래량")) {
-                        if (isForeign) {
-                            sb1.append("<td style='text-align:right'>" + s.getForeignTradingVolume() + "</td>\r\n");
-                        } else {
-                            sb1.append("<td style='text-align:right'>" + s.getOrganTradingVolume() + "</td>\r\n");
-                        }
-                    } else if (gubun.equals("거래대금")) {
-                        if (isForeign) {
-                            sb1.append("<td style='text-align:right'>" + s.getForeignTradingAmount() + "</td>\r\n");
-                        } else {
-                            sb1.append("<td style='text-align:right'>" + s.getOrganTradingAmount() + "</td>\r\n");
-                        }
-                    }
-                    sb1.append("</tr>\r\n");
-                }
-            }
-            sb1.append("</body>\r\n");
-            sb1.append("</html>\r\n");
-            fw.write(sb1.toString());
-            fw.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        } finally {
-
-        }
-    }
+					String varyRatio = StringUtils.defaultIfEmpty(svo.getVaryRatio(), "");
+					if (varyRatio.startsWith("+")) {
+						sb1.append("<td style='text-align:right'><font color='red'>" + varyRatio + "</font></td>\r\n");
+					} else if (varyRatio.startsWith("-")) {
+						sb1.append("<td style='text-align:right'><font color='blue'>" + varyRatio + "</font></td>\r\n");
+					} else {
+						sb1.append(
+							"<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
+					}
+					if (gubun.equals("등락률")) {
+					} else if (gubun.equals("거래량")) {
+						if (isForeign) {
+							sb1.append("<td style='text-align:right'>" + svo.getForeignTradingVolume() + "</td>\r\n");
+						} else {
+							sb1.append("<td style='text-align:right'>" + svo.getOrganTradingVolume() + "</td>\r\n");
+						}
+					} else if (gubun.equals("거래대금")) {
+						if (isForeign) {
+							sb1.append("<td style='text-align:right'>" + svo.getForeignTradingAmount() + "</td>\r\n");
+						} else {
+							sb1.append("<td style='text-align:right'>" + svo.getOrganTradingAmount() + "</td>\r\n");
+						}
+					}
+					sb1.append("</tr>\r\n");
+				}
+			}
+			sb1.append("</body>\r\n");
+			sb1.append("</html>\r\n");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strDate + "_" + title + ".html");
+			fw.write(sb1.toString());
+			fw.close();
+		} catch (FileNotFoundException e) {
+		} catch (IOException e1) {
+		} finally {
+		}
+	}
 
 }
