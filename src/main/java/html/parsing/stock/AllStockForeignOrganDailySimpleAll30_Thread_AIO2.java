@@ -38,15 +38,15 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 	int iFirstDayOfWeek;
 	int iLastDayOfWeek;
 
-	List<StockVO> kospiForeignDescList = new ArrayList();
-	List<StockVO> kospiForeignAscList = new ArrayList();
-	List<StockVO> kospiOrganDescList = new ArrayList();
-	List<StockVO> kospiOrganAscList = new ArrayList();
+	List<StockVO> kospiForeignDescList = new ArrayList<StockVO>();
+	List<StockVO> kospiForeignAscList = new ArrayList<StockVO>();
+	List<StockVO> kospiOrganDescList = new ArrayList<StockVO>();
+	List<StockVO> kospiOrganAscList = new ArrayList<StockVO>();
 
-	List<StockVO> kosdaqForeignDescList = new ArrayList();
-	List<StockVO> kosdaqForeignAscList = new ArrayList();
-	List<StockVO> kosdaqOrganDescList = new ArrayList();
-	List<StockVO> kosdaqOrganAscList = new ArrayList();
+	List<StockVO> kosdaqForeignDescList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqForeignAscList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqOrganDescList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqOrganAscList = new ArrayList<StockVO>();
 
 	/**
 	 * @param args
@@ -59,10 +59,10 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 		// 주간 거래일을 알아낸다.
 		// getFirstLastDayOfWeek();
 
-		thread1 = new AllStockForeignOrganDailySimpleAll_AIO_Thread("코스피");
+		thread1 = new AllStockForeignOrganDailySimpleAll_AIO_Thread("코스피", iFirstDayOfWeek, iLastDayOfWeek);
 		thread1.start();
 
-		thread2 = new AllStockForeignOrganDailySimpleAll_AIO_Thread("코스닥");
+		thread2 = new AllStockForeignOrganDailySimpleAll_AIO_Thread("코스닥", iFirstDayOfWeek, iLastDayOfWeek);
 		thread2.start();
 
 		System.out.println("getThread1State :" + getThread1State());
@@ -119,7 +119,7 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 	class AllStockForeignOrganDailySimpleAll_AIO_Thread extends Thread {
 
 		final String USER_HOME = System.getProperty("user.home");
-		private Logger logger = LoggerFactory.getLogger(AllStockForeignOrganDailySimpleAll30_Thread_AIO2.class);
+		private Logger logger = LoggerFactory.getLogger(AllStockForeignOrganDailySimpleAll_AIO_Thread.class);
 
 		String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 		int iYear = Integer.parseInt(strYear);
@@ -129,10 +129,10 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 		String strYMD = "";
 		DecimalFormat df = new DecimalFormat("#,##0.####");
 
-		List<StockVO> foreignDescList = new ArrayList();
-		List<StockVO> foreignAscList = new ArrayList();
-		List<StockVO> organDescList = new ArrayList();
-		List<StockVO> organAscList = new ArrayList();
+		List<StockVO> foreignDescList = new ArrayList<StockVO>();
+		List<StockVO> foreignAscList = new ArrayList<StockVO>();
+		List<StockVO> organDescList = new ArrayList<StockVO>();
+		List<StockVO> organAscList = new ArrayList<StockVO>();
 
 		int iFirstDayOfWeek;
 		int iLastDayOfWeek;
@@ -147,8 +147,10 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 			real();
 		}
 
-		AllStockForeignOrganDailySimpleAll_AIO_Thread(String marketType) {
+		AllStockForeignOrganDailySimpleAll_AIO_Thread(String marketType, int iFirstDayOfWeek, int iLastDayOfWeek) {
 			this.marketType = marketType;
+			this.iFirstDayOfWeek = iFirstDayOfWeek;
+			this.iLastDayOfWeek = iLastDayOfWeek;
 		}
 
 		void test() {
@@ -205,6 +207,16 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 			System.out.println("getThread1State :" + getThread1State());
 			System.out.println("getThread2State :" + getThread2State());
 			if (getThread1State() == Thread.State.TERMINATED && getThread2State() == Thread.State.RUNNABLE) {
+				logger.debug("kospiForeignDescList.size:" + kospiForeignDescList.size());
+				logger.debug("kospiForeignAscList.size:" + kospiForeignAscList.size());
+				logger.debug("kospiOrganDescList.size:" + kospiOrganDescList.size());
+				logger.debug("kospiOrganAscList.size:" + kospiOrganAscList.size());
+
+				logger.debug("kosdaqForeignDescList.size:" + kosdaqForeignDescList.size());
+				logger.debug("kosdaqForeignAscList.size:" + kosdaqForeignAscList.size());
+				logger.debug("kosdaqOrganDescList.size:" + kosdaqOrganDescList.size());
+				logger.debug("kosdaqOrganAscList.size:" + kosdaqOrganAscList.size());
+
 				writeFile();
 
 				end = System.currentTimeMillis();
@@ -832,7 +844,7 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 
 				sb1.append("<br>\r\n");
 
-				sb1.append("\t<font size=3>").append(" ").append(strDailyOrWeekly + "코스피 기관 순매매(거래대금순)")
+				sb1.append("\t<font size=3>").append(" ").append(strDailyOrWeekly + "코스닥 기관 순매매(거래대금순)")
 						.append("</font>");
 
 				sb1.append("<table>\r\n");

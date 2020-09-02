@@ -134,19 +134,19 @@ public class AllStockForeignOrganBothDailyV2_ThreadCall {
 
 		int iFirstDayOfWeek;
 		int iLastDayOfWeek;
-		String strDailyOrWeekly = "주간(Weekly) ";
-		int extractDayCount = 5;
+		String strDailyOrWeekly = "일간(Daily) ";
+		int extractDayCount = 1;
 		String marketType = "";
 		long start = 0;
 		long end = 0;
 
-		// 코스피 주간(Weekly) 외인,기관 양매수 거래대금
+		// 코스피 주간(Daily) 외인,기관 양매수 거래대금
 		List<StockVO> kospiAllStockBuyList = null;
-		// 코스피 주간(Weekly) 외인,기관 양매도 거래대금
+		// 코스피 주간(Daily) 외인,기관 양매도 거래대금
 		List<StockVO> kospiAllStockSellList = null;
-		// 코스닥 주간(Weekly) 외인,기관 양매수 거래대금
+		// 코스닥 주간(Daily) 외인,기관 양매수 거래대금
 		List<StockVO> kosdaqAllStockBuyList = null;
-		// 코스닥 주간(Weekly) 외인,기관 양매도 거래대금
+		// 코스닥 주간(Daily) 외인,기관 양매도 거래대금
 		List<StockVO> kosdaqAllStockSellList = null;
 
 		AllStockForeignOrganBothDailyV2_Thread() {

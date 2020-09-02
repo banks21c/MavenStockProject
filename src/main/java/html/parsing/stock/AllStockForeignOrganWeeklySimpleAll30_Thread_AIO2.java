@@ -38,15 +38,15 @@ public class AllStockForeignOrganWeeklySimpleAll30_Thread_AIO2 {
 	int iFirstDayOfWeek;
 	int iLastDayOfWeek;
 
-	List<StockVO> kospiForeignDescList = new ArrayList();
-	List<StockVO> kospiForeignAscList = new ArrayList();
-	List<StockVO> kospiOrganDescList = new ArrayList();
-	List<StockVO> kospiOrganAscList = new ArrayList();
+	List<StockVO> kospiForeignDescList = new ArrayList<StockVO>();
+	List<StockVO> kospiForeignAscList = new ArrayList<StockVO>();
+	List<StockVO> kospiOrganDescList = new ArrayList<StockVO>();
+	List<StockVO> kospiOrganAscList = new ArrayList<StockVO>();
 
-	List<StockVO> kosdaqForeignDescList = new ArrayList();
-	List<StockVO> kosdaqForeignAscList = new ArrayList();
-	List<StockVO> kosdaqOrganDescList = new ArrayList();
-	List<StockVO> kosdaqOrganAscList = new ArrayList();
+	List<StockVO> kosdaqForeignDescList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqForeignAscList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqOrganDescList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqOrganAscList = new ArrayList<StockVO>();
 
 	/**
 	 * @param args
@@ -129,10 +129,10 @@ public class AllStockForeignOrganWeeklySimpleAll30_Thread_AIO2 {
 		String strYMD = "";
 		DecimalFormat df = new DecimalFormat("#,##0.####");
 
-		List<StockVO> foreignDescList = new ArrayList();
-		List<StockVO> foreignAscList = new ArrayList();
-		List<StockVO> organDescList = new ArrayList();
-		List<StockVO> organAscList = new ArrayList();
+		List<StockVO> foreignDescList = new ArrayList<StockVO>();
+		List<StockVO> foreignAscList = new ArrayList<StockVO>();
+		List<StockVO> organDescList = new ArrayList<StockVO>();
+		List<StockVO> organAscList = new ArrayList<StockVO>();
 
 		int iFirstDayOfWeek;
 		int iLastDayOfWeek;
@@ -174,7 +174,7 @@ public class AllStockForeignOrganWeeklySimpleAll30_Thread_AIO2 {
 			logger.debug("실행시간 : " + (start) / 1000 + "초");
 
 			// 모든 주식 정보를 조회한다.
-			// 코스피
+			// 코스피,코스닥
 			List<StockVO> allStockList = StockUtil.readStockCodeNameList(marketType);
 			allStockList = getAllStockInfo(allStockList);
 			System.out.println("allStockList.size :" + allStockList.size());
@@ -197,11 +197,19 @@ public class AllStockForeignOrganWeeklySimpleAll30_Thread_AIO2 {
 				kospiForeignAscList = foreignAscList;
 				kospiOrganDescList = organDescList;
 				kospiOrganAscList = organAscList;
+				logger.debug("kospiForeignDescList.size:" + kospiForeignDescList.size());
+				logger.debug("kospiForeignAscList.size:" + kospiForeignAscList.size());
+				logger.debug("kospiOrganDescList.size:" + kospiOrganDescList.size());
+				logger.debug("kospiOrganAscList.size:" + kospiOrganAscList.size());
 			} else {
 				kosdaqForeignDescList = foreignDescList;
 				kosdaqForeignAscList = foreignAscList;
 				kosdaqOrganDescList = organDescList;
 				kosdaqOrganAscList = organAscList;
+				logger.debug("kosdaqForeignDescList.size:" + kosdaqForeignDescList.size());
+				logger.debug("kosdaqForeignAscList.size:" + kosdaqForeignAscList.size());
+				logger.debug("kosdaqOrganDescList.size:" + kosdaqOrganDescList.size());
+				logger.debug("kosdaqOrganAscList.size:" + kosdaqOrganAscList.size());
 			}
 
 			System.out.println("getThread1State :" + getThread1State());
@@ -473,6 +481,8 @@ public class AllStockForeignOrganWeeklySimpleAll30_Thread_AIO2 {
 //					}
 						String strTradeDay = StringUtils.defaultIfEmpty(tdElements.get(0).text(), "");
 						strTradeDay = strTradeDay.replace(".", "");
+						logger.debug("strTradeDay :"+strTradeDay);
+						if(strTradeDay.equals("")) continue;
 						int iTradeDay = Integer.parseInt(strTradeDay);
 						System.out.println("iTradeDay:" + iTradeDay);
 						System.out.println("iFirstDayOfWeek:" + iFirstDayOfWeek);
@@ -834,7 +844,7 @@ public class AllStockForeignOrganWeeklySimpleAll30_Thread_AIO2 {
 
 				sb1.append("<br>\r\n");
 
-				sb1.append("\t<font size=3>").append(" ").append(strDailyOrWeekly + "코스피 기관 순매매(거래대금순)")
+				sb1.append("\t<font size=3>").append(" ").append(strDailyOrWeekly + "코스닥 기관 순매매(거래대금순)")
 						.append("</font>");
 
 				sb1.append("<table>\r\n");

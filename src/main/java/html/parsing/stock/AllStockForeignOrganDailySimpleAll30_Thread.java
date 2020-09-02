@@ -43,10 +43,10 @@ public class AllStockForeignOrganDailySimpleAll30_Thread extends Thread {
 	static String strYMD = "";
 	static DecimalFormat df = new DecimalFormat("#,##0.####");
 
-	List<StockVO> foreignDescList = new ArrayList();
-	List<StockVO> foreignAscList = new ArrayList();
-	List<StockVO> organDescList = new ArrayList();
-	List<StockVO> organAscList = new ArrayList();
+	List<StockVO> foreignDescList = new ArrayList<StockVO>();
+	List<StockVO> foreignAscList = new ArrayList<StockVO>();
+	List<StockVO> organDescList = new ArrayList<StockVO>();
+	List<StockVO> organAscList = new ArrayList<StockVO>();
 
 	static int iFirstDayOfWeek;
 	static int iLastDayOfWeek;
@@ -612,9 +612,9 @@ public class AllStockForeignOrganDailySimpleAll30_Thread extends Thread {
 			sb1.append("</style>\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
-			sb1.append("\t<font size=4>").append(strYMD).append(strDailyOrWeekly + marketType + " 외국인,기관 순매매(거래대금순)")
+			sb1.append("\t<font size=4>").append(strYMD).append(strDailyOrWeekly + marketType + "외국인,기관 순매매(거래대금순)")
 					.append("</font><br/>");
-			sb1.append("\t<font size=3>").append(" ").append(strDailyOrWeekly + marketType + " 외국인 순매매(거래대금순)")
+			sb1.append("\t<font size=3>").append(" ").append(strDailyOrWeekly + marketType + "외국인 순매매(거래대금순)")
 					.append("</font>");
 			sb1.append("<table>\r\n");
 			sb1.append("<tr>\r\n");
