@@ -36,15 +36,15 @@ public class AllStockForeignOrganBothWeeklyV2_ThreadCall {
 	int iFirstDayOfWeek;
 	int iLastDayOfWeek;
 
-	List<StockVO> kospiForeignDescList = new ArrayList();
-	List<StockVO> kospiForeignAscList = new ArrayList();
-	List<StockVO> kospiOrganDescList = new ArrayList();
-	List<StockVO> kospiOrganAscList = new ArrayList();
+	List<StockVO> kospiForeignDescList = new ArrayList<StockVO>();
+	List<StockVO> kospiForeignAscList = new ArrayList<StockVO>();
+	List<StockVO> kospiOrganDescList = new ArrayList<StockVO>();
+	List<StockVO> kospiOrganAscList = new ArrayList<StockVO>();
 
-	List<StockVO> kosdaqForeignDescList = new ArrayList();
-	List<StockVO> kosdaqForeignAscList = new ArrayList();
-	List<StockVO> kosdaqOrganDescList = new ArrayList();
-	List<StockVO> kosdaqOrganAscList = new ArrayList();
+	List<StockVO> kosdaqForeignDescList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqForeignAscList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqOrganDescList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqOrganAscList = new ArrayList<StockVO>();
 
 	/**
 	 * @param args
@@ -127,10 +127,10 @@ public class AllStockForeignOrganBothWeeklyV2_ThreadCall {
 		String strYMD = "";
 		DecimalFormat df = new DecimalFormat("#,##0");
 
-		List<StockVO> foreignDescList = new ArrayList();
-		List<StockVO> foreignAscList = new ArrayList();
-		List<StockVO> organDescList = new ArrayList();
-		List<StockVO> organAscList = new ArrayList();
+		List<StockVO> foreignDescList = new ArrayList<StockVO>();
+		List<StockVO> foreignAscList = new ArrayList<StockVO>();
+		List<StockVO> organDescList = new ArrayList<StockVO>();
+		List<StockVO> organAscList = new ArrayList<StockVO>();
 
 		int iFirstDayOfWeek;
 		int iLastDayOfWeek;

@@ -127,10 +127,10 @@ public class AllStockForeignOrganBothDailyV2_ThreadCall {
 		String strYMD = "";
 		DecimalFormat df = new DecimalFormat("#,##0");
 
-		List<StockVO> foreignDescList = new ArrayList();
-		List<StockVO> foreignAscList = new ArrayList();
-		List<StockVO> organDescList = new ArrayList();
-		List<StockVO> organAscList = new ArrayList();
+		List<StockVO> foreignDescList = new ArrayList<StockVO>();
+		List<StockVO> foreignAscList = new ArrayList<StockVO>();
+		List<StockVO> organDescList = new ArrayList<StockVO>();
+		List<StockVO> organAscList = new ArrayList<StockVO>();
 
 		int iFirstDayOfWeek;
 		int iLastDayOfWeek;
