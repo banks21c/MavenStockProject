@@ -174,7 +174,7 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 			logger.debug("실행시간 : " + (start) / 1000 + "초");
 
 			// 모든 주식 정보를 조회한다.
-			// 코스피
+			// 코스피,코스닥
 			List<StockVO> allStockList = StockUtil.readStockCodeNameList(marketType);
 			allStockList = getAllStockInfo(allStockList);
 			System.out.println("allStockList.size :" + allStockList.size());
@@ -197,26 +197,24 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 				kospiForeignAscList = foreignAscList;
 				kospiOrganDescList = organDescList;
 				kospiOrganAscList = organAscList;
+				logger.debug("kospiForeignDescList.size:" + kospiForeignDescList.size());
+				logger.debug("kospiForeignAscList.size:" + kospiForeignAscList.size());
+				logger.debug("kospiOrganDescList.size:" + kospiOrganDescList.size());
+				logger.debug("kospiOrganAscList.size:" + kospiOrganAscList.size());
 			} else {
 				kosdaqForeignDescList = foreignDescList;
 				kosdaqForeignAscList = foreignAscList;
 				kosdaqOrganDescList = organDescList;
 				kosdaqOrganAscList = organAscList;
+				logger.debug("kosdaqForeignDescList.size:" + kosdaqForeignDescList.size());
+				logger.debug("kosdaqForeignAscList.size:" + kosdaqForeignAscList.size());
+				logger.debug("kosdaqOrganDescList.size:" + kosdaqOrganDescList.size());
+				logger.debug("kosdaqOrganAscList.size:" + kosdaqOrganAscList.size());
 			}
 
 			System.out.println("getThread1State :" + getThread1State());
 			System.out.println("getThread2State :" + getThread2State());
 			if (getThread1State() == Thread.State.TERMINATED && getThread2State() == Thread.State.RUNNABLE) {
-				logger.debug("kospiForeignDescList.size:" + kospiForeignDescList.size());
-				logger.debug("kospiForeignAscList.size:" + kospiForeignAscList.size());
-				logger.debug("kospiOrganDescList.size:" + kospiOrganDescList.size());
-				logger.debug("kospiOrganAscList.size:" + kospiOrganAscList.size());
-
-				logger.debug("kosdaqForeignDescList.size:" + kosdaqForeignDescList.size());
-				logger.debug("kosdaqForeignAscList.size:" + kosdaqForeignAscList.size());
-				logger.debug("kosdaqOrganDescList.size:" + kosdaqOrganDescList.size());
-				logger.debug("kosdaqOrganAscList.size:" + kosdaqOrganAscList.size());
-
 				writeFile();
 
 				end = System.currentTimeMillis();
@@ -483,6 +481,8 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 //					}
 						String strTradeDay = StringUtils.defaultIfEmpty(tdElements.get(0).text(), "");
 						strTradeDay = strTradeDay.replace(".", "");
+						logger.debug("strTradeDay :"+strTradeDay);
+						if(strTradeDay.equals("")) continue;
 						int iTradeDay = Integer.parseInt(strTradeDay);
 						System.out.println("iTradeDay:" + iTradeDay);
 						System.out.println("iFirstDayOfWeek:" + iFirstDayOfWeek);
