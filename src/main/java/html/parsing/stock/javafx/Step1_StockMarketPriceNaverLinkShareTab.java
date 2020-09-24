@@ -128,8 +128,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 	final String FX_FONT_STYLE_DEFAULT = "-fx-font-family: 'Arial';-fx-font-size: 15px;-fx-font-weight: bold;-fx-fill: black ;";
 	final String FX_FONT_STYLE_RED = "-fx-font-family: 'Arial';-fx-font-size: 15px;-fx-font-weight: bold;-fx-fill: red ;";
 	final String FX_FONT_STYLE_LARGE = "-fx-font-family: 'Arial';-fx-font-size: 20px;-fx-font-weight: bold;-fx-fill: black ;";
-	final String FX_FONT_STYLE_NAVER_LOG_ON = "-fx-font-family: 'Arial';-fx-font-size: 20px;-fx-font-weight: bold;-fx-fill: green ;";
-	final String FX_FONT_STYLE_NAVER_LOG_OFF = "-fx-font-family: 'Arial';-fx-font-size: 20px;-fx-font-weight: bold;-fx-fill: red ;";
+	final String FX_FONT_STYLE_NAVER_LOG_ON = "-fx-font-family: 'Arial';-fx-font-size: 15px;-fx-font-weight: bold;-fx-fill: green ;";
+	final String FX_FONT_STYLE_NAVER_LOG_OFF = "-fx-font-family: 'Arial';-fx-font-size: 15px;-fx-font-weight: bold;-fx-fill: red ;";
 
 	List<StockVO> kospiUniqueStockList = new ArrayList<>();
 	List<StockVO> kosdaqUniqueStockList = new ArrayList<>();
@@ -304,7 +304,9 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 	TextField urlTf4 = new TextField();
 	TextField urlTf5 = new TextField();
 
-	HBox mainTopBox = new HBox();
+	HBox onAndOffHBox = new HBox();
+	HBox mainTopHBox = new HBox();
+	Text onAndOffTxt = null;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -333,7 +335,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		addMainTopBox();
 
 		VBox mainVBox = new VBox();
-		mainVBox.getChildren().addAll(mainTopBox);
+		mainVBox.getChildren().addAll(mainTopHBox);
 		mainVBox.getChildren().addAll(tabPane);
 
 //		VBox tabPaneVBox = new VBox(tabPane);
@@ -486,6 +488,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		// This causes the
 		// ComboBox to "observe" the list for changes
 		naverBlogCategoryListComboBox.setItems(items);
+		naverBlogCategoryListComboBox.setMinWidth(247);
 		items.addListener(new ListChangeListener<String>() {
 			@Override
 			public void onChanged(ListChangeListener.Change<? extends String> arg0) {
@@ -535,13 +538,17 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		});
 
 		shareResultTxt1 = new Text();
-
-		mainTopBox.getChildren().addAll(naverBlogShareBtn);
-		mainTopBox.getChildren().addAll(stockPriceShareBtn);
-		mainTopBox.getChildren().addAll(instantShareBtn);
-		mainTopBox.getChildren().addAll(naverBlogCategoryListComboBox);
-		mainTopBox.getChildren().addAll(shareResultTxt1);
-		mainTopBox.getChildren().addAll(getCiNaverImageView("/images/ci/ci_naver.png"));
+		onAndOffTxt = new Text(" OFF");
+		onAndOffTxt.setStyle(FX_FONT_STYLE_NAVER_LOG_OFF);
+		onAndOffHBox.getChildren().addAll(onAndOffTxt);
+		
+		mainTopHBox.getChildren().addAll(naverBlogCategoryListComboBox);
+		mainTopHBox.getChildren().addAll(naverBlogShareBtn);
+		mainTopHBox.getChildren().addAll(stockPriceShareBtn);
+		mainTopHBox.getChildren().addAll(instantShareBtn);
+		mainTopHBox.getChildren().addAll(getCiNaverImageView("/images/ci/ci_naver.png"));
+		mainTopHBox.getChildren().addAll(onAndOffHBox);
+		mainTopHBox.getChildren().addAll(shareResultTxt1);
 	}
 
 	public VBox getNaverLoginTab() {
@@ -1625,15 +1632,15 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			System.out.println("strNidAut:" + strNidAut);
 			System.out.println("strNidSes:" + strNidSes);
 			if (!strNidAut.equals("") && !strNidSes.equals("")) {
-				Text txt = new Text(" ON");
-				txt.setStyle(FX_FONT_STYLE_NAVER_LOG_ON);
-//				mainTopBox.getChildren().clear();
-				mainTopBox.getChildren().addAll(txt);
+				onAndOffTxt = new Text(" ON");
+				onAndOffTxt.setStyle(FX_FONT_STYLE_NAVER_LOG_ON);
+				onAndOffHBox.getChildren().clear();
+				onAndOffHBox.getChildren().addAll(onAndOffTxt);
 			} else {
-				Text txt = new Text(" OFF");
-				txt.setStyle(FX_FONT_STYLE_NAVER_LOG_OFF);
-//				mainTopBox.getChildren().clear();
-				mainTopBox.getChildren().addAll(txt);
+				onAndOffTxt = new Text(" OFF");
+				onAndOffTxt.setStyle(FX_FONT_STYLE_NAVER_LOG_OFF);
+				onAndOffHBox.getChildren().clear();
+				onAndOffHBox.getChildren().addAll(onAndOffTxt);
 			}
 		} catch (NoSuchFieldException ex) {
 			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -1663,6 +1670,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		final ImageView imgView = new ImageView();
 		Image image1 = new Image(this.getClass().getResourceAsStream(imagePath));
 		imgView.setImage(image1);
+		imgView.setFitHeight(20);
+		imgView.setFitWidth(image1.getWidth());
 		return imgView;
 	}
 
