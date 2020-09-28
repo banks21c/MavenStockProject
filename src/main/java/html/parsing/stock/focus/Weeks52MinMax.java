@@ -253,7 +253,7 @@ public class Weeks52MinMax {
             for (int i = 1; i <= 13; i++) {
                 Document doc;
                 doc = Jsoup
-                        .connect("http://finance.naver.com/item/frgn.nhn?code=" + stock.getStockCode() + "&page=" + i)
+                        .connect("https://finance.naver.com/item/frgn.nhn?code=" + stock.getStockCode() + "&page=" + i)
                         .get();
 
                 // System.out.println(i+" "+doc.html());

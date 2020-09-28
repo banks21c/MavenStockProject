@@ -229,7 +229,19 @@ public class StockVO {
 	String url = "";
 	String symbolExchangeTicker = "";
 	String instrumentName = "";
+	
+	String thisWeekLastTradeDayEndPrice;
+	String lastWeekLastTradeDayEndPrice;
+	
+	int iLastWeekLastTradeDayEndPrice;
+	int iThisWeekLastTradeDayEndPrice;
+	
+	String thisWeekLastTradeDay;
+	String lastWeekLastTradeDay;
 
+	int iLastWeekLastTradeDay;
+	int iThisWeekLastTradeDay;
+	
 	public String getDate() {
 		return date;
 	}
@@ -1604,6 +1616,70 @@ public class StockVO {
 
 	public void setdForeignOrganTradingAmount(double dForeignOrganTradingAmount) {
 		this.dForeignOrganTradingAmount = dForeignOrganTradingAmount;
+	}
+
+	public String getThisWeekLastTradeDayEndPrice() {
+		return thisWeekLastTradeDayEndPrice;
+	}
+
+	public void setThisWeekLastTradeDayEndPrice(String thisWeekLastTradeDayEndPrice) {
+		this.thisWeekLastTradeDayEndPrice = thisWeekLastTradeDayEndPrice;
+	}
+
+	public String getLastWeekLastTradeDayEndPrice() {
+		return lastWeekLastTradeDayEndPrice;
+	}
+
+	public void setLastWeekLastTradeDayEndPrice(String lastWeekLastTradeDayEndPrice) {
+		this.lastWeekLastTradeDayEndPrice = lastWeekLastTradeDayEndPrice;
+	}
+
+	public int getiLastWeekLastTradeDayEndPrice() {
+		return iLastWeekLastTradeDayEndPrice;
+	}
+
+	public void setiLastWeekLastTradeDayEndPrice(int iLastWeekLastTradeDayEndPrice) {
+		this.iLastWeekLastTradeDayEndPrice = iLastWeekLastTradeDayEndPrice;
+	}
+
+	public int getiThisWeekLastTradeDayEndPrice() {
+		return iThisWeekLastTradeDayEndPrice;
+	}
+
+	public void setiThisWeekLastTradeDayEndPrice(int iThisWeekLastTradeDayEndPrice) {
+		this.iThisWeekLastTradeDayEndPrice = iThisWeekLastTradeDayEndPrice;
+	}
+
+	public String getThisWeekLastTradeDay() {
+		return thisWeekLastTradeDay;
+	}
+
+	public void setThisWeekLastTradeDay(String thisWeekLastTradeDay) {
+		this.thisWeekLastTradeDay = thisWeekLastTradeDay;
+	}
+
+	public String getLastWeekLastTradeDay() {
+		return lastWeekLastTradeDay;
+	}
+
+	public void setLastWeekLastTradeDay(String lastWeekLastTradeDay) {
+		this.lastWeekLastTradeDay = lastWeekLastTradeDay;
+	}
+
+	public int getiLastWeekLastTradeDay() {
+		return iLastWeekLastTradeDay;
+	}
+
+	public void setiLastWeekLastTradeDay(int iLastWeekLastTradeDay) {
+		this.iLastWeekLastTradeDay = iLastWeekLastTradeDay;
+	}
+
+	public int getiThisWeekLastTradeDay() {
+		return iThisWeekLastTradeDay;
+	}
+
+	public void setiThisWeekLastTradeDay(int iThisWeekLastTradeDay) {
+		this.iThisWeekLastTradeDay = iThisWeekLastTradeDay;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -116,6 +116,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 	final static String displayBoardUrl = "https://finance.daum.net/domestic/all_quotes";
 	final static String afterHoursUrl = "https://finance.daum.net/domestic/after_hours?market=KOSPI";
 	final static String naverLoginUrl = "https://nid.naver.com/nidlogin.login?mode=form&svctype=40960&id=banks&url=https://blog.naver.com/banks";
+	final static String naverLoginUrl2 = "https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com";
 	final static String naverUrl = "https://www.naver.com";
 	final static String coupangUrl = "https://www.coupang.com";
 
@@ -388,7 +389,11 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 					break;
 				}
 
+				mainTopHBox.getChildren().remove(shareResultTxt1);
+				shareResultTxt1 = new Text();
 				shareResultTxt1.setText("...");
+				mainTopHBox.getChildren().addAll(shareResultTxt1);
+				
 				// 네이버 블로그 공유
 				System.out.println("네이버 블로그 글쓰기");
 				getNaverCookies();
@@ -917,7 +922,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 //		reloadLbl.setAlignment(Pos.TOP_LEFT);
 //		reloadLbl.setFont(new Font(FONT_FAMILY, MAX_FONT_SIZE)); // set to Label
 
-		String naverUrl = "https://www.naver.com";
+		String naverUrl = naverLoginUrl2;
 		urlTf4 = new TextField();
 		urlTf4.setPrefWidth(800);
 		urlTf4.setPrefHeight(25);
@@ -2189,10 +2194,10 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		} catch (UnsupportedEncodingException ex) {
 			java.util.logging.Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
 		}
-		SEARCH_URL = SEARCH_URL + "?keyword=" + encodedKeyword + "&limit=" + limit;
+		String strSearchUrl = SEARCH_URL + "?keyword=" + encodedKeyword + "&limit=" + limit;
 //		server_url = server_url + "?keyword=food&limit=" + limit;
-		System.out.println("server_url:" + SEARCH_URL);
-		String data = getData("상품검색", SEARCH_URL, "", strParamJson);
+		System.out.println("server_url:" + strSearchUrl);
+		String data = getData("상품검색", strSearchUrl, "", strParamJson);
 		sb.append(data);
 		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
 

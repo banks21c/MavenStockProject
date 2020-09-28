@@ -306,10 +306,10 @@ public class AllStockForeignOrganBothDailyV2 {
 			String strStockCode = svo.getStockCode();
 			// =========================================================
 			// 투자자별 매매동향 - 외국인 보유주수, 보유율
-			// http://finance.naver.com/item/frgn.nhn?code=102460&page=1
-			// http://finance.naver.com/item/frgn.nhn?code=102460&page=2
-			System.out.println("http://finance.naver.com/item/frgn.nhn?code=" + strStockCode);
-			Document doc = Jsoup.connect("http://finance.naver.com/item/frgn.nhn?code=" + strStockCode).get();
+			// https://finance.naver.com/item/frgn.nhn?code=102460&page=1
+			// https://finance.naver.com/item/frgn.nhn?code=102460&page=2
+			System.out.println("https://finance.naver.com/item/frgn.nhn?code=" + strStockCode);
+			Document doc = Jsoup.connect("https://finance.naver.com/item/frgn.nhn?code=" + strStockCode).get();
 
 			String foreignTradingVolume = "";
 			String organTradingVolume = "";
@@ -565,8 +565,8 @@ public class AllStockForeignOrganBothDailyV2 {
 				} else {
 					curPrice1FontColor = "color:black";
 				}
-				sb1.append("<td style='text-align:right;" + curPrice1FontColor + "'><font color='red'>" + strCurPrice
-						+ "</font></td>\r\n");
+				sb1.append("<td style='text-align:right;" + curPrice1FontColor + "'>" + strCurPrice
+						+ "</td>\r\n");
 
 				long lForeignTradingAmount1 = svo1.getlForeignTradingAmount();
 				String amount1FontColor = "color:metal";
@@ -684,8 +684,8 @@ public class AllStockForeignOrganBothDailyV2 {
 				} else {
 					curPrice1FontColor = "color:black";
 				}
-				sb1.append("<td style='text-align:right;" + curPrice1FontColor + "'><font color='red'>" + strCurPrice
-						+ "</font></td>\r\n");
+				sb1.append("<td style='text-align:right;" + curPrice1FontColor + "'>" + strCurPrice
+						+ "</td>\r\n");
 
 				long lForeignTradingAmount1 = svo1.getlForeignTradingAmount();
 				String amount1FontColor = "color:metal";

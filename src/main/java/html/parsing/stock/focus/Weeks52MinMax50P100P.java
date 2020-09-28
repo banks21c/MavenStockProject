@@ -255,7 +255,7 @@ public class Weeks52MinMax50P100P {
                 Document doc;
                 doc = Jsoup
                         .connect(
-                                "http://finance.naver.com/item/frgn.nhn?code=" + analysis.getStockCode() + "&page=" + i)
+                                "https://finance.naver.com/item/frgn.nhn?code=" + analysis.getStockCode() + "&page=" + i)
                         .get();
 
                 // System.out.println(i+" "+doc.html());

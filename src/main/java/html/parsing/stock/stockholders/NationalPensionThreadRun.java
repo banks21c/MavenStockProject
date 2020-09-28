@@ -1,8 +1,5 @@
 package html.parsing.stock.stockholders;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -24,9 +21,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.util.DataSort.ChosenDayVsCurPriceUpDownRatioDescCompare;
 import html.parsing.stock.model.MajorStockHolderVO;
+import html.parsing.stock.model.StockVO;
+import html.parsing.stock.util.DataSort.ChosenDayVsCurPriceUpDownRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.StockUtil;
 
 public class NationalPensionThreadRun {
 

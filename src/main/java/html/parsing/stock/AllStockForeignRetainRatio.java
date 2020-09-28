@@ -226,7 +226,7 @@ public class AllStockForeignRetainRatio {
 				}
 			}
 			// 투자자별 매매동향 - 외국인 보유주수, 보유율
-			doc = Jsoup.connect("http://finance.naver.com/item/frgn.nhn?code=" + code).get();
+			doc = Jsoup.connect("https://finance.naver.com/item/frgn.nhn?code=" + code).get();
 			// System.out.println(doc.html());
 
 			String foreignHaveVolume = doc.select("table.type2").get(1).select("tr").get(3).select("td").get(7).text();

@@ -222,8 +222,8 @@ public class AllStockForeignOrganSellCount {
 
 			// ============================================================================
 			// 투자자별 매매동향 - 외국인 보유주수, 보유율
-			// http://finance.naver.com/item/frgn.nhn?code=102460&page=1
-			// http://finance.naver.com/item/frgn.nhn?code=102460&page=2
+			// https://finance.naver.com/item/frgn.nhn?code=102460&page=1
+			// https://finance.naver.com/item/frgn.nhn?code=102460&page=2
 			int organCount = 0;
 			int foreignCount = 0;
 
@@ -233,7 +233,7 @@ public class AllStockForeignOrganSellCount {
 			double dForeignVolumeSum = 0;
 			double dForeignAmountSum = 0;
 			for (int i = 1; i <= 3; i++) {
-				doc = Jsoup.connect("http://finance.naver.com/item/frgn.nhn?code=" + code + "&page=" + i).get();
+				doc = Jsoup.connect("https://finance.naver.com/item/frgn.nhn?code=" + code + "&page=" + i).get();
 				// System.out.println(doc.html());
 				Elements type2Elements = doc.select(".type2");
 				Element type2Element = type2Elements.get(1);

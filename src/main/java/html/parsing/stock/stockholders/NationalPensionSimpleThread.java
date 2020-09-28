@@ -32,7 +32,7 @@ class NationalPensionSimpleThread extends Thread {
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
-	
+
 	String strYmd = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREAN).format(new Date());
 
 	String strMarketType = "kospi";
@@ -63,24 +63,11 @@ class NationalPensionSimpleThread extends Thread {
 	}
 
 	public void run() {
-		// 프로그램 실행 시작 시간
-		long start = System.currentTimeMillis();
-
 		try {
 			readAndWriteMajorStockHolders();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// 프로그램 실행 종료 시간
-		long end = System.currentTimeMillis();
-		long timeElapsed = end - start;
-		logger.debug("실행시간 : " + (end - start) / 1000 + "초");
-
-		int second = (int) timeElapsed / 1000 % 60;
-		int minute = (int) timeElapsed / (1000 * 60) % 60;
-		int hour = (int) timeElapsed / (1000 * 60 * 60);
-
-		logger.debug("실행시간 : " + hour + " 시간 " + minute + " 분 " + second + " 초");
 	}
 
 	public void readAndWriteMajorStockHoldersTest() throws Exception {
@@ -131,6 +118,10 @@ class NationalPensionSimpleThread extends Thread {
 		for (StockVO svo : stockList) {
 			String stockCode = svo.getStockCode();
 			String stockName = svo.getStockName();
+			// 우선주 제외
+			if (stockName.endsWith("우") || stockName.endsWith("B")) {
+				continue;
+			}
 
 			if (cnt == 0) {
 				getYMD(stockCode);
@@ -219,40 +210,43 @@ class NationalPensionSimpleThread extends Thread {
 			if (no_exday.size() > 0) {
 				new_totalinfo = no_exday.get(0);
 //					logger.debug("new_totalinfo:" + new_totalinfo);
-				Document new_totalinfo_doc = Jsoup.parse(new_totalinfo.html());
+				String new_totalinfo_html = new_totalinfo.html();
+				new_totalinfo_html = new_totalinfo_html.replaceAll("플러스", "+");
+				new_totalinfo_html = new_totalinfo_html.replaceAll("마이너스", "-");
+				new_totalinfo_html = new_totalinfo_html.replaceAll("상승", "▲");
+				new_totalinfo_html = new_totalinfo_html.replaceAll("하락", "▼");
+				new_totalinfo_html = new_totalinfo_html.replaceAll("상한가", "↑");
+				new_totalinfo_html = new_totalinfo_html.replaceAll("하한가", "↓");
+				new_totalinfo_html = new_totalinfo_html.replaceAll("퍼센트", "%");
+				
+				Document new_totalinfo_doc = Jsoup.parse(new_totalinfo_html);
+				new_totalinfo_doc.select(".blind").remove();
 				logger.debug("new_totalinfo_doc:" + new_totalinfo_doc);
-				Elements no_up0 = new_totalinfo_doc.select(".no_up");
-				logger.debug("no_up0:" + no_up0);
-				if (no_up0.size() > 0) {
-					Element no_up_idx0 = no_up0.get(0);
-					logger.debug("no_up_idx0:" + no_up_idx0);
-					Element span0 = no_up0.select("span").get(0);
-					Element span1 = no_up0.select("span").get(1);
-					logger.debug("span0 :" + span0);
-					logger.debug("span1 :" + span1);
+				Elements emEls = new_totalinfo_doc.select("em");
+				logger.debug("emEls:" + emEls);
+				String specialLetter = "";
+				String sign = "";
+				
+				if (emEls.size() > 0) {
+					Element emEl0 = emEls.get(0);
+					specialLetter = emEl0.select("span").get(0).text();
+					emEl0.select("span").get(0).remove();
+					
+					Element emEl1 = emEls.get(1);
+					sign = emEl1.select("span").get(0).text();
+					emEl1.select("span").get(0).remove();
 
-					Element no_up_idx1 = no_up0.get(1);
-					logger.debug("no_up_idx1:" + no_up_idx1);
-
-					String text = span0.text();
-					logger.debug("text:" + text);
-
-					// logger.debug("data:" + text);
-					text = text.replaceAll("플러스", "+");
-					text = text.replaceAll("마이너스", "-");
-					text = text.replaceAll("상승", "▲");
-					text = text.replaceAll("하락", "▼");
-					text = text.replaceAll("퍼센트", "%");
-
-//					stock.setVaryRatio(strYMD);
-//					stock.setSpecialLetter(text);
+					svo.setVaryPrice(emEl0.text());
+					svo.setVaryRatio(emEl1.text());
+					svo.setSpecialLetter(specialLetter);
+					svo.setSign(sign);
 				}
 
 			}
 
 			// 종목분석-기업현황
 			doc = Jsoup.connect("http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + strStockCode)
-				.get();
+					.get();
 			if (cnt == 1) {
 				// logger.debug("title:" + doc.title());
 				// logger.debug(doc.html());
@@ -419,23 +413,23 @@ class NationalPensionSimpleThread extends Thread {
 			lRetainAmount2 += svo.getlRetainAmount();
 		}
 
-		sb1.append("현재 총금액(원)1 = " + StockUtil.moneyUnitSplit(moneyUnit, lRetainAmount) + "<br/>\r\n");
-		sb1.append("현재 총금액(원)2 = " + StockUtil.moneyUnitSplit(moneyUnit, lRetainAmount2) + "<br/>\r\n");
+		sb1.append("현재 총금액(원) = " + StockUtil.moneyUnitSplit(moneyUnit, lRetainAmount) + "<br/>\r\n");
+//		sb1.append("현재 총금액(원)2 = " + StockUtil.moneyUnitSplit(moneyUnit, lRetainAmount2) + "<br/>\r\n");
 
 		sb1.append("<table>\r\n");
 		sb1.append("<tr>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
 		sb1.append(
-			"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가(원)</td>\r\n");
+				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가(원)</td>\r\n");
 		if (!inputWordIsSameAsMajorStockHolders) {
 			sb1.append(
-				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>주요주주</td>\r\n");
+					"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>주요주주</td>\r\n");
 		}
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유주식수</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유율</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재총금액("
-			+ moneyUnit + ")</td>\r\n");
+				+ moneyUnit + ")</td>\r\n");
 		sb1.append("</tr>\r\n");
 
 		int cnt = 1;
@@ -443,15 +437,27 @@ class NationalPensionSimpleThread extends Thread {
 		for (StockVO svo : list) {
 			String itemMainUrl = "http://finance.naver.com/item/main.nhn?code=" + svo.getStockCode();
 			logger.debug("itemMainUrl2:" + itemMainUrl);
-			Vector vt = svo.getMajorStockHolderList();
+			Vector<MajorStockHolderVO> vt = svo.getMajorStockHolderList();
 			int listSize = vt.size();
 			if (svo != null) {
 				for (int i = 0; i < listSize; i++) {
 					sb1.append("<tr>\r\n");
 					if (i == 0) {
 						sb1.append("<td rowspan=" + listSize + ">" + cnt++ + "</td>\r\n");
-						sb1.append("<td rowspan=" + listSize + "><a href='" + itemMainUrl + "' target='new'>" + svo.getStockName() + "</a></td>\r\n");
-						sb1.append("<td rowspan=" + listSize + " style='text-align:right'>" + svo.getCurPrice() + "</td>\r\n");
+						sb1.append("<td rowspan=" + listSize + "><a href='" + itemMainUrl + "' target='new'>"
+								+ svo.getStockName() + "</a></td>\r\n");
+						String sign = svo.getSign();
+						System.out.println("specialLetter :"+sign);
+						String fontColorStyle = "";
+						if (sign.equals("+")) {
+							fontColorStyle = "color:red;";
+						} else if (sign.equals("-")) {
+							fontColorStyle = "color:blue;";
+						} else {
+							fontColorStyle = "color:black;";
+						}
+						sb1.append("<td rowspan=" + listSize + " style='text-align:right;" + fontColorStyle + "'>"
+								+ svo.getCurPrice() + "</td>\r\n");
 					}
 
 					MajorStockHolderVO holderVO = (MajorStockHolderVO) vt.get(i);
@@ -464,7 +470,7 @@ class NationalPensionSimpleThread extends Thread {
 //					sb1.append("<td style='text-align:right'>" + holderVO.getChosenDayRetainAmount() + "</td>\r\n");
 //					sb1.append("<td style='text-align:right'>" + holderVO.getChosenDayVsCurDayGapAmount() + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>"
-						+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlRetainAmount()) + "</td>\r\n");
+							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlRetainAmount()) + "</td>\r\n");
 					sb1.append("</tr>\r\n");
 				}
 			}

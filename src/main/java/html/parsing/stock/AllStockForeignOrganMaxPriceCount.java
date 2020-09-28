@@ -214,7 +214,7 @@ public class AllStockForeignOrganMaxPriceCount extends Thread {
 			String strFirstDate = "";
 			int maxPriceCount = 0;
 			for (int i = 1; i <= 7; i++) {
-				doc = Jsoup.connect("http://finance.naver.com/item/frgn.nhn?code=" + code + "&page=" + i).get();
+				doc = Jsoup.connect("https://finance.naver.com/item/frgn.nhn?code=" + code + "&page=" + i).get();
 				System.out.println("i:" + i + " maxPriceCount:" + maxPriceCount);
 				// System.out.println(i+" "+doc.html());
 				Elements type2Elements = doc.select(".type2");

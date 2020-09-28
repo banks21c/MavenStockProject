@@ -23,6 +23,7 @@ public enum NewsPublisher {
 	NewsChosunCom("news.chosun.com"),
 	HealthChosunCom("health.chosun.com"),
 	MonthlyChosunCom("monthly.chosun.com"),
+	WeeklyChosunCom("weekly.chosun.com"),
 	WwwHankookilboCom("www.hankookilbo.com"),
 	StarHankookilboCom("star.hankookilbo.com"),
 	WwwHuffingtonpostKr("www.huffingtonpost.kr"),

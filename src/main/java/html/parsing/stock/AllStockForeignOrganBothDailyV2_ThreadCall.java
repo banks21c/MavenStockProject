@@ -36,16 +36,25 @@ public class AllStockForeignOrganBothDailyV2_ThreadCall {
 	int iFirstDayOfWeek;
 	int iLastDayOfWeek;
 
-	List<StockVO> kospiForeignDescList = new ArrayList();
-	List<StockVO> kospiForeignAscList = new ArrayList();
-	List<StockVO> kospiOrganDescList = new ArrayList();
-	List<StockVO> kospiOrganAscList = new ArrayList();
+	List<StockVO> kospiForeignDescList = new ArrayList<StockVO>();
+	List<StockVO> kospiForeignAscList = new ArrayList<StockVO>();
+	List<StockVO> kospiOrganDescList = new ArrayList<StockVO>();
+	List<StockVO> kospiOrganAscList = new ArrayList<StockVO>();
 
-	List<StockVO> kosdaqForeignDescList = new ArrayList();
-	List<StockVO> kosdaqForeignAscList = new ArrayList();
-	List<StockVO> kosdaqOrganDescList = new ArrayList();
-	List<StockVO> kosdaqOrganAscList = new ArrayList();
+	List<StockVO> kosdaqForeignDescList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqForeignAscList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqOrganDescList = new ArrayList<StockVO>();
+	List<StockVO> kosdaqOrganAscList = new ArrayList<StockVO>();
 
+	// 코스피 일간(Daily) 외인,기관 양매수 거래대금
+	List<StockVO> kospiAllStockBuyList = new ArrayList<StockVO>();
+	// 코스피 일간(Daily) 외인,기관 양매도 거래대금
+	List<StockVO> kospiAllStockSellList = new ArrayList<StockVO>();
+	// 코스닥 일간(Daily) 외인,기관 양매수 거래대금
+	List<StockVO> kosdaqAllStockBuyList = new ArrayList<StockVO>();
+	// 코스닥 일간(Daily) 외인,기관 양매도 거래대금
+	List<StockVO> kosdaqAllStockSellList = new ArrayList<StockVO>();
+	
 	/**
 	 * @param args
 	 */
@@ -89,7 +98,7 @@ public class AllStockForeignOrganBothDailyV2_ThreadCall {
 		StringBuilder dialogMsg = new StringBuilder();
 		dialogMsg.append("날짜를 년월일로 8자리 입력하여 주세요. 양식)YYYYMMDD ex)20200815");
 		dialogMsg.append("\n입력하지 않을 경우 오늘 날짜 기준으로 데이터를 추출합니다.");
-		dialogMsg.append("\n주의 시작 요일은 일요읿니다.일요일~토요일");
+		dialogMsg.append("\n주의 시작 요일은 일요일입니다.일요일~토요일");
 		String ymd = JOptionPane.showInputDialog(dialogMsg.toString());
 		System.out.println("ymd:" + ymd);
 		if (!ymd.equals("")) {
@@ -140,15 +149,6 @@ public class AllStockForeignOrganBothDailyV2_ThreadCall {
 		long start = 0;
 		long end = 0;
 
-		// 코스피 주간(Daily) 외인,기관 양매수 거래대금
-		List<StockVO> kospiAllStockBuyList = null;
-		// 코스피 주간(Daily) 외인,기관 양매도 거래대금
-		List<StockVO> kospiAllStockSellList = null;
-		// 코스닥 주간(Daily) 외인,기관 양매수 거래대금
-		List<StockVO> kosdaqAllStockBuyList = null;
-		// 코스닥 주간(Daily) 외인,기관 양매도 거래대금
-		List<StockVO> kosdaqAllStockSellList = null;
-
 		AllStockForeignOrganBothDailyV2_Thread() {
 			// test();
 			real();
@@ -189,35 +189,36 @@ public class AllStockForeignOrganBothDailyV2_ThreadCall {
 			logger.debug("실행시간 : " + (start) / 1000 + "초");
 
 			// 모든 주식 정보를 조회한다.
-			// 코스피
-			List<StockVO> kospiAllStockList = StockUtil.readStockCodeNameList("kospi");
-			kospiAllStockList = getAllStockInfo(kospiAllStockList);
-			System.out.println("kospiAllStockList.size :" + kospiAllStockList.size());
+			List<StockVO> stockList = StockUtil.readStockCodeNameList(marketType);
+			stockList = getAllStockInfo(stockList);
+			System.out.println("stockList.size :" + stockList.size());
 
-			kospiAllStockList = getAllStockTrade(kospiAllStockList);
-			// 코스피 일간(Daily) 외인,기관 양매수 거래대금
-			kospiAllStockBuyList = getAllStockList(kospiAllStockList, "buy");
-			// 코스피 일간(Daily) 외인,기관 양매도 거래대금
-			kospiAllStockSellList = getAllStockList(kospiAllStockList, "sell");
-
-			// 코스피 외인,기관 양매수,양매도 거래대금순 정렬
-			Collections.sort(kospiAllStockBuyList, new ForeignOrganTradingAmountDescCompare());
-			Collections.sort(kospiAllStockSellList, new ForeignOrganTradingAmountAscCompare());
-
-			// 코스닥
-			List<StockVO> kosdaqAllStockList = StockUtil.readStockCodeNameList("kosdaq");
-			kosdaqAllStockList = getAllStockInfo(kosdaqAllStockList);
-			System.out.println("kosdaqAllStockList.size :" + kosdaqAllStockList.size());
-
-			kosdaqAllStockList = getAllStockTrade(kosdaqAllStockList);
-			// 코스닥 일간(Daily) 외인,기관 양매수 거래대금
-			kosdaqAllStockBuyList = getAllStockList(kosdaqAllStockList, "buy");
-			// 코스닥 일간(Daily) 외인,기관 양매도 거래대금
-			kosdaqAllStockSellList = getAllStockList(kosdaqAllStockList, "sell");
-
-			// 코스닥 외인,기관 양매수,양매도 거래대금순 정렬
-			Collections.sort(kosdaqAllStockBuyList, new ForeignOrganTradingAmountDescCompare());
-			Collections.sort(kosdaqAllStockSellList, new ForeignOrganTradingAmountAscCompare());
+			stockList = getAllStockTrade(stockList);
+			if (marketType.equals("코스피")) {
+				// 코스피 일간(Daily) 외인,기관 양매수 거래대금
+				kospiAllStockBuyList = getAllStockList(stockList, "buy");
+				// 코스피 일간(Daily) 외인,기관 양매도 거래대금
+				kospiAllStockSellList = getAllStockList(stockList, "sell");
+				System.out.println("1.kospiAllStockBuyList.size :" + kospiAllStockBuyList.size());
+				System.out.println("1.kospiAllStockSellList.size :" + kospiAllStockSellList.size());
+				System.out.println("1.kosdaqAllStockBuyList.size :" + kosdaqAllStockBuyList.size());
+				System.out.println("1.kosdaqAllStockSellList.size :" + kosdaqAllStockSellList.size());
+				// 코스피 외인,기관 양매수,양매도 거래대금순 정렬
+				Collections.sort(kospiAllStockBuyList, new ForeignOrganTradingAmountDescCompare());
+				Collections.sort(kospiAllStockSellList, new ForeignOrganTradingAmountAscCompare());
+			} else {
+				// 코스닥 일간(Daily) 외인,기관 양매수 거래대금
+				kosdaqAllStockBuyList = getAllStockList(stockList, "buy");
+				// 코스닥 일간(Daily) 외인,기관 양매도 거래대금
+				kosdaqAllStockSellList = getAllStockList(stockList, "sell");
+				System.out.println("2.kospiAllStockBuyList.size :" + kospiAllStockBuyList.size());
+				System.out.println("2.kospiAllStockSellList.size :" + kospiAllStockSellList.size());
+				System.out.println("2.kosdaqAllStockBuyList.size :" + kosdaqAllStockBuyList.size());
+				System.out.println("2.kosdaqAllStockSellList.size :" + kosdaqAllStockSellList.size());
+				// 코스닥 외인,기관 양매수,양매도 거래대금순 정렬
+				Collections.sort(kosdaqAllStockBuyList, new ForeignOrganTradingAmountDescCompare());
+				Collections.sort(kosdaqAllStockSellList, new ForeignOrganTradingAmountAscCompare());
+			}
 
 			System.out.println("getThread1State :" + getThread1State());
 			System.out.println("getThread2State :" + getThread2State());
@@ -436,10 +437,10 @@ public class AllStockForeignOrganBothDailyV2_ThreadCall {
 				String strStockCode = svo.getStockCode();
 				// =========================================================
 				// 투자자별 매매동향 - 외인 보유주수, 보유율
-				// http://finance.naver.com/item/frgn.nhn?code=102460&page=1
-				// http://finance.naver.com/item/frgn.nhn?code=102460&page=2
-				System.out.println("http://finance.naver.com/item/frgn.nhn?code=" + strStockCode);
-				Document doc = Jsoup.connect("http://finance.naver.com/item/frgn.nhn?code=" + strStockCode).get();
+				// https://finance.naver.com/item/frgn.nhn?code=102460&page=1
+				// https://finance.naver.com/item/frgn.nhn?code=102460&page=2
+				System.out.println("https://finance.naver.com/item/frgn.nhn?code=" + strStockCode);
+				Document doc = Jsoup.connect("https://finance.naver.com/item/frgn.nhn?code=" + strStockCode).get();
 
 				String foreignTradingVolume = "";
 				String organTradingVolume = "";
@@ -686,8 +687,8 @@ public class AllStockForeignOrganBothDailyV2_ThreadCall {
 					}
 				}
 
-				logger.debug("kospiAllStockBuyListSize1 :" + kospiAllStockBuyList.size());
-				logger.debug("kospiAllStockSellListSize1 :" + kospiAllStockSellList.size());
+				System.out.println("kospiAllStockBuyListSize1 :" + kospiAllStockBuyListSize);
+				System.out.println("kospiAllStockSellListSize1 :" + kospiAllStockSellListSize);
 
 				for (int i = 0; i < kospiAllStockBuyList.size(); i++) {
 					// 코스피 일간(Daily) 외인,기관 양매수 거래대금
@@ -713,8 +714,8 @@ public class AllStockForeignOrganBothDailyV2_ThreadCall {
 					} else {
 						curPrice1FontColor = "color:black";
 					}
-					sb1.append("<td style='text-align:right;" + curPrice1FontColor + "'><font color='red'>"
-							+ strCurPrice + "</font></td>\r\n");
+					sb1.append("<td style='text-align:right;" + curPrice1FontColor + "'>"
+							+ strCurPrice + "</td>\r\n");
 
 					long lForeignTradingAmount1 = svo1.getlForeignTradingAmount();
 					String amount1FontColor = "color:metal";
@@ -818,8 +819,8 @@ public class AllStockForeignOrganBothDailyV2_ThreadCall {
 						kosdaqAllStockBuyList.add(new StockVO());
 					}
 				}
-				logger.debug("kosdaqAllStockBuyListSize1 :" + kosdaqAllStockBuyList.size());
-				logger.debug("kosdaqAllStockSellListSize1 :" + kosdaqAllStockSellList.size());
+				System.out.println("kosdaqAllStockBuyListSize1 :" + kosdaqAllStockBuyListSize);
+				System.out.println("kosdaqAllStockSellListSize1 :" + kosdaqAllStockSellListSize);
 
 				for (int i = 0; i < kosdaqAllStockBuyList.size(); i++) {
 					// 코스닥 일간(Daily) 외인,기관 양매수 거래대금
@@ -845,8 +846,8 @@ public class AllStockForeignOrganBothDailyV2_ThreadCall {
 					} else {
 						curPrice1FontColor = "color:black";
 					}
-					sb1.append("<td style='text-align:right;" + curPrice1FontColor + "'><font color='red'>"
-							+ strCurPrice + "</font></td>\r\n");
+					sb1.append("<td style='text-align:right;" + curPrice1FontColor + "'>"
+							+ strCurPrice + "</td>\r\n");
 
 					long lForeignTradingAmount1 = svo1.getlForeignTradingAmount();
 					String amount1FontColor = "color:metal";

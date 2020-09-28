@@ -272,9 +272,9 @@ public class AllStockForeignOrganWeeklySimple {
 			String strStockCode = svo.getStockCode();
 			// =========================================================
 			// 투자자별 매매동향 - 외국인 보유주수, 보유율
-			// http://finance.naver.com/item/frgn.nhn?code=102460&page=1
-			// http://finance.naver.com/item/frgn.nhn?code=102460&page=2
-			Document doc = Jsoup.connect("http://finance.naver.com/item/frgn.nhn?code=" + strStockCode).get();
+			// https://finance.naver.com/item/frgn.nhn?code=102460&page=1
+			// https://finance.naver.com/item/frgn.nhn?code=102460&page=2
+			Document doc = Jsoup.connect("https://finance.naver.com/item/frgn.nhn?code=" + strStockCode).get();
 
 			String foreignTradingVolume = "";
 			String organTradingVolume = "";

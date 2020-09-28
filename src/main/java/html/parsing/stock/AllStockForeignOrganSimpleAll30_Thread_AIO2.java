@@ -30,8 +30,9 @@ import html.parsing.stock.util.DataSort.OrganTradingAmountAscCompare;
 import html.parsing.stock.util.DataSort.OrganTradingAmountDescCompare;
 import html.parsing.stock.util.StockUtil;
 
-public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
+public class AllStockForeignOrganSimpleAll30_Thread_AIO2 {
 
+	private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrganSimpleAll30_Thread_AIO2.class);
 	AllStockForeignOrganDailySimpleAll_AIO_Thread thread1 = null;
 	AllStockForeignOrganDailySimpleAll_AIO_Thread thread2 = null;
 
@@ -52,17 +53,38 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new AllStockForeignOrganDailySimpleAll30_Thread_AIO2();
+		int extractDayCount;
+		if (args.length != 0 && args[0].equals("1")) {
+			extractDayCount = 1;
+		} else if (args.length != 0 && args[0].equals("5")) {
+			extractDayCount = 5;
+		} else {
+			System.out.println("사용법: java AllStockForeignOrganSimpleAll30_Thread_AIO2 1 or 5");
+			System.out.println("일간일 경우에는 파라미터로 1을, 주간일 경우에는 파라미터로 5를 입력해 주세요.");
+			return;
+		}
+		logger.debug("extractDayCount :"+extractDayCount);
+		new AllStockForeignOrganSimpleAll30_Thread_AIO2(extractDayCount);
 	}
 
-	AllStockForeignOrganDailySimpleAll30_Thread_AIO2() {
-		// 주간 거래일을 알아낸다.
-		getFirstLastDayOfWeek();
+	AllStockForeignOrganSimpleAll30_Thread_AIO2(int extractDayCount) {
+		if (extractDayCount == 5) {
+			// 주간 거래일을 알아낸다.
+			getFirstLastDayOfWeek();
+		} else {
+			getFirstLastDayOfWeek2();
+//			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+//			String strLastDayOfWeek = simpleDateFormat.format(new Date());
+//			iFirstDayOfWeek = Integer.parseInt(strLastDayOfWeek);
+//			iLastDayOfWeek = Integer.parseInt(strLastDayOfWeek);
+		}
 
-		thread1 = new AllStockForeignOrganDailySimpleAll_AIO_Thread("코스피", iFirstDayOfWeek, iLastDayOfWeek);
+		thread1 = new AllStockForeignOrganDailySimpleAll_AIO_Thread("코스피", iFirstDayOfWeek, iLastDayOfWeek,
+				extractDayCount);
 		thread1.start();
 
-		thread2 = new AllStockForeignOrganDailySimpleAll_AIO_Thread("코스닥", iFirstDayOfWeek, iLastDayOfWeek);
+		thread2 = new AllStockForeignOrganDailySimpleAll_AIO_Thread("코스닥", iFirstDayOfWeek, iLastDayOfWeek,
+				extractDayCount);
 		thread2.start();
 
 		System.out.println("getThread1State :" + getThread1State());
@@ -116,6 +138,29 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 		System.out.println("마지막 요일(토요일) 날짜 : " + simpleDateFormat.format(cal.getTime()));
 	}
 
+	public void getFirstLastDayOfWeek2() {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+		Date date = new Date();
+		Calendar cal = Calendar.getInstance(Locale.KOREA);
+		cal.setTime(date);
+
+		System.out.println("cal.get(Calendar.DAY_OF_WEEK):" + cal.get(Calendar.DAY_OF_WEEK));
+		// 오늘이 일요일이면...전전날 금요일로 세팅
+		if (cal.get(Calendar.DAY_OF_WEEK) == 1) {
+			cal.add(Calendar.DATE, -2);
+		} else if (cal.get(Calendar.DAY_OF_WEEK) == 6) {
+			cal.add(Calendar.DATE, -1);
+		}
+
+		String strToday = simpleDateFormat.format(cal.getTime());
+		int iToday = Integer.parseInt(strToday);
+
+		iFirstDayOfWeek = iToday;
+		iLastDayOfWeek = iToday;
+
+		System.out.println("오늘 또는 주말일 경우는 금요일 날짜 : " + simpleDateFormat.format(cal.getTime()));
+	}
+
 	class AllStockForeignOrganDailySimpleAll_AIO_Thread extends Thread {
 
 		final String USER_HOME = System.getProperty("user.home");
@@ -136,8 +181,8 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 
 		int iFirstDayOfWeek;
 		int iLastDayOfWeek;
-		String strDailyOrWeekly = "일간(Daily) ";
-		int extractDayCount = 1;
+		String strDailyOrWeekly;
+		int extractDayCount;
 		String marketType = "";
 		long start = 0;
 		long end = 0;
@@ -148,6 +193,19 @@ public class AllStockForeignOrganDailySimpleAll30_Thread_AIO2 {
 		}
 
 		AllStockForeignOrganDailySimpleAll_AIO_Thread(String marketType, int iFirstDayOfWeek, int iLastDayOfWeek) {
+			this.marketType = marketType;
+			this.iFirstDayOfWeek = iFirstDayOfWeek;
+			this.iLastDayOfWeek = iLastDayOfWeek;
+		}
+
+		AllStockForeignOrganDailySimpleAll_AIO_Thread(String marketType, int iFirstDayOfWeek, int iLastDayOfWeek,
+				int extractDayCount) {
+			this.extractDayCount = extractDayCount;
+			if(extractDayCount == 1) {
+				strDailyOrWeekly = "일간(Daily)";
+			}else {
+				strDailyOrWeekly = "주간(Weekly)";
+			}
 			this.marketType = marketType;
 			this.iFirstDayOfWeek = iFirstDayOfWeek;
 			this.iLastDayOfWeek = iLastDayOfWeek;

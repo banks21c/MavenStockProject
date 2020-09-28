@@ -438,7 +438,7 @@ public class AllStockForeignOrganNew20191231 {
 			}
 			stock.setSpecialLetter(specialLetter);
 
-			url = "http://finance.naver.com/item/frgn.nhn?code=" + code;
+			url = "https://finance.naver.com/item/frgn.nhn?code=" + code;
 			logger.debug("url :"+url);
 			doc = Jsoup.connect(url).get();
 

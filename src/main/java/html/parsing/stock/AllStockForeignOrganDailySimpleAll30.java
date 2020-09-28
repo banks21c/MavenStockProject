@@ -336,10 +336,10 @@ public class AllStockForeignOrganDailySimpleAll30 {
 			String strStockCode = svo.getStockCode();
 			// =========================================================
 			// 투자자별 매매동향 - 외국인 보유주수, 보유율
-			// http://finance.naver.com/item/frgn.nhn?code=102460&page=1
-			// http://finance.naver.com/item/frgn.nhn?code=102460&page=2
-			System.out.println("http://finance.naver.com/item/frgn.nhn?code=" + strStockCode);
-			Document doc = Jsoup.connect("http://finance.naver.com/item/frgn.nhn?code=" + strStockCode).get();
+			// https://finance.naver.com/item/frgn.nhn?code=102460&page=1
+			// https://finance.naver.com/item/frgn.nhn?code=102460&page=2
+			System.out.println("https://finance.naver.com/item/frgn.nhn?code=" + strStockCode);
+			Document doc = Jsoup.connect("https://finance.naver.com/item/frgn.nhn?code=" + strStockCode).get();
 
 			String foreignTradingVolume = "";
 			String organTradingVolume = "";
@@ -775,7 +775,7 @@ public class AllStockForeignOrganDailySimpleAll30 {
 		StringBuilder dialogMsg = new StringBuilder();
 		dialogMsg.append("날짜를 년월일로 8자리 입력하여 주세요. 양식)YYYYMMDD ex)20200815");
 		dialogMsg.append("\n입력하지 않을 경우 오늘 날짜 기준으로 데이터를 추출합니다.");
-		dialogMsg.append("\n주의 시작 요일은 일요읿니다.일요일~토요일");
+		dialogMsg.append("\n주의 시작 요일은 일요일입니다.일요일~토요일");
 		String ymd = JOptionPane.showInputDialog(dialogMsg.toString());
 		System.out.println("ymd:" + ymd);
 		if (!ymd.equals("")) {
