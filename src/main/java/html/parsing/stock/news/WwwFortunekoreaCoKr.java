@@ -1,0 +1,194 @@
+package html.parsing.stock.news;
+
+import java.io.File;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import javax.swing.JOptionPane;
+
+import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
+import html.parsing.stock.JsoupChangeImageElementsAttribute;
+import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
+import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
+import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.StockUtil;
+
+public class WwwFortunekoreaCoKr extends News {
+
+	final static String userHome = System.getProperty("user.home");
+	private static Logger logger = LoggerFactory.getLogger(WwwFortunekoreaCoKr.class);
+
+	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
+	int iYear = Integer.parseInt(strYear);
+
+	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
+	// Locale.KOREAN).format(new Date());
+	static String strYMD = "";
+	static String strDate = null;
+	static String strTitle = null;
+
+	DecimalFormat df = new DecimalFormat("###.##");
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new WwwFortunekoreaCoKr(1);
+	}
+
+	WwwFortunekoreaCoKr() {
+		logger = LoggerFactory.getLogger(this.getClass());
+	}
+
+	WwwFortunekoreaCoKr(int i) {
+		logger = LoggerFactory.getLogger(this.getClass());
+		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
+		url = StringUtils.defaultString(url);
+		logger.debug("url:[" + url + "]");
+		if (url.equals("")) {
+			url = "http://www.fortunekorea.co.kr/news/articleView.html?idxno=11105";
+		}
+		createHTMLFile(url);
+	}
+
+	public static StringBuilder createHTMLFile(String url) {
+		return createHTMLFile(url, "");
+	}
+
+	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+		logger.debug("url:" + url);
+		getURL(url);
+		System.out.println("url:" + url);
+		System.out.println("createHTMLFile protocol:" + protocol);
+		System.out.println("createHTMLFile host:" + host);
+		System.out.println("createHTMLFile path:" + path);
+		StringBuilder sb1 = new StringBuilder();
+		Document doc;
+		String strTitleForFileName = "";
+		String strFileNameDate = "";
+		try {
+			doc = Jsoup.connect(url).get();
+			doc.select("iframe").remove();
+			doc.select("script").remove();
+			doc.select(".news_rel").remove();
+			doc.select(".news_like").remove();
+			doc.select("#news_rel_id").remove();
+			doc.select(".news_copyright_links").remove();
+			doc.select(".copy_bottom").remove();
+
+			JsoupChangeAhrefElementsAttribute.changeAhrefElementsAttribute(doc, protocol, host, path);
+			JsoupChangeImageElementsAttribute.changeImageElementsAttribute(doc, protocol, host, path);
+			JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
+			JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);			
+//제목
+			strTitle = doc.select(".article-view-header .article-header-wrap .article-head-title").html();
+			logger.debug("title:" + strTitle);
+			strTitleForFileName = strTitle;
+			strTitleForFileName = strTitleForFileName.replaceAll(" ", "_");
+			strTitleForFileName = strTitleForFileName.replaceAll("\"", "'");
+			strTitleForFileName = strTitleForFileName.replaceAll("\\?", "§");
+			logger.debug("strFileNameTitle:" + strTitleForFileName);
+//날짜
+			strDate = doc.select(".article-view-header .info-text li").get(1).text();
+			strDate = strDate.replace("입력 ", "");
+			strDate = strDate.replace("승인 ", "");
+			logger.debug("strDate:" + strDate);
+			if (strDate.contains("|")) {
+				String strDateArray[] = strDate.split("\\|");
+				strDate = strDateArray[0].trim();
+			}
+			logger.debug("strDate:" + strDate);
+			strFileNameDate = strDate;
+			strFileNameDate = strFileNameDate.replaceAll(" ", "_");
+			strFileNameDate = strFileNameDate.replaceAll(":", ".");
+			strFileNameDate = "[" + strFileNameDate + "]";
+			logger.debug("strFileNameDate:" + strFileNameDate);
+//작자
+			Element title_author_2011 = doc.select(".article-view-header .info-text li").get(0);
+			logger.debug("title_author_2011:" + title_author_2011);
+			String strAuthor = title_author_2011.text();
+			logger.debug("author:" + strAuthor);
+
+//본문
+			Elements article = doc.select("#article-view-content-div");
+			logger.debug("article:" + article);
+			article.select(".news_body .news_date").remove();
+
+			article.attr("style", "width:741px");
+			String articleHtml = article.outerHtml();
+			logger.debug("articleHtml:[" + articleHtml + "]articleHtml");
+
+			String copyright = "";
+			if(article.select(".article-veiw-body .view-copyright").size() <= 0){
+				copyright = doc.select(".article-veiw-body .view-copyright").outerHtml();
+			}
+			logger.debug("copyright:" + copyright);
+
+			String strContent = articleHtml.replaceAll("640px", "741px");
+			strContent = strContent.replaceAll("<figure>", "");
+			strContent = strContent.replaceAll("</figure>", "<br>");
+			strContent = strContent.replaceAll("<figcaption>", "");
+			strContent = strContent.replaceAll("</figcaption>", "<br>");
+			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
+
+			sb1.append("<!doctype html>\r\n");
+			sb1.append("<html lang='ko'>\r\n");
+			sb1.append("<head>\r\n");
+//          //sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			sb1.append("<style>\r\n");
+			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
+			sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
+			sb1.append("</style>\r\n");
+			sb1.append("</head>\r\n");
+			sb1.append("<body>\r\n");
+
+			StringBuilder bodySb = new StringBuilder();
+			bodySb.append(StockUtil.getMyCommentBox(strMyComment));
+
+			bodySb.append("<div style='width:741px'>\r\n");
+
+			bodySb.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
+			bodySb.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
+			bodySb.append("<span style='font-size:14px'>").append(strAuthor).append("</span><br><br>\n");
+			bodySb.append("<span style='font-size:14px'>").append(strDate).append("</span><br><br>\n");
+			bodySb.append(strContent).append("<br><br>\n");
+			if(!copyright.equals("")){
+				bodySb.append(copyright).append("<br><br>\n");
+			}
+			bodySb.append("</div>\r\n");
+			
+			sb1.append(StockUtil.makeStockLinkStringByTxtFile(bodySb.toString()));
+			
+			sb1.append("</body>\r\n");
+			sb1.append("</html>\r\n");
+			logger.debug("sb.toString:[" + sb1.toString() + "]:sb.toString:");
+
+			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
+
+			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+					+ strTitleForFileName + ".html";
+			System.out.println("fileName:"+fileName);
+			FileUtil.fileWrite(fileName, sb1.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			logger.debug("추출완료");
+		}
+		return sb1;
+	}
+
+}
