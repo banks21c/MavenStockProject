@@ -136,12 +136,12 @@ public class HankyorehNewsToday {
             System.out.println("style:" + style);
 
             article.select(".article-text-font-size").removeAttr("style");
-            article.select(".article-text-font-size").get(0).attr("style", "width:548px");
-            article.select(".article-text-font-size .imageC").attr("style", "width:548px");
-            article.select(".article-text-font-size .imageC .desc").attr("style", "width:548px");
+            article.select(".article-text-font-size").get(0).attr("style", "width:741px");
+            article.select(".article-text-font-size .imageC").attr("style", "width:741px");
+            article.select(".article-text-font-size .imageC .desc").attr("style", "width:741px");
 
             // System.out.println("imageArea:"+article.select(".image-area"));
-            String strContent = article.html().replaceAll("640px", "548px");
+            String strContent = article.html().replaceAll("640px", "741px");
             strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 
             Element time = doc.select(".article-head .date-time span").get(0);

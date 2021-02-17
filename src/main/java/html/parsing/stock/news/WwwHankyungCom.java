@@ -74,7 +74,6 @@ public class WwwHankyungCom extends News {
 		String strFileNameDate = "";
 		try {
 			doc = Jsoup.connect(url).get();
-			System.out.println("view:[" + doc.select(".view") + "]");
 			doc.select("iframe").remove();
 			doc.select("script").remove();
 			doc.select("noscript").remove();
@@ -138,57 +137,54 @@ public class WwwHankyungCom extends News {
 			}
 			// article.select(".image-area").append("<br><br>");
 			article.select(".image-area").after("<br><br>");
+			article.select("svg").remove();
+			//Update the tag name of each matched element. For example, to change each <i> to a <em>, do doc.select("i").tagName("em");
+			Elements divEls = article.select("blockquote").tagName("div");
+			divEls.attr("style","pading:5px;border:1px solid gray;");
 
 			String style = article.select("#mArticle").attr("style");
 			System.out.println("style:" + style);
 
 			article.removeAttr("style");
 			article.removeAttr("class");
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 
-			// article.select("img").attr("style", "width:548px");
-			article.select(".txt_caption.default_figure").attr("style", "width:548px");
+			// article.select("img").attr("style", "width:741px");
+			article.select(".txt_caption.default_figure").attr("style", "width:741px");
 			article.select("ylink").remove();
 
 			// System.out.println("imageArea:"+article.select(".image-area"));
-			String strContent = article.html().replaceAll("640px", "548px");
+			String strContent = article.html().replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = strContent.replaceAll("figure", "div");
 			strContent = strContent.replaceAll("figcaption", "div");
-			strContent = StockUtil.makeStockLinkStringByKrx(strContent);
-
-			Elements copyRightElements = doc.select(".news_copyright");
-			Element copyRightElement = null;
-			String copyRight = "";
-			if (copyRightElements.size() <= 0) {
-				copyRightElements = doc.select("#newsView .copy");
-			}
-			copyRightElement = copyRightElements.first();
-			if (copyRightElement != null) {
-				copyRight = copyRightElement.text();
-			}
 
 			sb1.append("<!doctype html>\r\n");
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-//            //sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+//          //sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			sb1.append("<style>\r\n");
+			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
+			sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
+			sb1.append("</style>\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
-			sb1.append(StockUtil.getMyCommentBox(strMyComment));
+			StringBuilder bodySb = new StringBuilder();
+			bodySb.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			bodySb.append("<div style='width:741px'>\r\n");
 
-			doc.select(".news_date").remove();
+			bodySb.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
+			bodySb.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
+			bodySb.append("<span style='font-size:12px'>").append(writer).append("</span><br><br>\n");
+			bodySb.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
+			bodySb.append(strContent);
+			bodySb.append("</div>\r\n");
+			
+			sb1.append(StockUtil.makeStockLinkStringByTxtFile(bodySb.toString()));
 
-			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
-			sb1.append("<span style='font-size:12px'>").append(writer).append("</span><br><br>\n");
-			sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
-			sb1.append(strContent).append("<br><br>\n");
-//            sb1.append(copyRight).append("<br><br>\n");
-			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 			System.out.println("sb.toString:[" + sb1.toString() + "]");

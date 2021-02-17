@@ -111,8 +111,8 @@ public class NewsKhanCoKr extends News {
 					System.out.println("width:" + width);
 					if (width != null && !width.equals("")) {
 						iWidth = Integer.parseInt(width);
-						if (iWidth > 548) {
-							changeWidth = 548;
+						if (iWidth > 741) {
+							changeWidth = 741;
 						} else {
 							changeWidth = iWidth;
 						}
@@ -163,7 +163,7 @@ public class NewsKhanCoKr extends News {
 			article.select(".image-area").after("<br><br>");
 
 			// System.out.println("imageArea:"+article.select(".image-area"));
-			String strContent = article.html().replaceAll("640px", "548px");
+			String strContent = article.html().replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
@@ -182,7 +182,7 @@ public class NewsKhanCoKr extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");

@@ -102,9 +102,9 @@ public class NewsHerald extends News {
 			System.out.println("style:" + style);
 
 			article.select("#articleText").removeAttr("style");
-			article.select("#articleText").get(0).attr("style", "width:548px");
-			article.select("#articleText .imageC").attr("style", "width:548px");
-			article.select("#articleText .imageC .desc").attr("style", "width:548px");
+			article.select("#articleText").get(0).attr("style", "width:741px");
+			article.select("#articleText .imageC").attr("style", "width:741px");
+			article.select("#articleText .imageC .desc").attr("style", "width:741px");
 
 			String orgTableStyles = article.select("table").attr("style");
 			System.out.println("orgTableStyles:" + orgTableStyles);
@@ -141,15 +141,15 @@ public class NewsHerald extends News {
 			System.out.println("iWidth:" + iWidth);
 			System.out.println("iHeight:" + iHeight);
 			if (iWidth > 0) {
-				if (iWidth > 548) {
-					iWidth2 = 548;
+				if (iWidth > 741) {
+					iWidth2 = 741;
 				} else {
 					iWidth2 = iWidth;
 				}
 
 				if (iHeight > 0 && iWidth > iHeight) {
-					if (iWidth > 548) {
-						iHeight2 = iHeight * 548 / iWidth;
+					if (iWidth > 741) {
+						iHeight2 = iHeight * 741 / iWidth;
 					} else {
 						iHeight2 = iHeight;
 					}
@@ -202,15 +202,15 @@ public class NewsHerald extends News {
 				System.out.println("iWidth:" + iWidth);
 				System.out.println("iHeight:" + iHeight);
 				if (iWidth > 0) {
-					if (iWidth > 548) {
-						iWidth2 = 548;
+					if (iWidth > 741) {
+						iWidth2 = 741;
 					} else {
 						iWidth2 = iWidth;
 					}
 
 					if (iHeight > 0 && iWidth > iHeight) {
-						if (iWidth > 548) {
-							iHeight2 = iHeight * 548 / iWidth;
+						if (iWidth > 741) {
+							iHeight2 = iHeight * 741 / iWidth;
 						} else {
 							iHeight2 = iHeight;
 						}
@@ -250,15 +250,15 @@ public class NewsHerald extends News {
 				iWidth2 = 0;
 				iHeight2 = 0;
 				if (iWidth > 0) {
-					if (iWidth > 548) {
-						iWidth2 = 548;
+					if (iWidth > 741) {
+						iWidth2 = 741;
 					} else {
 						iWidth2 = iWidth;
 					}
 
 					if (iHeight > 0 && iWidth > iHeight) {
-						if (iWidth > 548) {
-							iHeight2 = iHeight * 548 / iWidth;
+						if (iWidth > 741) {
+							iHeight2 = iHeight * 741 / iWidth;
 						} else {
 							iHeight2 = iHeight;
 						}
@@ -279,13 +279,13 @@ public class NewsHerald extends News {
 			System.out.println("article:" + article);
 
 			article.select("table").removeAttr("style");
-			article.select("table").attr("style", "width:548px");
+			article.select("table").attr("style", "width:741px");
 
-			article.select("table img").attr("style", "width:548px");
-			article.select("table img").attr("style", "width:548px");
+			article.select("table img").attr("style", "width:741px");
+			article.select("table img").attr("style", "width:741px");
 
 			// System.out.println("imageArea:"+article0.select(".image-area"));
-			String strContent = article.html().replaceAll("640px", "548px");
+			String strContent = article.html().replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
@@ -309,7 +309,7 @@ public class NewsHerald extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h2 id='title'>[" + strTime + "] " + strTitle + "</h2>\n");
 			sb1.append("<h2>" + strTitle + "</h2>\n");

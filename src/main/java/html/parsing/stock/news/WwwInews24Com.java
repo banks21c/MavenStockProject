@@ -88,7 +88,7 @@ public class WwwInews24Com extends News {
 			doc.select(".tex_l_box").remove();
 			doc.select(".tex_s_box").remove();
 			doc.select(".issue_more").remove();
-			doc.select("table").attr("width", "548");
+			doc.select("table").attr("width", "741");
 
 			strTitle = doc.select("header.view > h1").text();
 			strSubTitle = doc.select("header.view > h1").html();
@@ -131,11 +131,11 @@ public class WwwInews24Com extends News {
 			System.out.println("style:" + style);
 			article.removeAttr("style");
 			article.removeAttr("class");
-			article.attr("style", "width:548px");
-			// article.select("img").attr("style", "width:548px");
-			article.select(".txt_caption.default_figure").attr("style", "width:548px");
+			article.attr("style", "width:741px");
+			// article.select("img").attr("style", "width:741px");
+			article.select(".txt_caption.default_figure").attr("style", "width:741px");
 			// System.out.println("imageArea:"+article.select(".image-area"));
-			strContent = article.html().replaceAll("640px", "548px");
+			strContent = article.html().replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = strContent.replaceAll("figure", "div");
@@ -155,7 +155,7 @@ public class WwwInews24Com extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 			sb1.append("<h3> 기사주소:[<a href='").append(strUrl).append("' target='_sub'>").append(strUrl)
 				.append("</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");

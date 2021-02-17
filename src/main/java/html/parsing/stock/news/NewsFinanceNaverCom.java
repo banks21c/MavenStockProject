@@ -131,12 +131,12 @@ public class NewsFinanceNaverCom extends News {
 			article.select("#BpromotionBanner").remove();
 			System.out.println(article.select("figure img"));
 			article.select("figure img").removeAttr("style");
-			article.select("figure img").attr("style", "cursor:pointer;width:548px;height:365px");
+			article.select("figure img").attr("style", "cursor:pointer;width:741px;height:365px");
 			article.select("figure").tagName("div");
 			article.select("figcaption").tagName("div");
 			// System.out.println("article:" + article);
 
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 			String articleHtml = article.outerHtml();
 			System.out.println("articleHtml:[" + articleHtml + "]articleHtml");
 
@@ -147,7 +147,7 @@ public class NewsFinanceNaverCom extends News {
 			}
 			System.out.println("copyright:" + copyright);
 
-			String strContent = articleHtml.replaceAll("640px", "548px");
+			String strContent = articleHtml.replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<br> <br>", "\n<br>\n<br>");
 			// strContent = strContent.replaceAll("<figure class=\"article_image\">", "");
 			// strContent = strContent.replaceAll("</figure>", "<br>");
@@ -184,7 +184,7 @@ public class NewsFinanceNaverCom extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			doc.select(".news_date").remove();
 

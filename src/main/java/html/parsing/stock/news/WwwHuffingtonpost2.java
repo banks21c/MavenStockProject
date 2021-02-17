@@ -105,7 +105,7 @@ public class WwwHuffingtonpost2 extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			Element timeElement = doc.select(".posted time").get(0);
 			System.out.println("time html:" + timeElement);

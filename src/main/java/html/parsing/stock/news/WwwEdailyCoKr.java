@@ -86,7 +86,7 @@ public class WwwEdailyCoKr extends News {
 			doc.select(".tex_l_box").remove();
 			doc.select(".tex_s_box").remove();
 			doc.select(".issue_more").remove();
-			doc.select("table").attr("width", "548");
+			doc.select("table").attr("width", "741");
 			System.out.println("doc:[" + doc + "]");
 			strFileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_doc.html";
 			FileUtil.fileWrite(strFileName, doc.html());
@@ -173,9 +173,9 @@ public class WwwEdailyCoKr extends News {
 			System.out.println("style:" + style);
 			article.removeAttr("style");
 			article.removeAttr("class");
-			article.attr("style", "width:548px");
-			// article.select("img").attr("style", "width:548px");
-			article.select(".txt_caption.default_figure").attr("style", "width:548px");
+			article.attr("style", "width:741px");
+			// article.select("img").attr("style", "width:741px");
+			article.select(".txt_caption.default_figure").attr("style", "width:741px");
 			Elements aEls = article.select("a");
 			for(Element aEl:aEls){
 				String strHref = aEl.attr("href");
@@ -184,7 +184,7 @@ public class WwwEdailyCoKr extends News {
 				}
 			}
 			// System.out.println("imageArea:"+article.select(".image-area"));
-			String strContent = article.html().replaceAll("640px", "548px");
+			String strContent = article.html().replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = strContent.replaceAll("figure", "div");
@@ -204,7 +204,7 @@ public class WwwEdailyCoKr extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 			sb1.append("<h3> 기사주소:[<a href='").append(strUrl).append("' target='_sub'>").append(strUrl)
 				.append("</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");

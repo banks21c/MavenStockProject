@@ -127,10 +127,10 @@ public class WwwDtCoKr extends News {
 			}
 			// System.out.println("article:[" + article+"]article");
 
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 			String articleHtml = article.outerHtml();
 			System.out.println("articleHtml:[" + articleHtml + "]");
-			String strContent = articleHtml.replaceAll("640px", "548px");
+			String strContent = articleHtml.replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<img src=\"//", "<img src=\"" + protocol + "://");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
@@ -157,7 +157,7 @@ public class WwwDtCoKr extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			doc.select(".news_date").remove();
 

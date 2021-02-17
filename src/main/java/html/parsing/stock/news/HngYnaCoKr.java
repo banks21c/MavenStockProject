@@ -122,10 +122,10 @@ public class HngYnaCoKr extends News {
 
 			article.removeAttr("style");
 			article.removeAttr("class");
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 
 			// System.out.println("imageArea:"+article.select(".image-area"));
-			String strContent = article.html().replaceAll("640px", "548px");
+			String strContent = article.html().replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = strContent.replaceAll("figure", "div");
@@ -153,7 +153,7 @@ public class HngYnaCoKr extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			doc.select(".news_date").remove();
 

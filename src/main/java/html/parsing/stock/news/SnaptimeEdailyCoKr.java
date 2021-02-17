@@ -93,9 +93,9 @@ public class SnaptimeEdailyCoKr extends News {
 			doc.select(".tex_l_box").remove();
 			doc.select(".tex_s_box").remove();
 			doc.select(".issue_more").remove();
-			doc.select("table").attr("width", "548");
+			doc.select("table").attr("width", "741");
 			doc.select("div").removeAttr("style");
-//			doc.select("div").attr("style","width:548px");
+//			doc.select("div").attr("style","width:741px");
 			System.out.println("a link:" + doc.select("a"));
 			// System.out.println("doc:[" + doc+"]");
 			strTitle = doc.select(".post-template-1 .single-post-title").text();
@@ -161,7 +161,7 @@ public class SnaptimeEdailyCoKr extends News {
 			article.select(".cosmosfarm-share-buttons-default.cosmosfarm-align-center").remove();
 			article.select(".single-post-content .npqmgry").remove();
 			article.select("div").removeAttr("style");
-			article.select("div").attr("style", "width:548px");
+			article.select("div").attr("style", "width:741px");
 			if (article.isEmpty()) {
 				System.out.println("article is empty...");
 				article = doc.select(".article_news");
@@ -172,12 +172,12 @@ public class SnaptimeEdailyCoKr extends News {
 			System.out.println("style:" + style);
 			article.removeAttr("style");
 			article.removeAttr("class");
-			article.attr("style", "width:548px");
-			// article.select("img").attr("style", "width:548px");
-			article.select(".txt_caption.default_figure").attr("style", "width:548px");
-			article.select("figure").attr("style", "width:548px");
+			article.attr("style", "width:741px");
+			// article.select("img").attr("style", "width:741px");
+			article.select(".txt_caption.default_figure").attr("style", "width:741px");
+			article.select("figure").attr("style", "width:741px");
 			// System.out.println("imageArea:"+article.select(".image-area"));
-			String strContent = article.html().replaceAll("640px", "548px");
+			String strContent = article.html().replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = strContent.replaceAll("figure", "div");
@@ -198,7 +198,7 @@ public class SnaptimeEdailyCoKr extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");
 			sb1.append("<span style='font-size:12px'>" + writer + "</span><br>\n");

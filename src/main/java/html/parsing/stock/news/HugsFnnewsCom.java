@@ -132,10 +132,10 @@ public class HugsFnnewsCom extends News {
 
 			Element articleElement = doc.select(".art_content").first();
 
-			articleElement.attr("style", "width:548px");
-			articleElement.select("img").attr("style", "width:548px");
+			articleElement.attr("style", "width:741px");
+			articleElement.select("img").attr("style", "width:741px");
 			articleElement.select("img").removeAttr("width");
-			articleElement.select(".news_photo_table").attr("style", "width:548px");
+			articleElement.select(".news_photo_table").attr("style", "width:741px");
 			articleElement.select(".news_photo_table").removeAttr("width");
 			String strContent = articleElement.outerHtml();
 			strContent = StockUtil.makeStockLinkString(strContent);
@@ -155,7 +155,7 @@ public class HugsFnnewsCom extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");
 			sb1.append("<span style='font-size:14px'>" + author + "</span><br><br>\n");

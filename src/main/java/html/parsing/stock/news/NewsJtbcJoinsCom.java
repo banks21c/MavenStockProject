@@ -107,12 +107,12 @@ public class NewsJtbcJoinsCom extends News {
 
 			Elements article = doc.select(".article_content");
 			System.out.println("article:" + article);
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 			String articleHtml = article.outerHtml();
 			System.out.println("articleHtml:" + articleHtml);
-			String strContent = articleHtml.replaceAll("640px", "548px");
-			strContent = strContent.replaceAll("570", "548");
-			strContent = strContent.replaceAll("580", "548");
+			String strContent = articleHtml.replaceAll("640px", "741px");
+			strContent = strContent.replaceAll("570", "741");
+			strContent = strContent.replaceAll("580", "741");
 			strContent = strContent.replaceAll("data-src", "src");
 			strContent = strContent.replaceAll("<figure>", "");
 			strContent = strContent.replaceAll("</figure>", "<br>");
@@ -135,7 +135,7 @@ public class NewsJtbcJoinsCom extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");

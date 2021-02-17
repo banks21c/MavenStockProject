@@ -134,7 +134,7 @@ public class MarketinsightHankyungCom extends News {
 			}
 			article.removeAttr("style");
 			article.removeAttr("class");
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 
 			String strContent = article.html();
 			strContent = StockUtil.makeStockLinkStringByKrx(strContent);
@@ -159,7 +159,7 @@ public class MarketinsightHankyungCom extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			doc.select(".news_date").remove();
 

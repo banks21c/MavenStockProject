@@ -135,7 +135,7 @@ public class BizNewdailyCoKr extends News {
 
 			article.removeAttr("style");
 			article.removeAttr("class");
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 
 			Element copyRightElement = article.select(".nd-by-line").first();
 			String copyRight = "";
@@ -148,7 +148,7 @@ public class BizNewdailyCoKr extends News {
 			article.add(copyRightElement);
 
 			// System.out.println("imageArea:"+article.select(".image-area"));
-			String strContent = article.html().replaceAll("640px", "548px");
+			String strContent = article.html().replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = strContent.replaceAll("figure", "div");
@@ -168,7 +168,7 @@ public class BizNewdailyCoKr extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px;padding:5px 0px;'>\r\n");
+			sb1.append("<div style='width:741px;padding:5px 0px;'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");

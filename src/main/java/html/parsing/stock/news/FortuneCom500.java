@@ -129,7 +129,7 @@ public class FortuneCom500 extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + strUrl + "' target='_sub'>" + strUrl + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");

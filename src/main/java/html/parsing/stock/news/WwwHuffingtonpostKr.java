@@ -102,7 +102,7 @@ public class WwwHuffingtonpostKr extends News {
 			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			Element timeElement = doc.select(".posted time").get(0);
 			System.out.println("time html:" + timeElement);

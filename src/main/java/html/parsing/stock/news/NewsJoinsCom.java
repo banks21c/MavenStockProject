@@ -135,8 +135,8 @@ public class NewsJoinsCom extends News {
 									width = width.replaceAll(";", "");
 									width = width.trim();
 									int iWidth = Integer.parseInt(width);
-									if (iWidth > 548) {
-										styles[j] = "width:548px";
+									if (iWidth > 741) {
+										styles[j] = "width:741px";
 									}
 								}
 							}
@@ -152,10 +152,10 @@ public class NewsJoinsCom extends News {
 			}
 
 			System.out.println("article:[" + article + "]");
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 			String articleHtml = article.outerHtml();
 			System.out.println("articleHtml:[" + articleHtml + "]");
-			String strContent = articleHtml.replaceAll("640px", "548px");
+			String strContent = articleHtml.replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("class=\"caption\"", "style=\"font-size:12px;font-weight:bold;\"");
 			strContent = strContent.replaceAll("data-src", "src");
 			strContent = strContent.replaceAll("<figure>", "<div>");
@@ -181,7 +181,7 @@ public class NewsJoinsCom extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");

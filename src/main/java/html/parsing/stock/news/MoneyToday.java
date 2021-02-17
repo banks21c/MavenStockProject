@@ -152,7 +152,7 @@ public class MoneyToday extends javax.swing.JFrame {
             sb1.append("</style>\r\n");
             sb1.append("</head>\r\n");
             sb1.append("<body>\r\n");
-            sb1.append("<div style='width:548px'>\r\n");
+            sb1.append("<div style='width:741px'>\r\n");
 
             sb1.append(strTitle + "\r\n");
             sb1.append(subtitle + "\r\n");

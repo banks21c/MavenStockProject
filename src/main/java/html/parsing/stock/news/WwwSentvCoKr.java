@@ -288,8 +288,8 @@ public class WwwSentvCoKr extends javax.swing.JFrame {
 					System.out.println("width:" + width);
 					if (width != null && !width.equals("")) {
 						iWidth = Integer.parseInt(width);
-						if (iWidth > 548) {
-							changeWidth = 548;
+						if (iWidth > 741) {
+							changeWidth = 741;
 						} else {
 							changeWidth = iWidth;
 						}
@@ -325,7 +325,7 @@ public class WwwSentvCoKr extends javax.swing.JFrame {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");

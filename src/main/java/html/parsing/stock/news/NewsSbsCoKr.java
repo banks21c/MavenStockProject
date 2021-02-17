@@ -135,10 +135,10 @@ public class NewsSbsCoKr extends News {
 			for (Element e : divs) {
 				String itemprop = e.attr("itemprop");
 				if (itemprop.equals("articleBody")) {
-					e.attr("style", "width:548px");
-					e.select("img").attr("style", "width:548px");
+					e.attr("style", "width:741px");
+					e.select("img").attr("style", "width:741px");
 					e.select("img").removeAttr("width");
-					e.select(".news_photo_table").attr("style", "width:548px");
+					e.select(".news_photo_table").attr("style", "width:741px");
 					e.select(".news_photo_table").removeAttr("width");
 					strContent = e.outerHtml();
 				}
@@ -161,7 +161,7 @@ public class NewsSbsCoKr extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");

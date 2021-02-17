@@ -109,7 +109,7 @@ public class WwwAsiatodayCoKr extends News {
 			Elements article = doc.select(".news_bm");
 			// System.out.println("article:[" + article+"]article");
 
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 			String articleHtml = article.outerHtml();
 			// System.out.println("articleHtml:[" + articleHtml+"]articleHtml");
 
@@ -117,7 +117,7 @@ public class WwwAsiatodayCoKr extends News {
 			copyright = doc.select(".cont_copy").outerHtml();
 			System.out.println("copyright:[" + copyright + "]copyright");
 
-			String strContent = articleHtml.replaceAll("640px", "548px");
+			String strContent = articleHtml.replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<figure>", "");
 			strContent = strContent.replaceAll("</figure>", "<br>");
 			strContent = strContent.replaceAll("<figcaption>", "");
@@ -138,7 +138,7 @@ public class WwwAsiatodayCoKr extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");

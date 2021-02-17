@@ -316,7 +316,7 @@ public class SignalSedailyCom extends javax.swing.JFrame {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='").append(url).append("' target='_sub'>").append(url)
 					.append("</a>] </h3>\n");

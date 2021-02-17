@@ -106,7 +106,7 @@ public class WwwBusanCom extends News {
 
 			// Elements article = doc.select("#newsView");
 			Elements article = doc.select("#NewsContent");
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 			System.out.println("article:[" + article + "]");
 			String strContent = article.html();
 			System.out.println("content:[" + strContent + "]");
@@ -123,7 +123,7 @@ public class WwwBusanCom extends News {
 			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");

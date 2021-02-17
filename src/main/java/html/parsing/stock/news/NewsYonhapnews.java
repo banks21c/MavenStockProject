@@ -246,7 +246,7 @@ public class NewsYonhapnews extends javax.swing.JFrame {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("[" + strDate + "]" + strTitle + "<br>\r\n");
 			// sb1.append(strAuthor + "<br>\r\n");

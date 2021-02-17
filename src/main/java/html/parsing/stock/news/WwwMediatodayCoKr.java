@@ -134,11 +134,11 @@ public class WwwMediatodayCoKr extends News {
 			if (article.toString().equals("")) {
 				article = doc.select("#arl_view_content");
 			}
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 			String articleHtml = article.outerHtml();
 
 			System.out.println("articleHtml:" + articleHtml);
-			String strContent = articleHtml.replaceAll("640px", "548px");
+			String strContent = articleHtml.replaceAll("640px", "741px");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
 			Document contentDoc = Jsoup.parse(strContent);
 			contentDoc.select("#myCommentDiv").remove();
@@ -155,7 +155,7 @@ public class WwwMediatodayCoKr extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");

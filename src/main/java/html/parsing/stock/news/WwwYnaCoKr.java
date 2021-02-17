@@ -111,7 +111,7 @@ public class WwwYnaCoKr extends News {
 			// article.select(".image-area").append("<br><br>");
 			article.select(".image-area").after("<br><br>");
 			article.removeAttr("class");
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 
 			Element authorElement = article.select("p").last();
 			String author = "";
@@ -120,8 +120,8 @@ public class WwwYnaCoKr extends News {
 			}
 			System.out.println("author:[" + author + "]");
 
-			// article.select("img").attr("style", "width:548px");
-			article.select(".txt_caption.default_figure").attr("style", "width:548px");
+			// article.select("img").attr("style", "width:741px");
+			article.select(".txt_caption.default_figure").attr("style", "width:741px");
 			article.select("p").attr("style", "font-size:16px");
 			article.select(".img-info").attr("style", "font-size:12px;font-weight:bold;");
 
@@ -165,7 +165,7 @@ public class WwwYnaCoKr extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");
 			sb1.append("<span style='font-size:13px'>" + strDate + "</span><br><br>\n");

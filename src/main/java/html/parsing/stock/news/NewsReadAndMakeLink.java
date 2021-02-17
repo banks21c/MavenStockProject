@@ -233,7 +233,7 @@ public class NewsReadAndMakeLink extends javax.swing.JFrame {
 //        sb1.append(StockUtil.getMyCommentBox(strMyComment));
         sb1.append(StockUtil.getMyCommentBox());
 
-        sb1.append("<div style='width:548px'>\r\n");
+        sb1.append("<div style='width:741px'>\r\n");
 
         sb1.append("<h2 id='title'>[" + strYMD + "] Fortune 500 </h2><br>\r\n");
         sb1.append(htmlTarget + "<br>\r\n");

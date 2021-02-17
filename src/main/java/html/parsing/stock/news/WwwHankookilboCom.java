@@ -84,6 +84,7 @@ public class WwwHankookilboCom extends News {
 
 			// strTitle = doc.select(".titGroup h4").text();
 			strTitle = doc.select(".article-header h3").text();
+			strTitle = doc.select(".end .end-top .col-main .title").text();
 			System.out.println("title:" + strTitle);
 			strTitleForFileName = strTitle;
 			strTitleForFileName = StockUtil.getTitleForFileName(strTitleForFileName);
@@ -122,14 +123,14 @@ public class WwwHankookilboCom extends News {
 			article.select(".naver-banner").remove();
 			article.select("#fileServer").remove();
 			
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 			String articleHtml = article.outerHtml();
 			System.out.println("articleHtml:" + articleHtml);
 
 			String copyright = doc.select(".copy span").outerHtml();
 			System.out.println("copyright:" + copyright);
 
-			String strContent = articleHtml.replaceAll("640px", "548px");
+			String strContent = articleHtml.replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<p></p>", "<br><br><p>");
 			strContent = strContent.replaceAll("</article>", "</article><br>");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
@@ -147,7 +148,7 @@ public class WwwHankookilboCom extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");

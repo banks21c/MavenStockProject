@@ -309,14 +309,12 @@ public class SedailyCom extends javax.swing.JFrame {
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			// sb1.append("<meta http-equiv=\"Content-Type\"
-			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='").append(url).append("' target='_sub'>").append(url)
 					.append("</a>] </h3>\n");

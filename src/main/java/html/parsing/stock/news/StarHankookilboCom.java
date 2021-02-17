@@ -106,10 +106,10 @@ public class StarHankookilboCom extends News {
 			System.out.println("author:" + author);
 
 			Elements article = doc.select(".news-detail-content");
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 			String strContent = article.outerHtml();
 			System.out.println("strContent:" + strContent);
-			strContent = strContent.replaceAll("640px", "548px");
+			strContent = strContent.replaceAll("640px", "741px");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
 			Document contentDoc = Jsoup.parse(strContent);
 			contentDoc.select("#myCommentDiv").remove();
@@ -127,7 +127,7 @@ public class StarHankookilboCom extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[" + strDate + "] " + strTitle + "</h2>\n");

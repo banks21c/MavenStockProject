@@ -148,18 +148,18 @@ public class WwwHaniCoKr extends News {
 				System.out.println("style:" + style);
 
 				articleTextFontSize.removeAttr("style");
-				articleTextFontSize.attr("style", "width:548px");
-				article.select(".article-text-font-size .imageC").attr("style", "width:548px");
-				article.select(".article-text-font-size .imageC .desc").attr("style", "width:548px");
+				articleTextFontSize.attr("style", "width:741px");
+				article.select(".article-text-font-size .imageC").attr("style", "width:741px");
+				article.select(".article-text-font-size .imageC .desc").attr("style", "width:741px");
 
 			}
 			System.out.println("article:" + article);
 
-			// article.select("img").attr("style", "width:548px");
-			article.select(".txt_caption.default_figure").attr("style", "width:548px");
+			// article.select("img").attr("style", "width:741px");
+			article.select(".txt_caption.default_figure").attr("style", "width:741px");
 
 			// System.out.println("imageArea:"+article.select(".image-area"));
-			String strContent = article.html().replaceAll("640px", "548px");
+			String strContent = article.html().replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
@@ -176,7 +176,7 @@ public class WwwHaniCoKr extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");

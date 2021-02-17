@@ -109,9 +109,9 @@ public class Ttalgi21KhanKr extends News {
 				if ((imgWidth != null && !imgWidth.equals("")) && (imgHeight != null && !imgHeight.equals(""))) {
 					iWidth = Integer.parseInt(imgWidth);
 					iHeight = Integer.parseInt(imgHeight);
-					if (iWidth > 548) {
-						changeWidth = 548;
-						changeHeight = 548 * iHeight / iWidth;
+					if (iWidth > 741) {
+						changeWidth = 741;
+						changeHeight = 741 * iHeight / iWidth;
 					} else {
 						changeWidth = iWidth;
 						changeHeight = iHeight;
@@ -176,7 +176,7 @@ public class Ttalgi21KhanKr extends News {
 			article.select(".image-area").after("<br><br>");
 
 			// System.out.println("imageArea:"+article.select(".image-area"));
-			String strContent = article.html().replaceAll("640px", "548px");
+			String strContent = article.html().replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<p align=\"justify\"></p>", "<br><br>");
 			strContent = strContent.replaceAll("<span style=\"font-size: 11pt;\"> </span>", "");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
@@ -195,7 +195,7 @@ public class Ttalgi21KhanKr extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");

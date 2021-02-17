@@ -216,7 +216,7 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 
 			doc.select("iframe").remove();
 			doc.select("script").remove();
-			doc.select("div").attr("style", "width:548px");
+			doc.select("div").attr("style", "width:741px");
 
 			Elements title = doc.select("h1.top_title");
 			logger.debug("title1:" + strTitle);
@@ -311,7 +311,7 @@ public class NewsMkCoKr extends javax.swing.JFrame {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");

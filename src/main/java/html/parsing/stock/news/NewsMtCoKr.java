@@ -26,7 +26,7 @@ import html.parsing.stock.util.StockUtil;
 public class NewsMtCoKr extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private static Logger logger = LoggerFactory.getLogger(NewsMtCoKr.class);
+	private static Logger logger = null;
 	final static String userHome = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -77,6 +77,7 @@ public class NewsMtCoKr extends javax.swing.JFrame {
 	}
 
 	public NewsMtCoKr() {
+		logger = LoggerFactory.getLogger(this.getClass());
 
 		initComponents();
 	}
@@ -178,6 +179,7 @@ public class NewsMtCoKr extends javax.swing.JFrame {
 	}
 
 	NewsMtCoKr(int i) {
+		logger = LoggerFactory.getLogger(this.getClass());
 
 		String url = JOptionPane.showInputDialog(this.getClass().getSimpleName() + " URL을 입력하여 주세요.");
 		System.out.println("url:[" + url + "]");
@@ -270,13 +272,12 @@ public class NewsMtCoKr extends javax.swing.JFrame {
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			sb1.append("<meta http-equiv=\"Content-Type\" article=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");

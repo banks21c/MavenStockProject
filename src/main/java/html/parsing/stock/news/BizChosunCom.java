@@ -61,7 +61,10 @@ public class BizChosunCom extends News {
 	public static StringBuilder createHTMLFile(String url, String strMyComment) {
 		logger.debug("url:" + url);
 		getURL(url);
-
+		System.out.println("url:" + url);
+		System.out.println("createHTMLFile protocol:" + protocol);
+		System.out.println("createHTMLFile host:" + host);
+		System.out.println("createHTMLFile path:" + path);
 		StringBuilder sb1 = new StringBuilder();
 		Document doc;
 		String strTitleForFileName = "";
@@ -107,27 +110,24 @@ public class BizChosunCom extends News {
 			logger.debug("article:" + article);
 			article.select(".news_body .news_date").remove();
 
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 			String articleHtml = article.outerHtml();
 			logger.debug("articleHtml:[" + articleHtml + "]articleHtml");
 
 			String copyright = doc.select(".news_copyright").outerHtml();
 			logger.debug("copyright:" + copyright);
 
-			String strContent = articleHtml.replaceAll("640px", "548px");
+			String strContent = articleHtml.replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<figure>", "");
 			strContent = strContent.replaceAll("</figure>", "<br>");
 			strContent = strContent.replaceAll("<figcaption>", "");
 			strContent = strContent.replaceAll("</figcaption>", "<br>");
 			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
-			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
 
+			sb1.append("<!doctype html>\r\n");
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+//          //sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("<style>\r\n");
 			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 			sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
@@ -135,16 +135,20 @@ public class BizChosunCom extends News {
 			sb1.append("</head>\r\n");
 			sb1.append("<body>\r\n");
 
-			sb1.append(StockUtil.getMyCommentBox(strMyComment));
+			StringBuilder bodySb = new StringBuilder();
+			bodySb.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			bodySb.append("<div style='width:741px'>\r\n");
 
-			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
-			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
-			sb1.append("<span style='font-size:14px'>").append(strAuthor).append("</span><br><br>\n");
-			sb1.append("<span style='font-size:14px'>").append(strDate).append("</span><br><br>\n");
-			sb1.append(strContent).append("<br><br>\n");
-			sb1.append("</div>\r\n");
+			bodySb.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
+			bodySb.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
+			bodySb.append("<span style='font-size:14px'>").append(strAuthor).append("</span><br><br>\n");
+			bodySb.append("<span style='font-size:14px'>").append(strDate).append("</span><br><br>\n");
+			bodySb.append(strContent).append("<br><br>\n");
+			bodySb.append("</div>\r\n");
+			
+			sb1.append(StockUtil.makeStockLinkStringByTxtFile(bodySb.toString()));
+			
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 			logger.debug("[sb.toString:" + sb1.toString() + "]");

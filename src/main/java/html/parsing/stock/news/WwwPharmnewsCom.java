@@ -154,14 +154,14 @@ public class WwwPharmnewsCom extends News {
 				logger.debug("imgEl:" + imgEl);
 			}
 
-			article.attr("style", "width:548px");
+			article.attr("style", "width:741px");
 			String articleHtml = article.outerHtml();
 			logger.debug("articleHtml:[" + articleHtml + "]articleHtml");
 
 			String copyright = doc.select(".news_copyright").outerHtml();
 			logger.debug("copyright:" + copyright);
 
-			String strContent = articleHtml.replaceAll("640px", "548px");
+			String strContent = articleHtml.replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<figure>", "");
 			strContent = strContent.replaceAll("\"/", "\"" + getProtocolHost() + "/");
 			strContent = strContent.replaceAll("</figure>", "<br>");
@@ -185,7 +185,7 @@ public class WwwPharmnewsCom extends News {
 
 			sb1.append(StockUtil.getMyCommentBox(strMyComment));
 
-			sb1.append("<div style='width:548px'>\r\n");
+			sb1.append("<div style='width:741px'>\r\n");
 
 			sb1.append("<h3> 기사주소:[<a href='" + url + "' target='_sub'>" + url + "</a>] </h3>\n");
 			sb1.append("<h2 id='title'>[").append(strDate).append("] ").append(strTitle).append("</h2>\n");
