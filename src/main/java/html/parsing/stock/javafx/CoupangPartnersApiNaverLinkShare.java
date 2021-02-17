@@ -31,6 +31,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.coupang.partners.HmacGenerator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.webkit.network.CookieManager;
@@ -94,6 +95,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 	List<StockVO> kospiUniqueStockList = new ArrayList<>();
 	List<StockVO> kosdaqUniqueStockList = new ArrayList<>();
 
+	String strBlogId = "";
 	String strNidAut = "";
 	String strNidSes = "";
 
@@ -537,7 +539,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 
 					String url = urlTf.getText();
 					System.out.println("url1:" + url);
-					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strNidAut, strNidSes);
+					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strBlogId, strNidAut, strNidSes);
 					step2.schedulerStart();
 				} else {
 					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
@@ -562,7 +564,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 
 					String url = urlTf.getText();
 					System.out.println("url1:" + url);
-					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strNidAut, strNidSes,
+					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strBlogId,strNidAut, strNidSes,
 						true);
 					step2.schedulerStart();
 				} else {
@@ -935,9 +937,6 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 //		String jsonObject = JSONObject.toJSONString(stockMap);
 		String jsonObject = stockMap.toString();
 		String fileName = "";
-//		fileName = userHome + "\\documents\\" + strYmdhms + "_" + market_en + "_list.json";
-		fileName = market_en + "_list.json";
-		FileUtil.fileWrite(fileName, jsonObject);
 //		fileName = userHome + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
 		fileName = market_en + "_list.txt";
 		FileUtil.fileWrite(fileName, stockCodeNameSb.toString());
@@ -1157,7 +1156,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 		String strShareUrl) {
 		strNidAut = nidAutTf.getText();
 		strNidSes = nidSesTa.getText();
-		return NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strBlogCategoryNo,
+		return NaverUtil.naverBlogLinkShare(strBlogId,strNidAut, strNidSes, strShareUrl, strShareTitle, strBlogCategoryNo,
 			contentSb, null);
 	}
 
@@ -1542,7 +1541,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 		System.out.println("server_url :" + server_url);
 		StringBuilder sb = new StringBuilder();
 		// Generate HMAC string
-		String authorization = generate(REQUEST_METHOD_GET, server_url, ACCESS_KEY, SECRET_KEY);
+		String authorization = HmacGenerator.generate(REQUEST_METHOD_GET, server_url, SECRET_KEY, ACCESS_KEY);
 		System.out.println("authorization:" + authorization);
 		// Send request
 		StringEntity entity = new StringEntity(strParamJson, "UTF-8");
@@ -1724,7 +1723,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 		strNidAut = nidAutTf.getText();
 		strNidSes = nidSesTa.getText();
 		String strShareUrl = "";
-		NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strBlogCategoryNo, contentSb, null);
+		NaverUtil.naverBlogLinkShare(strBlogId,strNidAut, strNidSes, strShareUrl, strShareTitle, strBlogCategoryNo, contentSb, null);
 	}
 
 	/**

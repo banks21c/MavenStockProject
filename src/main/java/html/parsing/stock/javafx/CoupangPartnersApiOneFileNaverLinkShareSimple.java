@@ -51,6 +51,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.LoggerFactory;
 
+import com.coupang.partners.HmacGenerator;
+
 import html.parsing.stock.util.NaverUtil;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
@@ -147,6 +149,10 @@ public class CoupangPartnersApiOneFileNaverLinkShareSimple extends javax.swing.J
 	// Replace with your own ACCESS_KEY and SECRET_KEY
 	private String ACCESS_KEY = "";
 	private String SECRET_KEY = "";
+
+	private String strBlogId;
+	private String strNidAut;
+	private String strNidSes;
 
 	private final static String REQUEST_METHOD_POST = "POST";
 	private final static String REQUEST_METHOD_GET = "GET";
@@ -985,10 +991,10 @@ public class CoupangPartnersApiOneFileNaverLinkShareSimple extends javax.swing.J
 	}
 
 	public void naverBlogLinkShare(StringBuilder contentSb, String strCategoryName, String strShareTitle) {
-		String strNidAut = nidAutTa.getText();
-		String strNidSes = nidSesTa.getText();
+		strNidAut = nidAutTa.getText();
+		strNidSes = nidSesTa.getText();
 		String strShareUrl = "";
-		NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strCategoryName, contentSb, rootPane);
+		NaverUtil.naverBlogLinkShare(strBlogId, strNidAut, strNidSes, strShareUrl, strShareTitle, strCategoryName, contentSb, rootPane);
 	}
 
 	// 카테고리별 베스트 상품에 대한 상세 상품 정보를 생성합니다.
@@ -1185,7 +1191,7 @@ public class CoupangPartnersApiOneFileNaverLinkShareSimple extends javax.swing.J
 		System.out.println("server_url :" + server_url);
 		StringBuilder sb = new StringBuilder();
 		// Generate HMAC string
-		String authorization = generate(REQUEST_METHOD_GET, server_url, ACCESS_KEY, SECRET_KEY);
+		String authorization = HmacGenerator.generate(REQUEST_METHOD_GET, server_url, SECRET_KEY, ACCESS_KEY);
 		System.out.println("authorization:" + authorization);
 		// Send request
 		StringEntity entity = new StringEntity(strParamJson, "UTF-8");
