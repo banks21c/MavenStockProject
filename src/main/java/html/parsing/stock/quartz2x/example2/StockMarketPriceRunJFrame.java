@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
  */
 public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 
+	String strBlogId = "";
 	String strNidAut = "";
 	String strNidSes = "";
 
@@ -45,10 +46,10 @@ public class StockMarketPriceRunJFrame extends javax.swing.JFrame {
 	}
 
 	public void start() {
-		new StockUnique_ReadTxtFile_ThreadCall(strNidAut, strNidSes).start();
-		new StockWeeks52NewLowHighPriceTodayOneFile(strNidAut, strNidSes).start();
+		new StockUnique_ReadTxtFile_ThreadCall(strBlogId, strNidAut, strNidSes).start();
+		new StockWeeks52NewLowHighPriceTodayOneFile(strBlogId, strNidAut, strNidSes).start();
 //		new StockPlusMinusDivide_ThreadCall(strNidAut,strNidSes).start();
-		new StockPlusMinusDivide100(strNidAut, strNidSes).start();
+		new StockPlusMinusDivide100(strBlogId, strNidAut, strNidSes).start();
 	}
 
 	/**

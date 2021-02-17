@@ -11,10 +11,10 @@ import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JSoupTest1 {
+public class JSoupTest3 {
 
 	final static String userHome = System.getProperty("user.home");
-	private static Logger logger = LoggerFactory.getLogger(JSoupTest1.class);
+	private static Logger logger = LoggerFactory.getLogger(JSoupTest3.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -29,15 +29,15 @@ public class JSoupTest1 {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new JSoupTest1();
+		new JSoupTest3();
 	}
 
-	JSoupTest1() {
+	JSoupTest3() {
 
-		readNews("110570", "넥솔론");
+		readNews();
 	}
 
-	public void readNews(String stockCode, String stockName) {
+	public void readNews() {
 
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
@@ -46,8 +46,7 @@ public class JSoupTest1 {
 			StringBuilder sb1 = new StringBuilder();
 
 			// 종합정보
-//			String url = "https://m.stock.naver.com/api/item/getTrendList.nhn?code=005930&size=10&bizdate=20200805";
-			String url = "https://finance.daum.net/api/quotes/sectors?market=KOSPI";
+			String url = "https://static.nid.naver.com/getLoginStatus.nhn?callback=showGNB&charset=utf-8&svc=admin.blog&template=gnb_utf8&one_naver=0";
 			System.out.println(url);
 
 //			Connection.Response res = Jsoup.connect(url).timeout(10 * 1000).execute();

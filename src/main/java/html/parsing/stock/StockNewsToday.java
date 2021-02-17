@@ -557,7 +557,7 @@ public class StockNewsToday extends News {
 					Element view = doc.select(".view").get(0);
 					logger.debug("view.className:" + view.className());
 					logger.debug("attr(class):" + view.attr("class"));
-					view.attr("style", "width:548px;");
+					view.attr("style", "width:741px;");
 					view.select("td").attr("style", "border:0;");
 
 					Elements tables = view.select("table");
@@ -565,8 +565,8 @@ public class StockNewsToday extends News {
 						String width = table.attr("width");
 						if (width != null && !width.equals("")) {
 							int iWidth = Integer.parseInt(width);
-							if (iWidth > 548) {
-								table.attr("width", "548");
+							if (iWidth > 741) {
+								table.attr("width", "741");
 							}
 						}
 						String cellspacing = table.attr("cellspacing");

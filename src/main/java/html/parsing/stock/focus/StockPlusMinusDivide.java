@@ -45,7 +45,7 @@ public class StockPlusMinusDivide extends Thread {
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
 
-	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E hh.mm.SSS", Locale.KOREAN).format(new Date());
+	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.SSS", Locale.KOREAN).format(new Date());
 
 	DecimalFormat df = new DecimalFormat("###.##");
 
@@ -71,6 +71,7 @@ public class StockPlusMinusDivide extends Thread {
 
 	static int iExtractCount = -1;
 
+	private String strBlogId;
 	private String strNidAut;
 	private String strNidSes;
 
@@ -102,8 +103,9 @@ public class StockPlusMinusDivide extends Thread {
 		iExtractCount = -1;
 	}
 
-	StockPlusMinusDivide(String strNidAut, String strNidSes) {
+	StockPlusMinusDivide(String strBlogId,String strNidAut, String strNidSes) {
 		logger = LoggerFactory.getLogger(getClass());
+		this.strBlogId = strBlogId;
 		this.strNidAut = strNidAut;
 		this.strNidSes = strNidSes;
 	}
@@ -236,12 +238,15 @@ public class StockPlusMinusDivide extends Thread {
 	public void naverBlogLinkShare(StringBuilder html) {
 		String strUrl = "";
 		String strTitle = Jsoup.parse(html.toString()).select("h2#title").text();
-		String strBlogCategoryNo = "146";//증권↑↓↗↘
+		String strBlogCategoryNo = "146";// 증권↑↓↗↘
 		StringBuilder contentSb = html;
+		logger.debug("strBlogId:" + strBlogId);
 		logger.debug("strNidAut:" + strNidAut);
 		logger.debug("strNidSes:" + strNidSes);
-				if (!StringUtils.defaultIfEmpty(strNidAut,"").equals("") && !StringUtils.defaultIfEmpty(strNidSes,"").equals("")) {
-			NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strUrl, strTitle, strBlogCategoryNo, contentSb, null);
+		if (!StringUtils.defaultIfEmpty(strBlogId, "").equals("")
+				&& !StringUtils.defaultIfEmpty(strNidAut, "").equals("")
+				&& !StringUtils.defaultIfEmpty(strNidSes, "").equals("")) {
+			NaverUtil.naverBlogLinkShare(strBlogId, strNidAut, strNidSes, strUrl, strTitle, strBlogCategoryNo, contentSb, null);
 		}
 	}
 
@@ -437,9 +442,7 @@ public class StockPlusMinusDivide extends Thread {
 			} else if (specialLetter.equals("▼")) {
 				downCount++;
 			} else {
-				if (stock.getiTradingVolume() > 0) {
-					steadyCount++;
-				}
+				steadyCount++;
 			}
 //            System.out.println("date:" + date);
 			System.out.println("specialLetter:" + specialLetter);

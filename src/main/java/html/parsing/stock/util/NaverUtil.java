@@ -1,22 +1,31 @@
 package html.parsing.stock.util;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
-import java.net.URLDecoder;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 
-import org.json.JSONObject;
+import org.brotli.dec.BrotliInputStream;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -35,40 +45,68 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import org.brotli.dec.BrotliInputStream;
-
 public class NaverUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(NaverUtil.class);
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		int serial = 567;
-		// String serial = "123";
-		String suffix = String.format("%05s", serial);
-		System.out.println(suffix);
+//		getNaverBlogReplyOpen("", "");
+
+		JRootPane rootPane = null;
+		String strBlogId = "soonks21";
+		String strNidAut = "80pQ9sjL8eX2TSPE9NIbuj1SKyXkk6MfuwuASNjBanLlFZFp+swqQS9t0SR8xf6m";
+		String strNidSes = "AAABdS2WwTbmu4RR/uf7eoGmkO5HhLVVLkoMJ46DLnxolZggFp2OfgLQ0c1DtEZSHvjN3xCMuo0Y4umG/Ua6fQ9IA/nCgZuhXhO7LpxOo3vcQcImlMj3ws36g/t1vw7V0Q3re/xgBqLzYqsqhewouIv8ON7atNZgdr5sN1+64m2Choq+zNRlO01YYRnC4UcsSBdRkNZaPTWSaweOWmf7jIXTyvbbWjLqegyQxHhyi9gnY3MDzZ7gu2bCEcjtYQYNmGa8Aw9IzEFyt04wiZByEEpYAj0WGnxStulQt5qMWj+hby4mujbFwd8ryZl9W2uk2n/6WcUb8lKosu6+/8TZ1Pr6Am/XkM/SksFyxcvpT/4DFsuyIAvKWcWlvZkXvOFaRIlsO51Wes1UwZl34M9d3k9Dod279ZJOL22b7H6uloeZP+5dbV99sBPc8gUh8xgFf+X5+4exhzC/zz0gkhekV4eSHseCEqbPn9OPxuY+aosmXXcUhq1i7u7wKHlw7/XZ+GVdEw==";
+		String strUrl = "https://coupa.ng/bRA62y";
+		String strTitle = "쿠팡을 추천 합니다! 쿠팡! | 하림 에어프라이어 순살치킨 (냉동)";
+		String strCategoryNo = "2";
+		StringBuilder contentSb = new StringBuilder();
+
+//		naverBlogLinkShare(strBlogId, strNidAut, strNidSes, strUrl, strTitle, strCategoryNo, contentSb, rootPane);
+//		naverBlogLinkShareView(strBlogId, strNidAut, strNidSes, strUrl, strTitle, strCategoryNo, contentSb, rootPane);
+//		naverBlogOpenApiShare(strBlogId, strNidAut, strNidSes, strUrl, strTitle, strCategoryNo, contentSb, rootPane);
+		linkSharePostWriteAsync(strBlogId, strNidAut, strNidSes, strUrl, strTitle, strCategoryNo, contentSb, rootPane);
 	}
 
-	public static boolean naverBlogLinkShare(String strNidAut, String strNidSes, String strUrl, String strTitle,
-		String strCategoryNo, StringBuilder contentSb, JRootPane rootPane) {
-		System.out.println("contentSb :["+contentSb+"]:contentSb");
-		System.out.println("strCategoryNo :["+strCategoryNo+"]:strCategoryNo");
+	public static boolean naverBlogLinkShare(String strBlogId, String strNidAut, String strNidSes, String strUrl,
+			String strTitle, String strCategoryNo, StringBuilder contentSb, JRootPane rootPane) {
+		logger.debug("strBlogId :[" + strBlogId + "]");
+		logger.debug("contentSb :[" + contentSb + "]");
+		logger.debug("strCategoryNo :[" + strCategoryNo + "]");
 		if (strNidAut.equals("") || strNidSes.equals("")) {
 			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning",
-				JOptionPane.WARNING_MESSAGE);
+					JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
 
 		try {
+			String strRefererUrl = "https://blog.naver.com/LinkShare.nhn";
+			String strLinkShareUrl = "https://blog.naver.com/LinkSharePostWriteAsync.nhn";
+			URL url = new URL(strLinkShareUrl);
+			String protocol = url.getProtocol();
+			String host = url.getHost();
+			String protocolHost = protocol + "://" + host;
+			String path = url.getPath();
+			String query = url.getQuery();
+			int port = url.getPort();
+
 			HttpHeaders headers = new HttpHeaders();
 
+			headers.set("athority", "");
+			headers.set("method", "");
+			headers.set("path", "");
+			headers.set("scheme", "");
+
 			headers.set("Accept",
-				"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+			headers.set("Accept",
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
 			headers.set("Accept-Encoding", "gzip, deflate");
+			headers.set("Accept-Encoding", "gzip, deflate, br");
 			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
-			headers.set("Cache-Control", "max-age=0");
-			headers.set("Connection", "keep-alive");
-			headers.set("Content-Length", "4148");
+
+//			headers.set("Cache-Control", "max-age=0");
+//			headers.set("Connection", "keep-alive");
+//			headers.set("Content-Length", "4148");
 //			headers.set("Content-Type", "application/x-www-form-urlencoded");
 			// headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -83,193 +121,94 @@ public class NaverUtil {
 
 			headers.set("Cookie", cookieSb.toString());
 
-			headers.set("Host", "blog.naver.com");
-			headers.set("Origin", "http://blog.naver.com");
+			headers.set("Host", host);
+			headers.set("Origin", protocolHost);
 
 			String strEncodedTitle = URLEncoder.encode(strTitle, "UTF8");
 			logger.debug("strEncodedTitle==>" + strEncodedTitle);
 
-			headers.set("Referer", "http://blog.naver.com/LinkShare.nhn?url=" + strUrl + "&title=" + strEncodedTitle);
+			headers.set("Referer", strRefererUrl + "?url=" + strUrl + "&title=" + strEncodedTitle);
 
 			headers.set("Upgrade-Insecure-Requests", "1");
 			headers.set("User-Agent",
-				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
 
 //			headers.set("X-Requested-With", "XMLHttpRequest");
 			headers.forEach((key, value) -> {
-				System.out.println(String.format("Header '%s' = %s", key, value));
+				logger.debug(String.format("Header '%s' = %s", key, value));
 			});
 
 			RestTemplate restTemplate = new RestTemplate();
 
 //			List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 			List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
-			System.out.println("__________1_____________");
+			logger.debug("__________1_____________");
 			for (HttpMessageConverter httpMessageConverter : messageConverters) {
-				System.out.println(httpMessageConverter);
+				logger.debug(httpMessageConverter.toString());
 			}
-			System.out.println("__________1_____________");
-
-//            HttpEntity<String> entity = new HttpEntity<String>(headers);
-//			messageConverters.add(new org.springframework.http.converter.ByteArrayHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
-//			messageConverters.add(new org.springframework.http.converter.StringHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
-//			messageConverters.add(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
-//			messageConverters.add(new org.springframework.http.converter.ResourceHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
-			// messageConverters.add(new
-			// org.springframework.http.converter.xml.SourceHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
-//			messageConverters.add(new org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not extract
-			// response: no suitable HttpMessageConverter found for response type [class
-			// java.lang.String] and content type [text/html;charset=UTF-8]
-//			messageConverters.add(new org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
+			logger.debug("__________1_____________");
 			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not extract
-			// response: no suitable HttpMessageConverter found for response type [class
-			// java.lang.String] and content type [text/html;charset=UTF-8]
-//			messageConverters.add(new org.springframework.http.converter.ResourceRegionHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
-			System.out.println("___________2____________");
-			for (HttpMessageConverter httpMessageConverter : messageConverters) {
-				System.out.println(httpMessageConverter);
-			}
-			System.out.println("__________2_____________");
-
-//			RestTemplate restTemplate2 = new RestTemplate(messageConverters);
-//			restTemplate.setMessageConverters(messageConverters);
-			messageConverters = restTemplate.getMessageConverters();
-			System.out.println("__________3_____________");
-			for (HttpMessageConverter httpMessageConverter : messageConverters) {
-				System.out.println(httpMessageConverter);
-			}
-			System.out.println("__________3_____________");
 
 			// Form Data
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-//			map.add("domain", "www.youtube.com");
-			map.add("domain", "www.asiae.co.kr");
-			map.add("token", "");
-			map.add("timestamp", "");
-//			map.add("url", "https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DJ6zD3h_I3Lc%26feature%3Dshare");
+			map.add("domain", host);
+			map.add("token", "1ded42475374579f8d9197a195c6813e55fb5fd60e9b75264e99da234856586f");
+			map.add("timestamp", "1613308403301");
 			String strEncodedUrl = URLEncoder.encode(strUrl, "UTF8");
 			map.add("url", strEncodedUrl);
-			map.add("blogId", "banks");
+			map.add("blogId", strBlogId);
 			map.add("title", strEncodedTitle);
-//			temp += contentSb.toString();
-//			temp = URLEncoder.encode(temp, "UTF8");
-			map.add("content",URLEncoder.encode(contentSb.toString(), "UTF8"));
+			// 내용
+//			map.add("content",URLEncoder.encode(contentSb.toString(), "UTF8"));
+
 			String temp = "";
-
-			temp = "%3Cspan%20id%3D%22se_object_1592901264185%22%20class%3D%22__se_object%22%20s_type%3D%22leverage%22%20s_subtype%3D%22oglink%22%20jsonvalue%3D%22%257B%2522url%2522%253A%2522https%253A%252F%252Fwww.youtube.com%252Fwatch%253Fv%253DJ6zD3h_I3Lc%2526feature%253Dshare%2522%252C%2522domain%2522%253A%2522www.youtube.com%2522%252C%2522title%2522%253A%2522%25EC%25A3%25BD%25EC%259D%2584%2520%25EB%25BB%2594%2520%25ED%2595%259C%2520%25EC%2595%2584%25EA%25B8%25B0%2520%25EC%2588%2598%25EB%258B%25AC%25EC%259D%2584%2520%25EC%2582%25B4%25EB%25A0%25A4%25EC%25A4%25AC%25EB%258D%2594%25EB%258B%2588%2520%25EC%2583%259D%25EA%25B8%25B4%2520%25EC%259D%25BC%2520%25E3%2585%25A3%2520What%2520Happened%2520After%2520Rescuing%2520A%2520Nearly%2520Dying%2520Baby%2520Otter%2520Is..%2522%252C%2522description%2522%253A%2522%25ED%2595%2598%25EB%258A%2594%2520%25EC%25A7%2593%25EB%25A7%2588%25EB%258B%25A4%2520%25EB%25A9%258D%25EB%25AD%2589%25EB%25AF%25B8%2520%25EB%2584%2598%25EC%25B9%2598%25EB%258A%2594%2520%25EC%2588%2598%25EB%258B%25AC%2520%2526%252339%253B%25ED%2596%2587%25EB%258B%2598%25EC%259D%25B4%2526%252339%253B%2520%25ED%2596%2587%25EB%258B%2598%25EC%259D%25B4%25EA%25B0%2580%2520%25EC%2582%25AC%25EC%259C%25A1%25EC%2582%25AC%25EB%25A5%25BC%2520%25EB%2594%25B0%25EB%25A5%25B4%25EA%25B8%25B0%2520%25EC%258B%259C%25EC%259E%2591%25ED%2595%259C%2520%25EC%259D%25B4%25EC%259C%25A0%25EB%258A%2594..%2520%2523%25EB%258F%2599%25EB%25AC%25BC%25EB%2586%258D%25EC%259E%25A5%2520%2523%25EC%2595%25A0%25EB%258B%2588%25EB%25A9%2580%25EB%25B4%2590%25EC%2588%2598%25EB%258B%25AC%2520%2523%25EA%25B0%259C%25EC%2588%2598%25EB%258B%25AC%25ED%2596%2587%25EB%258B%2598%25EC%259D%25B4%2520-------------------------------------------------%2520%25EC%2595%25A0%25EB%258B%2588%25EB%25A9%2580%25EB%25B4%2590%25EC%2599%2580%2520%25ED%2595%259C%25EB%25B0%25B0%25ED%2583%2580%25EA%25B3%25A0%25E2%259B%25B5%2520%25E2%2598%259E%2520https%253A%252F%252Fgoo.gl%252FWL9mGy%2520%25ED%2596%2587...%2522%252C%2522type%2522%253A%2522video%2522%252C%2522image%2522%253A%257B%2522url%2522%253A%2522https%253A%252F%252Fi.ytimg.com%252Fvi%252FJ6zD3h_I3Lc%252Fhqdefault.jpg%2522%252C%2522width%2522%253A480%252C%2522height%2522%253A360%257D%252C%2522allImages%2522%253A%255B%257B%2522url%2522%253A%2522https%253A%252F%252Fi.ytimg.com%252Fvi%252FJ6zD3h_I3Lc%252Fhqdefault.jpg%2522%252C%2522width%2522%253A480%252C%2522height%2522%253A360%257D%255D%252C%2522video%2522%253A%2522https%253A%252F%252Fwww.youtube.com%252Fembed%252FJ6zD3h_I3Lc%2522%252C%2522site%2522%253A%2522YouTube%2522%252C%2522layoutType%2522%253A1%257D%22%3E%3C%2Fspan%3E%3Cbr%3E%EA%B7%80%EC%97%AC%EC%9B%8C%EC%9A%94...";
-			temp = URLDecoder.decode(temp, "UTF-8");
-			Document doc = Jsoup.parse(temp);
-			logger.debug("doc:" + doc);
-			String jsonvalue = doc.select("span").attr("jsonvalue");
-			logger.debug("jsonvalue:" + jsonvalue);
-			String decodedJsonvalue = URLDecoder.decode(jsonvalue, "UTF8");
-			logger.debug("decodedJsonvalue:" + decodedJsonvalue);
-			if (!decodedJsonvalue.equals("")) {
-
-				JSONObject jobj = new JSONObject(decodedJsonvalue);
-				Iterator it = jobj.keys();
-				logger.debug("================");
-				while (it.hasNext()) {
-					String key = (String) it.next();
-					Object valueObj = jobj.get(key);
-					String value = "";
-					if (valueObj instanceof String) {
-						value = (String) valueObj;
-					} else if (valueObj instanceof JSONObject) {
-						value = valueObj.toString();
-					}else{
-						value = String.valueOf(valueObj);
-					}
-
-					logger.debug(key + ":" + value);
-				}
-			}
-			logger.debug("================");
-
 			// 아래의 span 태그가 없으면 공유실패함..
-			temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leverage\" s_subtype=\"oglink\" jsonvalue=\"테스트(test)\"></span>";
-//			temp += contentSb.toString();
-			
+			// 쌍따옴표를 홑따옴표로 바꿔도 공유실패.
+			temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leverage\" s_subtype=\"oglink\" jsonvalue=\"테스트(test)\"> </span>";
+			temp += contentSb.toString();
+			// do url encoding
 			temp = URLEncoder.encode(temp, "UTF8");
 			map.add("content", temp);
-			// 공개 여부(비공개),0:비공개, 1:이웃공개, 2: 전체공개, 3:서로이웃공개
+			// postOpenType 공개 여부(비공개),0:비공개, 1:이웃공개, 2: 전체공개, 3:서로이웃공개
 			map.add("postOpenType", "2");
 
 			map.add("categoryNo", strCategoryNo);
 
+			String referrer = "https://share.naver.com/web/shareView.nhn?url=" + strEncodedUrl + "&title="
+					+ strEncodedTitle;
+			map.add("referrer", referrer);
+
 			// header에 있으면 Form Data에 없어도 된다.
 			// map.add("referrer",
-			// "https://blog.naver.com/openapi/share?url=https://www.asiae.co.kr/article/nationaldefense-diplomacy/2020062421382026021&title=%E5%8C%97,%20%EC%A0%95%EA%B2%BD%EB%91%90%20%EA%B5%AD%EB%B0%A9%EC%9E%A5%EA%B4%80%EC%97%90%20%22%EA%B2%81%20%EB%A8%B9%EC%9D%80%20%EA%B0%9C%EA%B0%80%20%EB%8D%94%20%EC%9A%94%EB%9E%80%22%20%EA%B2%BD%EA%B3%A0");
 //			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(SERVER_URI);
-			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme("http").host("blog.naver.com");
-			builder = builder.path("/LinkSharePostWriteAsync.nhn");
+			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme(protocol).host(host);
+			builder = builder.path(path);
 			UriComponents uriComponents = builder.build();
 			URI uri = uriComponents.toUri();
-			System.out.println("uri:" + uri);
-			System.out.println("uri path:" + uri.getPath());
+			logger.debug("uri:" + uri);
+			logger.debug("uri path:" + uri.getPath());
 
-			System.out.println("uriComponents :" + uriComponents);
+			logger.debug("uriComponents :" + uriComponents);
 			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map,
-				headers);
+					headers);
 //			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.POST, entity, byte[].class);
 			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity,
-				byte[].class);
-			System.out.println("response :" + response);
-
-//			RestTemplate template = new RestTemplate();
-//			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
-//			HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
-//			ResponseEntity<String> entity = restTemplate.getForEntity("https://example.com", String.class);
-//			HttpEntity<?> entity = new HttpEntity<>(headers);
-//			HttpEntity<String> entity = new HttpEntity<String>(headers);
-//			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, byte[].class);
-//			ResponseEntity<Object> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, Object.class);
-//			ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, String.class);
-//		        ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, String.class);
-			System.out.println("response.getStatusCode():" + response.getStatusCode());
+					byte[].class);
+			logger.debug("response :" + response);
+			logger.debug("response.getStatusCode():" + response.getStatusCode());
 			HttpHeaders responseHeaders = response.getHeaders();
 			responseHeaders.forEach((key, value) -> {
-				System.out.println(String.format("Response Header [%s] = %s", key, value));
+				logger.debug(String.format("Response Header [%s] = %s", key, value));
 			});
 
-//			System.out.println("guessEncoding :" + guessEncoding(response.getBody()));
-			System.out.println("body :" + response.getBody());
+//			logger.debug("guessEncoding :" + guessEncoding(response.getBody()));
+			logger.debug("body :" + response.getBody());
 
 			String unzipString = NaverUtil.unzipStringFromBytes(response.getBody(), "UTF8");
 
-			System.out.println("unzipString :" + unzipString);
-			System.out.println("finished");
+			logger.debug("unzipString :" + unzipString);
+			logger.debug("finished");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -284,7 +223,7 @@ public class NaverUtil {
 			HttpHeaders headers = new HttpHeaders();
 
 			headers.set("Accept",
-				"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
 			headers.set("Accept-Encoding", "gzip, deflate");
 			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
 			headers.set("Cache-Control", "max-age=0");
@@ -305,7 +244,7 @@ public class NaverUtil {
 			cookieSb.append(strNidAut + ";");
 			cookieSb.append("NID_SES=");
 			cookieSb.append(strNidSes + ";");
-			System.out.println("cookieSb.toString():" + cookieSb.toString());
+			logger.debug("cookieSb.toString():" + cookieSb.toString());
 			headers.set("Cookie", cookieSb.toString());
 
 //			Cookie c = new Cookie();
@@ -314,22 +253,22 @@ public class NaverUtil {
 //			headers.set("Referer", "http://blog.naver.com/LinkShare.nhn?url=https%3A//www.youtube.com/watch%3Fv%3DaL55d6sDiGE%26feature%3Dshare");
 			headers.set("Upgrade-Insecure-Requests", "1");
 			headers.set("User-Agent",
-				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
 
 //			headers.set("X-Requested-With", "XMLHttpRequest");
 			headers.forEach((key, value) -> {
-				System.out.println(String.format("Header '%s' = %s", key, value));
+				logger.debug(String.format("Header '%s' = %s", key, value));
 			});
 
 			RestTemplate restTemplate = new RestTemplate();
 
 //			List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
 			List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
-			System.out.println("__________1_____________");
+			logger.debug("__________1_____________");
 			for (HttpMessageConverter httpMessageConverter : messageConverters) {
-				System.out.println(httpMessageConverter);
+				logger.debug(httpMessageConverter.toString());
 			}
-			System.out.println("__________1_____________");
+			logger.debug("__________1_____________");
 
 //            HttpEntity<String> entity = new HttpEntity<String>(headers);
 //			messageConverters.add(new org.springframework.http.converter.ByteArrayHttpMessageConverter());
@@ -376,20 +315,20 @@ public class NaverUtil {
 			// no suitable HttpMessageConverter found for request type
 			// [org.springframework.util.LinkedMultiValueMap] and content type
 			// [application/x-www-form-urlencoded]
-			System.out.println("___________2____________");
+			logger.debug("___________2____________");
 			for (HttpMessageConverter httpMessageConverter : messageConverters) {
-				System.out.println(httpMessageConverter);
+				logger.debug(httpMessageConverter.toString());
 			}
-			System.out.println("__________2_____________");
+			logger.debug("__________2_____________");
 
 //			RestTemplate restTemplate2 = new RestTemplate(messageConverters);
 //			restTemplate.setMessageConverters(messageConverters);
 			messageConverters = restTemplate.getMessageConverters();
-			System.out.println("__________3_____________");
+			logger.debug("__________3_____________");
 			for (HttpMessageConverter httpMessageConverter : messageConverters) {
-				System.out.println(httpMessageConverter);
+				logger.debug(httpMessageConverter.toString());
 			}
-			System.out.println("__________3_____________");
+			logger.debug("__________3_____________");
 
 			// Form Data
 //			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -401,17 +340,17 @@ public class NaverUtil {
 			builder = builder.queryParam("url", "https://www.youtube.com/watch?v=J6zD3h_I3Lc&feature=share");
 			UriComponents uriComponents = builder.build();
 			URI uri = uriComponents.toUri();
-			System.out.println("uri:" + uri);
-			System.out.println("uri path:" + uri.getPath());
+			logger.debug("uri:" + uri);
+			logger.debug("uri path:" + uri.getPath());
 
-			System.out.println("uriComponents :" + uriComponents);
+			logger.debug("uriComponents :" + uriComponents);
 //			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
 //			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(map, headers);
 			HttpEntity<?> entity = new HttpEntity<>(headers);
 //			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, byte[].class);
 			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
-				byte[].class);
-			System.out.println("response :" + response);
+					byte[].class);
+			logger.debug("response :" + response);
 
 //			RestTemplate template = new RestTemplate();
 //			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
@@ -423,23 +362,23 @@ public class NaverUtil {
 //			ResponseEntity<Object> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, Object.class);
 //			ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, String.class);
 //		        ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, String.class);
-			System.out.println("response.getStatusCode():" + response.getStatusCode());
+			logger.debug("response.getStatusCode():" + response.getStatusCode());
 			HttpHeaders responseHeaders = response.getHeaders();
 			responseHeaders.forEach((key, value) -> {
-				System.out.println(String.format("Response Header [%s] = %s", key, value));
+				logger.debug(String.format("Response Header [%s] = %s", key, value));
 			});
 
-//			System.out.println("guessEncoding :" + guessEncoding(response.getBody()));
+//			logger.debug("guessEncoding :" + guessEncoding(response.getBody()));
 			byte[] responseBody = response.getBody();
-			System.out.println("body :" + responseBody);
+			logger.debug("body :" + responseBody);
 			String unzipString = "";
 			if (responseBody != null) {
 				unzipString = NaverUtil.unzipStringFromBytes(response.getBody(), "UTF8");
 			}
 			sb.append(unzipString);
 
-			System.out.println("body:" + unzipString);
-			System.out.println("finished");
+			logger.debug("body:" + unzipString);
+			logger.debug("finished");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -450,7 +389,7 @@ public class NaverUtil {
 	public static String guessEncoding(byte[] bytes) {
 		String DEFAULT_ENCODING = "UTF-8";
 		org.mozilla.universalchardet.UniversalDetector detector = new org.mozilla.universalchardet.UniversalDetector(
-			null);
+				null);
 		detector.handleData(bytes, 0, bytes.length);
 		detector.dataEnd();
 		String encoding = detector.getDetectedCharset();
@@ -458,7 +397,7 @@ public class NaverUtil {
 		if (encoding == null) {
 			encoding = DEFAULT_ENCODING;
 		}
-		System.out.println("encoding:" + encoding);
+		logger.debug("encoding:" + encoding);
 		return encoding;
 	}
 
@@ -487,7 +426,8 @@ public class NaverUtil {
 
 	// GZIPInputStream을 이용하여 byte배열 압축해제하기
 	public static String unzipStringFromBytes(byte[] bytes, String charset) throws IOException {
-
+		if (bytes == null)
+			return null;
 		ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 		GZIPInputStream gzipInputStream = new GZIPInputStream(byteArrayInputStream);
 		BufferedInputStream bufferedInputStream = new BufferedInputStream(gzipInputStream);
@@ -527,6 +467,1070 @@ public class NaverUtil {
 		byteArrayOutputStream.close();
 
 		return byteArrayOutputStream.toString(charset);
+	}
+
+	/**
+	 * 쿠키에 있는 NID_AUT,NID_SES 정보를 이용하여 네이버 카테고리 정보를 가져온다.
+	 */
+	public static List<String> getNaverBlogCategoryList(String strNidAut, String strNidSes) {
+		List<String> categoryList = new ArrayList<>();
+		try {
+			HttpHeaders headers = new HttpHeaders();
+
+			headers.set("Accept",
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+			headers.set("Accept-Encoding", "gzip, deflate");
+			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
+			headers.set("Cache-Control", "max-age=0");
+			headers.set("Connection", "keep-alive");
+//			headers.set("Content-Length", "4148");
+//			headers.set("Content-Type", "application/x-www-form-urlencoded");
+			// headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//			headers.set("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+//			headers.setContentType(MediaType.TEXT_PLAIN);
+
+			StringBuilder cookieSb = new StringBuilder();
+			cookieSb.append("NID_AUT=");
+			cookieSb.append(strNidAut).append(";");
+			cookieSb.append("NID_SES=");
+			cookieSb.append(strNidSes).append(";");
+
+			headers.set("Cookie", cookieSb.toString());
+
+			headers.set("Host", "blog.naver.com");
+//			headers.set("Origin", "http://blog.naver.com");
+//			headers.set("Referer", "http://blog.naver.com/LinkShare.nhn?url=https%3A//www.youtube.com/watch%3Fv%3DaL55d6sDiGE%26feature%3Dshare");
+			headers.set("Upgrade-Insecure-Requests", "1");
+			headers.set("User-Agent",
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+
+//			headers.set("X-Requested-With", "XMLHttpRequest");
+			headers.forEach((key, value) -> {
+				logger.debug(String.format("Header '%s' = %s", key, value));
+			});
+
+			RestTemplate restTemplate = new RestTemplate();
+
+//			List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+			List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________1_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________1_____________");
+
+			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
+			logger.debug("___________2____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________2_____________");
+
+//			RestTemplate restTemplate2 = new RestTemplate(messageConverters);
+//			restTemplate.setMessageConverters(messageConverters);
+			messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________3_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________3_____________");
+
+			// Form Data
+//			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+//			map.add("url", "https://www.youtube.com/watch?v=J6zD3h_I3Lc");
+//			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(LINK_SHARE_URI_PREFIX);
+			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme("http").host("blog.naver.com");
+			builder = builder.path("/openapi/share");
+			// 죽을 뻔 한 아기 수달을 살려줬더니 생긴 일 ㅣ What Happened After Rescuing A Nearly Dying Baby
+			// Otter Is..
+			String strUrl = "https://www.youtube.com/watch?v=J6zD3h_I3Lc";
+			strUrl = URLEncoder.encode(strUrl, "UTF-8");
+			builder = builder.queryParam("url", strUrl);
+			UriComponents uriComponents = builder.build();
+			URI uri = uriComponents.toUri();
+			logger.debug("uri:" + uri);
+			logger.debug("uri path:" + uri.getPath());
+
+			logger.debug("uriComponents :" + uriComponents);
+//			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
+//			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+			HttpEntity<?> entity = new HttpEntity<>(headers);
+//			HttpEntity<String> entity = new HttpEntity<String>(headers);
+//			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, byte[].class);
+			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
+					byte[].class);
+			logger.debug("response :" + response);
+
+//			RestTemplate template = new RestTemplate();
+//			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+//			HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
+//			ResponseEntity<String> entity = restTemplate.getForEntity("https://example.com", String.class);
+			logger.debug("response.getStatusCode():" + response.getStatusCode());
+			HttpHeaders responseHeaders = response.getHeaders();
+			responseHeaders.forEach((key, value) -> {
+				logger.debug(String.format("Response Header [%s] = %s", key, value));
+			});
+
+//			logger.debug("guessEncoding :" + guessEncoding(response.getBody()));
+			byte[] responseBody = response.getBody();
+			logger.debug("body :" + responseBody);
+			// [B@2460600f
+			String unzipString = "";
+			if (responseBody != null) {
+				unzipString = NaverUtil.unzipStringFromBytes(response.getBody(), "UTF8");
+			}
+
+			logger.debug("unzipString:" + unzipString);
+			if (response.getStatusCode() == HttpStatus.OK) {
+				if (!unzipString.equals("")) {
+					Document doc = Jsoup.parse(unzipString);
+					Elements categoryEls = doc.select("#_categoryList option");
+					for (Element categoryEl : categoryEls) {
+						String categoryNo = categoryEl.attr("value");
+						String categoryName = categoryEl.text();
+						String categoryNoAndName = categoryNo + ":" + categoryName;
+						categoryList.add(categoryNoAndName);
+					}
+				}
+			}
+			logger.debug("finished");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return categoryList;
+	}
+
+	public static Map<String, String> getNaverBlogCategoryMap(String strNidAut, String strNidSes) {
+		Map<String, String> categoryMap = new HashMap<>();
+		try {
+			HttpHeaders headers = new HttpHeaders();
+
+			headers.set("Accept",
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+			headers.set("Accept-Encoding", "gzip, deflate");
+			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
+			headers.set("Cache-Control", "max-age=0");
+			headers.set("Connection", "keep-alive");
+//			headers.set("Content-Length", "4148");
+//			headers.set("Content-Type", "application/x-www-form-urlencoded");
+			// headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//			headers.set("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+//			headers.setContentType(MediaType.TEXT_PLAIN);
+
+			StringBuilder cookieSb = new StringBuilder();
+			cookieSb.append("NID_AUT=");
+			cookieSb.append(strNidAut).append(";");
+			cookieSb.append("NID_SES=");
+			cookieSb.append(strNidSes).append(";");
+
+			headers.set("Cookie", cookieSb.toString());
+
+			headers.set("Host", "blog.naver.com");
+//			headers.set("Origin", "http://blog.naver.com");
+//			headers.set("Referer", "http://blog.naver.com/LinkShare.nhn?url=https%3A//www.youtube.com/watch%3Fv%3DaL55d6sDiGE%26feature%3Dshare");
+			headers.set("Upgrade-Insecure-Requests", "1");
+			headers.set("User-Agent",
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+
+//			headers.set("X-Requested-With", "XMLHttpRequest");
+			headers.forEach((key, value) -> {
+				logger.debug(String.format("Header '%s' = %s", key, value));
+			});
+
+			RestTemplate restTemplate = new RestTemplate();
+
+//			List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+			List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________1_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________1_____________");
+
+			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
+			logger.debug("___________2____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________2_____________");
+
+//			RestTemplate restTemplate2 = new RestTemplate(messageConverters);
+//			restTemplate.setMessageConverters(messageConverters);
+			messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________3_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________3_____________");
+
+			// Form Data
+//			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+//			map.add("url", "https://www.youtube.com/watch?v=J6zD3h_I3Lc");
+//			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(LINK_SHARE_URI_PREFIX);
+			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme("http").host("blog.naver.com");
+			builder = builder.path("/openapi/share");
+			// 죽을 뻔 한 아기 수달을 살려줬더니 생긴 일 ㅣ What Happened After Rescuing A Nearly Dying Baby
+			// Otter Is..
+			String strUrl = "https://www.youtube.com/watch?v=J6zD3h_I3Lc";
+			strUrl = URLEncoder.encode(strUrl, "UTF-8");
+			builder = builder.queryParam("url", strUrl);
+			UriComponents uriComponents = builder.build();
+			URI uri = uriComponents.toUri();
+			logger.debug("uri:" + uri);
+			logger.debug("uri path:" + uri.getPath());
+
+			logger.debug("uriComponents :" + uriComponents);
+//			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
+//			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+			HttpEntity<?> entity = new HttpEntity<>(headers);
+//			HttpEntity<String> entity = new HttpEntity<String>(headers);
+//			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, byte[].class);
+			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
+					byte[].class);
+			logger.debug("response :" + response);
+
+//			RestTemplate template = new RestTemplate();
+//			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+//			HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
+//			ResponseEntity<String> entity = restTemplate.getForEntity("https://example.com", String.class);
+			logger.debug("response.getStatusCode():" + response.getStatusCode());
+			HttpHeaders responseHeaders = response.getHeaders();
+			responseHeaders.forEach((key, value) -> {
+				logger.debug(String.format("Response Header [%s] = %s", key, value));
+			});
+
+//			logger.debug("guessEncoding :" + guessEncoding(response.getBody()));
+			byte[] responseBody = response.getBody();
+			logger.debug("body :" + responseBody);
+			// [B@2460600f
+			String unzipString = "";
+			if (responseBody != null) {
+				unzipString = NaverUtil.unzipStringFromBytes(response.getBody(), "UTF8");
+			}
+
+			logger.debug("unzipString:" + unzipString);
+			if (response.getStatusCode() == HttpStatus.OK) {
+				if (!unzipString.equals("")) {
+					Document doc = Jsoup.parse(unzipString);
+					Elements categoryEls = doc.select("#_categoryList option");
+					for (Element categoryEl : categoryEls) {
+						String categoryNo = categoryEl.attr("value");
+						String categoryName = categoryEl.text();
+						categoryMap.put(categoryNo, categoryName);
+					}
+				}
+			}
+			logger.debug("finished");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return categoryMap;
+	}
+
+	public static List<String> getNaverBlogCategoryList2(String strNidAut, String strNidSes) {
+		List<String> categoryList = new ArrayList<>();
+		Elements categoryEls = getNaverBlogCategoryElements(strNidAut, strNidSes);
+		for (Element categoryEl : categoryEls) {
+			String categoryNo = categoryEl.attr("value");
+			String categoryName = categoryEl.text();
+			String categoryNoAndName = categoryNo + ":" + categoryName;
+			categoryList.add(categoryNoAndName);
+		}
+		return categoryList;
+	}
+
+	public static Map<String, String> getNaverBlogCategoryMap2(String strNidAut, String strNidSes) {
+		Map<String, String> categoryMap = new HashMap<>();
+		Elements categoryEls = getNaverBlogCategoryElements(strNidAut, strNidSes);
+		for (Element categoryEl : categoryEls) {
+			String categoryNo = categoryEl.attr("value");
+			String categoryName = categoryEl.text();
+			categoryMap.put(categoryNo, categoryName);
+		}
+		return categoryMap;
+	}
+
+	public static String getNaverBlogCategoryNo(String strNidAut, String strNidSes, String strCategoryName) {
+		String strCategoryNo = null;
+		Elements categoryEls = getNaverBlogCategoryElements(strNidAut, strNidSes);
+		for (Element categoryEl : categoryEls) {
+			String categoryNo = categoryEl.attr("value");
+			String categoryName = categoryEl.text();
+			if (strCategoryName.equals(categoryName)) {
+				strCategoryNo = categoryNo;
+			}
+		}
+		return strCategoryNo;
+	}
+
+	public static Elements getNaverBlogCategoryElements(String strNidAut, String strNidSes) {
+		Elements categoryElements = null;
+		try {
+			HttpHeaders headers = new HttpHeaders();
+
+			headers.set("Accept",
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+			headers.set("Accept-Encoding", "gzip, deflate");
+			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
+			headers.set("Cache-Control", "max-age=0");
+			headers.set("Connection", "keep-alive");
+//			headers.set("Content-Length", "4148");
+//			headers.set("Content-Type", "application/x-www-form-urlencoded");
+			// headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//			headers.set("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+//			headers.setContentType(MediaType.TEXT_PLAIN);
+
+			StringBuilder cookieSb = new StringBuilder();
+			cookieSb.append("NID_AUT=");
+			cookieSb.append(strNidAut).append(";");
+			cookieSb.append("NID_SES=");
+			cookieSb.append(strNidSes).append(";");
+
+			headers.set("Cookie", cookieSb.toString());
+
+			headers.set("Host", "blog.naver.com");
+//			headers.set("Origin", "http://blog.naver.com");
+//			headers.set("Referer", "http://blog.naver.com/LinkShare.nhn?url=https%3A//www.youtube.com/watch%3Fv%3DaL55d6sDiGE%26feature%3Dshare");
+			headers.set("Upgrade-Insecure-Requests", "1");
+			headers.set("User-Agent",
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+
+//			headers.set("X-Requested-With", "XMLHttpRequest");
+			headers.forEach((key, value) -> {
+				logger.debug(String.format("Header '%s' = %s", key, value));
+			});
+
+			RestTemplate restTemplate = new RestTemplate();
+
+//			List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+			List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________1_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________1_____________");
+
+			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
+			logger.debug("___________2____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________2_____________");
+
+//			RestTemplate restTemplate2 = new RestTemplate(messageConverters);
+//			restTemplate.setMessageConverters(messageConverters);
+			messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________3_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________3_____________");
+
+			// Form Data
+//			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+//			map.add("url", "https://www.youtube.com/watch?v=J6zD3h_I3Lc");
+//			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(LINK_SHARE_URI_PREFIX);
+			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme("http").host("blog.naver.com");
+			builder = builder.path("/openapi/share");
+			// 죽을 뻔 한 아기 수달을 살려줬더니 생긴 일 ㅣ What Happened After Rescuing A Nearly Dying Baby
+			// Otter Is..
+			String strUrl = "https://www.youtube.com/watch?v=J6zD3h_I3Lc";
+			strUrl = URLEncoder.encode(strUrl, "UTF-8");
+			builder = builder.queryParam("url", strUrl);
+			UriComponents uriComponents = builder.build();
+			URI uri = uriComponents.toUri();
+			logger.debug("uri:" + uri);
+			logger.debug("uri path:" + uri.getPath());
+
+			logger.debug("uriComponents :" + uriComponents);
+//			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
+//			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+			HttpEntity<?> entity = new HttpEntity<>(headers);
+//			HttpEntity<String> entity = new HttpEntity<String>(headers);
+//			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, byte[].class);
+			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
+					byte[].class);
+			logger.debug("response :" + response);
+
+//			RestTemplate template = new RestTemplate();
+//			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+//			HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
+//			ResponseEntity<String> entity = restTemplate.getForEntity("https://example.com", String.class);
+			logger.debug("response.getStatusCode():" + response.getStatusCode());
+			HttpHeaders responseHeaders = response.getHeaders();
+			responseHeaders.forEach((key, value) -> {
+				logger.debug(String.format("Response Header [%s] = %s", key, value));
+			});
+
+//			logger.debug("guessEncoding :" + guessEncoding(response.getBody()));
+			byte[] responseBody = response.getBody();
+			logger.debug("body :" + responseBody);
+			// [B@2460600f
+			String unzipString = "";
+			if (responseBody != null) {
+				unzipString = NaverUtil.unzipStringFromBytes(response.getBody(), "UTF8");
+			}
+
+			logger.debug("unzipString:" + unzipString);
+			if (response.getStatusCode() == HttpStatus.OK) {
+				if (!unzipString.equals("")) {
+					Document doc = Jsoup.parse(unzipString);
+					categoryElements = doc.select("#_categoryList option");
+				}
+			}
+			logger.debug("finished");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return categoryElements;
+	}
+
+	/**
+	 * gif image를 가져온다.
+	 * 
+	 * @param strNidAut
+	 * @param strNidSes
+	 * @return
+	 */
+	public static Elements getNaverBlogReplyOpen(String strNidAut, String strNidSes) {
+		Elements categoryElements = null;
+		try {
+			HttpHeaders headers = new HttpHeaders();
+
+			headers.set("Accept",
+//					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+					"image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8");
+			headers.set("Accept-Encoding", "gzip, deflate, br");
+			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
+			headers.set("Cache-Control", "max-age=0");
+			headers.set("Connection", "keep-alive");
+
+			StringBuilder cookieSb = new StringBuilder();
+//			cookieSb.append("NID_AUT=");
+//			cookieSb.append(strNidAut).append(";");
+//			cookieSb.append("NID_SES=");
+//			cookieSb.append(strNidSes).append(";");
+//			cookieSb.append("NNB=J7WTOJDPSYRGA; nid_inf=658455308; NID_JKL=T4HuwC8nl4Ho1VSoNwrcOMJQdjsEI87kTKMXu5V4NEg=");
+			cookieSb.append(
+					"NNB=J7WTOJDPSYRGA; nid_inf=658188320; NID_AUT=8ocW/bWyQtAwbFe1jaknwXni/zAnrRdE+gpggAtm9DN4ZFyU9q6Z9VhQnTbS8Kbg; NID_SES=AAABmTwqXjkm14vAuPmr0XKyFHeatwErMUd+ww5rxi0Fa5WrI02Bj9QfxDBJPGsxNJzqyQGaXaG4PCka3KHB47Oj+GtDyyUypmTXhJwxFlqkbA8GLDjA5MBibZXhFlCDR7VeqG1omxubbcoy7cuMCHkPD1cAI9LPYV9uDyv0LiIrMFK+r59278IahUI0u4DHq2zUHUgP4mWwef4HSMlPJOE7hxHMcheeAiEG2egtTfgY8CMCCtW7XwsVwLBDxLeqHYIh9MvYiQ3xTQP5KHAi9GpSLIq2J3SrUx/K/FKq5CDEwoaI0udMNSgxLedBxBIksldzMcdoADLICla36y7OuTS5ZJnP3XRkd/L8HNImdOLvtuDkuMbyFrL8e/DE3uB61Y4eb1BatYqnQxsIEwoxH4WyevscFyol3xOVyDcFfn+spRXiRo5kHnerhagQD5Q4x7GPGnqYqKPr2mx4hXYy3qghEJe4u3YJfWPP85aOtI+6sxUvE2a24hhb2UZtJIYOTBv+RsXEU5vC3Rl5ndXiesCyyj3HK0AF3TDJ2d5FZaZ8nWsl; NID_JKL=APHY/rOeR6jC6ee5gqPjbxBx/jYVo50XE8GwGCCTzPM=");
+
+			headers.set("Cookie", cookieSb.toString());
+
+			headers.set("Host", "cc.naver.com");
+//			headers.set("Origin", "http://blog.naver.com");
+			headers.set("Referer",
+					"https://blog.naver.com/PostView.nhn?blogId=banks&logNo=222239938204&categoryNo=0&parentCategoryNo=0&viewDate=&currentPage=1&postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=5&userTopListManageOpen=false&userTopListCurrentPage=1");
+			headers.set("Upgrade-Insecure-Requests", "1");
+			headers.set("User-Agent",
+//					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36");
+			headers.set("sec-ch-ua", "\"Chromium\";v=\"88\", \"Google Chrome\";v=\"88\", \";Not A Brand\";v=\"99\"");
+			headers.set("sec-ch-ua-mobile", "?0");
+			headers.set("Sec-Fetch-Dest", "image");
+			headers.set("Sec-Fetch-Mode", "no-cors");
+			headers.set("Sec-Fetch-Site", "same-site");
+
+//			headers.set("X-Requested-With", "XMLHttpRequest");
+			headers.forEach((key, value) -> {
+				logger.debug(String.format("Header '%s' = %s", key, value));
+			});
+
+			RestTemplate restTemplate = new RestTemplate();
+
+//			List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+			List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________1_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________1_____________");
+
+			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
+			logger.debug("___________2____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________2_____________");
+
+//			RestTemplate restTemplate2 = new RestTemplate(messageConverters);
+//			restTemplate.setMessageConverters(messageConverters);
+			messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________3_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________3_____________");
+
+			// Form Data
+//			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+//			map.add("url", "https://www.youtube.com/watch?v=J6zD3h_I3Lc");
+//			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(LINK_SHARE_URI_PREFIX);
+			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme("http").host("cc.naver.com");
+			builder = builder.path("/cc");
+			// 죽을 뻔 한 아기 수달을 살려줬더니 생긴 일 ㅣ What Happened After Rescuing A Nearly Dying Baby
+			// Otter Is..
+
+			builder = builder.queryParam("a", "RPC.replyopen");
+			builder = builder.queryParam("r", "");
+			builder = builder.queryParam("i", "");
+			builder = builder.queryParam("bw", "756");
+			builder = builder.queryParam("px", "261");
+			builder = builder.queryParam("py", "734");
+			builder = builder.queryParam("sx", "261");
+			builder = builder.queryParam("sy", "-4612");
+			builder = builder.queryParam("m", "0");
+			builder = builder.queryParam("nsc", "blog.post");
+
+			String strUrl = "https://blog.naver.com/PostView.nhn?blogId=banks&logNo=222239938204&categoryNo=0&parentCategoryNo=0&viewDate=&currentPage=1&postListTopCurrentPage=&from=postList&userTopListOpen=true&userTopListCount=5&userTopListManageOpen=false&userTopListCurrentPage=1#";
+			strUrl = URLEncoder.encode(strUrl, "UTF-8");
+
+			builder = builder.queryParam("u", strUrl);
+			builder = builder.queryParam("time", "1613034429614");
+
+			UriComponents uriComponents = builder.build();
+			URI uri = uriComponents.toUri();
+			logger.debug("uri:" + uri);
+			logger.debug("uri path:" + uri.getPath());
+
+			logger.debug("uriComponents :" + uriComponents);
+//			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
+//			HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+			HttpEntity<?> entity = new HttpEntity<>(headers);
+//			HttpEntity<String> entity = new HttpEntity<String>(headers);
+//			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.GET, entity, byte[].class);
+			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
+					byte[].class);
+			logger.debug("response :" + response);
+
+//			RestTemplate template = new RestTemplate();
+//			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+//			HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
+//			ResponseEntity<String> entity = restTemplate.getForEntity("https://example.com", String.class);
+			logger.debug("response.getStatusCode():" + response.getStatusCode());
+			HttpHeaders responseHeaders = response.getHeaders();
+			responseHeaders.forEach((key, value) -> {
+				logger.debug(String.format("Response Header [%s] = %s", key, value));
+			});
+
+//			logger.debug("guessEncoding :" + guessEncoding(response.getBody()));
+			byte[] responseBody = response.getBody();
+			logger.debug("body :" + responseBody);
+			String strGif = NaverUtil.stringFromBytes(responseBody, "UTF8");
+			logger.debug("strGif :" + strGif);
+
+			if (response.getStatusCode() == HttpStatus.OK) {
+				if (responseBody != null) {
+					// convert byte[] back to a BufferedImage
+					InputStream is = new ByteArrayInputStream(responseBody);
+					BufferedImage newBi = ImageIO.read(is);
+
+					// add a text on top on the image, optional, just for fun
+					Graphics2D g = newBi.createGraphics();
+					g.setFont(new Font("TimesRoman", Font.BOLD, 30));
+					g.setColor(Color.BLACK);
+					g.drawString("Hello World", 100, 100);
+
+					// save it
+					Path target = Paths.get("./replyOpen.gif");
+					ImageIO.write(newBi, "gif", target.toFile());
+				}
+			}
+			logger.debug("finished");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return categoryElements;
+	}
+
+	// https://share.naver.com/web/shareView.nhn?url=https%3A%2F%2Fcoupa.ng%2FbRA62y&title=%EC%BF%A0%ED%8C%A1%EC%9D%84%20%EC%B6%94%EC%B2%9C%20%ED%95%A9%EB%8B%88%EB%8B%A4!%0A%EC%BF%A0%ED%8C%A1!%20%7C%20%ED%95%98%EB%A6%BC%20%EC%97%90%EC%96%B4%ED%94%84%EB%9D%BC%EC%9D%B4%EC%96%B4%20%EC%88%9C%EC%82%B4%EC%B9%98%ED%82%A8%20(%EB%83%89%EB%8F%99)
+	// 카페
+	// https://nid.naver.com/nidlogin.login?svctype=64&url=https%3A%2F%2Fm.cafe.naver.com%2FExternalScrapView.nhn%3FserviceCode%3Dshare%26url%3Dhttps%3A%2F%2Fcoupa.ng%2FbRA62y%26title%3D%25EC%25BF%25A0%25ED%258C%25A1%25EC%259D%2584%2B%25EC%25B6%2594%25EC%25B2%259C%2B%25ED%2595%25A9%25EB%258B%2588%25EB%258B%25A4%2521%250A%25EC%25BF%25A0%25ED%258C%25A1%2521%2B%257C%2B%25ED%2595%2598%25EB%25A6%25BC%2B%25EC%2597%2590%25EC%2596%25B4%25ED%2594%2584%25EB%259D%25BC%25EC%259D%25B4%25EC%2596%25B4%2B%25EC%2588%259C%25EC%2582%25B4%25EC%25B9%2598%25ED%2582%25A8%2B%2528%25EB%2583%2589%25EB%258F%2599%2529%26token%3D855facd89ade606039319c9f0f32208cb0e033443ec76ed8ce97a8bce0758fc0%26timestamp%3D1613308042752%26isMobile%3Dfalse
+	// 블로그
+	// https://nid.naver.com/nidlogin.login?svctype=64&url=https%3A%2F%2Fblog.naver.com%2Fopenapi%2Fshare%3FserviceCode%3Dshare%26url%3Dhttps%3A%2F%2Fcoupa.ng%2FbRA62y%26title%3D%25EC%25BF%25A0%25ED%258C%25A1%25EC%259D%2584%2B%25EC%25B6%2594%25EC%25B2%259C%2B%25ED%2595%25A9%25EB%258B%2588%25EB%258B%25A4%2521%250A%25EC%25BF%25A0%25ED%258C%25A1%2521%2B%257C%2B%25ED%2595%2598%25EB%25A6%25BC%2B%25EC%2597%2590%25EC%2596%25B4%25ED%2594%2584%25EB%259D%25BC%25EC%259D%25B4%25EC%2596%25B4%2B%25EC%2588%259C%25EC%2582%25B4%25EC%25B9%2598%25ED%2582%25A8%2B%2528%25EB%2583%2589%25EB%258F%2599%2529%26token%3D5db34acb53a343e4a00a381c9fa5cda8a6814af75a08afac208fd238220a012f%26timestamp%3D1613300985796%26isMobile%3Dfalse
+	public static boolean naverBlogLinkShareView(String strBlogId, String strNidAut, String strNidSes, String strUrl,
+			String strTitle, String strCategoryNo, StringBuilder contentSb, JRootPane rootPane) {
+		logger.debug("strBlogId :[" + strBlogId + "]");
+		logger.debug("contentSb :[" + contentSb + "]");
+		logger.debug("strCategoryNo :[" + strCategoryNo + "]");
+		if (strNidAut.equals("") || strNidSes.equals("")) {
+//			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning", JOptionPane.WARNING_MESSAGE);
+			logger.debug("NID_AUT와 NID_SES를 입력하여 주세요.");
+//			return false;
+		}
+
+		try {
+			String strShareViewUrl = "https://share.naver.com/web/shareView.nhn";
+			// url=https%3A%2F%2Fcoupa.ng%2FbRA62y
+			// &title=%EC%BF%A0%ED%8C%A1%EC%9D%84%20%EC%B6%94%EC%B2%9C%20%ED%95%A9%EB%8B%88%EB%8B%A4!%0A%EC%BF%A0%ED%8C%A1!%20%7C%20%ED%95%98%EB%A6%BC%20%EC%97%90%EC%96%B4%ED%94%84%EB%9D%BC%EC%9D%B4%EC%96%B4%20%EC%88%9C%EC%82%B4%EC%B9%98%ED%82%A8%20(%EB%83%89%EB%8F%99)
+			URL url = new URL(strShareViewUrl);
+			String protocol = url.getProtocol();
+			String host = url.getHost();
+			String protocolHost = protocol + "://" + host;
+			String path = url.getPath();
+			String query = url.getQuery();
+			int port = url.getPort();
+
+			HttpHeaders headers = new HttpHeaders();
+
+			headers.set("Accept",
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+			headers.set("Accept-Encoding", "gzip, deflate");
+			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
+			headers.set("Cache-Control", "max-age=0");
+			headers.set("Connection", "keep-alive");
+			headers.set("Content-Length", "4148");
+//			headers.set("Content-Type", "application/x-www-form-urlencoded");
+			// headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//			headers.set("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+//			headers.setContentType(MediaType.TEXT_PLAIN);
+
+			StringBuilder cookieSb = new StringBuilder();
+			cookieSb.append("NID_AUT=");
+			cookieSb.append(strNidAut + ";");
+			cookieSb.append("NID_SES=");
+			cookieSb.append(strNidSes + ";");
+
+			headers.set("Cookie", cookieSb.toString());
+
+			headers.set("Host", host);
+			headers.set("Origin", protocolHost);
+
+			String strEncodedTitle = URLEncoder.encode(strTitle, "UTF8");
+			logger.debug("strEncodedTitle==>" + strEncodedTitle);
+
+			headers.set("Referer", strShareViewUrl + "?url=" + strUrl + "&title=" + strEncodedTitle);
+
+			headers.set("Upgrade-Insecure-Requests", "1");
+			headers.set("User-Agent",
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+
+//			headers.set("X-Requested-With", "XMLHttpRequest");
+			headers.forEach((key, value) -> {
+				logger.debug(String.format("Header '%s' = %s", key, value));
+			});
+
+			RestTemplate restTemplate = new RestTemplate();
+
+//			List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+			List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________1_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________1_____________");
+			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
+
+			// Form Data
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			map.add("domain", host);
+			map.add("token", "");
+			map.add("timestamp", "");
+//			map.add("url", "https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DJ6zD3h_I3Lc%26feature%3Dshare");
+			String strEncodedUrl = URLEncoder.encode(strUrl, "UTF8");
+			map.add("url", strEncodedUrl);
+			map.add("blogId", strBlogId);
+			map.add("title", strEncodedTitle);
+			// 내용
+//			map.add("content",URLEncoder.encode(contentSb.toString(), "UTF8"));
+
+			String temp = "";
+			// 아래의 span 태그가 없으면 공유실패함..
+			// 쌍따옴표를 홑따옴표로 바꿔도 공유실패.
+			temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leverage\" s_subtype=\"oglink\" jsonvalue=\"테스트(test)\"> </span>";
+			temp += contentSb.toString();
+			// do url encoding
+			temp = URLEncoder.encode(temp, "UTF8");
+			map.add("content", temp);
+			// 공개 여부(비공개),0:비공개, 1:이웃공개, 2: 전체공개, 3:서로이웃공개
+			map.add("postOpenType", "2");
+
+			map.add("categoryNo", strCategoryNo);
+
+			// header에 있으면 Form Data에 없어도 된다.
+			// map.add("referrer",
+//			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(SERVER_URI);
+			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme("http").host(host);
+			builder = builder.path(path);
+			builder = builder.queryParam("url", strUrl);
+			UriComponents uriComponents = builder.build();
+			URI uri = uriComponents.toUri();
+			logger.debug("uri:" + uri);
+			logger.debug("uri path:" + uri.getPath());
+
+			logger.debug("uriComponents :" + uriComponents);
+			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map,
+					headers);
+//			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.POST, entity, byte[].class);
+			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity,
+					byte[].class);
+			logger.debug("response :" + response);
+
+//			RestTemplate template = new RestTemplate();
+//			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+//			HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
+//			ResponseEntity<String> entity = restTemplate.getForEntity("https://example.com", String.class);
+//			HttpEntity<?> entity = new HttpEntity<>(headers);
+//			HttpEntity<String> entity = new HttpEntity<String>(headers);
+//			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, byte[].class);
+//			ResponseEntity<Object> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, Object.class);
+//			ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, String.class);
+//		        ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, String.class);
+			logger.debug("response.getStatusCode():" + response.getStatusCode());
+			HttpHeaders responseHeaders = response.getHeaders();
+			responseHeaders.forEach((key, value) -> {
+				logger.debug(String.format("Response Header [%s] = %s", key, value));
+			});
+
+//			logger.debug("guessEncoding :" + guessEncoding(response.getBody()));
+			logger.debug("body :" + response.getBody());
+
+			String unzipString = NaverUtil.unzipStringFromBytes(response.getBody(), "UTF8");
+
+			logger.debug("unzipString :" + unzipString);
+			logger.debug("finished");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	// https://blog.naver.com/openapi/share?serviceCode=share&url=https://coupa.ng/bRA62y&title=%EC%BF%A0%ED%8C%A1%EC%9D%84+%EC%B6%94%EC%B2%9C+%ED%95%A9%EB%8B%88%EB%8B%A4%21%0A%EC%BF%A0%ED%8C%A1%21+%7C+%ED%95%98%EB%A6%BC+%EC%97%90%EC%96%B4%ED%94%84%EB%9D%BC%EC%9D%B4%EC%96%B4+%EC%88%9C%EC%82%B4%EC%B9%98%ED%82%A8+%28%EB%83%89%EB%8F%99%29&token=1ded42475374579f8d9197a195c6813e55fb5fd60e9b75264e99da234856586f&timestamp=1613308403301&isMobile=false
+	public static boolean naverBlogOpenApiShare(String strBlogId, String strNidAut, String strNidSes, String strUrl,
+			String strTitle, String strCategoryNo, StringBuilder contentSb, JRootPane rootPane) {
+		logger.debug("strBlogId :[" + strBlogId + "]");
+		logger.debug("contentSb :[" + contentSb + "]");
+		logger.debug("strCategoryNo :[" + strCategoryNo + "]");
+		if (strNidAut.equals("") || strNidSes.equals("")) {
+//			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning", JOptionPane.WARNING_MESSAGE);
+			logger.debug("NID_AUT와 NID_SES를 입력하여 주세요.");
+//			return false;
+		}
+
+		try {
+			String strShareViewUrl = "https://blog.naver.com/openapi/share";
+			// url=https%3A%2F%2Fcoupa.ng%2FbRA62y
+			// &title=%EC%BF%A0%ED%8C%A1%EC%9D%84%20%EC%B6%94%EC%B2%9C%20%ED%95%A9%EB%8B%88%EB%8B%A4!%0A%EC%BF%A0%ED%8C%A1!%20%7C%20%ED%95%98%EB%A6%BC%20%EC%97%90%EC%96%B4%ED%94%84%EB%9D%BC%EC%9D%B4%EC%96%B4%20%EC%88%9C%EC%82%B4%EC%B9%98%ED%82%A8%20(%EB%83%89%EB%8F%99)
+			URL url = new URL(strShareViewUrl);
+			String protocol = url.getProtocol();
+			String host = url.getHost();
+			String protocolHost = protocol + "://" + host;
+			String path = url.getPath();
+			String query = url.getQuery();
+			int port = url.getPort();
+
+			HttpHeaders headers = new HttpHeaders();
+
+			headers.set("athority", "");
+			headers.set("method", "");
+			headers.set("path", "");
+			headers.set("scheme", "");
+
+			headers.set("Accept",
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+			headers.set("Accept",
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+			headers.set("Accept-Encoding", "gzip, deflate");
+			headers.set("Accept-Encoding", "gzip, deflate, br");
+			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
+
+//			headers.set("Cache-Control", "max-age=0");
+//			headers.set("Connection", "keep-alive");
+//			headers.set("Content-Length", "4148");
+//			headers.set("Content-Type", "application/x-www-form-urlencoded");
+			// headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//			headers.set("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+//			headers.setContentType(MediaType.TEXT_PLAIN);
+
+			StringBuilder cookieSb = new StringBuilder();
+			cookieSb.append("NID_AUT=");
+			cookieSb.append(strNidAut + ";");
+			cookieSb.append("NID_SES=");
+			cookieSb.append(strNidSes + ";");
+
+			headers.set("Cookie", cookieSb.toString());
+
+//			headers.set("Host", host);
+//			headers.set("Origin", protocolHost);
+
+			String strEncodedTitle = URLEncoder.encode(strTitle, "UTF8");
+			logger.debug("strEncodedTitle==>" + strEncodedTitle);
+
+			headers.set("Referer", strShareViewUrl + "?url=" + strUrl + "&title=" + strEncodedTitle);
+			headers.set("sec-ch-ua", "\"Chromium\";v=\"88\", \"Google Chrome\";v=\"88\", \";Not A Brand\";v=\"99\"");
+			headers.set("sec-ch-ua-mobile", "?0");
+			headers.set("sec-fetch-dest", "document");
+			headers.set("sec-fetch-mode", "navigate");
+			headers.set("sec-fetch-site", "same-site");
+			headers.set("sec-fetch-user", "?1");
+			headers.set("Upgrade-Insecure-Requests", "1");
+			headers.set("User-Agent",
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+
+//			headers.set("X-Requested-With", "XMLHttpRequest");
+			headers.forEach((key, value) -> {
+				logger.debug(String.format("Header '%s' = %s", key, value));
+			});
+
+			RestTemplate restTemplate = new RestTemplate();
+
+//			List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+			List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________1_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________1_____________");
+			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
+
+			// Form Data
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			map.add("domain", host);
+			map.add("token", "");
+			map.add("timestamp", "");
+//			map.add("url", "https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DJ6zD3h_I3Lc%26feature%3Dshare");
+			String strEncodedUrl = URLEncoder.encode(strUrl, "UTF8");
+			map.add("url", strEncodedUrl);
+			map.add("blogId", strBlogId);
+			map.add("title", strEncodedTitle);
+			// 내용
+//			map.add("content",URLEncoder.encode(contentSb.toString(), "UTF8"));
+
+			String temp = "";
+			// 아래의 span 태그가 없으면 공유실패함..
+			// 쌍따옴표를 홑따옴표로 바꿔도 공유실패.
+			temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leverage\" s_subtype=\"oglink\" jsonvalue=\"테스트(test)\"> </span>";
+			temp += contentSb.toString();
+			// do url encoding
+			temp = URLEncoder.encode(temp, "UTF8");
+			map.add("content", temp);
+			// 공개 여부(비공개),0:비공개, 1:이웃공개, 2: 전체공개, 3:서로이웃공개
+			map.add("postOpenType", "2");
+
+			map.add("categoryNo", strCategoryNo);
+
+			// header에 있으면 Form Data에 없어도 된다.
+			// map.add("referrer",
+//			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(SERVER_URI);
+			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme("http").host(host);
+			builder = builder.path(path);
+			builder = builder.queryParam("serviceCode", "share");
+			builder = builder.queryParam("url", strUrl);// https://coupa.ng/bRA62y
+			builder = builder.queryParam("title", strEncodedTitle);// 쿠팡을 추천 합니다!쿠팡! | 하림 에어프라이어 순살치킨 (냉동)
+			builder = builder.queryParam("token", "1ded42475374579f8d9197a195c6813e55fb5fd60e9b75264e99da234856586f");
+			builder = builder.queryParam("timestamp", "1613308403301");
+			builder = builder.queryParam("isMobile", "false");
+
+			UriComponents uriComponents = builder.build();
+			URI uri = uriComponents.toUri();
+			logger.debug("uri:" + uri);
+			logger.debug("uri path:" + uri.getPath());
+
+			logger.debug("uriComponents :" + uriComponents);
+			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map,
+					headers);
+//			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.POST, entity, byte[].class);
+			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity,
+					byte[].class);
+			logger.debug("response :" + response);
+
+//			RestTemplate template = new RestTemplate();
+//			restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+//			HttpEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
+//			ResponseEntity<String> entity = restTemplate.getForEntity("https://example.com", String.class);
+//			HttpEntity<?> entity = new HttpEntity<>(headers);
+//			HttpEntity<String> entity = new HttpEntity<String>(headers);
+//			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, byte[].class);
+//			ResponseEntity<Object> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, Object.class);
+//			ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, String.class);
+//		        ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity, String.class);
+			logger.debug("response.getStatusCode():" + response.getStatusCode());
+			HttpHeaders responseHeaders = response.getHeaders();
+			responseHeaders.forEach((key, value) -> {
+				logger.debug(String.format("Response Header [%s] = %s", key, value));
+			});
+
+//			logger.debug("guessEncoding :" + guessEncoding(response.getBody()));
+			logger.debug("body :" + response.getBody());
+
+			String unzipString = NaverUtil.unzipStringFromBytes(response.getBody(), "UTF8");
+
+			logger.debug("unzipString :" + unzipString);
+			logger.debug("finished");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	// https://blog.naver.com/openapi/share?serviceCode=share&url=https://coupa.ng/bRA62y&title=%EC%BF%A0%ED%8C%A1%EC%9D%84+%EC%B6%94%EC%B2%9C+%ED%95%A9%EB%8B%88%EB%8B%A4%21%0A%EC%BF%A0%ED%8C%A1%21+%7C+%ED%95%98%EB%A6%BC+%EC%97%90%EC%96%B4%ED%94%84%EB%9D%BC%EC%9D%B4%EC%96%B4+%EC%88%9C%EC%82%B4%EC%B9%98%ED%82%A8+%28%EB%83%89%EB%8F%99%29&token=1ded42475374579f8d9197a195c6813e55fb5fd60e9b75264e99da234856586f&timestamp=1613308403301&isMobile=false
+	public static boolean linkSharePostWriteAsync(String strBlogId, String strNidAut, String strNidSes, String strUrl,
+			String strTitle, String strCategoryNo, StringBuilder contentSb, JRootPane rootPane) {
+		logger.debug("strBlogId :[" + strBlogId + "]");
+		logger.debug("contentSb :[" + contentSb + "]");
+		logger.debug("strCategoryNo :[" + strCategoryNo + "]");
+		if (strNidAut.equals("") || strNidSes.equals("")) {
+//			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning", JOptionPane.WARNING_MESSAGE);
+			logger.debug("NID_AUT와 NID_SES를 입력하여 주세요.");
+//			return false;
+		}
+
+		try {
+			String strShareViewUrl = "https://blog.naver.com/LinkSharePostWriteAsync.nhn";
+			URL url = new URL(strShareViewUrl);
+			String protocol = url.getProtocol();
+			String host = url.getHost();
+			String protocolHost = protocol + "://" + host;
+			String path = url.getPath();
+			String query = url.getQuery();
+			int port = url.getPort();
+
+			HttpHeaders headers = new HttpHeaders();
+
+			headers.set("athority", "");
+			headers.set("method", "");
+			headers.set("path", "");
+			headers.set("scheme", "");
+
+			headers.set("Accept",
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+			headers.set("Accept",
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+			headers.set("Accept-Encoding", "gzip, deflate");
+			headers.set("Accept-Encoding", "gzip, deflate, br");
+			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
+
+//			headers.set("Cache-Control", "max-age=0");
+//			headers.set("Connection", "keep-alive");
+//			headers.set("Content-Length", "4148");
+//			headers.set("Content-Type", "application/x-www-form-urlencoded");
+			// headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//			headers.set("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+//			headers.setContentType(MediaType.TEXT_PLAIN);
+
+			StringBuilder cookieSb = new StringBuilder();
+			cookieSb.append("NID_AUT=");
+			cookieSb.append(strNidAut + ";");
+			cookieSb.append("NID_SES=");
+			cookieSb.append(strNidSes + ";");
+
+			headers.set("Cookie", cookieSb.toString());
+
+//			headers.set("Host", host);
+//			headers.set("Origin", protocolHost);
+
+			String strEncodedTitle = URLEncoder.encode(strTitle, "UTF8");
+			logger.debug("strEncodedTitle==>" + strEncodedTitle);
+
+			headers.set("Referer", strShareViewUrl + "?url=" + strUrl + "&title=" + strEncodedTitle);
+			headers.set("sec-ch-ua", "\"Chromium\";v=\"88\", \"Google Chrome\";v=\"88\", \";Not A Brand\";v=\"99\"");
+			headers.set("sec-ch-ua-mobile", "?0");
+			headers.set("sec-fetch-dest", "document");
+			headers.set("sec-fetch-mode", "navigate");
+			headers.set("sec-fetch-site", "same-site");
+			headers.set("sec-fetch-user", "?1");
+			headers.set("Upgrade-Insecure-Requests", "1");
+			headers.set("User-Agent",
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+
+//			headers.set("X-Requested-With", "XMLHttpRequest");
+			headers.forEach((key, value) -> {
+				logger.debug(String.format("Header '%s' = %s", key, value));
+			});
+
+			RestTemplate restTemplate = new RestTemplate();
+
+//			List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+			List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________1_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________1_____________");
+			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
+
+			// Form Data
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			map.add("domain", host);
+			map.add("token", "1ded42475374579f8d9197a195c6813e55fb5fd60e9b75264e99da234856586f");
+			map.add("timestamp", "1613308403301");
+			String strEncodedUrl = URLEncoder.encode(strUrl, "UTF8");
+			map.add("url", strEncodedUrl);
+			map.add("blogId", strBlogId);
+			map.add("title", strEncodedTitle);
+			// 내용
+//			map.add("content",URLEncoder.encode(contentSb.toString(), "UTF8"));
+
+			String temp = "";
+			// 아래의 span 태그가 없으면 공유실패함..
+			// 쌍따옴표를 홑따옴표로 바꿔도 공유실패.
+			temp = "<span id=\"se_object_1592490330981\" class=\"__se_object\" s_type=\"leverage\" s_subtype=\"oglink\" jsonvalue=\"테스트(test)\"> </span>";
+			temp += contentSb.toString();
+			// do url encoding
+			temp = URLEncoder.encode(temp, "UTF8");
+			map.add("content", temp);
+			// postOpenType 공개 여부(비공개),0:비공개, 1:이웃공개, 2: 전체공개, 3:서로이웃공개
+			map.add("postOpenType", "2");
+
+			map.add("categoryNo", strCategoryNo);
+
+			String referrer = "https://share.naver.com/web/shareView.nhn?url=" + strEncodedUrl + "&title="
+					+ strEncodedTitle;
+			map.add("referrer", referrer);
+
+			// header에 있으면 Form Data에 없어도 된다.
+			// map.add("referrer",
+//			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(SERVER_URI);
+			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme("https").host(host);
+			builder = builder.path(path);
+
+			UriComponents uriComponents = builder.build();
+			URI uri = uriComponents.toUri();
+			logger.debug("uri:" + uri);
+			logger.debug("uri path:" + uri.getPath());
+
+			logger.debug("uriComponents :" + uriComponents);
+			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map,
+					headers);
+//			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.POST, entity, byte[].class);
+			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity,
+					byte[].class);
+			logger.debug("response :" + response);
+			logger.debug("response.getStatusCode():" + response.getStatusCode());
+			HttpHeaders responseHeaders = response.getHeaders();
+			responseHeaders.forEach((key, value) -> {
+				logger.debug(String.format("Response Header [%s] = %s", key, value));
+			});
+
+//			logger.debug("guessEncoding :" + guessEncoding(response.getBody()));
+			logger.debug("body :" + response.getBody());
+
+			String unzipString = NaverUtil.unzipStringFromBytes(response.getBody(), "UTF8");
+
+			logger.debug("unzipString :" + unzipString);
+			logger.debug("finished");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 }

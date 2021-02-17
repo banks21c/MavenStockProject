@@ -33,7 +33,7 @@ public class KoreaStockDividends extends Thread {
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
 
-	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E hh.mm.SSS", Locale.KOREAN).format(new Date());
+	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.SSS", Locale.KOREAN).format(new Date());
 
 	DecimalFormat df = new DecimalFormat("###.##");
 

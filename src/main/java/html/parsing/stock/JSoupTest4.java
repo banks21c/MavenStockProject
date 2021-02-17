@@ -11,10 +11,10 @@ import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JSoupTest1 {
+public class JSoupTest4 {
 
 	final static String userHome = System.getProperty("user.home");
-	private static Logger logger = LoggerFactory.getLogger(JSoupTest1.class);
+	private static Logger logger = LoggerFactory.getLogger(JSoupTest4.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -29,10 +29,10 @@ public class JSoupTest1 {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		new JSoupTest1();
+		new JSoupTest4();
 	}
 
-	JSoupTest1() {
+	JSoupTest4() {
 
 		readNews("110570", "넥솔론");
 	}
@@ -46,7 +46,6 @@ public class JSoupTest1 {
 			StringBuilder sb1 = new StringBuilder();
 
 			// 종합정보
-//			String url = "https://m.stock.naver.com/api/item/getTrendList.nhn?code=005930&size=10&bizdate=20200805";
 			String url = "https://finance.daum.net/api/quotes/sectors?market=KOSPI";
 			System.out.println(url);
 

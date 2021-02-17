@@ -396,8 +396,8 @@ public class MajorStockHoldersKospiKosdaqInput {
         sb1.append("</head>\r\n");
         sb1.append("<body>\r\n");
         sb1.append("\t<font size=5>" + strYMD + title + "</font>");
-        sb1.append("<div style='width:548px;text-align:right;font-weight:bold;'>국민연금 총 보유액?<span style='color:" + sColor + "'>" + new DecimalFormat("#,##0").format(lRetainAmount / 1000000) + "(백만)</span></div>\r\n");
-        sb1.append("<div style='width:548px;text-align:right;font-weight:bold;'>국민연금이 오늘 번 돈은?<span style='color:" + sColor + "'>" + new DecimalFormat("#,##0").format(lEarningAmount / 1000000) + "(백만)</span></div>\r\n");
+        sb1.append("<div style='width:741px;text-align:right;font-weight:bold;'>국민연금 총 보유액?<span style='color:" + sColor + "'>" + new DecimalFormat("#,##0").format(lRetainAmount / 1000000) + "(백만)</span></div>\r\n");
+        sb1.append("<div style='width:741px;text-align:right;font-weight:bold;'>국민연금이 오늘 번 돈은?<span style='color:" + sColor + "'>" + new DecimalFormat("#,##0").format(lEarningAmount / 1000000) + "(백만)</span></div>\r\n");
 
         sb1.append("<table>\r\n");
         sb1.append("<tr>\r\n");

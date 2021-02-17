@@ -22,6 +22,8 @@ import org.quartz.impl.StdSchedulerFactory;
 public class StockMarketPriceRunJobJFrame extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 3429228129460673161L;
+	
+	String strBlogId = "";
 	String strNidAut = "";
 	String strNidSes = "";
 
@@ -58,10 +60,10 @@ public class StockMarketPriceRunJobJFrame extends javax.swing.JFrame {
 	}
 
 	public void start() {
-		new StockUnique_ReadTxtFile_ThreadCall(strNidAut, strNidSes).start();
-		new StockWeeks52NewLowHighPriceTodayOneFile(strNidAut, strNidSes).start();
+		new StockUnique_ReadTxtFile_ThreadCall(strBlogId, strNidAut, strNidSes).start();
+		new StockWeeks52NewLowHighPriceTodayOneFile(strBlogId, strNidAut, strNidSes).start();
 //		new StockPlusMinusDivide_ThreadCall(strNidAut,strNidSes).start();
-		new StockPlusMinusDivide100(strNidAut, strNidSes).start();
+		new StockPlusMinusDivide100(strBlogId, strNidAut, strNidSes).start();
 	}
 
 	public void start2() {

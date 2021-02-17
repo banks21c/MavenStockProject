@@ -74,6 +74,7 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 
 	WebEngine webengine = null;
 
+	String strBlogId = "";
 	String strNidAut = "";
 	String strNidSes = "";
 
@@ -169,7 +170,7 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 			System.out.println("textfield changed from " + oldValue + " to " + newValue);
 			shareResultTxt.setText("...");
 			if (oldValue.equals("https://nid.naver.com/signin/v3/finalize?url=https%3A%2F%2Fwww.naver.com&svctype=1")
-				&& newValue.equals("https://www.naver.com/")) {
+					&& newValue.equals("https://www.naver.com/")) {
 				System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
 				// 네이버에 로그인하여 주소창에 주소가 변경되면 네이버 쿠키를 가져온다.
 				getNaverCookies();
@@ -178,22 +179,22 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 
 		Button goBtn = new Button("GO");
 		goBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
-			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
-			@Override
-			public void handle(javafx.scene.input.MouseEvent event) {
-				String url = urlTf.getText();
-				System.out.println("url1:" + url);
-				if (!url.toLowerCase().startsWith("http") && !url.toLowerCase().startsWith("https")) {
-					if (!url.contains(".") || url.contains(" ")) {
-						url = "https://www.google.com/search?q=" + url + "&oq=" + url;
-					} else {
-						url = "http://" + url;
+				new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
+					@Override
+					public void handle(javafx.scene.input.MouseEvent event) {
+						String url = urlTf.getText();
+						System.out.println("url1:" + url);
+						if (!url.toLowerCase().startsWith("http") && !url.toLowerCase().startsWith("https")) {
+							if (!url.contains(".") || url.contains(" ")) {
+								url = "https://www.google.com/search?q=" + url + "&oq=" + url;
+							} else {
+								url = "http://" + url;
+							}
+						}
+						System.out.println("url2:" + url);
+						webengine.load(url);
 					}
-				}
-				System.out.println("url2:" + url);
-				webengine.load(url);
-			}
-		});
+				});
 
 		Button shareBtn = new Button("네이버 블로그 글쓰기");
 
@@ -244,13 +245,15 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 				// 네이버 블로그 공유
 				System.out.println("네이버 블로그 공유");
 				getNaverCookies();
+				logger.debug("strBlogId :" + strBlogId);
 				logger.debug("strNidAut :" + strNidAut);
 				logger.debug("strNidSes :" + strNidSes);
-				if (!strNidAut.equals("") && !strNidSes.equals("")) {
+				if (!strBlogId.equals("") && !strNidAut.equals("") && !strNidSes.equals("")) {
 
 					String url = urlTf.getText();
 					System.out.println("url1:" + url);
-					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strNidAut, strNidSes);
+					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strBlogId, strNidAut,
+							strNidSes);
 					step2.schedulerStart();
 				} else {
 					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
@@ -269,14 +272,15 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 				// 네이버 블로그 공유
 				System.out.println("네이버 블로그 공유");
 				getNaverCookies();
+				logger.debug("strBlogId :" + strBlogId);
 				logger.debug("strNidAut :" + strNidAut);
 				logger.debug("strNidSes :" + strNidSes);
-				if (!strNidAut.equals("") && !strNidSes.equals("")) {
+				if (!strBlogId.equals("") && !strNidAut.equals("") && !strNidSes.equals("")) {
 
 					String url = urlTf.getText();
 					System.out.println("url1:" + url);
-					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strNidAut, strNidSes,
-						true);
+					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strBlogId, strNidAut,
+							strNidSes, true);
 					step2.schedulerStart();
 				} else {
 					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
@@ -356,61 +360,60 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 			}
 		});
 		homeTxt.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
-			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
-			@Override
-			public void handle(javafx.scene.input.MouseEvent event) {
-				webView.getEngine().load("https://www.naver.com");
-			}
-		});
+				new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
+					@Override
+					public void handle(javafx.scene.input.MouseEvent event) {
+						webView.getEngine().load("https://www.naver.com");
+					}
+				});
 		backTxt.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
-			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
-			@Override
-			public void handle(javafx.scene.input.MouseEvent event) {
-				webView.getEngine().getHistory().go(-1);
-			}
-		});
+				new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
+					@Override
+					public void handle(javafx.scene.input.MouseEvent event) {
+						webView.getEngine().getHistory().go(-1);
+					}
+				});
 		forwardTxt.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
-			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
-			@Override
-			public void handle(javafx.scene.input.MouseEvent event) {
-				webView.getEngine().getHistory().go(1);
-			}
-		});
+				new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
+					@Override
+					public void handle(javafx.scene.input.MouseEvent event) {
+						webView.getEngine().getHistory().go(1);
+					}
+				});
 		reloadTxt.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
-			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
-			@Override
-			public void handle(javafx.scene.input.MouseEvent event) {
-				webView.getEngine().reload();
-			}
-		});
+				new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
+					@Override
+					public void handle(javafx.scene.input.MouseEvent event) {
+						webView.getEngine().reload();
+					}
+				});
 
 		Button saveBtn = new Button("Save");
 		saveBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
-			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
-			@Override
-			public void handle(javafx.scene.input.MouseEvent event) {
-				String html = (String) webView.getEngine().executeScript("document.documentElement.outerHTML");
+				new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
+					@Override
+					public void handle(javafx.scene.input.MouseEvent event) {
+						String html = (String) webView.getEngine().executeScript("document.documentElement.outerHTML");
 
-				System.out.println("html:" + html);
-				// saveHtml(html, "전광판");
-				try {
-					saveCookies();
-				} catch (NoSuchMethodException ex) {
-					java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-				} catch (InvocationTargetException ex) {
-					java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-				} catch (IllegalAccessException ex) {
-					java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-				} catch (NoSuchFieldException ex) {
-					java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-				} catch (ClassNotFoundException ex) {
-					java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-				} catch (IOException ex) {
-					java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-				}
-			}
-		;
-		});
+						System.out.println("html:" + html);
+						// saveHtml(html, "전광판");
+						try {
+							saveCookies();
+						} catch (NoSuchMethodException ex) {
+							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+						} catch (InvocationTargetException ex) {
+							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+						} catch (IllegalAccessException ex) {
+							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+						} catch (NoSuchFieldException ex) {
+							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+						} catch (ClassNotFoundException ex) {
+							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+						} catch (IOException ex) {
+							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+						}
+					};
+				});
 
 		Text nidAutTxt = new Text("NID_AUT");
 		nidAutTxt.setStyle(FX_FONT_STYLE);
@@ -421,29 +424,29 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 		nidAutTf.setAlignment(Pos.TOP_LEFT);
 
 		categoryListComboBox.getItems().addAll("266:쿠팡 상품 추천", "267:로켓배송", "268:로켓프레시", "269:로켓직구", "270:정기배송",
-			"271:골드박스", "272:기획전", "274:카테고리별 베스트 상품", "275:PL 상품", "276:PL 브랜드별 상품", "277:추천 상품", "33:소개,알림,공지",
-			"173:유행,트렌드,동향", "255:역사", "88:사회,문화", "198:국정교과서", "216:혼이비정상", "31:정치,정부,정책", "180:선거",
-			"7:국외,해외,국제,세계", "249:북한", "236:미국", "228:중국", "237:일본", "2:경제,산업", "256:삼성", "260:현대", "141:부동산",
-			"238:가상(암호)화폐", "250:투자썰전", "47:IT(Info Tech)", "258:BT(Bio Tech)", "259:NT(Nano Tech)", "199:카페베네",
-			"131:증권", "265:미국", "146:증권↑↓↗↘", "153:특징주", "164:신고,신저가", "235:시간외단일가", "278:증권뉴스", "176:제약,약품,바이오",
-			"264:IT(Info Tech)", "273:조선", "190:삼성", "171:국민연금", "261:ETN,ETF", "188:핸디소프트", "253:Entertainment",
-			"166:외국인 보유", "170:리포트,리서치", "172:상하한일수", "148:데이타", "155:Top 100", "159:기외 연속매수", "160:기외 연속매도",
-			"156:기외 거래량", "161:기외 거래대금", "157:기외 양매수금", "162:기외 양매수량", "158:기외 양매도금", "163:기외 양매도량", "152:기획기사",
-			"209:방송,언론", "210:JTBC", "201:뉴스공장", "202:파파이스", "206:스포트라이트", "150:건강", "207:치매", "29:비타민", "140:운동",
-			"151:식당", "208:마약", "263:질병", "132:Manuka Honey", "9:음식,식료품", "262:환경", "142:사건,사고", "182:세월호",
-			"234:4대강", "204:5촌살인사건", "241:MeToo", "243:갑질", "244:댓글사건", "121:오늘의 잠언", "177:오늘의 계시", "128:오늘의 성경",
-			"120:오늘의 말씀", "149:오늘의 사진", "123:오늘의 영어", "178:주일,수요말씀", "245:인물", "197:문재인대통령", "189:노무현대통령",
-			"225:인물1", "179:이승만", "183:박정희", "240:이명박", "185:박근혜", "193:이재명", "191:김기춘", "186:최태민", "200:김재규",
-			"184:최순실", "229:장준하", "192:역사", "147:브렉시트", "145:자동차", "174:여행", "관광", "196:레져", "144:신앙", "181:종교",
-			"230:과학", "111:LearningJava, 4Th", "94:자바 IO, NIO NetPrg", "50:Node.js 프로그래밍", "70:막힘없이배우는Java프로그래밍",
-			"89:HTML5를 활용한 모바일웹앱", "90:1부.HTML5주요기능", "91:2부. jQueryMobile", "92:3부.Sencha Touch", "5:웹 프로그래밍",
-			"127:모바일 프로그래밍", "130:모던웹을위한HTML5프로그래밍", "35:연예,엔터,재미", "129:해외직구", "32:쇼핑", "135:문화,예술", "3:음악",
-			"139:미술", "49:영화", "6:연예", "8:책", "211:교양", "212:다큐", "213:교육", "46:보안", "24:패션", "37:뷰티", "19:디자인",
-			"114:메르스", "25:생활", "10:스포츠", "30:동영상", "69:월남전", "43:영감의 시", "126:천국과지옥", "125:정명석선생님", "137:프로그램",
-			"45:CSS", "87:Eclipse", "247:easyui", "93:Google", "44:HTML", "27:JavaScript", "26:Java", "42:jQuery",
-			"248:NetBeans", "112:Node.js", "86:Spring", "246:Mybatis", "115:Swing", "39:Thymeleaf", "254:tomcat",
-			"113:Software", "36:드라이버", "257:Freemarker", "133:데이터베이스", "41:Oracle", "48:MSSQL", "40:MySQL",
-			"134:운영체제", "22:Windows", "21:Unix, Linux", "175:레오사진", "233:광고");
+				"271:골드박스", "272:기획전", "274:카테고리별 베스트 상품", "275:PL 상품", "276:PL 브랜드별 상품", "277:추천 상품", "33:소개,알림,공지",
+				"173:유행,트렌드,동향", "255:역사", "88:사회,문화", "198:국정교과서", "216:혼이비정상", "31:정치,정부,정책", "180:선거",
+				"7:국외,해외,국제,세계", "249:북한", "236:미국", "228:중국", "237:일본", "2:경제,산업", "256:삼성", "260:현대", "141:부동산",
+				"238:가상(암호)화폐", "250:투자썰전", "47:IT(Info Tech)", "258:BT(Bio Tech)", "259:NT(Nano Tech)", "199:카페베네",
+				"131:증권", "265:미국", "146:증권↑↓↗↘", "153:특징주", "164:신고,신저가", "235:시간외단일가", "278:증권뉴스", "176:제약,약품,바이오",
+				"264:IT(Info Tech)", "273:조선", "190:삼성", "171:국민연금", "261:ETN,ETF", "188:핸디소프트", "253:Entertainment",
+				"166:외국인 보유", "170:리포트,리서치", "172:상하한일수", "148:데이타", "155:Top 100", "159:기외 연속매수", "160:기외 연속매도",
+				"156:기외 거래량", "161:기외 거래대금", "157:기외 양매수금", "162:기외 양매수량", "158:기외 양매도금", "163:기외 양매도량", "152:기획기사",
+				"209:방송,언론", "210:JTBC", "201:뉴스공장", "202:파파이스", "206:스포트라이트", "150:건강", "207:치매", "29:비타민", "140:운동",
+				"151:식당", "208:마약", "263:질병", "132:Manuka Honey", "9:음식,식료품", "262:환경", "142:사건,사고", "182:세월호",
+				"234:4대강", "204:5촌살인사건", "241:MeToo", "243:갑질", "244:댓글사건", "121:오늘의 잠언", "177:오늘의 계시", "128:오늘의 성경",
+				"120:오늘의 말씀", "149:오늘의 사진", "123:오늘의 영어", "178:주일,수요말씀", "245:인물", "197:문재인대통령", "189:노무현대통령",
+				"225:인물1", "179:이승만", "183:박정희", "240:이명박", "185:박근혜", "193:이재명", "191:김기춘", "186:최태민", "200:김재규",
+				"184:최순실", "229:장준하", "192:역사", "147:브렉시트", "145:자동차", "174:여행", "관광", "196:레져", "144:신앙", "181:종교",
+				"230:과학", "111:LearningJava, 4Th", "94:자바 IO, NIO NetPrg", "50:Node.js 프로그래밍", "70:막힘없이배우는Java프로그래밍",
+				"89:HTML5를 활용한 모바일웹앱", "90:1부.HTML5주요기능", "91:2부. jQueryMobile", "92:3부.Sencha Touch", "5:웹 프로그래밍",
+				"127:모바일 프로그래밍", "130:모던웹을위한HTML5프로그래밍", "35:연예,엔터,재미", "129:해외직구", "32:쇼핑", "135:문화,예술", "3:음악",
+				"139:미술", "49:영화", "6:연예", "8:책", "211:교양", "212:다큐", "213:교육", "46:보안", "24:패션", "37:뷰티", "19:디자인",
+				"114:메르스", "25:생활", "10:스포츠", "30:동영상", "69:월남전", "43:영감의 시", "126:천국과지옥", "125:정명석선생님", "137:프로그램",
+				"45:CSS", "87:Eclipse", "247:easyui", "93:Google", "44:HTML", "27:JavaScript", "26:Java", "42:jQuery",
+				"248:NetBeans", "112:Node.js", "86:Spring", "246:Mybatis", "115:Swing", "39:Thymeleaf", "254:tomcat",
+				"113:Software", "36:드라이버", "257:Freemarker", "133:데이터베이스", "41:Oracle", "48:MSSQL", "40:MySQL",
+				"134:운영체제", "22:Windows", "21:Unix, Linux", "175:레오사진", "233:광고");
 		categoryListComboBox.setPromptText("Please select one");
 
 		HBox nidAutBox = new HBox(nidAutTxt, nidAutTf, categoryListComboBox);
@@ -532,13 +535,13 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 								strStockCode = strStockCode.replace("'", "");
 								if (strStockCode.startsWith("A")) {
 									if (!strStockName.startsWith("ARIRANG") && !strStockName.startsWith("KINDEX")
-										&& !strStockName.startsWith("TIGER") && !strStockName.startsWith("KBSTAR")
-										&& !strStockName.startsWith("SMART") && !strStockName.startsWith("KODEX")
-										&& !strStockName.startsWith("TREX") && !strStockName.startsWith("HANARO")
-										&& !strStockName.startsWith("KOSEF") && !strStockName.contains("코스피")
-										&& !strStockName.contains("레버리지") && !strStockName.contains("S&P")
-										&& !strStockName.contains("마이다스") && !strStockName.contains("고배당")
-										&& !strStockName.contains("FOCUS")) {
+											&& !strStockName.startsWith("TIGER") && !strStockName.startsWith("KBSTAR")
+											&& !strStockName.startsWith("SMART") && !strStockName.startsWith("KODEX")
+											&& !strStockName.startsWith("TREX") && !strStockName.startsWith("HANARO")
+											&& !strStockName.startsWith("KOSEF") && !strStockName.contains("코스피")
+											&& !strStockName.contains("레버리지") && !strStockName.contains("S&P")
+											&& !strStockName.contains("마이다스") && !strStockName.contains("고배당")
+											&& !strStockName.contains("FOCUS")) {
 
 										stockCount++;
 										strStockCode = strStockCode.replace("A", "");
@@ -607,9 +610,6 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 //		String jsonObject = JSONObject.toJSONString(stockMap);
 		String jsonObject = stockMap.toString();
 		String fileName = "";
-//		fileName = userHome + "\\documents\\" + strYmdhms + "_" + market_en + "_list.json";
-		fileName = market_en + "_list.json";
-		FileUtil.fileWrite(fileName, jsonObject);
 //		fileName = userHome + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
 		fileName = market_en + "_list.txt";
 		FileUtil.fileWrite(fileName, stockCodeNameSb.toString());
@@ -617,7 +617,7 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 	}
 
 	private void saveCookies() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException,
-		NoSuchFieldException, ClassNotFoundException, IOException {
+			NoSuchFieldException, ClassNotFoundException, IOException {
 		CookieManager cookieManager = (CookieManager) CookieHandler.getDefault();
 		Field f = cookieManager.getClass().getDeclaredField("store");
 		f.setAccessible(true);
@@ -769,10 +769,10 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 //			Method method = c.getDeclaredMethod("createHTMLFile", String.class);
 //			sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
 			Method method = c.getDeclaredMethod("createHTMLFile", String.class, String.class);
-			sb = (StringBuilder) method.invoke(String.class, new Object[]{strUrl, strMyComment});
+			sb = (StringBuilder) method.invoke(String.class, new Object[] { strUrl, strMyComment });
 			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.INFO, sb.toString());
 		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-			| NoSuchMethodException | SecurityException ex) {
+				| NoSuchMethodException | SecurityException ex) {
 			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 			return;
 		}
@@ -826,10 +826,10 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 	}
 
 	public boolean naverBlogLinkShare(StringBuilder contentSb, String strCategoryName, String strShareTitle,
-		String strShareUrl) {
+			String strShareUrl) {
 		strNidAut = nidAutTf.getText();
 		strNidSes = nidSesTa.getText();
-		return NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strCategoryName,
-			contentSb, null);
+		return NaverUtil.naverBlogLinkShare(strBlogId, strNidAut, strNidSes, strShareUrl, strShareTitle,
+				strCategoryName, contentSb, null);
 	}
 }

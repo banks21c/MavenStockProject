@@ -44,7 +44,7 @@ public class StockPlusMinusDivide100 extends Thread {
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
 
-	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E hh.mm.SSS", Locale.KOREAN).format(new Date());
+	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.SSS", Locale.KOREAN).format(new Date());
 
 	DecimalFormat df = new DecimalFormat("###.##");
 
@@ -96,6 +96,7 @@ public class StockPlusMinusDivide100 extends Thread {
 
 	static int iExtractCount = 100;
 
+	private String strBlogId;
 	private String strNidAut;
 	private String strNidSes;
 
@@ -127,8 +128,9 @@ public class StockPlusMinusDivide100 extends Thread {
 		iExtractCount = 100;
 	}
 
-	public StockPlusMinusDivide100(String strNidAut, String strNidSes) {
+	public StockPlusMinusDivide100(String strBlogId, String strNidAut, String strNidSes) {
 		logger = LoggerFactory.getLogger(getClass());
+		this.strBlogId = strBlogId;
 		this.strNidAut = strNidAut;
 		this.strNidSes = strNidSes;
 	}
@@ -140,21 +142,21 @@ public class StockPlusMinusDivide100 extends Thread {
 
 	StockPlusMinusDivide100(int i) {
 		List<StockVO> kospiStockList = readOne("123890", "한국자산신탁");
-		//List<StockVO> kospiStockList = readOne("032980");
+		// List<StockVO> kospiStockList = readOne("032980");
 		StringBuilder info1 = getStockInfoHtml(kospiStockList, "코스피", "상승율");
-		//writeFile(info1, "코스피", "상승율");
+		// writeFile(info1, "코스피", "상승율");
 		StringBuilder html = createHtmlString(info1, "코스피", "상승율");
-		//네이버 블로그에 공유
+		// 네이버 블로그에 공유
 		naverBlogLinkShare(html);
-		
-		//      List<StockVO> kospiStockList1 = readOne("123890");
-		//      writeFile(kospiStockList1, kospiFileName, "코스피", "상승율");
+
+		// List<StockVO> kospiStockList1 = readOne("123890");
+		// writeFile(kospiStockList1, kospiFileName, "코스피", "상승율");
 		List<StockVO> kosdaqStockList = readOne("204990");
 		StringBuilder info2 = getStockInfoHtml(kosdaqStockList, "코스닥", "상승율");
-		//writeFile(info2, "코스닥", "상승율");
+		// writeFile(info2, "코스닥", "상승율");
 		// writeFile(kosdaqStockList,kosdaqFileName,"코스닥");
 		html = createHtmlString(info1, "코스닥", "상승율");
-		//네이버 블로그에 공유
+		// 네이버 블로그에 공유
 		naverBlogLinkShare(html);
 	}
 
@@ -187,6 +189,13 @@ public class StockPlusMinusDivide100 extends Thread {
 
 		stockList = getAllStockInfo(stockList, marketType);
 		logger.debug("stockList.size :" + stockList.size());
+		int iHour = Integer.parseInt(new SimpleDateFormat("HH").format(new Date()));
+		if (iHour >= 18 || iHour < 8) {
+			//기관,외인,개인매매
+			stockList = NaverStockTradingVolume.getStockTradingVolumeList(stockList);
+			//시간외단일가
+			stockList = JsoupMkStockAfterHours.getAfterHoursStockTradeInfoList(stockList);
+		}
 
 		// 1.상승율순 정렬
 		Collections.sort(stockList, new VaryRatioDescCompare());
@@ -220,22 +229,24 @@ public class StockPlusMinusDivide100 extends Thread {
 
 		StringBuilder html = createHtmlString(sBuilder, marketType, "시세");
 		writeFile(html, marketType, "시세");
-		//네이버 블로그에 공유
+		// 네이버 블로그에 공유
 		naverBlogLinkShare(html);
-		
+
 		logger.debug("file write finished");
 	}
 
-	//네이버 블로그에 공유
+	// 네이버 블로그에 공유
 	public void naverBlogLinkShare(StringBuilder html) {
 		String strUrl = "";
 		String strTitle = Jsoup.parse(html.toString()).select("h2#title").text();
-		String strBlogCategoryNo = "146";//증권↑↓↗↘
+		String strBlogCategoryNo = "146";// 증권↑↓↗↘
 		StringBuilder contentSb = html;
+		logger.debug("strBlogId:" + strBlogId);
 		logger.debug("strNidAut:" + strNidAut);
 		logger.debug("strNidSes:" + strNidSes);
-				if (!StringUtils.defaultIfEmpty(strNidAut,"").equals("") && !StringUtils.defaultIfEmpty(strNidSes,"").equals("")) {
-			NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strUrl, strTitle, strBlogCategoryNo, contentSb, null);
+		if (!StringUtils.defaultIfEmpty(strBlogId, "").equals("")&&!StringUtils.defaultIfEmpty(strNidAut, "").equals("")
+				&& !StringUtils.defaultIfEmpty(strNidSes, "").equals("")) {
+			NaverUtil.naverBlogLinkShare(strBlogId, strNidAut, strNidSes, strUrl, strTitle, strBlogCategoryNo, contentSb, null);
 		}
 	}
 
@@ -352,7 +363,7 @@ public class StockPlusMinusDivide100 extends Thread {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -362,7 +373,7 @@ public class StockPlusMinusDivide100 extends Thread {
 					varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
@@ -410,7 +421,7 @@ public class StockPlusMinusDivide100 extends Thread {
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -431,9 +442,7 @@ public class StockPlusMinusDivide100 extends Thread {
 			} else if (specialLetter.equals("▼")) {
 				kospiDownCount++;
 			} else {
-				if (stock.getiTradingVolume() > 0) {
-					kospiSteadyCount++;
-				}
+				kospiSteadyCount++;
 			}
 //            System.out.println("date:" + date);
 			System.out.println("specialLetter:" + specialLetter);
@@ -471,12 +480,12 @@ public class StockPlusMinusDivide100 extends Thread {
 		sb1.append("\t<h2 id='title'>" + strYmdDashBracket + " " + marketType + " " + title + "</h2>");
 		if (marketType.equals("코스피")) {
 			sb1.append("<h4><font color='red'>상한가:" + kospiTopCount + "</font><font color='red'> 상승:" + kospiUpCount
-				+ "</font><font color='gray'> 보합:" + kospiSteadyCount + "</font><font color='blue'> 하락:"
-				+ kospiDownCount + "</font><font color='blue'> 하한가:" + kospiBottomCount + "</font></h4>");
+					+ "</font><font color='gray'> 보합:" + kospiSteadyCount + "</font><font color='blue'> 하락:"
+					+ kospiDownCount + "</font><font color='blue'> 하한가:" + kospiBottomCount + "</font></h4>");
 		} else {
 			sb1.append("<h4><font color='red'>상한가:" + kosdaqTopCount + "</font><font color='red'> 상승:" + kosdaqUpCount
-				+ "</font><font color='gray'> 보합:" + kosdaqSteadyCount + "</font><font color='blue'> 하락:"
-				+ kosdaqDownCount + "</font><font color='blue'> 하한가:" + kosdaqBottomCount + "</font></h4>");
+					+ "</font><font color='gray'> 보합:" + kosdaqSteadyCount + "</font><font color='blue'> 하락:"
+					+ kosdaqDownCount + "</font><font color='blue'> 하한가:" + kosdaqBottomCount + "</font></h4>");
 
 		}
 		sb1.append(sb.toString());
@@ -488,7 +497,7 @@ public class StockPlusMinusDivide100 extends Thread {
 	public void writeFile(StringBuilder sb, String marketType, String title) {
 		title = title.replace(" ", "_");
 		String fileName = USER_HOME + "\\documents\\" + strYmdDashBracket + "_" + strHms + "_" + marketType + "_"
-			+ title;
+				+ title;
 		if (iExtractCount != -1) {
 			fileName += "_TOP_" + iExtractCount;
 		}
@@ -501,10 +510,11 @@ public class StockPlusMinusDivide100 extends Thread {
 	public StringBuilder getStockInfoHtml(List<StockVO> list, String marketType, String descGubun) {
 		StringBuilder sb1 = new StringBuilder();
 		if (iExtractCount > 0) {
-			sb1.append("\t<h2>").append(marketType).append(" ").append(descGubun).append("TOP ").append(iExtractCount).append("</h2>");
+			sb1.append("\t<h2>").append(marketType).append(" ").append(descGubun).append("TOP ").append(iExtractCount)
+					.append("</h2>");
 		}
 
-		sb1.append("<table>\r\n");
+		sb1.append("<table style='border-collapse:collapse'>\r\n");
 		sb1.append("<tr>\r\n");
 		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
 		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
@@ -530,10 +540,21 @@ public class StockPlusMinusDivide100 extends Thread {
 		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락율</td>\r\n");
 		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래량</td>\r\n");
 		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
+
+		int iHour = Integer.parseInt(new SimpleDateFormat("HH").format(new Date()));
+		if (iHour >= 18 || iHour < 8) {
+			// 2020.12.13 추가
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외국인매매</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관매매</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>개인매매</td>\r\n");
+			// 2020.12.17 추가
+			sb1.append(
+					"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>시간외단일가</td>\r\n");
+		}
 		sb1.append("</tr>\r\n");
 		int cnt = 1;
-		for (StockVO s : list) {
-			String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
+		for (StockVO svo : list) {
+			String specialLetter = StringUtils.defaultIfEmpty(svo.getSpecialLetter(), "");
 			logger.debug(descGubun + " specialLetter+++>" + specialLetter);
 			if (descGubun.equals("상승율")) {
 				// 1.상승율
@@ -548,34 +569,50 @@ public class StockPlusMinusDivide100 extends Thread {
 			} else if (descGubun.equals("보합")) {
 				// 3.보합
 				if (specialLetter.equals("▼") || specialLetter.equals("↓") || specialLetter.equals("▲")
-					|| specialLetter.equals("↑")) {
+						|| specialLetter.equals("↑")) {
 					continue;
 				}
 			}
-			sb1.append("<tr>\r\n");
-			String url = TOTAL_INFO_URL + s.getStockCode();
-			sb1.append("<td>" + cnt + "</td>\r\n");
-			sb1.append("<td><a href='" + url + "' target='_sub'>" + s.getStockName() + "</a></td>\r\n");
 
-			String varyPrice = s.getVaryPrice();
+			// 2020.12.13 추가
+			DecimalFormat formatter = new DecimalFormat("#,##0");
+			int iForeignTradingVolume = svo.getiForeignTradingVolume();
+			int iOrganTradingVolume = svo.getiOrganTradingVolume();
+			int iIndividualTradingVolume = svo.getiIndividualTradingVolume();
+
+			String strForeignTradingVolume = formatter.format(iForeignTradingVolume);
+			String strOrganTradingVolume = formatter.format(iOrganTradingVolume);
+			String strIndividualTradingVolume = formatter.format(iIndividualTradingVolume);
+
+			if (iForeignTradingVolume > 0 && iOrganTradingVolume > 0) {
+				sb1.append("<tr style='border:1px solid red;'>\r\n");
+			} else {
+				sb1.append("<tr>\r\n");
+			}
+
+			String url = TOTAL_INFO_URL + svo.getStockCode();
+			sb1.append("<td>" + cnt + "</td>\r\n");
+			sb1.append("<td><a href='" + url + "' target='_sub'>" + svo.getStockName() + "</a></td>\r\n");
+
+			String varyPrice = svo.getVaryPrice();
 
 			logger.debug(descGubun + " varyPrice+++>" + varyPrice);
 			logger.debug(descGubun + " 변동가격:" + specialLetter + varyPrice);
 
 			if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲") || specialLetter.startsWith("+")) {
-				sb1.append("<td style='text-align:right;color:red'>" + StringUtils.defaultIfEmpty(s.getCurPrice(), "")
-					+ "</td>\r\n");
+				sb1.append("<td style='text-align:right;color:red'>" + StringUtils.defaultIfEmpty(svo.getCurPrice(), "")
+						+ "</td>\r\n");
 				sb1.append("<td style='text-align:right'><font color='red'>" + specialLetter + " " + varyPrice
-					+ "</font></td>\r\n");
+						+ "</font></td>\r\n");
 			} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
-				|| specialLetter.startsWith("-")) {
-				sb1.append("<td style='text-align:right;color:blue'>" + StringUtils.defaultIfEmpty(s.getCurPrice(), "")
-					+ "</td>\r\n");
+					|| specialLetter.startsWith("-")) {
+				sb1.append("<td style='text-align:right;color:blue'>"
+						+ StringUtils.defaultIfEmpty(svo.getCurPrice(), "") + "</td>\r\n");
 				sb1.append("<td style='text-align:right'><font color='blue'>" + specialLetter + " " + varyPrice
-					+ "</font></td>\r\n");
+						+ "</font></td>\r\n");
 			} else {
-				sb1.append("<td style='text-align:right;color:metal'>" + StringUtils.defaultIfEmpty(s.getCurPrice(), "")
-					+ "</td>\r\n");
+				sb1.append("<td style='text-align:right;color:metal'>"
+						+ StringUtils.defaultIfEmpty(svo.getCurPrice(), "") + "</td>\r\n");
 				sb1.append("<td style='text-align:right'>0</td>\r\n");
 			}
 
@@ -622,7 +659,8 @@ public class StockPlusMinusDivide100 extends Thread {
 			// StringUtils.defaultIfEmpty(s.getTradingAmount(),"") +
 			// "</td>\r\n");
 			// }
-			String varyRatio = StringUtils.defaultIfEmpty(s.getVaryRatio(), "");
+
+			String varyRatio = StringUtils.defaultIfEmpty(svo.getVaryRatio(), "");
 			if (varyRatio.startsWith("+")) {
 				sb1.append("<td style='text-align:right'><font color='red'>" + varyRatio + "</font></td>\r\n");
 			} else if (varyRatio.startsWith("-")) {
@@ -630,11 +668,58 @@ public class StockPlusMinusDivide100 extends Thread {
 			} else {
 				sb1.append("<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
 			}
-			sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingVolume(), "")
-				+ "</td>\r\n");
-			sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingAmount(), "")
-				+ "</td>\r\n");
+			sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(svo.getTradingVolume(), "")
+					+ "</td>\r\n");
+			sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(svo.getTradingAmount(), "")
+					+ "</td>\r\n");
 
+			if (iHour >= 18 || iHour < 8) {
+				// 외국인 매매
+				if (iForeignTradingVolume < 0) {
+					sb1.append("<td style='text-align:right;color:blue'>" + strForeignTradingVolume + "</td>\r\n");
+				} else if (iForeignTradingVolume > 0) {
+					if (iOrganTradingVolume > 0) {
+						sb1.append("<td style='text-align:right;color:red;background-color:yellow;'>" + strForeignTradingVolume + "</td>\r\n");
+					}else {
+						sb1.append("<td style='text-align:right;color:red'>" + strForeignTradingVolume + "</td>\r\n");
+					}
+				} else {
+					sb1.append("<td style='text-align:right'>0</td>\r\n");
+				}
+				// 기관 매매
+				if (iOrganTradingVolume < 0) {
+					sb1.append("<td style='text-align:right;color:blue'>" + strOrganTradingVolume + "</td>\r\n");
+				} else if (iOrganTradingVolume > 0) {
+					if (iForeignTradingVolume > 0) {
+						sb1.append("<td style='text-align:right;color:red;background-color:yellow;'>" + strOrganTradingVolume + "</td>\r\n");
+					}else {
+						sb1.append("<td style='text-align:right;color:red'>" + strOrganTradingVolume + "</td>\r\n");
+					}
+				} else {
+					sb1.append("<td style='text-align:right'>0</td>\r\n");
+				}
+				// 개인 매매
+				if (iIndividualTradingVolume < 0) {
+					sb1.append("<td style='text-align:right;color:blue'>" + strIndividualTradingVolume + "</td>\r\n");
+				} else if (iIndividualTradingVolume > 0) {
+					sb1.append("<td style='text-align:right;color:red'>" + strIndividualTradingVolume + "</td>\r\n");
+				} else {
+					sb1.append("<td style='text-align:right'>0</td>\r\n");
+				}
+				// 2020.12.17 추가
+				String strAfterHoursPrice = svo.getStrAfterHoursPrice();
+				String strAfterHoursSign = StringUtils.defaultString(svo.getStrAfterHoursSign());
+				String strAfterHoursPriceColor = "";
+				String strAfterHoursPriceBgColor = "";
+				if (strAfterHoursSign.equals("+")) {
+					strAfterHoursPriceColor = "red";
+					strAfterHoursPriceBgColor = "yellow";
+				} else if (strAfterHoursSign.equals("-")) {
+					strAfterHoursPriceColor = "blue";
+				}
+				sb1.append("<td style='text-align:right;color:" + strAfterHoursPriceColor + ";background-color:"+strAfterHoursPriceBgColor+"'>" + strAfterHoursPrice
+						+ "</td>\r\n");
+			}
 			sb1.append("</tr>\r\n");
 			if (cnt == iExtractCount) {
 				break;
@@ -644,7 +729,6 @@ public class StockPlusMinusDivide100 extends Thread {
 		sb1.append("</table>\r\n");
 		return sb1;
 	}
-
 
 	public void readNews(List<StockVO> allStockList) {
 
@@ -667,7 +751,7 @@ public class StockPlusMinusDivide100 extends Thread {
 				System.out.println("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
 
 				Document doc = Jsoup
-					.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=").get();
+						.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=").get();
 				// http://finance.naver.com/item/news_read.nhn?article_id=0002942514&office_id=011&code=246690&page=
 				doc.select("script").remove();
 				Element e1 = doc.select(".type5").get(0);
@@ -706,7 +790,7 @@ public class StockPlusMinusDivide100 extends Thread {
 						// sb1.append("<div>"+ strSource+" | "+ strDayTime
 						// +"</div>\n");
 						sb1.append("<h3><a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-							+ strStockName + "(" + strStockCode + ")" + "</a></h3>\n");
+								+ strStockName + "(" + strStockCode + ")" + "</a></h3>\n");
 
 						doc = Jsoup.connect("http://finance.naver.com" + strLink).get();
 						Elements link_news_elements = doc.select(".link_news");
@@ -722,8 +806,8 @@ public class StockPlusMinusDivide100 extends Thread {
 
 						String strView = view.toString();
 						strView = strView.replaceAll(strStockName,
-							"<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
-							+ strStockName + "</a>");
+								"<a href='http://finance.naver.com/item/main.nhn?code=" + strStockCode + "'>"
+										+ strStockName + "</a>");
 
 						sb1.append(strView);
 						sb1.append("<br><br>\n");
@@ -812,7 +896,7 @@ public class StockPlusMinusDivide100 extends Thread {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -822,7 +906,7 @@ public class StockPlusMinusDivide100 extends Thread {
 					varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
@@ -872,7 +956,7 @@ public class StockPlusMinusDivide100 extends Thread {
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -893,9 +977,7 @@ public class StockPlusMinusDivide100 extends Thread {
 			} else if (specialLetter.equals("▼")) {
 				countPlus("down", marketType);
 			} else {
-				if (stock.getiTradingVolume() > 0) {
-					countPlus("steady", marketType);
-				}
+				countPlus("steady", marketType);
 			}
 
 			if (specialLetter.equals("↑")) {
@@ -926,18 +1008,18 @@ public class StockPlusMinusDivide100 extends Thread {
 			logger.debug("고가가 상한가인가?:" + highPrice.equals(stock.getMaxPrice()));
 			// 고가가 0이 아니고 고가가 상한가인가?
 			if (!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())
-				&& !curPrice.equals(stock.getMaxPrice())) {
+					&& !curPrice.equals(stock.getMaxPrice())) {
 				logger.debug("고가가 0이 아니고 고가가 상한가인가?:" + (!highPrice.equals("0") && highPrice.equals(stock.getMaxPrice())
-					&& !curPrice.equals(stock.getMaxPrice())));
+						&& !curPrice.equals(stock.getMaxPrice())));
 				stock.setStockGubun("상터치↑↘");
 				stock.setLineUp(12);
 				addStockList(stock, "topTouch", marketType);
 				return stock;
 			}
 			if (!lowPrice.equals("0") && lowPrice.equals(stock.getMinPrice())
-				&& !curPrice.equals(stock.getMinPrice())) {
+					&& !curPrice.equals(stock.getMinPrice())) {
 				logger.debug("고가가 0이 아니고 저가 하한가인가?:" + (!lowPrice.equals("0") && lowPrice.equals(stock.getMinPrice())
-					&& !curPrice.equals(stock.getMinPrice())));
+						&& !curPrice.equals(stock.getMinPrice())));
 				stock.setStockGubun("하터치↓↗");
 				stock.setLineUp(22);
 				addStockList(stock, "bottomTouch", marketType);

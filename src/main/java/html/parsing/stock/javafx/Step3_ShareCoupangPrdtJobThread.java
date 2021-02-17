@@ -10,11 +10,11 @@ import org.quartz.JobKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Step3_StockMarketPriceJobThread extends Thread implements Job {
+public class Step3_ShareCoupangPrdtJobThread extends Thread implements Job {
 
-	private static Logger logger = LoggerFactory.getLogger(Step3_StockMarketPriceJobThread.class);
+	private static Logger logger = LoggerFactory.getLogger(Step3_ShareCoupangPrdtJobThread.class);
 
-	public Step3_StockMarketPriceJobThread() {
+	public Step3_ShareCoupangPrdtJobThread() {
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class Step3_StockMarketPriceJobThread extends Thread implements Job {
 		System.out.println("strBlogId:" + strBlogId);
 		System.out.println("strNidAut:" + strNidAut);
 		System.out.println("strNidSes:" + strNidSes);
-		Step4_StockMarketPriceRun jobThread = new Step4_StockMarketPriceRun(strBlogId, strNidAut, strNidSes);
+		Step4_ShareCoupangPrdtRun jobThread = new Step4_ShareCoupangPrdtRun(strBlogId, strNidAut, strNidSes);
 		jobThread.start();
 	}
 

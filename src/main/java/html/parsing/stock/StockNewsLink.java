@@ -327,7 +327,7 @@ public class StockNewsLink {
 					Element view = doc.select(".view").get(0);
 					logger.debug("view.className:" + view.className());
 					logger.debug("attr(class):" + view.attr("class"));
-					view.attr("style", "width:548px");
+					view.attr("style", "width:741px");
 					logger.debug("attr(style):" + view.attr("style"));
 
 					String strView = view.toString();

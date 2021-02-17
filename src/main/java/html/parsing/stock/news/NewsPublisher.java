@@ -35,6 +35,7 @@ public enum NewsPublisher {
 	WwwHankyungCom("www.hankyung.com"),
 	NewsHankyungCom("news.hankyung.com"),
 	MarketinsightHankyungCom("marketinsight.hankyung.com"),
+	MagazineHankyungCom("magazine.hankyung.com"),
 	WwwYtnCoKr("www.ytn.co.kr"),
 	WwwYnaCoKr("www.yna.co.kr"),
 	WwwWikitreeCoKr("www.wikitree.co.kr"),
@@ -104,6 +105,7 @@ public enum NewsPublisher {
 	WwwMbnCoKr("www.mbn.co.kr"),
 	WwwBusinesspostCoKr("www.businesspost.co.kr"),
 	WwwInews24Com("www.inews24.com"),
+	WwwFortunekoreaCoKr("www.fortunekorea.co.kr"),
 	WwwIlyoseoulCoKr("www.ilyoseoul.co.kr");
 
 	final private String name;

@@ -369,7 +369,7 @@ public class StockNewsInput {
 				}
 			}
 			if (!commentSb.toString().equals("")) {
-				sb1.append("<table style='width:548px'>\r\n");
+				sb1.append("<table style='width:741px'>\r\n");
 				sb1.append("<tr>\r\n");
 				sb1.append("<td>\r\n");
 				sb1.append(commentSb.toString());
@@ -505,7 +505,7 @@ public class StockNewsInput {
 						view.select(".end_btn").remove();
 						// logger.debug("view.className:" + view.className());
 						// logger.debug("attr(class):" + view.attr("class"));
-						view.attr("style", "width:548px");
+						view.attr("style", "width:741px");
 						// logger.debug("attr(style):" + view.attr("style"));
 
 						String strView = view.toString();

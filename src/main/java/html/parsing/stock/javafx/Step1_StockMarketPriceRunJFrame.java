@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 public class Step1_StockMarketPriceRunJFrame extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 3429228129460673161L;
+	String strBlogId = "";
 	String strNidAut = "";
 	String strNidSes = "";
 
@@ -20,9 +21,11 @@ public class Step1_StockMarketPriceRunJFrame extends javax.swing.JFrame {
 //		execute();
 	}
 
-	public Step1_StockMarketPriceRunJFrame(String strNidAut, String strNidSes) {
+	public Step1_StockMarketPriceRunJFrame(String strBlogId, String strNidAut, String strNidSes) {
+		this.strBlogId = strBlogId;
 		this.strNidAut = strNidAut;
 		this.strNidSes = strNidSes;
+		System.out.println("strBlogId:" + strBlogId);
 		System.out.println("strNidAut:" + strNidAut);
 		System.out.println("strNidSes:" + strNidSes);
 	}
@@ -40,7 +43,7 @@ public class Step1_StockMarketPriceRunJFrame extends javax.swing.JFrame {
 			return;
 		}
 
-		Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strNidAut, strNidSes);
+		Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strBlogId, strNidAut, strNidSes);
 		step2.schedulerStart();
 	}
 	/**

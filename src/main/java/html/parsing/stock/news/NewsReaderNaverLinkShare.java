@@ -45,6 +45,7 @@ import html.parsing.stock.util.StockUtil;
  */
 public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 
+	String strBlogId = "";
 	String strNidAut = "";
 	String strNidSes = "";
 
@@ -1058,11 +1059,17 @@ public class NewsReaderNaverLinkShare extends javax.swing.JFrame {
 			}
 		});
 	}
-
+	/**
+	 * strBlogId = null, NaverUtil.naverBlogLinkShare 오류 임시 처방
+	 * @param contentSb
+	 * @param strCategoryName
+	 * @param strShareTitle
+	 * @param strShareUrl
+	 */
 	public void naverBlogLinkShare(StringBuilder contentSb, String strCategoryName, String strShareTitle, String strShareUrl) {
 		strNidAut = nidAutTa.getText();
 		strNidSes = nidSesTa.getText();
-		NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strCategoryName, contentSb, rootPane);
+		NaverUtil.naverBlogLinkShare(strBlogId,strNidAut, strNidSes, strShareUrl, strShareTitle, strCategoryName, contentSb, rootPane);
 	}
 
 	public void createCategoryListCombo() {

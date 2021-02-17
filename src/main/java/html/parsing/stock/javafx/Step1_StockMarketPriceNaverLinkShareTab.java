@@ -15,10 +15,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.GeneralSecurityException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,15 +30,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.logging.Level;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.StringEntity;
@@ -67,12 +61,14 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.coupang.partners.HmacGenerator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.webkit.network.CookieManager;
 
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.news.NewsPublisher;
+import html.parsing.stock.util.CoupangUtil;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.NaverUtil;
 import html.parsing.stock.util.StockUtil;
@@ -110,17 +106,14 @@ import javafx.stage.Stage;
 public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 
 	final static String USER_HOME = System.getProperty("user.home");
-	private static final String ALGORITHM = "HmacSHA256";
-	private static final Charset STANDARD_CHARSET = Charset.forName("UTF-8");
 	private static Logger logger = LoggerFactory.getLogger(Step1_StockMarketPriceNaverLinkShareTab.class);
 
 	static String homeUrl = "";
 	final static String displayBoardUrl = "https://finance.daum.net/domestic/all_quotes";
 	final static String afterHoursUrl = "https://finance.daum.net/domestic/after_hours?market=KOSPI";
-	final static String naverLoginUrl = "https://nid.naver.com/nidlogin.login?mode=form&svctype=40960&id=banks&url=https://blog.naver.com/banks";
+	final static String naverLoginUrl1 = "https://nid.naver.com/nidlogin.login?mode=form&svctype=40960&url=https%3A%2F%2Fwww.naver.com";
 	final static String naverLoginUrl2 = "https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com";
-	final static String naverLoginUrl3 = "https://nid.naver.com/nidlogin.login?template=plogin&mode=form&url=https://blog.naver.com/ReloadTopAndReturnClose.nhn?blogId=banks%26logNo=222115920474%26isMemolog=false";	
-	final static String naverUrl = "https://www.naver.com";
+	final static String naverUrl = "https://www.naver.com/";
 	final static String coupangUrl = "https://www.coupang.com";
 
 	final static String daumKospiAfterHoursUrl = "https://finance.daum.net/domestic/after_hours?market=KOSPI";
@@ -135,9 +128,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 	final String FX_FONT_STYLE_NAVER_LOG_ON = "-fx-font-family: 'Arial';-fx-font-size: 15px;-fx-font-weight: bold;-fx-fill: green ;";
 	final String FX_FONT_STYLE_NAVER_LOG_OFF = "-fx-font-family: 'Arial';-fx-font-size: 15px;-fx-font-weight: bold;-fx-fill: red ;";
 
-	List<StockVO> kospiUniqueStockList = new ArrayList<>();
-	List<StockVO> kosdaqUniqueStockList = new ArrayList<>();
-
+	private String strBlogId;
+	private String isLogin;
 	String strNidAut = "";
 	String strNidSes = "";
 
@@ -156,8 +148,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 	javafx.scene.control.CheckBox cb5;
 
 	ComboBox<String> naverBlogCategoryListComboBox;
-	ComboBox<String> cCategoryListComboBox;
-	ComboBox<String> cBrandListComboBox;
+	ComboBox<String> coupangCategoryListComboBox;
+	ComboBox<String> coupangBrandListComboBox;
 
 	Label bestcategoriesResultLbl;
 	Label goldboxResultLbl;
@@ -180,10 +172,10 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 	String strDate = sdf.format(new Date());
-	
+
 	Calendar cal = Calendar.getInstance();
 	int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
-	
+
 	SimpleDateFormat sdf0 = new SimpleDateFormat("[yyyy-MM-dd]", Locale.KOREAN);
 	String strYmdBlacket = sdf0.format(new Date());
 
@@ -199,8 +191,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 	SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmmss", Locale.KOREAN);
 	String strYmdhms = sdf1.format(new Date());
 
-	String strCategoryNo = "";
-	String strCategoryName = "";
+	String strNaverBlogCategoryNo = "";
+	String strNaverBlogCategoryName = "";
 
 	String strFileName;
 	URI uri = null;
@@ -234,29 +226,15 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 
 	String topBanner = rocketDeliveryBannerHtml;
 
-//	boolean isJCheckBox1Selected = false;
-//	boolean isGoldboxJCheckBoxSelected = false;
-//	boolean isCoupangPLJCheckBoxSelected = false;
-//	boolean isCoupangPLBrandJCheckBoxSelected = false;
-//	boolean isSearchJCheckBoxSelected = false;
-//	boolean isClicksJCheckBoxSelected = false;
-//	boolean isOrdersJCheckBoxSelected = false;
-//	boolean isCancelsJCheckBoxSelected = false;
-//	boolean isLinkJCheckBoxSelected = false;
-
 	// Replace with your own ACCESS_KEY and SECRET_KEY
 	private String ACCESS_KEY = "";
 	private String SECRET_KEY = "";
 
-	private final static String REQUEST_METHOD_POST = "POST";
 	private final static String REQUEST_METHOD_GET = "GET";
 	private final static String DOMAIN = "https://api-gateway.coupang.com";
 	private final static String API_PATH = "/v2/providers/affiliate_open_api/apis/openapi/v1";
-	private final static String DEEPLINK_URL = API_PATH + "/deeplink";
 
 	private static DecimalFormat df = new DecimalFormat("#,##0");
-	// 채널ID
-	private final static String subId = "";
 
 	// GET
 	// 카테고리 별 베스트 상품에 대한 상세 상품 정보를 생성합니다.
@@ -300,7 +278,6 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 	// 성공
 //    private final static String REQUEST_JSON = "{\"coupangUrls\": [\"https://www.coupang.com/np/campaigns/82\"]}";
 	// 성공
-	private final static String REQUEST_JSON = "{\"coupangUrls\": [\"https://www.coupang.com/np/coupangglobal\"]}";
 	TabPane tabPane = null;
 	// This is our ObservableList that will hold our ComboBox items
 	private ObservableList<String> items = FXCollections.observableArrayList();
@@ -317,11 +294,11 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 	WebView webView4 = null;
 	WebView webView5 = null;
 
-	WebEngine webengine1 = null;
-	WebEngine webengine2 = null;
-	WebEngine webengine3 = null;
-	WebEngine webengine4 = null;
-	WebEngine webengine5 = null;
+	WebEngine webEngine1 = null;
+	WebEngine webEngine2 = null;
+	WebEngine webEngine3 = null;
+	WebEngine webEngine4 = null;
+	WebEngine webEngine5 = null;
 
 	HBox onAndOffHBox = new HBox();
 	HBox mainTopHBox = new HBox();
@@ -357,11 +334,6 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		mainVBox.getChildren().addAll(mainTopHBox);
 		mainVBox.getChildren().addAll(tabPane);
 
-//		VBox tabPaneVBox = new VBox(tabPane);
-//		tab1.setContent(getStockBoardTab());
-//		tab2.setContent(getNaverTab());
-//		tab3.setContent(getCoupangTab());
-
 		Scene scene = new Scene(mainVBox, 1300, 1000);
 
 		primaryStage.setScene(scene);
@@ -385,28 +357,34 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			@Override
 			public void handle(javafx.scene.input.MouseEvent event) {
 
+				String strWebPageHtml = "";
 				TextField urlTf = null;
 				int selectedTabIndex = tabPane.getSelectionModel().getSelectedIndex();
 				switch (selectedTabIndex) {
 				case 0:
 					urlTf = urlTf1;
-					urlTf.setText(webengine1.getLocation());
+					urlTf.setText(webEngine1.getLocation());
+					strWebPageHtml = (String) webView1.getEngine().executeScript("document.documentElement.outerHTML");
 					break;
 				case 1:
 					urlTf = urlTf2;
-					urlTf.setText(webengine2.getLocation());
+					urlTf.setText(webEngine2.getLocation());
+					strWebPageHtml = (String) webView2.getEngine().executeScript("document.documentElement.outerHTML");
 					break;
 				case 2:
 					urlTf = urlTf3;
-					urlTf.setText(webengine3.getLocation());
+					urlTf.setText(webEngine3.getLocation());
+					strWebPageHtml = (String) webView3.getEngine().executeScript("document.documentElement.outerHTML");
 					break;
 				case 3:
 					urlTf = urlTf4;
-					urlTf.setText(webengine4.getLocation());
+					urlTf.setText(webEngine4.getLocation());
+					strWebPageHtml = (String) webView4.getEngine().executeScript("document.documentElement.outerHTML");
 					break;
 				case 4:
 					urlTf = urlTf5;
-					urlTf.setText(webengine5.getLocation());
+					urlTf.setText(webEngine5.getLocation());
+					strWebPageHtml = (String) webView5.getEngine().executeScript("document.documentElement.outerHTML");
 					break;
 				default:
 					break;
@@ -416,7 +394,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 				shareResultTxt1 = new Text();
 				shareResultTxt1.setText("...");
 				mainTopHBox.getChildren().addAll(shareResultTxt1);
-				
+
 				// 네이버 블로그 공유
 				System.out.println("네이버 블로그 글쓰기");
 				getNaverCookies();
@@ -434,7 +412,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 						}
 					}
 					System.out.println("url2:" + strUrl);
-					
+
 					switch (selectedTabIndex) {
 					case 0:
 						urlTf1.setText(strUrl);
@@ -453,9 +431,10 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 						break;
 					default:
 						break;
-					}					
-					
+					}
+
 					createHTMLFile(strUrl, myCommentTa1.getText());
+//					createHTMLFileFromWebView(strUrl, strWebPageHtml, myCommentTa1.getText());
 				} else {
 //					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해 주세요.");
 					shareResultTxt1.setText("먼저 네이버에 로그인해 주세요.");
@@ -466,22 +445,92 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 
 		});
 
-		Button stockPriceShareBtn = new Button("주식 시세 공유");
-		stockPriceShareBtn.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+
+		Button naverBlogShareBtn2 = new Button("네이버 블로그 공유2");
+		naverBlogShareBtn2.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
 			@Override
 			public void handle(javafx.scene.input.MouseEvent event) {
+
+				String strWebPageHtml = "";
+				TextField urlTf = null;
+				int selectedTabIndex = tabPane.getSelectionModel().getSelectedIndex();
+				switch (selectedTabIndex) {
+				case 0:
+					urlTf = urlTf1;
+					urlTf.setText(webEngine1.getLocation());
+					strWebPageHtml = (String) webView1.getEngine().executeScript("document.documentElement.outerHTML");
+					break;
+				case 1:
+					urlTf = urlTf2;
+					urlTf.setText(webEngine2.getLocation());
+					strWebPageHtml = (String) webView2.getEngine().executeScript("document.documentElement.outerHTML");
+					break;
+				case 2:
+					urlTf = urlTf3;
+					urlTf.setText(webEngine3.getLocation());
+					strWebPageHtml = (String) webView3.getEngine().executeScript("document.documentElement.outerHTML");
+					break;
+				case 3:
+					urlTf = urlTf4;
+					urlTf.setText(webEngine4.getLocation());
+					strWebPageHtml = (String) webView4.getEngine().executeScript("document.documentElement.outerHTML");
+					break;
+				case 4:
+					urlTf = urlTf5;
+					urlTf.setText(webEngine5.getLocation());
+					strWebPageHtml = (String) webView5.getEngine().executeScript("document.documentElement.outerHTML");
+					break;
+				default:
+					break;
+				}
+
+				mainTopHBox.getChildren().remove(shareResultTxt1);
+				shareResultTxt1 = new Text();
 				shareResultTxt1.setText("...");
-				// 주식 시세 공유
-				System.out.println("주식 시세 공유");
+				mainTopHBox.getChildren().addAll(shareResultTxt1);
+
+				// 네이버 블로그 공유
+				System.out.println("네이버 블로그 글쓰기");
 				getNaverCookies();
 				logger.debug("strNidAut1 :" + strNidAut);
 				logger.debug("strNidSes1 :" + strNidSes);
 				if (!strNidAut.equals("") && !strNidSes.equals("")) {
 
-					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strNidAut, strNidSes);
-					step2.schedulerStart();
+					String strUrl = urlTf.getText();
+					System.out.println("url1:" + strUrl);
+					if (!strUrl.toLowerCase().startsWith("http") && !strUrl.toLowerCase().startsWith("https")) {
+						if (!strUrl.contains(".") || strUrl.contains(" ")) {
+							strUrl = "https://www.google.com/search?q=" + strUrl + "&oq=" + strUrl;
+						} else {
+							strUrl = "http://" + strUrl;
+						}
+					}
+					System.out.println("url2:" + strUrl);
+
+					switch (selectedTabIndex) {
+					case 0:
+						urlTf1.setText(strUrl);
+						break;
+					case 1:
+						urlTf2.setText(strUrl);
+						break;
+					case 2:
+						urlTf3.setText(strUrl);
+						break;
+					case 3:
+						urlTf4.setText(strUrl);
+						break;
+					case 4:
+						urlTf5.setText(strUrl);
+						break;
+					default:
+						break;
+					}
+
+//					createHTMLFile(strUrl, myCommentTa1.getText());
+					createHTMLFileFromWebView(strUrl, strWebPageHtml, myCommentTa1.getText());
 				} else {
-//					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
+//					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해 주세요.");
 					shareResultTxt1.setText("먼저 네이버에 로그인해 주세요.");
 					return;
 				}
@@ -490,31 +539,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 
 		});
 
-		Button instantShareBtn = new Button("즉시 공유");
-		instantShareBtn.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
-			@Override
-			public void handle(javafx.scene.input.MouseEvent event) {
-				shareResultTxt1.setText("...");
-				// 즉시 공유
-				System.out.println("즉시 공유");
-				getNaverCookies();
-				logger.debug("strNidAut1 :" + strNidAut);
-				logger.debug("strNidSes1 :" + strNidSes);
-				if (!strNidAut.equals("") && !strNidSes.equals("")) {
 
-					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strNidAut, strNidSes,
-							true);
-					step2.schedulerStart();
-				} else {
-//					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
-					shareResultTxt1.setText("먼저 네이버에 로그인해 주세요.");
-					return;
-				}
-
-			}
-
-		});
-
+		// 네이버 블로그 카테고리 목록 콤보박스
 		naverBlogCategoryListComboBox = new ComboBox<String>();
 		// Let's "permanently" set our ComboBox items to the "items" ObservableList.
 		// This causes the
@@ -541,7 +567,6 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			}
 		});
 
-//		nBlogCategoryListComboBox1.getItems().addAll("146:증권↑↓↗↘");
 		naverBlogCategoryListComboBox.setPromptText("Please select one");
 		naverBlogCategoryListComboBox.getSelectionModel().selectedItemProperty()
 				.addListener(new ChangeListener<String>() {
@@ -550,8 +575,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 							String newValue) {
 						if (newValue != null) {
 							String[] strSelectedCategoryArray = newValue.split(":");
-							strCategoryNo = strSelectedCategoryArray[0];
-							strCategoryName = strSelectedCategoryArray[1];
+							strNaverBlogCategoryNo = strSelectedCategoryArray[0];
+							strNaverBlogCategoryName = strSelectedCategoryArray[1];
 							System.out.println(
 									"strSelectedCategoryArray[0]-------------->" + strSelectedCategoryArray[0]);
 							System.out.println(
@@ -569,15 +594,116 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			}
 		});
 
+		Button stockPriceShareBtn = new Button("주식 시세 공유");
+		stockPriceShareBtn.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+			@Override
+			public void handle(javafx.scene.input.MouseEvent event) {
+				shareResultTxt1.setText("...");
+				// 주식 시세 공유
+				System.out.println("주식 시세 공유");
+				getNaverCookies();
+				logger.debug("strBlogId :" + strBlogId);
+				logger.debug("strNidAut1 :" + strNidAut);
+				logger.debug("strNidSes1 :" + strNidSes);
+				if (!strBlogId.equals("") && !strNidAut.equals("") && !strNidSes.equals("")) {
+
+					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strBlogId, strNidAut,
+							strNidSes);
+					step2.schedulerStart();
+				} else {
+//					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
+					shareResultTxt1.setText("먼저 네이버에 로그인해 주세요.");
+					return;
+				}
+
+			}
+
+		});
+
+		Button instantShareBtn = new Button("주식 시세 즉시 공유");
+		instantShareBtn.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+			@Override
+			public void handle(javafx.scene.input.MouseEvent event) {
+				shareResultTxt1.setText("...");
+				// 즉시 공유
+				System.out.println("즉시 공유");
+				getNaverCookies();
+				logger.debug("strBlogId :" + strBlogId);
+				logger.debug("strNidAut1 :" + strNidAut);
+				logger.debug("strNidSes1 :" + strNidSes);
+				if (!strBlogId.equals("") && !strNidAut.equals("") && !strNidSes.equals("")) {
+
+					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strBlogId, strNidAut,
+							strNidSes, true);
+					step2.schedulerStart();
+				} else {
+//					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
+					shareResultTxt1.setText("먼저 네이버에 로그인해 주세요.");
+					return;
+				}
+
+			}
+
+		});
+
+		Button shareCoupangPrdtBtn = new Button("쿠팡 상품 자동 공유 시작");
+		shareCoupangPrdtBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
+				new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
+					@Override
+					public void handle(javafx.scene.input.MouseEvent event) {
+						getNaverCookies();
+						logger.debug("strBlogId :" + strBlogId);
+						logger.debug("strNidAut1 :" + strNidAut);
+						logger.debug("strNidSes1 :" + strNidSes);
+						if (!strBlogId.equals("") && !strNidAut.equals("") && !strNidSes.equals("")) {
+
+//							Step2_ShareCoupangPrdtScheduler step2 = new Step2_ShareCoupangPrdtScheduler(strNidAut, strNidSes,true);
+							Step2_ShareCoupangPrdtScheduler step2 = new Step2_ShareCoupangPrdtScheduler(strBlogId,
+									strNidAut, strNidSes);
+							step2.schedulerStart();
+						} else {
+//							JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
+							shareResultTxt1.setText("먼저 네이버에 로그인해 주세요.");
+							return;
+						}
+					};
+				});
+
+		Button directPostCoupangPrdtBtn = new Button("쿠팡 상품 즉시 포스팅 시작");
+		directPostCoupangPrdtBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
+				new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
+					@Override
+					public void handle(javafx.scene.input.MouseEvent event) {
+						getNaverCookies();
+						logger.debug("strBlogId :" + strBlogId);
+						logger.debug("strNidAut1 :" + strNidAut);
+						logger.debug("strNidSes1 :" + strNidSes);
+						if (!strBlogId.equals("") && !strNidAut.equals("") && !strNidSes.equals("")) {
+
+//							Step2_ShareCoupangPrdtScheduler step2 = new Step2_ShareCoupangPrdtScheduler(strNidAut, strNidSes,true);
+							Step2_ShareCoupangPrdtScheduler step2 = new Step2_ShareCoupangPrdtScheduler(strBlogId,
+									strNidAut, strNidSes, true);
+							step2.schedulerStart();
+						} else {
+//							JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
+							shareResultTxt1.setText("먼저 네이버에 로그인해 주세요.");
+							return;
+						}
+					};
+				});
+
 		shareResultTxt1 = new Text();
 		onAndOffTxt = new Text(" OFF");
 		onAndOffTxt.setStyle(FX_FONT_STYLE_NAVER_LOG_OFF);
 		onAndOffHBox.getChildren().addAll(onAndOffTxt);
-		
+
 		mainTopHBox.getChildren().addAll(naverBlogCategoryListComboBox);
 		mainTopHBox.getChildren().addAll(naverBlogShareBtn);
+		mainTopHBox.getChildren().addAll(naverBlogShareBtn2);
 		mainTopHBox.getChildren().addAll(stockPriceShareBtn);
 		mainTopHBox.getChildren().addAll(instantShareBtn);
+		mainTopHBox.getChildren().addAll(shareCoupangPrdtBtn);
+		mainTopHBox.getChildren().addAll(directPostCoupangPrdtBtn);
 		mainTopHBox.getChildren().addAll(getCiNaverImageView("/images/ci/ci_naver.png"));
 		mainTopHBox.getChildren().addAll(onAndOffHBox);
 		mainTopHBox.getChildren().addAll(shareResultTxt1);
@@ -586,15 +712,15 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 	public VBox getNaverLoginTab() {
 		webView1 = new WebView();
 		webView1.setPrefHeight(1000);
-		webengine1 = webView1.getEngine();
-		webengine1.load(naverLoginUrl);
+		webEngine1 = webView1.getEngine();
+		webEngine1.load(naverLoginUrl1);
 
 		urlTf1 = new TextField();
 		urlTf1.setPrefWidth(800);
 		urlTf1.setPrefHeight(25);
 		urlTf1.setAlignment(Pos.TOP_LEFT);
 
-		urlTf1.setText(naverLoginUrl);
+		urlTf1.setText(naverLoginUrl1);
 
 		urlTf1.addEventHandler(javafx.scene.input.KeyEvent.KEY_PRESSED,
 				new EventHandler<javafx.scene.input.KeyEvent>() { // Was
@@ -622,48 +748,50 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 							}
 							System.out.println("url2:" + url);
 							urlTf1.setText(url);
-							webView1.getEngine().load(url);
+							webEngine1.load(url);
 							getNaverCookies();
+							// 네이버 카테고리를 가져온다.
+							getNaverBlogCategory();
 						}
 					};
 				});
 
 		urlTf1.textProperty().addListener((observable, oldValue, newValue) -> {
 			System.out.println("textfield changed from " + oldValue + " to " + newValue);
+			System.out.println("oldValue:" + oldValue);
+			System.out.println("newValue:" + newValue);
+			// https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com
 			shareResultTxt1.setText("...");
-			if (oldValue.equals(
-					"https://nid.naver.com/signin/v3/finalize?url=https%3A%2F%2Fblog.naver.com%2Fbanks&svctype=40960")
-					&& newValue.equals("https://blog.naver.com/banks")) {
+			if (oldValue
+					.equals("https://nid.naver.com/signin/v3/finalize?url=https%3A%2F%2Fwww.naver.com&svctype=40960")
+					&& newValue.equals(naverUrl)) {
 				System.out.println("blogblogblogblogblogblog");
 				// 네이버에 로그인하여 주소창에 주소가 변경되면 네이버 쿠키를 가져온다.
 				getNaverCookies();
-			}
-			if (oldValue.equals("https://blog.naver.com/banks") && newValue.equals("https://banks.blog.me/")) {
-				System.out.println("banksbanksbanksbanksbanks");
-				// 네이버에 로그인하여 주소창에 주소가 변경되면 네이버 쿠키를 가져온다.
-				getNaverCookies();
+				// 네이버 카테고리를 가져온다.
+				getNaverBlogCategory();
 			}
 		});
 
-//		webengine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
-//			logger.debug("oldValue :" + oldValue + " newValue:" + newValue);
-//			if (Worker.State.SUCCEEDED.equals(newValue)) {
-//				logger.debug("webengine.getLocation:" + webengine.getLocation());
-//				urlTf.setText(webengine.getLocation());
-//			}
-//		});
-		webengine1.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
+		webEngine1.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
+			logger.debug("oldValue :" + oldValue + " newValue:" + newValue);
+			if (javafx.concurrent.Worker.State.SUCCEEDED.equals(newValue)) {
+				logger.debug("webengine.getLocation:" + webEngine1.getLocation());
+				urlTf1.setText(webEngine1.getLocation());
+			}
+		});
+		webEngine1.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
 			logger.debug("observable :" + observable + " oldState :" + oldState + " newState:" + newState);
-			if (newState == State.SUCCEEDED) {
-				urlTf1.setText(webengine1.getLocation());
+			if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+				urlTf1.setText(webEngine1.getLocation());
 			}
 		});
 
-		webengine1.getLoadWorker().stateProperty().addListener(new javafx.beans.value.ChangeListener<State>() {
+		webEngine1.getLoadWorker().stateProperty().addListener(new javafx.beans.value.ChangeListener<State>() {
 			@Override
 			public void changed(ObservableValue ov, State oldState, State newState) {
 				if (newState == State.SUCCEEDED) {
-					urlTf1.setText(webengine1.getLocation());
+					urlTf1.setText(webEngine1.getLocation());
 				}
 			}
 		});
@@ -684,7 +812,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 						}
 						System.out.println("url2:" + url);
 						urlTf1.setText(url);
-						webView1.getEngine().load(url);
+						webEngine1.load(url);
 					}
 				});
 
@@ -693,7 +821,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		vSeparator1.setPrefHeight(10);
 
 		HBox urlHBox = new HBox(10);
-		HBox naviTxtHBox = getNavigateText(webView1, 0);
+		HBox naviTxtHBox = getNavigateText(webView1);
 		urlHBox.getChildren().addAll(naviTxtHBox);
 		urlHBox.getChildren().addAll(urlTf1);
 		urlHBox.getChildren().addAll(goBtn);
@@ -708,23 +836,19 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 	public VBox getStockBoardTab() {
 		webView2 = new WebView();
 		webView2.setPrefHeight(1000);
-		
-		webengine2 = webView2.getEngine();
-		String daumUrl = "https://finance.daum.net/domestic/all_quotes";
-		webengine2.load(daumUrl);
+
+		webEngine2 = webView2.getEngine();
+		webEngine2.load(displayBoardUrl);
 
 		urlTf2 = new TextField();
 		urlTf2.setPrefWidth(800);
 		urlTf2.setPrefHeight(25);
 		urlTf2.setAlignment(Pos.TOP_LEFT);
 
-		urlTf2.setText(daumUrl);
+		urlTf2.setText(displayBoardUrl);
 
 		urlTf2.addEventHandler(javafx.scene.input.KeyEvent.KEY_PRESSED,
-				new EventHandler<javafx.scene.input.KeyEvent>() { // Was
-					// missing
-					// the
-					// <MouseEvent>
+				new EventHandler<javafx.scene.input.KeyEvent>() {
 					@Override
 					public void handle(javafx.scene.input.KeyEvent event) {
 						System.out.println("code:" + event.getCode());
@@ -788,7 +912,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		vSeparator1.setPrefHeight(10);
 
 		HBox urlHBox = new HBox(10);
-		HBox naviTxtHBox = getNavigateText(webView2, 4);
+		HBox naviTxtHBox = getNavigateText(webView2);
 		urlHBox.getChildren().addAll(naviTxtHBox);
 		urlHBox.getChildren().addAll(urlTf2);
 		urlHBox.getChildren().addAll(goBtn);
@@ -823,16 +947,16 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 
 		webView3 = new WebView();
 		webView3.setPrefHeight(900);
-		
-		webengine3 = webView3.getEngine();
 
-		webengine3.load(daumKospiAfterHoursUrl);
+		webEngine3 = webView3.getEngine();
 
-		webengine3.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
+		webEngine3.load(daumKospiAfterHoursUrl);
+
+		webEngine3.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
 			logger.debug("observable1 :" + observable);
 			logger.debug(" oldState1 :" + oldState + " newState1:" + newState);
 			if (newState == State.SUCCEEDED) {
-				urlTf3.setText(webengine3.getLocation());
+				urlTf3.setText(webEngine3.getLocation());
 				shareResultTxt1.setText("......");
 
 				String strContent = (String) webView3.getEngine().executeScript("document.documentElement.outerHTML");
@@ -918,7 +1042,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		hSeparator2.setPrefWidth(10);
 
 		HBox urlHBox = new HBox(10);
-		HBox naviTxtHBox = getNavigateText(webView3, 2);
+		HBox naviTxtHBox = getNavigateText(webView3);
 		urlHBox.getChildren().addAll(naviTxtHBox);
 		urlHBox.getChildren().addAll(hSeparator1);
 		urlHBox.getChildren().addAll(urlTf3);
@@ -952,7 +1076,6 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 //		reloadLbl.setAlignment(Pos.TOP_LEFT);
 //		reloadLbl.setFont(new Font(FONT_FAMILY, MAX_FONT_SIZE)); // set to Label
 
-		String naverUrl = naverLoginUrl2;
 		urlTf4 = new TextField();
 		urlTf4.setPrefWidth(800);
 		urlTf4.setPrefHeight(25);
@@ -966,9 +1089,9 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		webView4.setMaxHeight(1600);
 
 //		webView.autosize();
-		webengine4 = webView4.getEngine();
+		webEngine4 = webView4.getEngine();
 
-		webengine4.load(naverUrl);
+		webEngine4.load(naverLoginUrl2);
 
 //		webengine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
 //			logger.debug("oldValue :" + oldValue + " newValue:" + newValue);
@@ -977,18 +1100,18 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 //				urlTf.setText(webengine.getLocation());
 //			}
 //		});
-		webengine4.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
+		webEngine4.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
 			logger.debug("observable :" + observable + " oldState :" + oldState + " newState:" + newState);
 			if (newState == State.SUCCEEDED) {
-				urlTf4.setText(webengine4.getLocation());
+				urlTf4.setText(webEngine4.getLocation());
 			}
 		});
 
-		webengine4.getLoadWorker().stateProperty().addListener(new javafx.beans.value.ChangeListener<State>() {
+		webEngine4.getLoadWorker().stateProperty().addListener(new javafx.beans.value.ChangeListener<State>() {
 			@Override
 			public void changed(ObservableValue ov, State oldState, State newState) {
 				if (newState == State.SUCCEEDED) {
-					urlTf4.setText(webengine4.getLocation());
+					urlTf4.setText(webEngine4.getLocation());
 				}
 			}
 		});
@@ -1001,22 +1124,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 						String html = (String) webView4.getEngine().executeScript("document.documentElement.outerHTML");
 
 						System.out.println("html:" + html);
-						// saveStockList(html, "전광판");
-						try {
-							saveCookies();
-						} catch (NoSuchMethodException ex) {
-							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-						} catch (InvocationTargetException ex) {
-							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-						} catch (IllegalAccessException ex) {
-							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-						} catch (NoSuchFieldException ex) {
-							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-						} catch (ClassNotFoundException ex) {
-							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-						} catch (IOException ex) {
-							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-						}
+						saveCookies();
 					};
 				});
 
@@ -1042,20 +1150,35 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 							}
 							System.out.println("url2:" + url);
 							urlTf4.setText(url);
-							webengine4.load(url);
+							webEngine4.load(url);
 							getNaverCookies();
+							// 네이버 카테고리를 가져온다.
+							getNaverBlogCategory();
 						}
 					}
 				});
 
 		urlTf4.textProperty().addListener((observable, oldValue, newValue) -> {
 			System.out.println("textfield changed from " + oldValue + " to " + newValue);
+			System.out.println("oldValue1:" + oldValue);
+			System.out.println("newValue1:" + newValue);
+			System.out.println("naverUrl:" + naverUrl);
+			// oldValue :https://nid.naver.com/nidlogin.login
+			// old,newValue :
+			// https://nid.naver.com/signin/v3/finalize?url=https%3A%2F%2Fwww.naver.com&svctype=1
+			// newValue : https://www.naver.com/
 			shareResultTxt1.setText("...");
 			if (oldValue.equals("https://nid.naver.com/signin/v3/finalize?url=https%3A%2F%2Fwww.naver.com&svctype=1")
-					&& newValue.equals("https://www.naver.com/")) {
+					&& newValue.equals(naverUrl)) {
 				System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
 				// 네이버에 로그인하여 주소창에 주소가 변경되면 네이버 쿠키를 가져온다.
 				getNaverCookies();
+
+				// 네이버 카테고리를 가져온다.
+				getNaverBlogCategory();
+
+				getNaverId(webView4);
+
 			}
 		});
 
@@ -1075,49 +1198,18 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 						}
 						System.out.println("url2:" + url);
 						urlTf4.setText(url);
-						webengine4.load(url);
+						webEngine4.load(url);
 					}
 				});
 
-//		shareBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
-//			new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
-//			@Override
-//			public void handle(javafx.scene.input.MouseEvent event) {
-//				//네이버 블로그 공유
-//				System.out.println("네이버 블로그 글쓰기");
-//				getNaverCookies();
-//				logger.debug("strNidAut :" + strNidAut);
-//				logger.debug("strNidSes :" + strNidSes);
-//				if (!strNidAut.equals("") && !strNidSes.equals("")) {
-//
-//					String url = urlTf.getText();
-//					System.out.println("url1:" + url);
-//					if (!url.toLowerCase().startsWith("http") && !url.toLowerCase().startsWith("https")) {
-//						if (!url.contains(".") || url.contains(" ")) {
-//							url = "https://www.google.com/search?q=" + url + "&oq=" + url;
-//						} else {
-//							url = "http://" + url;
-//						}
-//					}
-//					System.out.println("url2:" + url);
-//					createHTMLFile(url);
-//				} else {
-//					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
-//					return;
-//				}
-//
-//			}
-//		});
 //		HBox urlHBox = new HBox(backLbl, forwardLbl, reloadLbl, urlTf, goBtn);
 		HBox urlHBox = new HBox(10);
 
-		HBox naviTxtHBox = getNavigateText(webView4, 3);
+		HBox naviTxtHBox = getNavigateText(webView4);
 		urlHBox.getChildren().addAll(naviTxtHBox);
 
 		urlHBox.getChildren().addAll(urlTf4);
 		urlHBox.getChildren().addAll(goBtn);
-
-
 
 		Text myCommentTxt = new Text("My Comment");
 		myCommentTxt.setStyle(FX_FONT_STYLE_DEFAULT);
@@ -1158,7 +1250,6 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		getUrlAttr();
 		initKeys();
 
-		String naverUrl = "https://www.coupang.com";
 		urlTf5 = new TextField();
 		urlTf5.setPrefWidth(800);
 		urlTf5.setPrefHeight(25);
@@ -1172,9 +1263,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		webView5.setMaxHeight(800);
 
 //		webView.autosize();
-//		final WebEngine webengine;
-		webengine5 = webView5.getEngine();
-		webengine5.load(naverUrl);
+		webEngine5 = webView5.getEngine();
+		webEngine5.load(coupangUrl);
 
 //		webengine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
 //			logger.debug("oldValue :" + oldValue + " newValue:" + newValue);
@@ -1183,46 +1273,31 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 //				urlTf.setText(webengine.getLocation());
 //			}
 //		});
-		webengine5.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
+		webEngine5.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
 			logger.debug("observable :" + observable + " oldState :" + oldState + " newState:" + newState);
 			if (newState == State.SUCCEEDED) {
-				urlTf5.setText(webengine5.getLocation());
+				urlTf5.setText(webEngine5.getLocation());
 			}
 		});
 
-		webengine5.getLoadWorker().stateProperty().addListener(new javafx.beans.value.ChangeListener<State>() {
+		webEngine5.getLoadWorker().stateProperty().addListener(new javafx.beans.value.ChangeListener<State>() {
 			@Override
 			public void changed(ObservableValue ov, State oldState, State newState) {
 				if (newState == State.SUCCEEDED) {
-					urlTf5.setText(webengine5.getLocation());
+					urlTf5.setText(webEngine5.getLocation());
 				}
 			}
 		});
 
-		Button saveStockDispBoardBtn = new Button("Save Cookies");
-		saveStockDispBoardBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
+		Button saveBtn = new Button("Save");
+		saveBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
 				new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
 					@Override
 					public void handle(javafx.scene.input.MouseEvent event) {
 						String html = (String) webView5.getEngine().executeScript("document.documentElement.outerHTML");
 
 						System.out.println("html:" + html);
-						// saveStockList(html, "전광판");
-						try {
-							saveCookies();
-						} catch (NoSuchMethodException ex) {
-							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-						} catch (InvocationTargetException ex) {
-							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-						} catch (IllegalAccessException ex) {
-							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-						} catch (NoSuchFieldException ex) {
-							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-						} catch (ClassNotFoundException ex) {
-							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-						} catch (IOException ex) {
-							java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-						}
+						saveCookies();
 					};
 				});
 
@@ -1230,6 +1305,12 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 				new EventHandler<javafx.scene.input.KeyEvent>() {
 					@Override
 					public void handle(javafx.scene.input.KeyEvent event) {
+						System.out.println("code:" + event.getCode());
+						System.out.println("code:" + event.getText());
+						System.out.println("code:" + event.getCharacter());
+						System.out.println("KeyCode.ENTER:" + KeyCode.ENTER);
+						System.out.println(
+								"event.getCode().equals(KeyCode.ENTER):" + event.getCode().equals(KeyCode.ENTER));
 						if (event.getCode().equals(KeyCode.ENTER)) {
 							String url = urlTf5.getText();
 							System.out.println("url1:" + url);
@@ -1242,19 +1323,34 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 							}
 							System.out.println("url2:" + url);
 							urlTf5.setText(url);
-							webengine5.load(url);
+							webEngine5.load(url);
 							getNaverCookies();
+
+							// 네이버 카테고리를 가져온다.
+							getNaverBlogCategory();
 						}
 					}
 				});
 
 		urlTf5.textProperty().addListener((observable, oldValue, newValue) -> {
 //			System.out.println("textfield changed from " + oldValue + " to " + newValue);
+			System.out.println("textfield changed from " + oldValue + " to " + newValue);
+			System.out.println("oldValue1:" + oldValue);
+			System.out.println("newValue1:" + newValue);
+			System.out.println("naverUrl:" + naverUrl);
+			// oldValue :https://nid.naver.com/nidlogin.login
+			// old,newValue :
+			// https://nid.naver.com/signin/v3/finalize?url=https%3A%2F%2Fwww.naver.com&svctype=1
+			// newValue : https://www.naver.com/
+			shareResultTxt1.setText("...");
 			if (oldValue.equals("https://nid.naver.com/signin/v3/finalize?url=https%3A%2F%2Fwww.naver.com&svctype=1")
-					&& newValue.equals("https://www.naver.com/")) {
+					&& newValue.equals(naverUrl)) {
 				System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkk");
 				// 네이버에 로그인하여 주소창에 주소가 변경되면 네이버 쿠키를 가져온다.
 				getNaverCookies();
+
+				// 네이버 카테고리를 가져온다.
+				getNaverBlogCategory();
 			}
 		});
 
@@ -1274,15 +1370,13 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 						}
 						System.out.println("url2:" + url);
 						urlTf5.setText(url);
-						webengine5.load(url);
+						webEngine5.load(url);
 					}
 				});
 
-		
-
 		HBox urlHBox = new HBox(10);
 
-		HBox naviTxtHBox = getNavigateText(webView5, 4);
+		HBox naviTxtHBox = getNavigateText(webView5);
 		urlHBox.getChildren().addAll(naviTxtHBox);
 
 		urlHBox.getChildren().addAll(urlTf5);
@@ -1298,9 +1392,9 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 
 		HBox myCommentBox = new HBox(myCommentTxt, myCommentTa2);
 
-		VBox nidBox = new VBox(myCommentBox, saveStockDispBoardBtn);
+		VBox nidBox = new VBox(myCommentBox, saveBtn);
 
-		VBox saveBtnBox = new VBox(saveStockDispBoardBtn);
+		VBox saveBtnBox = new VBox(saveBtn);
 		saveBtnBox.setAlignment(Pos.CENTER);
 
 		Separator vSeparator = new Separator();
@@ -1314,6 +1408,10 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		accessKeyLbl.setAlignment(Pos.TOP_LEFT);
 		accessKeyLbl.setFont(new Font(FONT_FAMILY, MAX_FONT_SIZE)); // set to Label
 
+		accessKeyTf.setPrefWidth(400);
+		accessKeyTf.setPrefHeight(25);
+		accessKeyTf.setAlignment(Pos.TOP_LEFT);
+
 		Separator hSeparator2 = new Separator();
 		hSeparator2.setOrientation(Orientation.HORIZONTAL);
 		hSeparator2.setPrefWidth(10);
@@ -1323,12 +1421,16 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		secretKeyLbl.setAlignment(Pos.TOP_LEFT);
 		secretKeyLbl.setFont(new Font(FONT_FAMILY, MAX_FONT_SIZE)); // set to Label
 
+		secretKeyTf.setPrefWidth(400);
+		secretKeyTf.setPrefHeight(25);
+		secretKeyTf.setAlignment(Pos.TOP_LEFT);
+
 		Separator hSeparator3 = new Separator();
 		hSeparator3.setOrientation(Orientation.HORIZONTAL);
 		hSeparator3.setPrefWidth(10);
 
-		Button saveCookieBtn = new Button("Save Cookie");
-		saveCookieBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
+		Button keySaveBtn = new Button("Save");
+		keySaveBtn.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED,
 				new EventHandler<javafx.scene.input.MouseEvent>() { // Was missing the <MouseEvent>
 					@Override
 					public void handle(javafx.scene.input.MouseEvent event) {
@@ -1341,8 +1443,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 							fw.flush();
 							fw.close();
 						} catch (IOException ex) {
-							java.util.logging.Logger.getLogger(Step1_StockMarketPriceNaverLinkShareTab.class.getName())
-									.log(Level.SEVERE, null, ex);
+							ex.getMessage();
 						}
 					};
 				});
@@ -1353,7 +1454,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		coupangKeyHbox.getChildren().addAll(secretKeyLbl);
 		coupangKeyHbox.getChildren().addAll(secretKeyTf);
 		coupangKeyHbox.getChildren().addAll(hSeparator3);
-		coupangKeyHbox.getChildren().addAll(saveCookieBtn);
+		coupangKeyHbox.getChildren().addAll(keySaveBtn);
 
 		cb1 = new javafx.scene.control.CheckBox();
 		cb2 = new javafx.scene.control.CheckBox();
@@ -1373,23 +1474,23 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		coupangPrdtTxt2.setStyle(FX_FONT_STYLE_RED);
 		coupangPrdtTxt6.setStyle(FX_FONT_STYLE_RED);
 
-		cCategoryListComboBox = new ComboBox<String>();
-		cCategoryListComboBox.getItems().addAll("1001: 여성패션", "", "1002: 남성패션", "", "1003: 베이비패션 (0~3세)", "",
+		coupangCategoryListComboBox = new ComboBox<String>();
+		coupangCategoryListComboBox.getItems().addAll("1001: 여성패션", "", "1002: 남성패션", "", "1003: 베이비패션 (0~3세)", "",
 				"1004: 여아패션 (3세 이상)", "", "1005: 남아패션 (3세 이상)", "", "1006: 스포츠패션", "", "1007: 신발", "", "1008: 가방/잡화",
 				"", "1010: 뷰티", "", "1011: 출산/유아동", "", "1012: 식품", "", "1013: 주방용품", "", "1014: 생활용품", "",
 				"1015: 홈인테리어", "", "1016: 가전디지털", "", "1017: 스포츠/레저", "", "1018: 자동차용품", "", "1019: 도서/음반/DVD", "",
 				"1020: 완구/취미", "", "1021: 문구/오피스", "", "1024: 헬스/건강식품", "", "1025: 국내여행", "", "1026: 해외여행", "",
 				"1029: 반려동물용품");
-		cCategoryListComboBox.setMinHeight(21);
-		cCategoryListComboBox.setMinWidth(200);
-		cCategoryListComboBox.setPromptText("전체");
+		coupangCategoryListComboBox.setMinHeight(21);
+		coupangCategoryListComboBox.setMinWidth(200);
+		coupangCategoryListComboBox.setPromptText("전체");
 
-		cBrandListComboBox = new ComboBox<String>();
-		cBrandListComboBox.getItems().addAll("1001: 탐사", "1002: 코멧", "1003: Gomgom", "1004: 줌", "1005: 마케마케",
+		coupangBrandListComboBox = new ComboBox<String>();
+		coupangBrandListComboBox.getItems().addAll("1001: 탐사", "1002: 코멧", "1003: Gomgom", "1004: 줌", "1005: 마케마케",
 				"1006: 곰곰", "1007: 꼬리별", "1008: 베이스알파에센셜", "1009: 요놈", "1010: 비타할로", "1011: 비지엔젤", "1012: 타이니스타");
-		cBrandListComboBox.setMinHeight(21);
-		cBrandListComboBox.setMinWidth(200);
-		cBrandListComboBox.setPromptText("전체");
+		coupangBrandListComboBox.setMinHeight(21);
+		coupangBrandListComboBox.setMinWidth(200);
+		coupangBrandListComboBox.setPromptText("전체");
 
 		keywordTf = new TextField();
 		Button keywordDelBtn = new Button("지우기");
@@ -1433,7 +1534,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		prdtHbox1.getChildren().addAll(cb1);
 		prdtHbox1.getChildren().addAll(coupangPrdtTxt1);
 		prdtHbox1.getChildren().addAll(coupangPrdtTxt2);
-		prdtHbox1.getChildren().addAll(cCategoryListComboBox);
+		prdtHbox1.getChildren().addAll(coupangCategoryListComboBox);
 		prdtHbox1.getChildren().addAll(bestcategoriesResultLbl);
 
 		prdtHbox2.getChildren().addAll(cb2);
@@ -1447,7 +1548,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		prdtHbox4.getChildren().addAll(cb4);
 		prdtHbox4.getChildren().addAll(coupangPrdtTxt5);
 		prdtHbox4.getChildren().addAll(coupangPrdtTxt6);
-		prdtHbox4.getChildren().addAll(cBrandListComboBox);
+		prdtHbox4.getChildren().addAll(coupangBrandListComboBox);
 		prdtHbox4.getChildren().addAll(coupangPLBrandResultLbl);
 
 		prdtHbox5.getChildren().addAll(cb5);
@@ -1584,9 +1685,6 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 //		String jsonObject = JSONObject.toJSONString(stockMap);
 		String jsonObject = stockMap.toString();
 		String fileName = "";
-//		fileName = USER_HOME + "\\documents\\" + strYmdhms + "_" + market_en + "_list.json";
-		fileName = market_en + "_list.json";
-		FileUtil.fileWrite(fileName, jsonObject);
 //		fileName = USER_HOME + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
 		fileName = market_en + "_list.txt";
 		FileUtil.fileWrite(fileName, stockCodeNameSb.toString());
@@ -1594,39 +1692,53 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		shareResultTxt1.setText(market_ko + "주식 목록을 추출하였습니다.");
 	}
 
-	private void saveCookies() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException,
-			NoSuchFieldException, ClassNotFoundException, IOException {
+	private void saveCookies() {
 		CookieManager cookieManager = (CookieManager) CookieHandler.getDefault();
-		Field f = cookieManager.getClass().getDeclaredField("store");
-		f.setAccessible(true);
-		Object cookieStore = f.get(cookieManager);
+		Field f;
+		try {
+			f = cookieManager.getClass().getDeclaredField("store");
+			f.setAccessible(true);
+			Object cookieStore = f.get(cookieManager);
 
-		Class cookieClass = Class.forName("com.sun.webkit.network.Cookie");
-		System.out.println("cookieClass:" + cookieClass);
+			Class cookieClass = Class.forName("com.sun.webkit.network.Cookie");
+			System.out.println("cookieClass:" + cookieClass);
 
-		Field bucketsField = Class.forName("com.sun.webkit.network.CookieStore").getDeclaredField("buckets");
-		bucketsField.setAccessible(true);
-		Map buckets = (Map) bucketsField.get(cookieStore);
-		System.out.println("buckets:" + buckets);
-		f.setAccessible(true);
-		Map<String, Collection> cookiesToSave = new HashMap<>();
-		for (Object o : buckets.entrySet()) {
-			Map.Entry pair = (Map.Entry) o;
-			String key = (String) pair.getKey();
-			System.out.println("key:" + key);
-			Map cookies = (Map) pair.getValue();
-			System.out.println("cookies.values():" + cookies.values());
-			cookiesToSave.put(key, cookies.values());
+			Field bucketsField = Class.forName("com.sun.webkit.network.CookieStore").getDeclaredField("buckets");
+			bucketsField.setAccessible(true);
+			Map buckets = (Map) bucketsField.get(cookieStore);
+			System.out.println("buckets:" + buckets);
+			f.setAccessible(true);
+			Map<String, Collection> cookiesToSave = new HashMap<>();
+			for (Object o : buckets.entrySet()) {
+				Map.Entry pair = (Map.Entry) o;
+				String key = (String) pair.getKey();
+				System.out.println("key:" + key);
+				Map cookies = (Map) pair.getValue();
+				System.out.println("cookies.values():" + cookies.values());
+				cookiesToSave.put(key, cookies.values());
+			}
+
+			Gson gson = new GsonBuilder().create();
+			String json = gson.toJson(cookiesToSave);
+			System.out.println("json:" + json);
+			JSONObject jo = new JSONObject(json);
+			callJsonObjectLoop(jo);
+			System.out.println("strNidAut:" + strNidAut);
+			System.out.println("strNidSes:" + strNidSes);
+			Files.write(Paths.get("cookies.json"), json.getBytes());
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-
-		Gson gson = new GsonBuilder().create();
-		String json = gson.toJson(cookiesToSave);
-		System.out.println("json:" + json);
-		JSONObject jo = new JSONObject(json);
-		callJsonObjectLoop(jo);
-		System.out.println("strNidAut:" + strNidAut);
-		System.out.println("strNidSes:" + strNidSes);
-		Files.write(Paths.get("cookies.json"), json.getBytes());
 	}
 
 	private void getNaverCookies() {
@@ -1634,6 +1746,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			CookieManager cookieManager = (CookieManager) CookieHandler.getDefault();
 			System.out.println("cookieManager:" + cookieManager);
 			System.out.println("cookieManager.getClass():" + cookieManager.getClass());
+			System.out.println("cookieManager.getClass().getName():" + cookieManager.getClass().getName());
+			System.out.println("cookieManager.getClass().getSimpleName():" + cookieManager.getClass().getSimpleName());
 			Field f = cookieManager.getClass().getDeclaredField("store");
 			f.setAccessible(true);
 			Object cookieStore = f.get(cookieManager);
@@ -1661,6 +1775,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			callJsonObjectLoop(jo);
 			System.out.println("strNidAut:" + strNidAut);
 			System.out.println("strNidSes:" + strNidSes);
+			
 			if (!strNidAut.equals("") && !strNidSes.equals("")) {
 				onAndOffTxt = new Text(" ON");
 				onAndOffTxt.setStyle(FX_FONT_STYLE_NAVER_LOG_ON);
@@ -1672,6 +1787,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 				onAndOffHBox.getChildren().clear();
 				onAndOffHBox.getChildren().addAll(onAndOffTxt);
 			}
+			
 		} catch (NoSuchFieldException ex) {
 			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (SecurityException ex) {
@@ -1682,11 +1798,36 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 		} catch (ClassNotFoundException ex) {
 			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-		} finally{ 
-			System.out.println("getCategory....");
-			// 네이버 카테고리를 가져온다.
-			getNaverBlogCategory();
 		}
+	}
+
+	private void getNaverId(WebView webView) {
+		String html = (String) webView.getEngine().executeScript("document.documentElement.outerHTML");
+		System.out.println("html:" + html);
+
+		Document naverMainDoc = Jsoup.parse(html);
+		Elements naverMainDocScripts = naverMainDoc.select("script");
+		for (Element naverMainDocScript : naverMainDocScripts) {
+			String scriptData = naverMainDocScript.data();
+			if (!scriptData.contains("window.nmain.gv")) {
+				continue;
+			}
+			scriptData = scriptData.replace("window.nmain.gv = ", "");
+
+			JSONObject jObj = new JSONObject(scriptData);
+			Iterator scriptKeysIt = jObj.keys();
+			while (scriptKeysIt.hasNext()) {
+				String key = (String) scriptKeysIt.next();
+				if (key.equals("isLogin")) {
+					isLogin = jObj.getString(key);
+				} else if (key.equals("userId")) {
+					strBlogId = jObj.getString(key);
+				}
+			}
+		}
+		System.out.println("isLogin:" + isLogin);
+		System.out.println("strBlogId:" + strBlogId);
+		System.out.println("-------------");
 	}
 
 	public ImageView getCiNaverImageView() {
@@ -1708,16 +1849,16 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		return buff;
 
 	}
-	
+
 	public ImageView getCiNaverImageView(String imagePath) {
-		System.out.println("imagePath :"+imagePath);
+		System.out.println("imagePath :" + imagePath);
 		final ImageView imgView = new ImageView();
 		InputStream is = null;
 		is = this.getClass().getResourceAsStream(imagePath);
-		if(is == null) {
-			is = this.getClass().getResourceAsStream("/resources"+imagePath);
+		if (is == null) {
+			is = this.getClass().getResourceAsStream("/resources" + imagePath);
 		}
-		
+
 		Image image1 = new Image(is);
 		imgView.setImage(image1);
 		imgView.setFitHeight(20);
@@ -1759,7 +1900,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 	private void createHTMLFile(String strUrl) {
 		createHTMLFile(strUrl, myCommentTa1.getText());
 	}
-
+	
 	private void createHTMLFile(String strUrl, String strMyComment) {
 		if (strUrl.equals("")) {
 			return;
@@ -1824,8 +1965,108 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.delete(0, sb.length());
 		sb.setLength(0);
 
-		System.out.println("strCategoryNo-------------->" + strCategoryNo);
-		System.out.println("strCategoryName-------------->" + strCategoryName);
+		String strShareTitle = htmlDoc.select("h2#title").text();
+		logger.debug("strShareTitle:" + strShareTitle);
+		if (strShareTitle.equals("")) {
+			return;
+		}
+		Elements shareUrlEls = htmlDoc.select("a");
+		String strShareUrl = "";
+		if (shareUrlEls.size() > 0) {
+			strShareUrl = htmlDoc.select("a").first().attr("href");
+		}
+		if (strShareUrl.equals("")) {
+			return;
+		}
+		StringBuilder contentSb = new StringBuilder();
+		contentSb.append(htmlDoc.html());
+		contentSb.toString();
+
+		logger.debug("strNaverBlogCategoryNo:" + strNaverBlogCategoryNo);
+		logger.debug("strShareUrl:" + strShareUrl);
+//		strNaverBlogCategoryName = "증권";
+//		strNaverBlogCategoryNo = getCategoryNo(strNaverBlogCategoryName);
+		
+		if (naverBlogLinkShare(contentSb, strNaverBlogCategoryNo, strShareTitle, strShareUrl)) {
+			shareResultTxt1.setText("블로그 글쓰기 성공");
+		} else {
+			shareResultTxt1.setText("블로그 글쓰기 실패");
+		}
+		myCommentTa1.setText("...");
+
+	}
+	/**
+	 * 
+	 * @param strUrl
+	 * @param strMyComment
+	 */
+	private void createHTMLFileFromWebView(String strUrl, String strWebPageHtml, String strMyComment) {
+		if (strUrl.equals("")) {
+			return;
+		}
+		System.out.println("createHTMLFile strUrl:" + strUrl);
+		// tab2에서 페이지 이동
+		int idx = 0;
+		String newsCompany = "";
+		for (NewsPublisher np : NewsPublisher.values()) {
+			String newsPublisherDomain = np.getName();
+			idx = np.ordinal();
+			if (strUrl.contains(newsPublisherDomain)) {
+				System.out.println("idx:" + idx + " newsPublisherDomain:" + newsPublisherDomain);
+				System.out.println("주소가 일치합니다. idx:" + idx);
+				newsCompany = np.toString();
+				System.out.println("newsCompany:" + newsCompany);
+				break;
+			}
+		}
+		StringBuilder sb = new StringBuilder();
+
+		if (newsCompany.equals("")) {
+			shareResultTxt1.setText("뉴스 클래스 부재");
+			return;
+		}
+
+		Class<?> c;
+		try {
+			c = Class.forName("html.parsing.stock.news." + newsCompany);
+			System.out.println("Class Name:" + c.getName());
+			// c.getDeclaredMethods()[0].invoke(object, Object... MethodArgs );
+//			Method method = c.getDeclaredMethod("createHTMLFile", String.class);
+//			sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
+//			Method method = c.getDeclaredMethod("createHTMLFile", String.class, String.class);
+//			sb = (StringBuilder) method.invoke(String.class, new Object[] { strUrl, strMyComment });
+			
+			Method method = c.getDeclaredMethod("createHTMLFileFromWebView", String.class, String.class, String.class);
+			sb = (StringBuilder) method.invoke(String.class, new Object[] { strUrl, strWebPageHtml, strMyComment });
+			
+			if (sb.toString().equals("")) {
+				method = c.getDeclaredMethod("parseHTMLFile", String.class, String.class, String.class);
+				String strContent = (String) webView4.getEngine().executeScript("document.documentElement.outerHTML");
+				logger.debug("strContent:" + strContent);
+				sb = (StringBuilder) method.invoke(String.class, new Object[] { strUrl, strContent, strMyComment });
+			}
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.INFO, sb.toString());
+		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException ex) {
+			java.util.logging.Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+			return;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		if (sb.toString().equals("")) {
+			logger.debug("기사를 읽어오지 못했습니다.");
+//			JOptionPane.showMessageDialog(null, "기사를 읽어오지 못했습니다.");
+			shareResultTxt1.setText("기사를 읽어오지 못했습니다.");
+			return;
+		}
+
+		Document htmlDoc = Jsoup.parse(sb.toString());
+		logger.debug("htmlDoc:" + htmlDoc.html());
+
+		htmlDoc.select("meta").remove();
+		sb.delete(0, sb.length());
+		sb.setLength(0);
 
 		String strShareTitle = htmlDoc.select("h2#title").text();
 		logger.debug("strShareTitle:" + strShareTitle);
@@ -1844,9 +2085,12 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		contentSb.append(htmlDoc.html());
 		contentSb.toString();
 
+		logger.debug("strNaverBlogCategoryNo:" + strNaverBlogCategoryNo);
 		logger.debug("strShareUrl:" + strShareUrl);
-
-		if (naverBlogLinkShare(contentSb, strCategoryNo, strShareTitle, strShareUrl)) {
+//		strNaverBlogCategoryName = "증권";
+//		strNaverBlogCategoryNo = getCategoryNo(strNaverBlogCategoryName);
+		
+		if (naverBlogLinkShare(contentSb, strNaverBlogCategoryNo, strShareTitle, strShareUrl)) {
 			shareResultTxt1.setText("블로그 글쓰기 성공");
 		} else {
 			shareResultTxt1.setText("블로그 글쓰기 실패");
@@ -1855,24 +2099,17 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 
 	}
 
-	public void naverBlogLinkShare(StringBuilder contentSb, String strCategoryNo, String strShareTitle) {
-//		strNidAut = nidAutTf1.getText();
-//		strNidSes = nidSesTa1.getText();
-		String strShareUrl = "";
-		if (!strNidAut.equals("") && !strNidSes.equals("")) {
-			NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strCategoryNo, contentSb,
-					null);
-		}
-	}
-
-	public boolean naverBlogLinkShare(StringBuilder contentSb, String strCategoryNo, String strShareTitle,
+	public boolean naverBlogLinkShare(StringBuilder contentSb, String strNaverBlogCategoryNo, String strShareTitle,
 			String strShareUrl) {
-//		strNidAut = nidAutTf1.getText();
-//		strNidSes = nidSesTa1.getText();
-		if (!strNidAut.equals("") && !strNidSes.equals("")) {
-			return NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strCategoryNo,
-					contentSb, null);
+		logger.debug("strBlogId:" + strBlogId);
+		logger.debug("strNidAut:" + strNidAut);
+		logger.debug("strNidSes:" + strNidSes);
+
+		if (!strNidAut.equals("") && !strNidSes.equals("") && !strBlogId.equals("")) {
+			return NaverUtil.naverBlogLinkShare(strBlogId, strNidAut, strNidSes, strShareUrl, strShareTitle,
+					strNaverBlogCategoryNo, contentSb, null);
 		} else {
+			System.out.println("로그인하지 않았습니다.");
 			return false;
 		}
 	}
@@ -1910,6 +2147,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			File f = new File("./coupangPartners.properties");
 			System.out.println("f.exists():" + f.exists());
 			if (f.exists()) {
+				System.out.println("./coupangPartners.properties File exists");
 				is = new FileInputStream(f);
 				props.load(is);
 				System.out.println("props :" + props);
@@ -1925,7 +2163,15 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			} else {
 				// classes root 경로
 				is = getClass().getResourceAsStream("/coupangPartners.properties");
+//				is = getClass().getClassLoader().getResourceAsStream("/coupangPartners.properties");
 				System.out.println("class 경로 read /coupangPartners.properties Resource");
+
+				String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+				System.out.println("rootPath :" + rootPath);
+
+				String defaultConfigPath = rootPath + "coupangPartners.properties";
+				Properties defaultProps = new Properties();
+				defaultProps.load(new FileInputStream(defaultConfigPath));
 			}
 			System.out.println("is :" + is);
 			if (is != null) {
@@ -1982,7 +2228,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 
 		if (cb1.isSelected()) {
 			bestcategoriesResultLbl.setText("");
-			String item = String.valueOf(cCategoryListComboBox.getSelectionModel().getSelectedItem());
+			String item = String.valueOf(coupangCategoryListComboBox.getSelectionModel().getSelectedItem());
 			System.out.println("item:" + item);
 			if (item.contains(":")) {
 				String categoryId = item.substring(0, item.indexOf(":"));
@@ -2023,7 +2269,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		if (cb4.isSelected()) {
 			coupangPLBrandResultLbl.setText("");
 			// getCoupangPLBrandProducts();
-			String item = String.valueOf(cBrandListComboBox.getSelectionModel().getSelectedItem());
+			String item = String.valueOf(coupangBrandListComboBox.getSelectionModel().getSelectedItem());
 			System.out.println("item:" + item);
 			if (item.contains(":")) {
 				String brandId = item.substring(0, item.indexOf(":"));
@@ -2046,7 +2292,8 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		if (cb5.isSelected()) {
 			searchResultLbl.setText("");
 			String keyword = keywordTf.getText();
-			bResult = getSearchProducts(keyword);
+//			bResult = getSearchProducts(keyword);
+			bResult = CoupangUtil.getSearchProducts(keyword, strBlogId, strNidAut, strNidSes,ACCESS_KEY,SECRET_KEY);
 			if (bResult) {
 				searchResultLbl.setText("처리 완료");
 			}
@@ -2090,10 +2337,9 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append(data);
 		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
 
-		String strBlogCategoryNo = "274";// "카테고리별 베스트 상품";
-		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
-
-		return true;
+		strNaverBlogCategoryName = "카테고리별 베스트 상품";
+		strNaverBlogCategoryNo = getCategoryNo(strNaverBlogCategoryName);
+		return naverBlogLinkShare(sb, strNaverBlogCategoryNo, shareTitle, "");
 	}
 
 	public StringBuilder getBestcategoryProducts(int idx, String categoryId, String categoryNm, int limit) {
@@ -2131,10 +2377,9 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
 
 		String shareTitle = strYmdBlacket + " " + "카테고리별 베스트상품";
-		String strBlogCategoryNo = "274";// 카테고리별 베스트 상품
-		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
-
-		return true;
+		strNaverBlogCategoryName = "카테고리별 베스트 상품";
+		strNaverBlogCategoryNo = getCategoryNo(strNaverBlogCategoryName);
+		return naverBlogLinkShare(sb, strNaverBlogCategoryNo, shareTitle, "");
 	}
 
 	// 골드박스 상품에 대한 상세 상품 정보를 생성합니다. (골드박스 상품은 매일 오전 7:30에 업데이트 됩니다)
@@ -2151,10 +2396,9 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
 
 		String shareTitle = strYmdBlacket + " " + "WOW 와우회원 전용 매일 오전 7시 골드박스 1일특가";
-		String strBlogCategoryNo = "271";// 골드박스
-		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
-
-		return true;
+		strNaverBlogCategoryName = "골드박스";
+		strNaverBlogCategoryNo = getCategoryNo(strNaverBlogCategoryName);
+		return naverBlogLinkShare(sb, strNaverBlogCategoryNo, shareTitle, "");
 	}
 
 	// 쿠팡 PL 상품에 대한 상세 정보를 생성합니다.
@@ -2171,10 +2415,9 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
 
 		String shareTitle = strYmdBlacket + " " + "쿠팡 PL 상품 TOP" + limit;
-		String strBlogCategoryNo = "275";// PL 상품
-		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
-
-		return true;
+		strNaverBlogCategoryName = "PL 상품";
+		strNaverBlogCategoryNo = getCategoryNo(strNaverBlogCategoryName);
+		return naverBlogLinkShare(sb, strNaverBlogCategoryNo, shareTitle, "");
 	}
 
 	// 쿠팡 PL 브랜드 별 상품 상세 정보를 생성합니다.
@@ -2190,9 +2433,9 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append(data);
 
 		String shareTitle = strYmdBlacket + " " + "쿠팡 PL 브랜드별(" + brandNm + ") 상품 TOP" + limit;
-		String strBlogCategoryNo = "276";// "PL 브랜드별 상품";
-		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
-		return true;
+		strNaverBlogCategoryName = "PL 브랜드별 상품";
+		strNaverBlogCategoryNo = getCategoryNo(strNaverBlogCategoryName);
+		return naverBlogLinkShare(sb, strNaverBlogCategoryNo, shareTitle, "");
 	}
 
 	public StringBuilder getCoupangPLBrandProducts(int idx, String brandId, String brandNm, int limit) {
@@ -2230,18 +2473,17 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
 
 		String shareTitle = strYmdBlacket + " " + "쿠팡 PL 브랜드별 상품 TOP" + limit;
-		String strBlogCategoryNo = "276";// "PL 브랜드별 상품";
-		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
-
-		return true;
+		strNaverBlogCategoryName = "PL 브랜드별 상품";
+		strNaverBlogCategoryNo = getCategoryNo(strNaverBlogCategoryName);
+		return naverBlogLinkShare(sb, strNaverBlogCategoryNo, shareTitle, "");
 	}
 
-	// 검색 키워드에 대한 쿠팡 검색 결과와 상세 상품 정보를 생성합니다 (1 시간당 최대 10번 호출 가능합니다.)
+	// 검색 키워드에 대한 쿠팡 검색 결과와 상세 상품 정보를 생성합니다 (1 시간당 최대 10번 호출 가능합니다. 6분에 1번 호출 가능)
 	// SEARCH_URL = API_PATH + "​/products​/search";
 	public boolean getSearchProducts(String keyword) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<div style='width:100%;'><h1>").append(strYmdBlacket).append(" ").append("상품검색:").append(keyword)
-				.append("</h1></div>");
+		sb.append("<div style='width:100%;'><h1>").append(strYmdBlacket).append(" ").append("쿠팡 제품 추천 합니다!쿠팡! |")
+				.append(keyword).append("</h1></div>");
 		String strParamJson = "";
 		int limit = 20;
 		String encodedKeyword = "";
@@ -2258,16 +2500,16 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
 
 		String shareTitle = strYmdBlacket + " " + keyword;
-		String strBlogCategoryNo = "277";// "추천 상품";
-		naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle);
-		return true;
+		strNaverBlogCategoryName = "추천 상품";
+		strNaverBlogCategoryNo = getCategoryNo(strNaverBlogCategoryName);
+		return naverBlogLinkShare(sb, strNaverBlogCategoryNo, shareTitle, "");
 	}
 
 	public String getData(String apiGubun, String server_url, String categoryNm, String strParamJson) {
 		System.out.println("server_url :" + server_url);
 		StringBuilder sb = new StringBuilder();
 		// Generate HMAC string
-		String authorization = generate(REQUEST_METHOD_GET, server_url, ACCESS_KEY, SECRET_KEY);
+		String authorization = HmacGenerator.generate(REQUEST_METHOD_GET, server_url, SECRET_KEY, ACCESS_KEY);
 		System.out.println("authorization:" + authorization);
 		// Send request
 		StringEntity entity = new StringEntity(strParamJson, "UTF-8");
@@ -2447,48 +2689,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		return sb.toString();
 	}
 
-	/**
-	 * Generate HMAC signature
-	 *
-	 * @param method
-	 * @param uri       http request uri
-	 * @param accessKey access key that Coupang partner granted for calling open api
-	 * @param secretKey secret key that Coupang partner granted for calling open api
-	 * @return HMAC signature
-	 */
-	public static String generate(String method, String uri, String accessKey, String secretKey) {
-		String[] parts = uri.split("\\?");
-		if (parts.length > 2) {
-			throw new RuntimeException("incorrect uri format");
-		} else {
-			String path = parts[0];
-			String query = "";
-			if (parts.length == 2) {
-				query = parts[1];
-			}
-
-			SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyMMdd'T'HHmmss'Z'");
-			dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-			String datetime = dateFormatGmt.format(new Date());
-			String message = datetime + method + path + query;
-
-			String signature;
-			try {
-				SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes(STANDARD_CHARSET), ALGORITHM);
-				Mac mac = Mac.getInstance(ALGORITHM);
-				mac.init(signingKey);
-				byte[] rawHmac = mac.doFinal(message.getBytes(STANDARD_CHARSET));
-				signature = Hex.encodeHexString(rawHmac);
-			} catch (GeneralSecurityException e) {
-				throw new IllegalArgumentException("Unexpected error while creating hash: " + e.getMessage(), e);
-			}
-
-			return String.format("CEA algorithm=%s, access-key=%s, signed-date=%s, signature=%s", "HmacSHA256",
-					accessKey, datetime, signature);
-		}
-	}
-
-	public HBox getNavigateText(WebView webView, int tabNo) {
+	public HBox getNavigateText(WebView webView) {
 
 		// Top
 		Text homeTxt = new Text("🏠");
@@ -2522,7 +2723,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 						int selectedTabIndex = tabPane.getSelectionModel().getSelectedIndex();
 						switch (selectedTabIndex) {
 						case 0:
-							homeUrl = naverLoginUrl;
+							homeUrl = naverLoginUrl1;
 							break;
 						case 1:
 							homeUrl = displayBoardUrl;
@@ -2566,6 +2767,9 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		return new HBox(homeTxt, hSeparator1, backTxt, hSeparator2, forwardTxt, hSeparator3, reloadTxt);
 	}
 
+	/**
+	 * Daum 시간외단일가 save 버튼 클릭시 html을 저장한다.
+	 */
 	public void saveAfterHoursHtml(String contentHtml, String title) {
 		StringBuilder sb = new StringBuilder();
 
@@ -2573,24 +2777,23 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		String strHour = hourSdf.format(new Date());
 		int iHour = Integer.parseInt(strHour);
 
-		System.out.println("dayOfWeek:"+dayOfWeek);
-		System.out.println("strHour:"+strHour);
+		System.out.println("dayOfWeek:" + dayOfWeek);
+		System.out.println("strHour:" + strHour);
 		Calendar c = Calendar.getInstance();
-		if(iHour >= 0 && iHour <= 8) {
-			if(dayOfWeek >= 3 && dayOfWeek <= 7) {
+		if (iHour >= 0 && iHour <= 8) {
+			if (dayOfWeek >= 3 && dayOfWeek <= 7) {
 				c.add(Calendar.DATE, -1);
 				strYmdBlacket = sdf0.format(c.getTime());
-			}else if(dayOfWeek == 1) {//일요일일 경우
+			} else if (dayOfWeek == 1) {// 일요일일 경우
 				c.add(Calendar.DATE, -2);
 				strYmdBlacket = sdf0.format(c.getTime());
 			}
-		}else {
-			if(dayOfWeek == 7 || dayOfWeek == 1) {
+		} else {
+			if (dayOfWeek == 7 || dayOfWeek == 1) {
 				c.add(Calendar.DATE, -1);
 				strYmdBlacket = sdf0.format(c.getTime());
 			}
 		}
-		
 
 		try {
 			URL url = new URL(daumKospiAfterHoursUrl);
@@ -2660,23 +2863,23 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 					.append(upDownType).append(")").append("</h1>\r\n");
 //			sb.append(table.outerHtml());
 			StringBuilder tableOuterHtml = new StringBuilder(table.outerHtml());
-			//다음 스톡 링크 제거하고 네이버 스톡 링크 걸기
+			// 다음 스톡 링크 제거하고 네이버 스톡 링크 걸기
 			StringBuilder naverLinkHtml = StockUtil.stockLinkString(tableOuterHtml, stockList);
 			sb.append(naverLinkHtml);
 
-			//뉴스  첨부
+			// 뉴스 첨부
 			StringBuilder newsAddedStockList = StockUtil.getNews(stockList);
 			System.out.println("newsAddedStockList:" + newsAddedStockList);
 			// 증권명에 증권링크 생성
 			StringBuilder stockTableAdded = StockUtil.stockLinkString(newsAddedStockList, stockList);
 			System.out.println("stockTableAdded:" + stockTableAdded);
-			sb.append(stockTableAdded.toString());			
+			sb.append(stockTableAdded.toString());
 
-			String strBlogCategoryNo = "235";// "시간외단일가";
+			strNaverBlogCategoryNo = "235";// "시간외단일가";
 			String shareTitle = strYmdBlacket + " " + mktType + " 시간외단일가(" + upDownType + ")";
 
 			if (!strNidAut.equals("") && !strNidSes.equals("")) {
-				if (naverBlogLinkShare(sb, strBlogCategoryNo, shareTitle, "")) {
+				if (naverBlogLinkShare(sb, strNaverBlogCategoryNo, shareTitle, "")) {
 //					JOptionPane.showMessageDialog(null, shareTitle + " 데이터를 공유하였습니다.");
 					shareResultTxt1.setText(shareTitle + " 데이터를 공유하였습니다.");
 				}
@@ -2689,6 +2892,9 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		}
 	}
 
+	/**
+	 * 쿠키에 있는 NID_AUT,NID_SES 정보를 이용하여 네이버 카테고리 정보를 가져온다.
+	 */
 	public void getNaverBlogCategory() {
 		try {
 			HttpHeaders headers = new HttpHeaders();
@@ -2736,51 +2942,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 			}
 			System.out.println("__________1_____________");
 
-//            HttpEntity<String> entity = new HttpEntity<String>(headers);
-//			messageConverters.add(new org.springframework.http.converter.ByteArrayHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
-//			messageConverters.add(new org.springframework.http.converter.StringHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
-//			messageConverters.add(new org.springframework.http.converter.json.MappingJackson2HttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
-//			messageConverters.add(new org.springframework.http.converter.ResourceHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
-			// messageConverters.add(new
-			// org.springframework.http.converter.xml.SourceHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
-//			messageConverters.add(new org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not extract
-			// response: no suitable HttpMessageConverter found for response type [class
-			// java.lang.String] and content type [text/html;charset=UTF-8]
-//			messageConverters.add(new org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
 			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not extract
-			// response: no suitable HttpMessageConverter found for response type [class
-			// java.lang.String] and content type [text/html;charset=UTF-8]
-//			messageConverters.add(new org.springframework.http.converter.ResourceRegionHttpMessageConverter());
-			// org.springframework.web.client.RestClientException: Could not write request:
-			// no suitable HttpMessageConverter found for request type
-			// [org.springframework.util.LinkedMultiValueMap] and content type
-			// [application/x-www-form-urlencoded]
 			System.out.println("___________2____________");
 			for (HttpMessageConverter httpMessageConverter : messageConverters) {
 				System.out.println(httpMessageConverter);
@@ -2798,12 +2960,14 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 
 			// Form Data
 //			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-//			map.add("url", "https://www.youtube.com/watch?v=J6zD3h_I3Lc&feature=share");
+//			map.add("url", "https://www.youtube.com/watch?v=J6zD3h_I3Lc");
 //			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(LINK_SHARE_URI_PREFIX);
 			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme("http").host("blog.naver.com");
 //			builder = builder.path("/LinkShare.nhn");
 			builder = builder.path("/openapi/share");
-			String strUrl = "https://www.youtube.com/watch?v=J6zD3h_I3Lc&feature=share";
+			// 죽을 뻔 한 아기 수달을 살려줬더니 생긴 일 ㅣ What Happened After Rescuing A Nearly Dying Baby
+			// Otter Is..
+			String strUrl = "https://www.youtube.com/watch?v=J6zD3h_I3Lc";
 			strUrl = URLEncoder.encode(strUrl, "UTF-8");
 			builder = builder.queryParam("url", strUrl);
 			UriComponents uriComponents = builder.build();
@@ -2834,6 +2998,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 //			System.out.println("guessEncoding :" + guessEncoding(response.getBody()));
 			byte[] responseBody = response.getBody();
 			System.out.println("body :" + responseBody);
+			// [B@2460600f
 			String unzipString = "";
 			if (responseBody != null) {
 				unzipString = NaverUtil.unzipStringFromBytes(response.getBody(), "UTF8");
@@ -2841,18 +3006,23 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 
 			System.out.println("unzipString:" + unzipString);
 			if (response.getStatusCode() == HttpStatus.OK) {
+				if (!unzipString.equals("")) {
+					// 카테고리 초기화
+					items.clear();
 
-				List<String> categories = new ArrayList<>();
-				Document doc = Jsoup.parse(unzipString);
-				Elements categoryEls = doc.select("#_categoryList option");
-				for (Element categoryEl : categoryEls) {
-					String categoryNo = categoryEl.attr("value");
-					String categoryName = categoryEl.text();
-					String categoryNoAndName = categoryNo + ":" + categoryName;
-					categories.add(categoryNoAndName);
+					naverBlogCategoryListComboBox.setItems(items);
+
+					List<String> categories = new ArrayList<>();
+					Document doc = Jsoup.parse(unzipString);
+					Elements categoryEls = doc.select("#_categoryList option");
+					for (Element categoryEl : categoryEls) {
+						String categoryNo = categoryEl.attr("value");
+						String categoryName = categoryEl.text();
+						String categoryNoAndName = categoryNo + ":" + categoryName;
+						categories.add(categoryNoAndName);
+					}
+					items.setAll(categories);
 				}
-				items.setAll(categories);
-
 			}
 			;
 			System.out.println("finished");
@@ -2862,4 +3032,28 @@ public class Step1_StockMarketPriceNaverLinkShareTab extends Application {
 		}
 	}
 
+	public String getCategoryNo(String categoryName) {
+		String categoryNo = "";
+//		ObservableList<String> items = FXCollections.observableArrayList();
+		ObservableList<String> items = naverBlogCategoryListComboBox.getItems();
+
+		for (int i = 0; i < items.size(); i++) {
+			String item = items.get(i);
+			if (item.contains(":")) {
+				String strCategoryArray[] = item.split(":");
+				System.out.println("strCategoryArray.length :" + strCategoryArray.length);
+				if (strCategoryArray.length > 1) {
+					strNaverBlogCategoryNo = strCategoryArray[0];
+					strNaverBlogCategoryName = strCategoryArray[1];
+					System.out.println("strNaverBlogCategoryNo-------------->" + strNaverBlogCategoryNo);
+					System.out.println("strNaverBlogCategoryName-------------->" + strNaverBlogCategoryName);
+				}
+				if (categoryName.equals(strNaverBlogCategoryName)) {
+					categoryNo = strNaverBlogCategoryNo;
+					break;
+				}
+			}
+		}
+		return categoryNo;
+	}
 }

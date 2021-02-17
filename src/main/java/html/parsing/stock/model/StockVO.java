@@ -48,22 +48,27 @@ public class StockVO {
 	private String foreignTradingVolume = "";
 	private String organTradingVolume = "";
 	private String foreignOrganTradingVolume = "";
+	private String individualTradingVolume = "";
 
 	private long lForeignTradingVolume;
 	private long lOrganTradingVolume;
 	private long lForeignOrganTradingVolume;
+	private long lIndividualTradingVolume;
 
 	private String foreignTradingAmount = "";
 	private String organTradingAmount = "";
 	private String foreignOrganTradingAmount = "";
+	private String individualTradingAmount = "";
 
 	private long lForeignTradingAmount;
 	private long lOrganTradingAmount;
 	private long lForeignOrganTradingAmount;
+	private long lIndividualTradingAmount;
 
 	private double dForeignTradingAmount;
 	private double dOrganTradingAmount;
 	private double dForeignOrganTradingAmount;
+	private double dIndividualTradingAmount;
 
 	private String foreignHaveVolume = "";
 	private String foreignHaveAmount = "";
@@ -94,6 +99,7 @@ public class StockVO {
 	private int iForeignTradingVolume;
 	private int iOrganTradingVolume;
 	private int iForeignOrganTradingVolume;
+	private int iIndividualTradingVolume;
 
 	private long lTradingVolume;
 	private long lTradingAmount;
@@ -241,6 +247,12 @@ public class StockVO {
 
 	int iLastWeekLastTradeDay;
 	int iThisWeekLastTradeDay;
+	
+	String strAfterHoursPrice;
+	String strAfterHoursEndPrice;
+	String strAfterHoursVaryPrice;
+	String strAfterHoursVaryRate;
+	String strAfterHoursSign;
 	
 	public String getDate() {
 		return date;
@@ -1680,6 +1692,94 @@ public class StockVO {
 
 	public void setiThisWeekLastTradeDay(int iThisWeekLastTradeDay) {
 		this.iThisWeekLastTradeDay = iThisWeekLastTradeDay;
+	}
+
+	public String getIndividualTradingVolume() {
+		return individualTradingVolume;
+	}
+
+	public void setIndividualTradingVolume(String individualTradingVolume) {
+		this.individualTradingVolume = individualTradingVolume;
+	}
+
+	public long getlIndividualTradingVolume() {
+		return lIndividualTradingVolume;
+	}
+
+	public void setlIndividualTradingVolume(long lIndividualTradingVolume) {
+		this.lIndividualTradingVolume = lIndividualTradingVolume;
+	}
+
+	public String getIndividualTradingAmount() {
+		return individualTradingAmount;
+	}
+
+	public void setIndividualTradingAmount(String individualTradingAmount) {
+		this.individualTradingAmount = individualTradingAmount;
+	}
+
+	public long getlIndividualTradingAmount() {
+		return lIndividualTradingAmount;
+	}
+
+	public void setlIndividualTradingAmount(long lIndividualTradingAmount) {
+		this.lIndividualTradingAmount = lIndividualTradingAmount;
+	}
+
+	public double getdIndividualTradingAmount() {
+		return dIndividualTradingAmount;
+	}
+
+	public void setdIndividualTradingAmount(double dIndividualTradingAmount) {
+		this.dIndividualTradingAmount = dIndividualTradingAmount;
+	}
+
+	public int getiIndividualTradingVolume() {
+		return iIndividualTradingVolume;
+	}
+
+	public void setiIndividualTradingVolume(int iIndividualTradingVolume) {
+		this.iIndividualTradingVolume = iIndividualTradingVolume;
+	}
+
+	public String getStrAfterHoursPrice() {
+		return strAfterHoursPrice;
+	}
+
+	public void setStrAfterHoursPrice(String strAfterHoursPrice) {
+		this.strAfterHoursPrice = strAfterHoursPrice;
+	}
+
+	public String getStrAfterHoursEndPrice() {
+		return strAfterHoursEndPrice;
+	}
+
+	public void setStrAfterHoursEndPrice(String strAfterHoursEndPrice) {
+		this.strAfterHoursEndPrice = strAfterHoursEndPrice;
+	}
+
+	public String getStrAfterHoursVaryPrice() {
+		return strAfterHoursVaryPrice;
+	}
+
+	public void setStrAfterHoursVaryPrice(String strAfterHoursVaryPrice) {
+		this.strAfterHoursVaryPrice = strAfterHoursVaryPrice;
+	}
+
+	public String getStrAfterHoursVaryRate() {
+		return strAfterHoursVaryRate;
+	}
+
+	public void setStrAfterHoursVaryRate(String strAfterHoursVaryRate) {
+		this.strAfterHoursVaryRate = strAfterHoursVaryRate;
+	}
+
+	public String getStrAfterHoursSign() {
+		return strAfterHoursSign;
+	}
+
+	public void setStrAfterHoursSign(String strAfterHoursSign) {
+		this.strAfterHoursSign = strAfterHoursSign;
 	}
 
 	@SuppressWarnings("unchecked")

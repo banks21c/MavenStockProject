@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
  */
 public class StockWeeks52NewLowHighPriceTodayOneFileJFrame extends javax.swing.JFrame {
 
+	String strBlogId = "";
 	String strNidAut = "";
 	String strNidSes = "";
 
@@ -35,7 +36,7 @@ public class StockWeeks52NewLowHighPriceTodayOneFileJFrame extends javax.swing.J
 	}
 
 	public void start() {
-		new StockWeeks52NewLowHighPriceTodayOneFile(strNidAut, strNidSes).start();
+		new StockWeeks52NewLowHighPriceTodayOneFile(strBlogId, strNidAut, strNidSes).start();
 	}
 
 	/**

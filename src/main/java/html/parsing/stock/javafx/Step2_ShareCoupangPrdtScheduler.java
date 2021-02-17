@@ -17,7 +17,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Step2_StockMarketPriceScheduler {
+public class Step2_ShareCoupangPrdtScheduler {
 	/*
 	 * <!-- 5분 마다 실행 ex) 00:05, 00:10. 00:15.... --> cron = "0 0/5 * * * *" <!-- 1시간
 	 * 마다 실행 ex) 01:00, 02:00, 03:00.... --> cron = "0 0 0/1 * * *" <!-- 매일 오후 18시마다
@@ -29,17 +29,17 @@ public class Step2_StockMarketPriceScheduler {
 	 * --> cron = "0 0 0 1 * *" <!-- 매년 3월내 월-금요일 10시 30분에만 실행 --> cron =
 	 * "0 30 10 ? 3 MON-FRI" <!-- 매월 마지막날 저녁 10시에 실행 --> cron = "0 0 10 L * ?"
 	 */
-	private static Logger logger = LoggerFactory.getLogger(Step2_StockMarketPriceScheduler.class);
+	private static Logger logger = LoggerFactory.getLogger(Step2_ShareCoupangPrdtScheduler.class);
 
 	String strBlogId = "";
 	String strNidAut = "";
 	String strNidSes = "";
 	boolean isInstant = false;
 
-	public Step2_StockMarketPriceScheduler() {
+	public Step2_ShareCoupangPrdtScheduler() {
 	}
 
-	public Step2_StockMarketPriceScheduler(String strBlogId, String strNidAut, String strNidSes) {
+	public Step2_ShareCoupangPrdtScheduler(String strBlogId, String strNidAut, String strNidSes) {
 		this.strBlogId = strBlogId;
 		this.strNidAut = strNidAut;
 		this.strNidSes = strNidSes;
@@ -48,7 +48,7 @@ public class Step2_StockMarketPriceScheduler {
 		System.out.println("strNidSes:" + strNidSes);
 	}
 
-	Step2_StockMarketPriceScheduler(String strBlogId, String strNidAut, String strNidSes, boolean isInstant) {
+	Step2_ShareCoupangPrdtScheduler(String strBlogId, String strNidAut, String strNidSes, boolean isInstant) {
 		this.strBlogId = strBlogId;
 		this.strNidAut = strNidAut;
 		this.strNidSes = strNidSes;
@@ -91,48 +91,39 @@ public class Step2_StockMarketPriceScheduler {
 				System.out.println("strDate2:" + strDate);
 
 				// Job #0 is scheduled to run every 10 minutes
-//			job = newJob(StockPlusMinusDivide100Job.class).withIdentity("job0", "group0").build();
-				job = newJob(Step3_StockMarketPriceJobThread.class)
-						.withIdentity("stockMarketPriceJob0", "stockMarketPriceGroup0").build();
+//				job = newJob(StockPlusMinusDivide100Job.class).withIdentity("job0", "group0").build();
+				job = newJob(Step3_ShareCoupangPrdtJobThread.class)
+						.withIdentity("shareCoupangPrdtJob0", "shareCoupangPrdtGroup0").build();
 				JobDataMap map = job.getJobDataMap();
 				map.put("BLOG_ID", strBlogId);
 				map.put("NID_AUT", strNidAut);
 				map.put("NID_SES", strNidSes);
 
-				trigger = newTrigger().withIdentity("stockMarketPriceTrigger0", "stockMarketPriceGroup0")
+				trigger = newTrigger().withIdentity("shareCoupangPrdtTrigger0", "shareCoupangPrdtGroup0")
 						.withSchedule(cronSchedule(strDate)).build();
 				sched.scheduleJob(job, trigger);
 				sched.start();
 			} else {
 
-				
 				// Job #0 is scheduled to run every day at 매시 0분 0초에 실행
 //				trigger = newTrigger().withIdentity("trigger0", "group0").withSchedule(cronSchedule("0 0 * ? * *")).build();
 //				sched.scheduleJob(job, trigger);
 
-				job = newJob(Step3_StockMarketPriceJobThread.class)
-						.withIdentity("stockMarketPriceJob0", "stockMarketPriceGroup0").build();
+				job = newJob(Step3_ShareCoupangPrdtJobThread.class).withIdentity("shareCoupangPrdtJob1", "group1")
+						.build();
 				JobDataMap map = job.getJobDataMap();
 				map.put("BLOG_ID", strBlogId);
 				map.put("NID_AUT", strNidAut);
 				map.put("NID_SES", strNidSes);
 
-				// Job #0 is scheduled to run every 1 hour
-				// 1시간마다
-				trigger = newTrigger().withIdentity("stockMarketPriceTrigger0", "stockMarketPriceGroup0")
-						.withSchedule(cronSchedule("0 0 0/1 ? * *")).build();
-				sched.scheduleJob(job, trigger);
-
-				// Job #1 is scheduled to run every day at 15:40pm
-				job = newJob(Step3_StockMarketPriceJobThread.class)
-						.withIdentity("stockMarketPriceJob1", "stockMarketPriceGroup1").build();
-				map = job.getJobDataMap();
-				map.put("BLOG_ID", strBlogId);
-				map.put("NID_AUT", strNidAut);
-				map.put("NID_SES", strNidSes);
-
-				trigger = newTrigger().withIdentity("stockMarketPriceTrigger1", "group1")
-						.withSchedule(cronSchedule("0 40 15 * * ?")).build();
+				// Job #1 is scheduled to run every 10minutes
+				// 10분마다실행
+//				trigger = newTrigger().withIdentity("shareCoupangPrdtTrigger1", "group1").withSchedule(cronSchedule("0 0/10 * * * ?")) .build();
+				// 30분마다실행
+				trigger = newTrigger().withIdentity("shareCoupangPrdtTrigger1", "group1")
+						.withSchedule(cronSchedule("0 0/30 * * * ?")).build();
+				// 1시간마다실행
+//				trigger = newTrigger().withIdentity("shareCoupangPrdtTrigger1", "group1").withSchedule(cronSchedule("0 0 0/1 * * ?")).build();
 				sched.scheduleJob(job, trigger);
 
 				// The scheduler is then started (it also would have been fine to start it
