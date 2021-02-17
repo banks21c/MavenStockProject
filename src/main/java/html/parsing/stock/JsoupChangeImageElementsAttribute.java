@@ -70,9 +70,9 @@ public class JsoupChangeImageElementsAttribute {
 				}
 				iImgWidth = Integer.parseInt(imgWidth);
 				iImgHeight = Integer.parseInt(imgHeight);
-				if (iImgWidth > 548) {
-					iImgWidth = 548;
-					iImgHeight = (548 * iImgHeight) / iImgWidth;
+				if (iImgWidth > 741) {
+					iImgWidth = 741;
+					iImgHeight = (741 * iImgHeight) / iImgWidth;
 				}
 				imgWidth = iImgWidth + "";
 				imgHeight = iImgHeight + "";

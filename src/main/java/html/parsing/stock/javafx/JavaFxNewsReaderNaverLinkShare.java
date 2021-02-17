@@ -70,6 +70,7 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 
 	WebEngine webengine = null;
 
+	String strBlogId = "";
 	String strNidAut = "";
 	String strNidSes = "";
 
@@ -245,13 +246,15 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 				// 네이버 블로그 공유
 				System.out.println("주식 시세 공유");
 				getNaverCookies();
+				logger.debug("strBlogId :" + strBlogId);
 				logger.debug("strNidAut :" + strNidAut);
 				logger.debug("strNidSes :" + strNidSes);
-				if (!strNidAut.equals("") && !strNidSes.equals("")) {
+				if (!strBlogId.equals("") && !strNidAut.equals("") && 
+						!strNidSes.equals("")) {
 
 					String url = urlTf.getText();
 					System.out.println("url1:" + url);
-					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strNidAut, strNidSes);
+					Step2_StockMarketPriceScheduler step2 = new Step2_StockMarketPriceScheduler(strBlogId, strNidAut, strNidSes);
 					step2.schedulerStart();
 				} else {
 					JOptionPane.showMessageDialog(null, "먼저 네이버에 로그인해주세요.");
@@ -570,9 +573,6 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 //		String jsonObject = JSONObject.toJSONString(stockMap);
 		String jsonObject = stockMap.toString();
 		String fileName = "";
-//		fileName = userHome + "\\documents\\" + strYmdhms + "_" + market_en + "_list.json";
-		fileName = market_en + "_list.json";
-		FileUtil.fileWrite(fileName, jsonObject);
 //		fileName = userHome + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
 		fileName = market_en + "_list.txt";
 		FileUtil.fileWrite(fileName, stockCodeNameSb.toString());
@@ -788,7 +788,7 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 			String strShareUrl) {
 		strNidAut = nidAutTf.getText();
 		strNidSes = nidSesTa.getText();
-		return NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strShareUrl, strShareTitle, strCategoryName,
+		return NaverUtil.naverBlogLinkShare(strBlogId, strNidAut, strNidSes, strShareUrl, strShareTitle, strCategoryName,
 				contentSb, null);
 	}
 }

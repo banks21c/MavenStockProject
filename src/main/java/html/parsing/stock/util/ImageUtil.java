@@ -340,9 +340,9 @@ public class ImageUtil {
 			int height = srcImg.getHeight();
 			System.out.println("width1:" + width);
 			System.out.println("height1:" + height);
-			if (width > height && width > 548) {
-				height = (548 * height) / width;
-				width = 548;
+			if (width > height && width > 741) {
+				height = (741 * height) / width;
+				width = 741;
 
 				destImg = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
 				Graphics2D g = destImg.createGraphics();
@@ -420,9 +420,9 @@ public class ImageUtil {
 		System.out.println("iHeight : " + iHeight);
 		System.out.println("iWidth : " + iWidth);
 
-		if (iWidth > 548) {
-			changeWidth = 548;
-			changeHeight = 548 * iHeight / iWidth;
+		if (iWidth > 741) {
+			changeWidth = 741;
+			changeHeight = 741 * iHeight / iWidth;
 		}
 		System.out.println("style : " + "width:" + changeWidth + "px;height:" + changeHeight + "px;");
 
@@ -452,9 +452,9 @@ public class ImageUtil {
 			System.out.println("iHeight : " + iHeight);
 			System.out.println("iWidth : " + iWidth);
 
-			if (iWidth > 548) {
-				changeWidth = 548;
-				changeHeight = 548 * iHeight / iWidth;
+			if (iWidth > 741) {
+				changeWidth = 741;
+				changeHeight = 741 * iHeight / iWidth;
 			}
 			System.out.println("style : " + "width:" + changeWidth + "px;height:" + changeHeight + "px;");
 

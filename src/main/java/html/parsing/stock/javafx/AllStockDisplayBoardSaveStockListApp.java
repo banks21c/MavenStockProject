@@ -231,9 +231,6 @@ public class AllStockDisplayBoardSaveStockListApp extends Application {
 		//jsonObject=map
 		String jsonObject = JSONObject.toJSONString(stockMap);
 		String fileName = "";
-//		fileName = userHome + "\\documents\\" + strYmdhms + "_" + market_en + "_list.json";
-		fileName = market_en + "_list.json";
-		FileUtil.fileWrite(fileName, jsonObject);
 //		fileName = userHome + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
 		fileName = market_en + "_list.txt";
 		FileUtil.fileWrite(fileName, stockCodeNameSb.toString());

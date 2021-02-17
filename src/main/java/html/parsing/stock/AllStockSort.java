@@ -307,9 +307,7 @@ public class AllStockSort extends Thread {
 			} else if (specialLetter.equals("▼")) {
 				downCount++;
 			} else {
-				if (stock.getiTradingVolume() > 0) {
 					steadyCount++;
-				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
