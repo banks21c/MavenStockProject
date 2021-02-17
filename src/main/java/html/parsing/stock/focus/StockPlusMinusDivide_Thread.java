@@ -38,7 +38,7 @@ public class StockPlusMinusDivide_Thread extends Thread {
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
 
-	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E hh.mm.SSS", Locale.KOREAN).format(new Date());
+	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.SSS", Locale.KOREAN).format(new Date());
 
 	DecimalFormat df = new DecimalFormat("###.##");
 
@@ -62,6 +62,7 @@ public class StockPlusMinusDivide_Thread extends Thread {
 
 	static int iExtractCount = -1;
 
+	private String strBlogId;
 	private String strNidAut;
 	private String strNidSes;
 	private String marketType = "";
@@ -80,14 +81,17 @@ public class StockPlusMinusDivide_Thread extends Thread {
 			iExtractCount = -1;
 		}
 
-		String strNidAut="792+F+6fIHtv8qnL+ughaBpetwjTElGGvLK21bJVCUpMUUHP/eyfWjnqbAm699+3";
-		String strNidSes="AAABj/MyEI0r+RsPs3/xR5KzMBKK/aybgYzjbdPrhVwoOmZBoL7u+aSJvtT5fWq3fea49DQZkkBRB+gYk9LADAhueugorCT+cpoKa2otdnbInRr46kOcnpvJgJSxDoDBkeTO2xvKfeQ6AQgiUzuSAcjTkW9Ku71di/fVEE9/jfyD9lfviQcekuKHeAXmOQGDnYpKI3mor1HW7jPq8NHo3q03mr9T7Kf1jiOGoBUxFfBh94pIIJBCwxxgvOgjfAr+IKRH7D3vzFrLmFfNKpyMHar4ZzCQmAQmAM3eFTc+D/fLkDdxVZ98VZxmlSZHZfryHIVi++QaWwEhDF556Bmunf+Hrxr0UHSGQHw/9l9f27kD+QIPed+5xqZa9ZYJoTRow+e58LbH7AoADPm/mhLSf2KcuS2cafL2V6y9iSJoFVYs0iSWCFGt9DWUVHa/2l86dprMB31fDBHCw4mY9WzX0ektSmVbfqT3zZBtm0BdD/M1xHCZgKvqFoZasUREIq6o4wpLr+e46j84nAuNkJPpnPnv5Aw=";
-		
-		String marketType="코스피";
-		StockPlusMinusDivide_Thread list1 = new StockPlusMinusDivide_Thread(marketType,strNidAut,strNidSes);
+		String strBlogId = "banks";
+		String strNidAut = "792+F+6fIHtv8qnL+ughaBpetwjTElGGvLK21bJVCUpMUUHP/eyfWjnqbAm699+3";
+		String strNidSes = "AAABj/MyEI0r+RsPs3/xR5KzMBKK/aybgYzjbdPrhVwoOmZBoL7u+aSJvtT5fWq3fea49DQZkkBRB+gYk9LADAhueugorCT+cpoKa2otdnbInRr46kOcnpvJgJSxDoDBkeTO2xvKfeQ6AQgiUzuSAcjTkW9Ku71di/fVEE9/jfyD9lfviQcekuKHeAXmOQGDnYpKI3mor1HW7jPq8NHo3q03mr9T7Kf1jiOGoBUxFfBh94pIIJBCwxxgvOgjfAr+IKRH7D3vzFrLmFfNKpyMHar4ZzCQmAQmAM3eFTc+D/fLkDdxVZ98VZxmlSZHZfryHIVi++QaWwEhDF556Bmunf+Hrxr0UHSGQHw/9l9f27kD+QIPed+5xqZa9ZYJoTRow+e58LbH7AoADPm/mhLSf2KcuS2cafL2V6y9iSJoFVYs0iSWCFGt9DWUVHa/2l86dprMB31fDBHCw4mY9WzX0ektSmVbfqT3zZBtm0BdD/M1xHCZgKvqFoZasUREIq6o4wpLr+e46j84nAuNkJPpnPnv5Aw=";
+
+		String marketType = "코스피";
+		StockPlusMinusDivide_Thread list1 = new StockPlusMinusDivide_Thread(marketType, strBlogId, strNidAut,
+				strNidSes);
 		list1.start();
-		marketType="코스닥";
-		StockPlusMinusDivide_Thread list2 = new StockPlusMinusDivide_Thread(marketType,strNidAut,strNidSes);
+		marketType = "코스닥";
+		StockPlusMinusDivide_Thread list2 = new StockPlusMinusDivide_Thread(marketType, strBlogId, strNidAut,
+				strNidSes);
 //		list2.start();
 
 		long endTime = System.currentTimeMillis();
@@ -106,15 +110,17 @@ public class StockPlusMinusDivide_Thread extends Thread {
 		this.marketType = marketType;
 	}
 
-	StockPlusMinusDivide_Thread(String strNidAut, String strNidSes) {
+	StockPlusMinusDivide_Thread(String strBlogId, String strNidAut, String strNidSes) {
 		logger = LoggerFactory.getLogger(getClass());
+		this.strBlogId = strBlogId;
 		this.strNidAut = strNidAut;
 		this.strNidSes = strNidSes;
 	}
 
-	public StockPlusMinusDivide_Thread(String marketType, String strNidAut, String strNidSes) {
+	public StockPlusMinusDivide_Thread(String marketType, String strBlogId, String strNidAut, String strNidSes) {
 		logger = LoggerFactory.getLogger(getClass());
 		this.marketType = marketType;
+		this.strBlogId = strBlogId;
 		this.strNidAut = strNidAut;
 		this.strNidSes = strNidSes;
 	}
@@ -232,13 +238,17 @@ public class StockPlusMinusDivide_Thread extends Thread {
 	public void naverBlogLinkShare(StringBuilder html) {
 		String strUrl = "";
 		String strTitle = Jsoup.parse(html.toString()).select("h2#title").text();
-		logger.debug("strTitle:"+strTitle);
-		String strBlogCategoryNo = "146";//증권↑↓↗↘";
+		logger.debug("strTitle:" + strTitle);
+		String strBlogCategoryNo = "146";// 증권↑↓↗↘";
 		StringBuilder contentSb = html;
+		logger.debug("strBlogId:" + strBlogId);
 		logger.debug("strNidAut:" + strNidAut);
 		logger.debug("strNidSes:" + strNidSes);
-				if (!StringUtils.defaultIfEmpty(strNidAut,"").equals("") && !StringUtils.defaultIfEmpty(strNidSes,"").equals("")) {
-			NaverUtil.naverBlogLinkShare(strNidAut, strNidSes, strUrl, strTitle, strBlogCategoryNo, contentSb, null);
+		if (!StringUtils.defaultIfEmpty(strBlogId, "").equals("")
+				&& !StringUtils.defaultIfEmpty(strNidAut, "").equals("")
+				&& !StringUtils.defaultIfEmpty(strNidSes, "").equals("")) {
+			NaverUtil.naverBlogLinkShare(strBlogId, strNidAut, strNidSes, strUrl, strTitle, strBlogCategoryNo,
+					contentSb, null);
 		}
 	}
 
@@ -614,7 +624,6 @@ public class StockPlusMinusDivide_Thread extends Thread {
 		sb1.append("</table>\r\n");
 		return sb1;
 	}
-
 
 	public void readNews(List<StockVO> allStockList) {
 

@@ -435,9 +435,7 @@ public class StockUniqueByDate {
                         } else if (specialLetter.equals("▼")) {
                             downCount++;
                         } else {
-                            if (stock.getiTradingVolume() > 0) {
                                 steadyCount++;
-                            }
                         }
                         break;
                     }

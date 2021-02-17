@@ -206,7 +206,7 @@ public class StockThemeAll {
 
 			Elements themeStockTables = doc.select(".type_5");
 			Element themeStockTable = themeStockTables.get(0);
-			themeStockTable.attr("style", "margin:0 0 10px 0; width:548px;");
+			themeStockTable.attr("style", "margin:0 0 10px 0; width:741px;");
 			// System.out.println("themeStockTable:"+themeStockTable);
 			Element themeStockTableColgroup = themeStockTable.select("colgroup").get(0);
 			themeStockTableColgroup.remove();

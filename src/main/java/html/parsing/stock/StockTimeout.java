@@ -80,7 +80,7 @@ public class StockTimeout {
                 sb1.append("<body>\r\n");
                 sb1.append("<h4>[" + strDate + "]</h4>");
                 sb1.append("<h2>" + title + "</h2>");
-                sb1.append("<div style='width:548px'>\r\n");
+                sb1.append("<div style='width:741px'>\r\n");
 
                 String strContent = doc.select(".dTable").outerHtml();
                 strContent = strContent.replaceAll("\"/item", "\"http://finance.daum.net/item");

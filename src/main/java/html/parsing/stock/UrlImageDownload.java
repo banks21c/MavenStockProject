@@ -47,9 +47,9 @@ public class UrlImageDownload {
             int height = srcImg.getHeight();
             System.out.println("width1:" + width);
             System.out.println("height1:" + height);
-            if (width > 548) {
-                height = (548 * height) / width;
-                width = 548;
+            if (width > 741) {
+                height = (741 * height) / width;
+                width = 741;
 
                 destImg = new BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR);
                 Graphics2D g = destImg.createGraphics();

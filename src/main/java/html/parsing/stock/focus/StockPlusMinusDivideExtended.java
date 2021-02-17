@@ -42,7 +42,7 @@ public class StockPlusMinusDivideExtended extends Thread {
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
 
-	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E hh.mm.SSS", Locale.KOREAN).format(new Date());
+	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.SSS", Locale.KOREAN).format(new Date());
 
 	DecimalFormat df = new DecimalFormat("###.##");
 
@@ -408,9 +408,7 @@ public class StockPlusMinusDivideExtended extends Thread {
 			} else if (specialLetter.equals("▼")) {
 				downCount++;
 			} else {
-				if (stock.getiTradingVolume() > 0) {
 					steadyCount++;
-				}
 			}
 //            System.out.println("date:" + date);
 			System.out.println("specialLetter:" + specialLetter);

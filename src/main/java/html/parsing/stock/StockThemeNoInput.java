@@ -217,7 +217,7 @@ public class StockThemeNoInput extends News {
             } else {
                 return null;
             }
-            themeStockTable.attr("style", "margin:0 0 10px 0; width:548px;");
+            themeStockTable.attr("style", "margin:0 0 10px 0; width:741px;");
             // System.out.println("themeStockTable:"+themeStockTable);
             Element themeStockTableColgroup = themeStockTable.select("colgroup").get(0);
             themeStockTableColgroup.remove();
@@ -345,7 +345,7 @@ public class StockThemeNoInput extends News {
                 }
             }
             if (!commentSb.toString().equals("")) {
-                sb1.append("<table style='width:548px'>\r\n");
+                sb1.append("<table style='width:741px'>\r\n");
                 sb1.append("<tr>\r\n");
                 sb1.append("<td>\r\n");
                 sb1.append(commentSb.toString());

@@ -598,9 +598,7 @@ public class StockUniqueByWeekly {
                         } else if (specialLetter.equals("▼")) {
                             downCount++;
                         } else {
-                            if (stock.getiTradingVolume() > 0) {
                                 steadyCount++;
-                            }
                         }
                         System.out.println("date:" + date);
                         System.out.println("specialLetter:" + specialLetter);
