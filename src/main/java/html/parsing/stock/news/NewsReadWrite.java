@@ -30,9 +30,13 @@ import javafx.scene.web.WebView;
  */
 public class NewsReadWrite extends javax.swing.JFrame {
 
-    private static Logger logger = LoggerFactory.getLogger(NewsReadWrite.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3649852440281783369L;
+	private static Logger logger = LoggerFactory.getLogger(NewsReadWrite.class);
     private WebEngine webEngine;
-    private WebView view;
+    private WebView webView;
 
     /**
      * Creates new form NewJFrame1
@@ -42,7 +46,7 @@ public class NewsReadWrite extends javax.swing.JFrame {
     }
 
     public void loadURL(final String url) {
-        System.out.println("url:" + url);
+        logger.debug("url:" + url);
         Platform.runLater(() -> {
             webEngine.load(url);
         });
@@ -90,10 +94,10 @@ public class NewsReadWrite extends javax.swing.JFrame {
         jPanel1.add(jfxPanel);
 
         Platform.runLater(() -> {
-            view = new WebView();
-            webEngine = view.getEngine();
+            webView = new WebView();
+            webEngine = webView.getEngine();
 
-            jfxPanel.setScene(new Scene(view));
+            jfxPanel.setScene(new Scene(webView));
         });
         jScrollPane1 = new javax.swing.JScrollPane();
         htmlViewArea = new javax.swing.JTextArea();
@@ -461,7 +465,7 @@ public class NewsReadWrite extends javax.swing.JFrame {
 
     public void createHTMLFile() {
         String newsCompany = getSelectedButtonText(buttonGroup1);
-        System.out.println("newsCompany:" + newsCompany);
+        logger.debug("newsCompany:" + newsCompany);
         if (newsCompany != null) {
             url = urlTf.getText();
             if (!url.equals("")) {
@@ -506,64 +510,77 @@ public class NewsReadWrite extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        //System.out.println("document.documentElement.outerHTML:"+(String) webEngine.executeScript("document.documentElement.outerHTML"));
+        //logger.debug("document.documentElement.outerHTML:"+(String) webEngine.executeScript("document.documentElement.outerHTML"));
         //String html = (String) webEngine.executeScript("document.documentElement.outerHTML");
 
-        org.w3c.dom.Document xmlDom = webEngine.getDocument();
-        System.out.println(xmlDom);
-        String html = xmlDom.getTextContent();
-        System.out.println(xmlDom);
-
-        Document doc = Jsoup.parse(html);
-        doc.select("meta").remove();
-        html = doc.html();
-        System.out.println("html:" + html);
-        htmlViewArea.setText(html);
-
-        String newsCompany = getSelectedButtonText(buttonGroup1);
-        System.out.println("newsCompany:" + newsCompany);
-        if (newsCompany != null) {
-            url = urlTf.getText();
-            if (!url.equals("")) {
-                StringBuilder sb = new StringBuilder();
-                if (newsCompany.equals("MT")) {
-                    sb = NewsMoneyToday.createHTMLFile(url);
-                } else if (newsCompany.equals("SSI")) {
-                    sb = WwwSisainCoKr.createHTMLFile(url);
-                } else if (newsCompany.equals("KMIB")) {
-                    sb = NewsKmib.createHTMLFile(url);
-                } else if (newsCompany.equals("KHSM")) {
-                } else if (newsCompany.equals("HKR")) {
-                    sb = NewsHankyoreh.createHTMLFile(url);
-                } else if (newsCompany.equals("JAIB")) {
-                    sb = NewsJoinsCom.createHTMLFile(url);
-                } else if (newsCompany.equals("CSIB")) {
-                    sb = NewsChosun.createHTMLFile(url);
-                } else if (newsCompany.equals("HKIB")) {
-                    sb = WwwHankookilboCom.createHTMLFile(url);
-                } else if (newsCompany.equals("HPTP")) {
-                    sb = WwwHuffingtonpostKr.createHTMLFile(url);
-                } else if (newsCompany.equals("DAUM")) {
-                    sb = NewsDaumNet.createHTMLFile(url);
-                } else if (newsCompany.equals("NAVER")) {
-                    sb = NewsNaverCom.createHTMLFile(url);
-                } else if (newsCompany.equals("YHN")) {
-                    sb = WwwYonhapnewsCoKr.createHTMLFile(url);
-                } else if (newsCompany.equals("HKE")) {
-                    sb = WwwHankyungCom.createHTMLFile(url);
-                } else if (newsCompany.equals("SHK")) {
-                    sb = StarHankookilboCom.createHTMLFile(url);
-                } else if (newsCompany.equals("YTN")) {
-                    sb = WwwYtnCoKr.createHTMLFile(url);
-                } else if (newsCompany.equals("EDAILY")) {
-                    sb = WwwYtnCoKr.createHTMLFile(url);
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "저장할 주소를 입력하여 주세요.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "신문명을 선택하여 주세요.");
-        }
+//        Platform.runLater(() -> {
+//            view = new WebView();
+//            webEngine = view.getEngine();
+//
+//            jfxPanel.setScene(new Scene(view));
+//        });
+        
+//        org.w3c.dom.Document xmlDom = null;
+        Platform.runLater(() -> {
+			String html = "";
+//			html = (String) webView.getEngine().executeScript("document.documentElement.outerHTML");
+			html = (String) webEngine.executeScript("document.documentElement.outerHTML");
+	    	logger.debug("html:["+html+"]");
+	    	Document doc = Jsoup.parse(html);
+	    	doc.select("meta").remove();
+	    	doc.select("script").remove();
+	    	doc.select("link").remove();
+	    	doc.select("style").remove();
+	    	html = doc.html();
+	    	logger.debug("html:" + html);
+	    	htmlViewArea.setText(html);
+	    	
+	    	String newsCompany = getSelectedButtonText(buttonGroup1);
+	    	logger.debug("newsCompany:" + newsCompany);
+	    	if (newsCompany != null) {
+	    		url = urlTf.getText();
+	    		if (!url.equals("")) {
+	    			StringBuilder sb = new StringBuilder();
+	    			if (newsCompany.equals("MT")) {
+	    				sb = new NewsMoneyToday().createHTMLFile(url);
+	    			} else if (newsCompany.equals("SSI")) {
+	    				sb = new WwwSisainCoKr().createHTMLFile(url);
+	    			} else if (newsCompany.equals("KMIB")) {
+	    				sb = new NewsKmib().createHTMLFile(url);
+	    			} else if (newsCompany.equals("KHSM")) {
+	    			} else if (newsCompany.equals("HKR")) {
+	    				sb = new NewsHankyoreh().createHTMLFile(url);
+	    			} else if (newsCompany.equals("JAIB")) {
+	    				sb = new NewsJoinsCom().createHTMLFile(url);
+	    			} else if (newsCompany.equals("CSIB")) {
+	    				sb = new NewsChosun().createHTMLFile(url);
+	    			} else if (newsCompany.equals("HKIB")) {
+	    				sb = new WwwHankookilboCom().createHTMLFile(url);
+	    			} else if (newsCompany.equals("HPTP")) {
+	    				sb = new WwwHuffingtonpostKr().createHTMLFile(url);
+	    			} else if (newsCompany.equals("DAUM")) {
+	    				sb = new NewsDaumNet().createHTMLFile(url);
+	    			} else if (newsCompany.equals("NAVER")) {
+	    				sb = new NewsNaverCom().createHTMLFile(url);
+	    			} else if (newsCompany.equals("YHN")) {
+	    				sb = new WwwYonhapnewsCoKr().createHTMLFile(url);
+	    			} else if (newsCompany.equals("HKE")) {
+	    				sb = new WwwHankyungCom().createHTMLFile(url);
+	    			} else if (newsCompany.equals("SHK")) {
+	    				sb = new StarHankookilboCom().createHTMLFile(url);
+	    			} else if (newsCompany.equals("YTN")) {
+	    				sb = new WwwYtnCoKr().createHTMLFile(url);
+	    			} else if (newsCompany.equals("EDAILY")) {
+	    				sb = new WwwYtnCoKr().createHTMLFile(url);
+	    			}
+	    		} else {
+	    			JOptionPane.showMessageDialog(null, "저장할 주소를 입력하여 주세요.");
+	    		}
+	    	} else {
+	    		JOptionPane.showMessageDialog(null, "신문명을 선택하여 주세요.");
+	    	}
+        });
+        
 
     }// GEN-LAST:event_jButton1ActionPerformed
 

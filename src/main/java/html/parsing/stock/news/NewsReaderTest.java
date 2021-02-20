@@ -5,8 +5,6 @@
  */
 package html.parsing.stock.news;
 
-import static html.parsing.stock.util.StockUtil.readStockCodeNameListFromExcel;
-
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -22,18 +20,20 @@ import java.util.logging.Level;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.StockNameAscCompare2;
-import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
 
 /**
  *
@@ -41,7 +41,11 @@ import html.parsing.stock.util.GlobalVariables;
  */
 public class NewsReaderTest extends javax.swing.JFrame {
 
-    private static org.slf4j.Logger logger = LoggerFactory.getLogger(NewsReaderTest.class);
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6353160383953159520L;
+	private static Logger logger = LoggerFactory.getLogger(NewsReaderTest.class);
     URI uri = null;
 
     /**
@@ -54,14 +58,12 @@ public class NewsReaderTest extends javax.swing.JFrame {
     }
 
     void initList() throws Exception {
-        String kospiFileName = GlobalVariables.kospiFileName;
-        String kosdaqFileName = GlobalVariables.kosdaqFileName;
         List<StockVO> kospiStockList = new ArrayList<StockVO>();
         List<StockVO> kosdaqStockList = new ArrayList<StockVO>();
 
-        readStockCodeNameListFromExcel(kospiStockList, kospiFileName);
+        kospiStockList = StockUtil.readKospiStockCodeNameListFromTxtFile();
         Collections.sort(kospiStockList, new StockNameAscCompare2());
-        readStockCodeNameListFromExcel(kosdaqStockList, kosdaqFileName);
+        kosdaqStockList = StockUtil.readKosdaqStockCodeNameListFromTxtFile();
         Collections.sort(kosdaqStockList, new StockNameAscCompare2());
 
         String kospis[] = new String[kospiStockList.size()];
@@ -518,7 +520,7 @@ public class NewsReaderTest extends javax.swing.JFrame {
 
     }//GEN-LAST:event_extractImgBtnActionPerformed
 
-    private void navigate(String url) {
+    private void loadURL(String url) {
         try {
             jEditorPane2.setPage(url);
         } catch (IOException ex) {
@@ -527,67 +529,67 @@ public class NewsReaderTest extends javax.swing.JFrame {
     }
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        navigate("http://www.hani.co.kr");
+        loadURL("http://www.hani.co.kr");
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        navigate("http://www.khan.co.kr");
+        loadURL("http://www.khan.co.kr");
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void jLabel14MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel14MouseClicked
-        navigate("http://www.kmib.co.kr");
+        loadURL("http://www.kmib.co.kr");
     }//GEN-LAST:event_jLabel14MouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-        navigate("http://www.hankookilbo.com");
+        loadURL("http://www.hankookilbo.com");
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-        navigate("http://www.hankyung.com/");
+        loadURL("http://www.hankyung.com/");
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        navigate("http://www.sedaily.com/");
+        loadURL("http://www.sedaily.com/");
     }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        navigate("http://www.chosun.com");
+        loadURL("http://www.chosun.com");
     }//GEN-LAST:event_jLabel6MouseClicked
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
-        navigate("http://www.joins.com");
+        loadURL("http://www.joins.com");
     }//GEN-LAST:event_jLabel7MouseClicked
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
-        navigate("http://imnews.imbc.com");
+        loadURL("http://imnews.imbc.com");
     }//GEN-LAST:event_jLabel8MouseClicked
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
-        navigate("http://news.kbs.co.kr");
+        loadURL("http://news.kbs.co.kr");
     }//GEN-LAST:event_jLabel9MouseClicked
 
     private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
-        navigate("http://www.sbs.co.kr/");
+        loadURL("http://www.sbs.co.kr/");
     }//GEN-LAST:event_jLabel10MouseClicked
 
     private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
-        navigate("http://www.edaily.co.kr");
+        loadURL("http://www.edaily.co.kr");
     }//GEN-LAST:event_jLabel11MouseClicked
 
     private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel12MouseClicked
-        navigate("http://www.etoday.co.kr");
+        loadURL("http://www.etoday.co.kr");
     }//GEN-LAST:event_jLabel12MouseClicked
 
     private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
-        navigate("http://www.mt.co.kr/");
+        loadURL("http://www.mt.co.kr/");
     }//GEN-LAST:event_jLabel13MouseClicked
 
     private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
-        navigate("http://www.donga.com");
+        loadURL("http://www.donga.com");
     }//GEN-LAST:event_jLabel15MouseClicked
 
     private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel16MouseClicked
-        navigate("http://www.newstomato.com");
+        loadURL("http://www.newstomato.com");
     }//GEN-LAST:event_jLabel16MouseClicked
 
     private void executeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executeBtnActionPerformed
@@ -684,7 +686,7 @@ public class NewsReaderTest extends javax.swing.JFrame {
 
     public void createHTMLFile() {
         String newsCompany = getSelectedButtonText(buttonGroup1);
-        System.out.println("newsCompany1:" + newsCompany);
+        System.out.println("newsCompany:" + newsCompany);
         url = textFieldPopupMenuPanel1.getTextField().getText();
         if (!url.equals("")) {
             if (newsCompany != null) {
@@ -693,19 +695,22 @@ public class NewsReaderTest extends javax.swing.JFrame {
                 //JOptionPane.showMessageDialog(null, "신문명을 선택하여 주세요.");
                 createHTMLFile(url);
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "URL을 입력하여 주세요.");
         }
     }
 
 	private void createHTMLFile(String strUrl) {
 		createHTMLFile(strUrl,"");
 	}
+	@SuppressWarnings("unchecked")
 	private void createHTMLFile(String strUrl,String strMyComment) {
         if(strUrl.equals("")) return;
         System.out.println("url:" + strUrl);
         //페이지 추출 완료 라벨 초기화
         extractedUrlTextPane.setText("");
         //tab2에서 페이지 이동
-        navigate(strUrl);
+        loadURL(strUrl);
         String newsCompany = "";
         int idx = 0;
         for (NewsPublisher np : NewsPublisher.values()) {
@@ -721,12 +726,6 @@ public class NewsReaderTest extends javax.swing.JFrame {
         }
         System.out.println("newsCompany3:" + newsCompany);
 
-        StringBuilder sb = new StringBuilder();
-        if (newsCompany.equals("BUSAN")) {
-            sb = WwwBusanCom.createHTMLFile(strUrl);
-        } else if (newsCompany.equals("WwwHanitvCom")) {
-            sb = WwwHanitvCom.createHTMLFile(strUrl);
-        }
         if (newsCompany.equals("")) {
             textFieldPopupMenuPanel1.getTextField().setText("");
             extractedUrlTextPane.setText(strUrl + " 추출실패");
@@ -735,18 +734,18 @@ public class NewsReaderTest extends javax.swing.JFrame {
             return;
         }
 
-        Class<?> c;
+        StringBuilder sb = new StringBuilder();
+		Class<News> c;
+		Method method;
         try {
-            c = Class.forName("html.parsing.stock.news." + newsCompany);
+			c = (Class<News>)Class.forName("html.parsing.stock.news." + newsCompany);
             System.out.println("Class Name:" + c.getName());
             System.out.println("url:" + strUrl);
-            //c.getDeclaredMethods()[0].invoke(object, Object... MethodArgs  );
-//			Method method = c.getDeclaredMethod("createHTMLFile", String.class);
-//			sb = (StringBuilder) method.invoke(String.class, new Object[]{url});
-			Method method = c.getDeclaredMethod("createHTMLFile", String.class, String.class);
-			sb = (StringBuilder) method.invoke(String.class, new Object[] { strUrl, strMyComment });
+		    News instance = c.newInstance();
+		    method = c.getDeclaredMethod("createHTMLFile", String.class, String.class);
+		    sb = (StringBuilder) method.invoke(instance, new Object[] { strUrl, strMyComment });
             java.util.logging.Logger.getLogger(NewsReaderTest.class.getName()).log(Level.INFO, sb.toString());
-        } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
+        } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException ex) {
             java.util.logging.Logger.getLogger(NewsReaderTest.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -782,27 +781,7 @@ public class NewsReaderTest extends javax.swing.JFrame {
             createHTMLFile();
         }
     }// GEN-LAST:event_urlTfKeyReleased
-/*
-//	private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton2ActionPerformed
-//		// TODO add your handling code here:
-//	}// GEN-LAST:event_jRadioButton2ActionPerformed
-//
-//	private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton1ActionPerformed
-//		// TODO add your handling code here:
-//	}// GEN-LAST:event_jRadioButton1ActionPerformed
-//
-//	private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton3ActionPerformed
-//		// TODO add your handling code here:
-//	}// GEN-LAST:event_jRadioButton3ActionPerformed
-//
-//	private void jRadioButton10ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton10ActionPerformed
-//		// TODO add your handling code here:
-//	}// GEN-LAST:event_jRadioButton10ActionPerformed
-//
-//	private void jRadioButton11ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jRadioButton11ActionPerformed
-//		// TODO add your handling code here:
-//	}// GEN-LAST:event_jRadioButton11ActionPerformed
-     */
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String html = newsTextArea.getText();
@@ -836,8 +815,17 @@ public class NewsReaderTest extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(NewsReaderTest.class.getName()).log(java.util.logging.Level.SEVERE, null,
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(NewsReaderTest.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                    ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(NewsReaderTest.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                    ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(NewsReaderTest.class.getName()).log(java.util.logging.Level.SEVERE, null,
+                    ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(NewsReaderTest.class.getName()).log(java.util.logging.Level.SEVERE, null,
                     ex);
         }
         // </editor-fold>
