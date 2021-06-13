@@ -1,13 +1,13 @@
 package html.parsing.stock.news;
 
+import org.jsoup.nodes.Document;
+
 public interface NewsInterface {
 
-	public static StringBuilder createHTMLFile(String s1, String s2) {
-		return null;
-	}
+	public StringBuilder createHTMLFile(String strUrl, String strMyComment);
 
-	public static StringBuilder createHTMLFileFromWebView(String s1, String s2, String s3) {
-		return null;
-	}
+	public StringBuilder createHTMLFileFromWebView(String s1, String strUrl, String strMyComment);
+
+	public StringBuilder createHTMLFileCommon(Document doc, String strUrl, String strMyComment);
 
 }

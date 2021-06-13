@@ -1,5 +1,4 @@
 
-import html.parsing.stock.news.*;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -11,9 +10,11 @@ import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.news.News;
+import html.parsing.stock.news.NewsInterface;
 import html.parsing.stock.util.FileUtil;
 
-public class JsoupMStockNaverCom extends News {
+public class JsoupMStockNaverCom extends News implements NewsInterface {
 
 	private static Logger logger = LoggerFactory.getLogger(JsoupMStockNaverCom.class);
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -70,13 +71,13 @@ public class JsoupMStockNaverCom extends News {
 			doc.select("body").html(sb1.toString());
 			logger.debug("doc:" + doc.html());
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 			String fileName = "";
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, doc.html());
 

@@ -69,9 +69,9 @@ public class NaverUtil {
 
 	public static boolean naverBlogLinkShare(String strBlogId, String strNidAut, String strNidSes, String strUrl,
 			String strTitle, String strCategoryNo, StringBuilder contentSb, JRootPane rootPane) {
-		logger.debug("strBlogId :[" + strBlogId + "]");
-		logger.debug("contentSb :[" + contentSb + "]");
-		logger.debug("strCategoryNo :[" + strCategoryNo + "]");
+		logger.debug("naverBlogLinkShare strBlogId :[" + strBlogId + "]");
+		logger.debug("naverBlogLinkShare strCategoryNo :[" + strCategoryNo + "]");
+		logger.debug("naverBlogLinkShare contentSb :[" + contentSb + "]");
 		if (strNidAut.equals("") || strNidSes.equals("")) {
 			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning",
 					JOptionPane.WARNING_MESSAGE);
@@ -1056,9 +1056,9 @@ public class NaverUtil {
 	// https://nid.naver.com/nidlogin.login?svctype=64&url=https%3A%2F%2Fblog.naver.com%2Fopenapi%2Fshare%3FserviceCode%3Dshare%26url%3Dhttps%3A%2F%2Fcoupa.ng%2FbRA62y%26title%3D%25EC%25BF%25A0%25ED%258C%25A1%25EC%259D%2584%2B%25EC%25B6%2594%25EC%25B2%259C%2B%25ED%2595%25A9%25EB%258B%2588%25EB%258B%25A4%2521%250A%25EC%25BF%25A0%25ED%258C%25A1%2521%2B%257C%2B%25ED%2595%2598%25EB%25A6%25BC%2B%25EC%2597%2590%25EC%2596%25B4%25ED%2594%2584%25EB%259D%25BC%25EC%259D%25B4%25EC%2596%25B4%2B%25EC%2588%259C%25EC%2582%25B4%25EC%25B9%2598%25ED%2582%25A8%2B%2528%25EB%2583%2589%25EB%258F%2599%2529%26token%3D5db34acb53a343e4a00a381c9fa5cda8a6814af75a08afac208fd238220a012f%26timestamp%3D1613300985796%26isMobile%3Dfalse
 	public static boolean naverBlogLinkShareView(String strBlogId, String strNidAut, String strNidSes, String strUrl,
 			String strTitle, String strCategoryNo, StringBuilder contentSb, JRootPane rootPane) {
-		logger.debug("strBlogId :[" + strBlogId + "]");
-		logger.debug("contentSb :[" + contentSb + "]");
-		logger.debug("strCategoryNo :[" + strCategoryNo + "]");
+		logger.debug("naverBlogLinkShareView strBlogId :[" + strBlogId + "]");
+		logger.debug("naverBlogLinkShareView strCategoryNo :[" + strCategoryNo + "]");
+		logger.debug("naverBlogLinkShareView contentSb :[" + contentSb + "]");
 		if (strNidAut.equals("") || strNidSes.equals("")) {
 //			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning", JOptionPane.WARNING_MESSAGE);
 			logger.debug("NID_AUT와 NID_SES를 입력하여 주세요.");
@@ -1208,9 +1208,9 @@ public class NaverUtil {
 	// https://blog.naver.com/openapi/share?serviceCode=share&url=https://coupa.ng/bRA62y&title=%EC%BF%A0%ED%8C%A1%EC%9D%84+%EC%B6%94%EC%B2%9C+%ED%95%A9%EB%8B%88%EB%8B%A4%21%0A%EC%BF%A0%ED%8C%A1%21+%7C+%ED%95%98%EB%A6%BC+%EC%97%90%EC%96%B4%ED%94%84%EB%9D%BC%EC%9D%B4%EC%96%B4+%EC%88%9C%EC%82%B4%EC%B9%98%ED%82%A8+%28%EB%83%89%EB%8F%99%29&token=1ded42475374579f8d9197a195c6813e55fb5fd60e9b75264e99da234856586f&timestamp=1613308403301&isMobile=false
 	public static boolean naverBlogOpenApiShare(String strBlogId, String strNidAut, String strNidSes, String strUrl,
 			String strTitle, String strCategoryNo, StringBuilder contentSb, JRootPane rootPane) {
-		logger.debug("strBlogId :[" + strBlogId + "]");
-		logger.debug("contentSb :[" + contentSb + "]");
-		logger.debug("strCategoryNo :[" + strCategoryNo + "]");
+		logger.debug("naverBlogOpenApiShare strBlogId :[" + strBlogId + "]");
+		logger.debug("naverBlogOpenApiShare strCategoryNo :[" + strCategoryNo + "]");
+		logger.debug("naverBlogOpenApiShare contentSb :[" + contentSb + "]");
 		if (strNidAut.equals("") || strNidSes.equals("")) {
 //			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning", JOptionPane.WARNING_MESSAGE);
 			logger.debug("NID_AUT와 NID_SES를 입력하여 주세요.");
@@ -1380,9 +1380,9 @@ public class NaverUtil {
 	// https://blog.naver.com/openapi/share?serviceCode=share&url=https://coupa.ng/bRA62y&title=%EC%BF%A0%ED%8C%A1%EC%9D%84+%EC%B6%94%EC%B2%9C+%ED%95%A9%EB%8B%88%EB%8B%A4%21%0A%EC%BF%A0%ED%8C%A1%21+%7C+%ED%95%98%EB%A6%BC+%EC%97%90%EC%96%B4%ED%94%84%EB%9D%BC%EC%9D%B4%EC%96%B4+%EC%88%9C%EC%82%B4%EC%B9%98%ED%82%A8+%28%EB%83%89%EB%8F%99%29&token=1ded42475374579f8d9197a195c6813e55fb5fd60e9b75264e99da234856586f&timestamp=1613308403301&isMobile=false
 	public static boolean linkSharePostWriteAsync(String strBlogId, String strNidAut, String strNidSes, String strUrl,
 			String strTitle, String strCategoryNo, StringBuilder contentSb, JRootPane rootPane) {
-		logger.debug("strBlogId :[" + strBlogId + "]");
-		logger.debug("contentSb :[" + contentSb + "]");
-		logger.debug("strCategoryNo :[" + strCategoryNo + "]");
+		logger.debug("linkSharePostWriteAsync strBlogId :[" + strBlogId + "]");
+		logger.debug("linkSharePostWriteAsync strCategoryNo :[" + strCategoryNo + "]");
+		logger.debug("linkSharePostWriteAsync contentSb :[" + contentSb + "]");
 		if (strNidAut.equals("") || strNidSes.equals("")) {
 //			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning", JOptionPane.WARNING_MESSAGE);
 			logger.debug("NID_AUT와 NID_SES를 입력하여 주세요.");
@@ -1512,6 +1512,455 @@ public class NaverUtil {
 			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity,
 					byte[].class);
 			logger.debug("response :" + response);
+			logger.debug("response.getStatusCode():" + response.getStatusCode());
+			HttpHeaders responseHeaders = response.getHeaders();
+			responseHeaders.forEach((key, value) -> {
+				logger.debug(String.format("Response Header [%s] = %s", key, value));
+			});
+
+//			logger.debug("guessEncoding :" + guessEncoding(response.getBody()));
+			logger.debug("body :" + response.getBody());
+
+			String unzipString = NaverUtil.unzipStringFromBytes(response.getBody(), "UTF8");
+
+			logger.debug("unzipString :" + unzipString);
+			logger.debug("finished");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	// https://blog.naver.com/isLogin.nhn
+	public static boolean isLogin(String strBlogId, String strNidAut, String strNidSes, String strUrl, String strTitle,
+			String strCategoryNo, StringBuilder contentSb, JRootPane rootPane) {
+		logger.debug("isLogin strBlogId :[" + strBlogId + "]");
+		logger.debug("isLogin strCategoryNo :[" + strCategoryNo + "]");
+		logger.debug("isLogin contentSb :[" + contentSb + "]");
+		if (strNidAut.equals("") || strNidSes.equals("")) {
+//			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning", JOptionPane.WARNING_MESSAGE);
+			logger.debug("NID_AUT와 NID_SES를 입력하여 주세요.");
+//			return false;
+		}
+
+		try {
+			String strShareViewUrl = "https://blog.naver.com/isLogin.nhn";
+			URL url = new URL(strShareViewUrl);
+			String protocol = url.getProtocol();
+			String host = url.getHost();
+			String protocolHost = protocol + "://" + host;
+			String path = url.getPath();
+			String query = url.getQuery();
+			int port = url.getPort();
+
+			HttpHeaders headers = new HttpHeaders();
+
+			headers.set("athority", "blog.naver.com");
+			headers.set("method", "GET");
+			headers.set("path", "/isLogin.nhn");
+			headers.set("scheme", "https");
+
+			headers.set("Accept", "*/*");
+//			headers.set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+//			headers.set("Accept-Encoding", "gzip, deflate");
+			headers.set("Accept-Encoding", "gzip, deflate, br");
+			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
+			headers.set("charset", "utf-8");
+			headers.set("content-type", "application/x-www-form-urlencoded; charset=utf-8");
+//			headers.set("cookie","NNB=J7WTOJDPSYRGA; NRTK=ag#all_gr#1_ma#-2_si#0_en#0_sp#0; bHideResizeNotice=1; _fbp=fb.1.1614255074399.1149044494; _ga=GA1.2.206197184.1614255075; nx_ssl=2; MM_NEW=1; NFS=2; MM_NOW_COACH=1; bNoAutoAttachOG=false; ASID=af7cbab4000001787415e5270000005e; nid_inf=591293557; NID_AUT=ab78fa4tlkKz/0Ltn6yrB7M3nOzfUj1WPDS/rhoVzTCP8CZo99RE11WmMninjrfJ; NID_JKL=lvUlefBquwQGpnisVk792NHlLeODx2Y7tU9kz39Huxw=; stat_yn=1; NID_SES=AAABjCn98L1L313FsolQLeNeWOCqzB6pBV9NhFLzq5gPgVWWMvmX750Rf07R1FnokiCB5i99HkIpYwN78UnJiAXASIWtizU50QGaU9YuzKozRFfhEVWbh6U/lnD29Ru3s0kJk/HRcponJ/Hi+EtafYLwPVyxsgicS22z9UUNISJqinjUSIsslhLK2F5+7RfKhB267zbE8NZnln1d0JiOdwACMekbBmrEqkPH6/tpMCjlPQXzN/YY5XAGtSzusWKUjXU+kek4J1naLftZDpqfhl7cvxpOw9IdqHFKPpN6sm2g3f8gmI/f9Io2a2NJsbP6RlaPfzzK0akgBtEUL7/KnFPFHCc/OYCIHgDNmivZ8TtkhD0jKyNsdvWFiHWdKn/shNJ0gtpG6U34ohyDknwbDcgDQpOn4gTQijCyAMeBgjR5N0cG/kIuQgDrfgo69MWnwbEziej4KXxP3TLpz2oYYseCBsXvG/eMiKkm3XcyOUIN5OmQWDuLOLNSXxBi7b8tvi312Gy+W/dmKFbo1+PlaI20g3U=; JSESSIONID=668C1102E76375E2390EF1E6E89E476F.jvm1");
+			headers.set("referer", "https://blog.naver.com/" + strBlogId + "/postwrite?categoryNo=" + strCategoryNo);
+			headers.set("sec-ch-ua", "\"Google Chrome\";v=\"89\", \"Chromium\";v=\"89\", \";Not A Brand\";v=\"99\"");
+			headers.set("sec-ch-ua-mobile", "?0");
+			headers.set("sec-fetch-dest", "empty");
+			headers.set("sec-fetch-mode", "cors");
+			headers.set("sec-fetch-site", "same-origin");
+			headers.set("User-Agent",
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36");
+			headers.set("x-requested-with", "XMLHttpRequest");
+
+			StringBuilder cookieSb = new StringBuilder();
+			cookieSb.append("NID_AUT=");
+			cookieSb.append(strNidAut + ";");
+			cookieSb.append("NID_SES=");
+			cookieSb.append(strNidSes + ";");
+
+			headers.set("Cookie", cookieSb.toString());
+
+//			headers.set("Host", host);
+//			headers.set("Origin", protocolHost);
+
+			String strEncodedTitle = URLEncoder.encode(strTitle, "UTF8");
+			logger.debug("strEncodedTitle==>" + strEncodedTitle);
+
+//			headers.set("X-Requested-With", "XMLHttpRequest");
+			headers.forEach((key, value) -> {
+				logger.debug(String.format("Header '%s' = %s", key, value));
+			});
+
+			RestTemplate restTemplate = new RestTemplate();
+
+//			List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+			List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________1_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________1_____________");
+			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
+
+			// Form Data
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			// header에 있으면 Form Data에 없어도 된다.
+			// map.add("referrer",
+//			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(SERVER_URI);
+			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme("https").host(host);
+			builder = builder.path(path);
+
+			UriComponents uriComponents = builder.build();
+			URI uri = uriComponents.toUri();
+			logger.debug("uri:" + uri);
+			logger.debug("uri path:" + uri.getPath());
+
+			logger.debug("uriComponents :" + uriComponents);
+			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map,
+					headers);
+//			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.POST, entity, byte[].class);
+			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity,
+					byte[].class);
+			logger.debug("response :" + response);
+			logger.debug("response.getStatusCode():" + response.getStatusCode());
+			HttpHeaders responseHeaders = response.getHeaders();
+			responseHeaders.forEach((key, value) -> {
+				logger.debug(String.format("Response Header [%s] = %s", key, value));
+			});
+
+//			logger.debug("guessEncoding :" + guessEncoding(response.getBody()));
+			logger.debug("body :" + response.getBody());
+
+			String unzipString = NaverUtil.unzipStringFromBytes(response.getBody(), "UTF8");
+
+			logger.debug("unzipString :" + unzipString);
+			logger.debug("finished");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	// https://static.nid.naver.com/getLoginStatus.nhn?callback=showGNB&charset=utf-8&svc=admin.blog&template=gnb_utf8&one_naver=0
+	public static boolean getLoginStatus(String strBlogId, String strNidAut, String strNidSes, String strUrl,
+			String strTitle, String strCategoryNo, StringBuilder contentSb, JRootPane rootPane) {
+		logger.debug("getLoginStatus strBlogId :[" + strBlogId + "]");
+		logger.debug("getLoginStatus strCategoryNo :[" + strCategoryNo + "]");
+		logger.debug("getLoginStatus contentSb :[" + contentSb + "]");
+		if (strNidAut.equals("") || strNidSes.equals("")) {
+//			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning", JOptionPane.WARNING_MESSAGE);
+			logger.debug("NID_AUT와 NID_SES를 입력하여 주세요.");
+//			return false;
+		}
+
+		try {
+			String strShareViewUrl = "https://static.nid.naver.com/getLoginStatus.nhn";
+			URL url = new URL(strShareViewUrl);
+			String protocol = url.getProtocol();
+			String host = url.getHost();
+			String protocolHost = protocol + "://" + host;
+			String path = url.getPath();
+			String query = url.getQuery();
+			int port = url.getPort();
+
+			HttpHeaders headers = new HttpHeaders();
+
+			headers.set("athority", "");
+			headers.set("method", "");
+			headers.set("path", "");
+			headers.set("scheme", "");
+
+			headers.set("Accept", "*/*");
+//			headers.set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+//			headers.set("Accept-Encoding", "gzip, deflate");
+			headers.set("Accept-Encoding", "gzip, deflate, br");
+			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
+			headers.set("Connection", "keep-alive");
+
+			StringBuilder cookieSb = new StringBuilder();
+			cookieSb.append("NID_AUT=");
+			cookieSb.append(strNidAut + ";");
+			cookieSb.append("NID_SES=");
+			cookieSb.append(strNidSes + ";");
+
+			headers.set("Cookie", cookieSb.toString());
+
+			headers.set("Host", "static.nid.naver.com");
+//			headers.set("Origin", protocolHost);
+
+			String strEncodedTitle = URLEncoder.encode(strTitle, "UTF8");
+			logger.debug("strEncodedTitle==>" + strEncodedTitle);
+
+			headers.set("Referer", "https://blog.naver.com/" + strBlogId + "/postwrite?categoryNo=" + strCategoryNo);
+			headers.set("sec-ch-ua", "\"Chromium\";v=\"88\", \"Google Chrome\";v=\"88\", \";Not A Brand\";v=\"99\"");
+			headers.set("sec-ch-ua-mobile", "?0");
+			headers.set("sec-fetch-dest", "script");
+			headers.set("sec-fetch-mode", "no-cors");
+			headers.set("sec-fetch-site", "same-site");
+			headers.set("sec-fetch-user", "?1");
+			headers.set("Upgrade-Insecure-Requests", "1");
+			headers.set("User-Agent",
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36");
+
+//			headers.set("X-Requested-With", "XMLHttpRequest");
+			headers.forEach((key, value) -> {
+				logger.debug(String.format("Header '%s' = %s", key, value));
+			});
+
+			RestTemplate restTemplate = new RestTemplate();
+
+//			List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+			List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________1_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________1_____________");
+			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
+
+			// Form Data
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			// header에 있으면 Form Data에 없어도 된다.
+			// map.add("referrer",
+//			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(SERVER_URI);
+			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme("http").host(host);
+			builder = builder.path(path);
+
+			builder = builder.queryParam("allback", "showGNB");
+			builder = builder.queryParam("charset", "utf-8");
+			builder = builder.queryParam("svc", "admin.blog");
+			builder = builder.queryParam("template", "gnb_utf8");
+			builder = builder.queryParam("one_naver", "0");
+
+			UriComponents uriComponents = builder.build();
+			URI uri = uriComponents.toUri();
+			logger.debug("uri:" + uri);
+			logger.debug("uri path:" + uri.getPath());
+
+			logger.debug("uriComponents :" + uriComponents);
+			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map,
+					headers);
+//			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.POST, entity, byte[].class);
+			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity,
+					byte[].class);
+			logger.debug("response :" + response);
+
+			logger.debug("response.getStatusCode():" + response.getStatusCode());
+			HttpHeaders responseHeaders = response.getHeaders();
+			responseHeaders.forEach((key, value) -> {
+				logger.debug(String.format("Response Header [%s] = %s", key, value));
+			});
+
+//			logger.debug("guessEncoding :" + guessEncoding(response.getBody()));
+			logger.debug("body :" + response.getBody());
+
+			String unzipString = NaverUtil.unzipStringFromBytes(response.getBody(), "UTF8");
+
+			logger.debug("unzipString :" + unzipString);
+			logger.debug("finished");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	// https://static.nid.naver.com/getLoginStatus.nhn?callback=showGNB&charset=utf-8&svc=admin.blog&template=gnb_utf8&one_naver=0
+	public static boolean postUpdate(String strBlogId, String strNidAut, String strNidSes, String strUrl,
+			String strTitle, String strCategoryNo, StringBuilder contentSb, JRootPane rootPane) {
+		logger.debug("getLoginStatus strBlogId :[" + strBlogId + "]");
+		logger.debug("getLoginStatus strCategoryNo :[" + strCategoryNo + "]");
+		logger.debug("getLoginStatus contentSb :[" + contentSb + "]");
+		if (strNidAut.equals("") || strNidSes.equals("")) {
+//			JOptionPane.showMessageDialog(rootPane, "NID_AUT와 NID_SES를 입력하여 주세요.", "Warning", JOptionPane.WARNING_MESSAGE);
+			logger.debug("NID_AUT와 NID_SES를 입력하여 주세요.");
+//			return false;
+		}
+
+		try {
+			String strShareViewUrl = "https://blog.naver.com/PostUpdate.nhn";
+			URL url = new URL(strShareViewUrl);
+			String protocol = url.getProtocol();
+			String host = url.getHost();
+			String protocolHost = protocol + "://" + host;
+			String path = url.getPath();
+			String query = url.getQuery();
+			int port = url.getPort();
+
+			HttpHeaders headers = new HttpHeaders();
+			
+			headers.set("athority", "blog.naver.com");
+			headers.set("method", "POST");
+			headers.set("path", "/PostUpdate.nhn");
+			headers.set("scheme", "https");
+
+			headers.set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+			headers.set("Accept-Encoding", "gzip, deflate, br");
+			headers.set("Accept-Language", "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7");
+			
+			headers.set("Connection", "keep-alive");
+			headers.set("cache-control","max-age=0");
+//			headers.set("content-length","");
+			headers.set("content-type","application/x-www-form-urlencoded");
+			
+			StringBuilder cookieSb = new StringBuilder();
+			cookieSb.append("NID_AUT=");
+			cookieSb.append(strNidAut + ";");
+			cookieSb.append("NID_SES=");
+			cookieSb.append(strNidSes + ";");
+
+			headers.set("Cookie", cookieSb.toString());
+
+//			headers.set("Host", "static.nid.naver.com");
+			headers.set("Origin", protocolHost);
+
+			String strEncodedTitle = URLEncoder.encode(strTitle, "UTF8");
+			logger.debug("strEncodedTitle==>" + strEncodedTitle);
+
+			headers.set("Referer",protocolHost+"/PostUpdateForm.nhn?blogId="+strBlogId+"&Redirect=Update&cpage=1&sourceCode=0&logNo=222293009975&redirect=Update&widgetTypeCall=true&topReferer=https%3A%2F%2Fblog.naver.com%2FPostList.nhn%3FblogId%3D"+strBlogId+"%26from%3DpostList%26categoryNo%3D"+strCategoryNo+"&directAccess=false");
+				
+			headers.set("sec-ch-ua", "\"Chromium\";v=\"88\", \"Google Chrome\";v=\"88\", \";Not A Brand\";v=\"99\"");
+			headers.set("sec-ch-ua-mobile", "?0");
+//			headers.set("sec-fetch-dest", "script");
+			headers.set("sec-fetch-dest", "iframe");
+//			headers.set("sec-fetch-mode", "no-cors");
+			headers.set("sec-fetch-mode", "navigate");
+//			headers.set("sec-fetch-site", "same-site");
+			headers.set("sec-fetch-site", "same-origin");
+			headers.set("sec-fetch-user", "?1");
+			headers.set("Upgrade-Insecure-Requests", "1");
+			headers.set("User-Agent",
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36");
+
+//			headers.set("X-Requested-With", "XMLHttpRequest");
+			headers.forEach((key, value) -> {
+				logger.debug(String.format("Header '%s' = %s", key, value));
+			});
+
+			RestTemplate restTemplate = new RestTemplate();
+
+//			List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+			List<HttpMessageConverter<?>> messageConverters = restTemplate.getMessageConverters();
+			logger.debug("__________1_____________");
+			for (HttpMessageConverter httpMessageConverter : messageConverters) {
+				logger.debug(httpMessageConverter.toString());
+			}
+			logger.debug("__________1_____________");
+			messageConverters.add(new org.springframework.http.converter.FormHttpMessageConverter());
+
+			// Form Data
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			// header에 있으면 Form Data에 없어도 된다.
+			// map.add("referrer",
+//			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(SERVER_URI);
+			UriComponentsBuilder builder = UriComponentsBuilder.newInstance().scheme("http").host(host);
+			builder = builder.path(path);
+			
+			builder = builder.queryParam("captchaKey", "");
+			builder = builder.queryParam("captchaValue", "");
+			builder = builder.queryParam("appId", "");
+			builder = builder.queryParam("tempLogNo", "");
+			builder = builder.queryParam("blogId", strBlogId);
+			builder = builder.queryParam("post.logNo", "222293009975");
+			builder = builder.queryParam("post.sourceCode", "0");
+			builder = builder.queryParam("post.contents.contentsValue", contentSb.toString());
+			builder = builder.queryParam("post.prePostRegistDirectly", "false");
+			builder = builder.queryParam("post.lastRelayTime", "");
+			builder = builder.queryParam("smartEditorVersion", "2");
+			builder = builder.queryParam("post.book.ratingScore", "0");
+			builder = builder.queryParam("post.music.ratingScore", "0");
+			builder = builder.queryParam("post.movie.ratingScore", "0");
+			builder = builder.queryParam("post.scrapedYn", "false");
+			builder = builder.queryParam("post.clientType", "");
+			builder = builder.queryParam("post.contents.summaryYn", "false");
+			builder = builder.queryParam("post.contents.summaryToggleText", "");
+			builder = builder.queryParam("post.contents.summaryTogglePosition", "");
+			builder = builder.queryParam("post.templatePhoto.width", "0");
+			builder = builder.queryParam("post.templatePhoto.height", "0");
+			builder = builder.queryParam("post.addedInfoSet.addedInfoStruct", "");
+			builder = builder.queryParam("post.mapAttachmentSet.mapAttachStruct", "");
+			builder = builder.queryParam("post.calendarAttachmentSet.calendarAttachmentStruct", "");
+			builder = builder.queryParam("post.musicPlayerAttachmentSet.musicPlayerAttachmentStruct", "");
+			builder = builder.queryParam("post.postOptions.openType", "2");
+			builder = builder.queryParam("post.postOptions.commentYn", "true");
+			builder = builder.queryParam("post.postOptions.isRelayOpen", "");
+			builder = builder.queryParam("post.postOptions.sympathyYn", "true");
+			builder = builder.queryParam("post.postOptions.outSideAllowYn", "true");
+			builder = builder.queryParam("post.me2dayPostingYn", "");
+			builder = builder.queryParam("post.facebookPostingYn", "false");
+			builder = builder.queryParam("post.twitterPostingYn", "false");
+			builder = builder.queryParam("post.postOptions.searchYn", "true");
+			builder = builder.queryParam("post.postOptions.rssOpenYn", "true");
+			builder = builder.queryParam("post.postOptions.scrapType", "2");
+			builder = builder.queryParam("post.postOptions.ccl.commercialUsesYn", "false");
+			builder = builder.queryParam("post.postOptions.ccl.contentsModification", "0");
+			builder = builder.queryParam("post.postOptions.noticePostYn", "false");
+			builder = builder.queryParam("directorySeq", "0");
+			builder = builder.queryParam("directoryDetail", "");
+			builder = builder.queryParam("post.bookTheme.infoPk", "");
+			builder = builder.queryParam("post.movieTheme.infoPk", "");
+			builder = builder.queryParam("post.musicTheme.infoPk", "");
+			builder = builder.queryParam("post.kitchenTheme.recipeName", "");
+			builder = builder.queryParam("post.postOptions.directoryOptions.directoryChangeYn", "false");
+			builder = builder.queryParam("post.postOptions.directoryOptions.tagAutoChangedYn", "false");
+			builder = builder.queryParam("post.postOptions.isAutoTaggingEnabled", "false");
+			builder = builder.queryParam("post.postOptions.greenReviewBannerYn", "false");
+			builder = builder.queryParam("previewGreenReviewBannerAsInteger", "0");
+			builder = builder.queryParam("post.leverageOptions.themeSourceCode", "");
+			builder = builder.queryParam("post.music.subType", "");
+			builder = builder.queryParam("post.postOptions.isContinueSaved", "false");
+			builder = builder.queryParam("post.mrBlogTalk.talkCode", "");
+			builder = builder.queryParam("happyBeanGiveDayReqparam", "");
+			builder = builder.queryParam("post.postOptions.isExifEnabled", "false");
+			builder = builder.queryParam("editorSource", "0F7mfBFoFPpXb0MOz2JxMQ==");
+			builder = builder.queryParam("post.category.categoryNo", "271");
+			builder = builder.queryParam("post.title", "WOW 와우회원 전용 매일 오전 7시 골드박스 1일특가");
+			builder = builder.queryParam("ir1", contentSb.toString());
+			builder = builder.queryParam("query", "지역명을 입력해 주세요");
+			builder = builder.queryParam("char_preview", "®º⊆●○");
+			builder = builder.queryParam("se2_tbp", "on");
+			builder = builder.queryParam("se2_tbp3", "on");
+			builder = builder.queryParam("post.directorySeq", "0");
+			builder = builder.queryParam("post.tag.names", "#에그팬");
+			builder = builder.queryParam("openType", "2");
+			builder = builder.queryParam("post.postWriteTimeType", "now");
+			builder = builder.queryParam("prePostDay", "2021년 3월 31일");
+			builder = builder.queryParam("prePostDateType.hour", "00");
+			builder = builder.queryParam("prePostDateType.minute", "00");
+			builder = builder.queryParam("prePostDateType.year", "2021");
+			builder = builder.queryParam("prePostDateType.month", "3");
+			builder = builder.queryParam("prePostDateType.date", "31");
+			builder = builder.queryParam("commercialUses", "false");
+			builder = builder.queryParam("contentsModification", "0");
+			builder = builder.queryParam("writingMaterialInfos", "[]");
+
+			UriComponents uriComponents = builder.build();
+			URI uri = uriComponents.toUri();
+			logger.debug("uri:" + uri);
+			logger.debug("uri path:" + uri.getPath());
+
+			logger.debug("uriComponents :" + uriComponents);
+			HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(map,
+					headers);
+//			ResponseEntity<byte[]> response = restTemplate.exchange(uri, HttpMethod.POST, entity, byte[].class);
+			ResponseEntity<byte[]> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity,
+					byte[].class);
+			logger.debug("response :" + response);
+
 			logger.debug("response.getStatusCode():" + response.getStatusCode());
 			HttpHeaders responseHeaders = response.getHeaders();
 			responseHeaders.forEach((key, value) -> {

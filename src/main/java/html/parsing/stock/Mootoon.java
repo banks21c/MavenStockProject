@@ -19,7 +19,8 @@ import org.slf4j.LoggerFactory;
 
 public class Mootoon {
 
-    final static String userHome = System.getProperty("user.home");
+    
+	public final static String USER_HOME = System.getProperty("user.home");
     private static Logger logger = LoggerFactory.getLogger(Mootoon.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -75,7 +76,7 @@ public class Mootoon {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
             String strDate = sdf.format(new Date());
 
-            FileWriter fw = new FileWriter(userHome + "\\documents\\" + strDate + "_" + title + ".html");
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strDate + "_" + title + ".html");
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
             //sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");

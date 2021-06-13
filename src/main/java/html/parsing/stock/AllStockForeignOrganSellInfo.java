@@ -1,14 +1,9 @@
 package html.parsing.stock;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.model.StockVO;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,13 +20,16 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.ForeignStraitSellCountDescCompare;
 import html.parsing.stock.util.DataSort.OrganStraitSellCountDescCompare;
+import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.StockUtil;
 
 public class AllStockForeignOrganSellInfo {
 
-	final static String userHome = System.getProperty("user.home");
+	
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static final Logger logger = LoggerFactory.getLogger(AllStockForeignOrganSellInfo.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -434,9 +432,9 @@ public class AllStockForeignOrganSellInfo {
 	}
 
 	public void writeFile(List<StockVO> list, String fileName, String title, boolean isForeign) {
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
-			FileWriter fw = new FileWriter(userHome + "\\documents\\" + strYMD + "_" + title + ".html");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strYMD + "_" + title + ".html");
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");

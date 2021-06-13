@@ -32,7 +32,7 @@ public class OnlyURLDecodeTest{
 	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREAN);
 	static String strDefaultDate = sdf.format(new Date());
 
-	static final String userHome = System.getProperty("user.home");
+	static final String USER_HOME = System.getProperty("user.home");
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
 	static String strYMD = "";
@@ -76,7 +76,7 @@ public class OnlyURLDecodeTest{
 			JsoupChangeLinkHrefElementsAttribute.changeLinkHrefElementsAttribute(doc, protocol, host, path);
 			JsoupChangeScriptSrcElementsAttribute.changeScriptSrcElementsAttribute(doc, protocol, host, path);
 
-			String fileName = userHome + "\\documents\\"+this.getClass().getSimpleName()+"." + strDate + ".html";
+			String fileName = USER_HOME + "\\documents\\"+this.getClass().getSimpleName()+"." + strDate + ".html";
 			FileUtil.fileWrite(fileName, doc.html().replace("https://blog.naver.com", "https://nid.naver.com"));
 			System.out.println("file write finished");
 

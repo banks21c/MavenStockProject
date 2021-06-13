@@ -15,7 +15,7 @@ import html.parsing.stock.util.ImageUtil;
 
 public class WwwRichousesComArticle {
 
-	final static String userHome = System.getProperty("user.home");
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(WwwRichousesComArticle.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -52,28 +52,27 @@ public class WwwRichousesComArticle {
 
 			String header = doc.select(".entry-header h1").outerHtml();
 			sb1.append(header);
-			
-			
+
 			Element contentEl = doc.selectFirst(".entry-content");
 			contentEl.select(".ad2").parents().remove();
 			contentEl.select("div").removeAttr("style");
-			
+
 			Elements imgEls = contentEl.select("img");
-			for(Element imgEl:imgEls) {
+			for (Element imgEl : imgEls) {
 				imgEl.removeAttr("width");
 				imgEl.removeAttr("height");
 				String src = imgEl.attr("src");
 				String style = ImageUtil.getImageStyle(src);
-				imgEl.attr("style",style);
+				imgEl.attr("style", style);
 			}
-			
+
 			String content = contentEl.html();
 			sb1.append(content);
 
 			System.out.println(sb1.toString());
 
 			FileWriter fw = new FileWriter(
-					userHome + "\\documents\\" + this.getClass().getSimpleName() + " " + strDate + ".html");
+					USER_HOME + "\\documents\\" + this.getClass().getSimpleName() + " " + strDate + ".html");
 			fw.write(Jsoup.parse(sb1.toString()).html());
 			fw.close();
 

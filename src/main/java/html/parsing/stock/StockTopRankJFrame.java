@@ -1,14 +1,9 @@
 package html.parsing.stock;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.model.StockVO;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,15 +22,18 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.TradingAmountDescCompare;
 import html.parsing.stock.util.DataSort.TradingVolumeDescCompare;
 import html.parsing.stock.util.DataSort.VaryRatioAscCompare;
 import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
+import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.StockUtil;
 
 public class StockTopRankJFrame extends JFrame {
 
-	final static String userHome = System.getProperty("user.home");
+	
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(StockTopRankJFrame.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -269,12 +267,12 @@ public class StockTopRankJFrame extends JFrame {
 	}
 
 	public void writeFile(List<StockVO> list, String fileName, String title, String gubun) {
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 			String strDate = sdf.format(new Date());
 
-			FileWriter fw = new FileWriter(userHome + "\\documents\\" + strDate + "_" + title + ".html");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strDate + "_" + title + ".html");
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");

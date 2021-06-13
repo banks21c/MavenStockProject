@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class WwwMediatodayCoKr extends News {
+public class WwwMediatodayCoKr extends News implements NewsInterface {
 
 	private static Logger logger = LoggerFactory.getLogger(WwwMediatodayCoKr.class);
 
@@ -61,11 +61,11 @@ public class WwwMediatodayCoKr extends News {
 		}
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 //        if (url.contains("?")) {
 //            url = url.substring(0, url.indexOf("?"));
 //        }
@@ -83,7 +83,7 @@ public class WwwMediatodayCoKr extends News {
 			// doc = Jsoup.connect(url).get();
 			System.out.println("doc:[" + doc + "]");
 
-			String fileName2 = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
+			String fileName2 = USER_HOME + File.separator + "documents" + File.separator + strYMD + ".html";
 			System.out.println("fileName2:" + fileName2);
 			Writer bw = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
@@ -140,9 +140,7 @@ public class WwwMediatodayCoKr extends News {
 			System.out.println("articleHtml:" + articleHtml);
 			String strContent = articleHtml.replaceAll("640px", "741px");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
 
 			String strCopyright = doc.select(".arl_view_copywriter").outerHtml();
 			System.out.println("strCopyright:" + strCopyright);
@@ -167,16 +165,16 @@ public class WwwMediatodayCoKr extends News {
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 

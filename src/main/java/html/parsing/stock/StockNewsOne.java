@@ -28,12 +28,13 @@ import org.slf4j.LoggerFactory;
 import html.parsing.stock.model.StockNewsVO;
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.news.News;
+import html.parsing.stock.news.NewsInterface;
 import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.StockUtil;
 
-public class StockNewsOne extends News {
+public class StockNewsOne extends News implements NewsInterface {
 
-	final static String userHome = System.getProperty("user.home");
+	
 	private static Logger logger = LoggerFactory.getLogger(StockNewsOne.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -129,7 +130,7 @@ public class StockNewsOne extends News {
 	}
 
 	public void simpleReadFile(List<StockVO> stockList, String kospidaq, String fileName) {
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
@@ -169,7 +170,7 @@ public class StockNewsOne extends News {
 	}
 
 	public void readFile(String kospidaq, String fileName) {
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
@@ -415,7 +416,7 @@ public class StockNewsOne extends News {
 	}
 
 	public void writeFile(List<StockVO> list, String fileName, String title) {
-		// File f = new File(userHome + "\\documents\\" + fileName);
+		// File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN);
@@ -424,7 +425,7 @@ public class StockNewsOne extends News {
 				strDate2 = sdf2.format(new Date());
 			}
 
-			FileWriter fw = new FileWriter(userHome + "\\documents\\[" + strDate2 + "]_" + title + ".html");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\[" + strDate2 + "]_" + title + ".html");
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
@@ -460,7 +461,7 @@ public class StockNewsOne extends News {
 	}
 
 	public void writeFile(StockVO stock, String fileName, String title) {
-		// File f = new File(userHome + "\\documents\\" + fileName);
+		// File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN);
@@ -469,7 +470,7 @@ public class StockNewsOne extends News {
 				strDate2 = sdf2.format(new Date());
 			}
 
-			FileWriter fw = new FileWriter(userHome + "\\documents\\[" + strDate2 + "]_" + title + ".html");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\[" + strDate2 + "]_" + title + ".html");
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");

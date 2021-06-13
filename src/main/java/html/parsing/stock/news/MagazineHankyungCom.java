@@ -22,7 +22,7 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class MagazineHankyungCom extends News {
+public class MagazineHankyungCom extends News implements NewsInterface {
 
 	private static Logger logger = LoggerFactory.getLogger(MagazineHankyungCom.class);
 
@@ -58,11 +58,11 @@ public class MagazineHankyungCom extends News {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 		System.out.println("url:" + url);
 		System.out.println("createHTMLFile protocol:" + protocol);
@@ -190,16 +190,16 @@ public class MagazineHankyungCom extends News {
 			sb1.append("</html>\r\n");
 			System.out.println("sb.toString:[" + sb1.toString() + "]");
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 				+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 				+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 

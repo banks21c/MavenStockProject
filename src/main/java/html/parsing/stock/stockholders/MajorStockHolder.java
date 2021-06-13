@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,7 +22,6 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.focus.StockPlusMinusDivide100;
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.RetainAmountDescCompare;
 import html.parsing.stock.util.DataSort.RetainRatioDescCompare;

@@ -5,10 +5,11 @@
  */
 package html.parsing.stock.quartz2x.example2;
 
+import java.util.Date;
+
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import java.util.Date;
 import org.quartz.JobKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,11 +1,12 @@
 package html.parsing.stock.javafx;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.quartz.CronTrigger;
 import org.quartz.JobDataMap;
@@ -119,11 +120,12 @@ public class Step2_StockMarketPriceScheduler {
 
 				// Job #0 is scheduled to run every 1 hour
 				// 1시간마다
+				// 9시00분-17시 사이에 10분에 실행 --> cron = "0 10 9-19 * * *"
 				trigger = newTrigger().withIdentity("stockMarketPriceTrigger0", "stockMarketPriceGroup0")
-						.withSchedule(cronSchedule("0 0 0/1 ? * *")).build();
+						.withSchedule(cronSchedule("0 10 9-19 ? * *")).build();
 				sched.scheduleJob(job, trigger);
 
-				// Job #1 is scheduled to run every day at 15:40pm
+				// Job #1 is scheduled to run every day at 15:40pm(장마감후)
 				job = newJob(Step3_StockMarketPriceJobThread.class)
 						.withIdentity("stockMarketPriceJob1", "stockMarketPriceGroup1").build();
 				map = job.getJobDataMap();

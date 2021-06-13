@@ -1,14 +1,8 @@
 package html.parsing.stock;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.model.StockVO;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,15 +18,17 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.TradingAmountDescCompare;
 import html.parsing.stock.util.DataSort.TradingVolumeDescCompare;
 import html.parsing.stock.util.DataSort.VaryRatioAscCompare;
 import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
+import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.StockUtil;
 
 public class AllStockSort extends Thread {
 
-	final static String userHome = System.getProperty("user.home");
+	public final static String USER_HOME = System.getProperty("user.home");
 	static java.util.logging.Logger logger1 = java.util.logging.Logger.getLogger("AllStockForeignOrganBothStraight");
 	private static final Logger logger2 = LoggerFactory.getLogger(AllStockSort.class);
 
@@ -228,7 +224,7 @@ public class AllStockSort extends Thread {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -238,7 +234,7 @@ public class AllStockSort extends Thread {
 					varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
@@ -286,7 +282,7 @@ public class AllStockSort extends Thread {
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -307,7 +303,7 @@ public class AllStockSort extends Thread {
 			} else if (specialLetter.equals("▼")) {
 				downCount++;
 			} else {
-					steadyCount++;
+				steadyCount++;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -319,11 +315,12 @@ public class AllStockSort extends Thread {
 
 	public void writeFile(List<StockVO> list, String fileName, String title, String gubun) {
 		try {
-			FileWriter fw = new FileWriter(userHome + "\\documents\\" + strYMD + "_" + title + ".html");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strYMD + "_" + title + ".html");
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("<style>\r\n");
 			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 			sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
@@ -334,8 +331,8 @@ public class AllStockSort extends Thread {
 			sb1.append(strYMD + " " + title + "\r\n");
 			sb1.append("</h2>\r\n");
 			sb1.append("<h4><font color='red'>상한가:" + topCount + "</font><font color='red'> 상승:" + upCount
-				+ "</font><font color='blue'> 하한가:" + bottomCount + "</font><font color='blue'> 하락:" + downCount
-				+ "</font><font color='gray'> 보합:" + steadyCount + "</font></h4>");
+					+ "</font><font color='blue'> 하한가:" + bottomCount + "</font><font color='blue'> 하락:" + downCount
+					+ "</font><font color='gray'> 보합:" + steadyCount + "</font></h4>");
 			sb1.append("<table>\r\n");
 			sb1.append("<tr>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
@@ -362,7 +359,8 @@ public class AllStockSort extends Thread {
 
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락율</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래량</td>\r\n");
-			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
+			sb1.append(
+					"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
 
 			sb1.append("</tr>\r\n");
 
@@ -381,20 +379,20 @@ public class AllStockSort extends Thread {
 					System.out.println("varyPrice+++>" + varyPrice);
 
 					if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
-						|| specialLetter.startsWith("+")) {
+							|| specialLetter.startsWith("+")) {
 						sb1.append("<td style='text-align:right;color:red'>"
-							+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
+								+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
 						sb1.append("<td style='text-align:right'><font color='red'>" + specialLetter + " " + varyPrice
-							+ "</font></td>\r\n");
+								+ "</font></td>\r\n");
 					} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
-						|| specialLetter.startsWith("-")) {
+							|| specialLetter.startsWith("-")) {
 						sb1.append("<td style='text-align:right;color:blue'>"
-							+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
+								+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
 						sb1.append("<td style='text-align:right'><font color='blue'>" + specialLetter + " " + varyPrice
-							+ "</font></td>\r\n");
+								+ "</font></td>\r\n");
 					} else {
 						sb1.append("<td style='text-align:right;color:metal'>"
-							+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
+								+ StringUtils.defaultIfEmpty(s.getCurPrice(), "") + "</td>\r\n");
 						sb1.append("<td style='text-align:right'>0</td>\r\n");
 					}
 
@@ -448,12 +446,12 @@ public class AllStockSort extends Thread {
 						sb1.append("<td style='text-align:right'><font color='blue'>" + varyRatio + "</font></td>\r\n");
 					} else {
 						sb1.append(
-							"<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
+								"<td style='text-align:right'><font color='black'>" + varyRatio + "</font></td>\r\n");
 					}
 					sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingVolume(), "")
-						+ "</td>\r\n");
+							+ "</td>\r\n");
 					sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(s.getTradingAmount(), "")
-						+ "</td>\r\n");
+							+ "</td>\r\n");
 
 					sb1.append("</tr>\r\n");
 				}

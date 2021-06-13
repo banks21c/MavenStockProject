@@ -25,14 +25,15 @@ import org.slf4j.LoggerFactory;
 import html.parsing.stock.model.StockNewsVO;
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.news.News;
+import html.parsing.stock.news.NewsInterface;
 import html.parsing.stock.util.DataSort.StockNameLengthDescCompare;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.StockUtil;
 
-public class StockThemeNoInput extends News {
+public class StockThemeNoInput extends News implements NewsInterface {
 
-    final static String userHome = System.getProperty("user.home");
+    
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(StockThemeNoInput.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -125,7 +126,7 @@ public class StockThemeNoInput extends News {
     }
 
     public void readFile(String kospidaq, String fileName) {
-        File f = new File(userHome + "\\documents\\" + fileName);
+        File f = new File(USER_HOME + "\\documents\\" + fileName);
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f),"UTF8"));
 
@@ -361,7 +362,7 @@ public class StockThemeNoInput extends News {
 
             System.out.println(sb1.toString());
 
-            String fileName = userHome + "\\documents\\" + strDate + "_테마[" + strThemeName + "]_관련_뉴스.html";
+            String fileName = USER_HOME + "\\documents\\" + strDate + "_테마[" + strThemeName + "]_관련_뉴스.html";
             FileUtil.fileWrite(fileName, sb1.toString());
         } catch (FileNotFoundException e) {
             e.printStackTrace();

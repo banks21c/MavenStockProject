@@ -18,16 +18,17 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.util.DataSort.DividendRateDescCompare;
 import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.news.News;
+import html.parsing.stock.news.NewsInterface;
+import html.parsing.stock.util.DataSort.DividendRateDescCompare;
 import html.parsing.stock.util.FileUtil;
 
-public class Dowjones_KrInvestingCom extends News {
+public class Dowjones_KrInvestingCom extends News implements NewsInterface {
 
 //public static final String SERVER_URI = "https://www.nyse.com/listings_directory/stock";
 //	public static final String SERVER_URI = "https://www.nyse.com/api/quotes/filter";
@@ -35,7 +36,7 @@ public class Dowjones_KrInvestingCom extends News {
 	String dowJones = "https://kr.investing.com/equities/StocksFilter?noconstruct=1&smlID=595&sid=&tabletype=price&index_id=169";
 
 	private static final Logger logger = LoggerFactory.getLogger(Dowjones_KrInvestingCom.class);
-	final static String userHome = System.getProperty("user.home");
+	
 	static String strCurrentDate = new SimpleDateFormat("yyyy.MM.dd_E_HH.mm.ss.SSS", Locale.KOREAN).format(new Date());
 	String fileName = "";
 
@@ -194,7 +195,7 @@ public class Dowjones_KrInvestingCom extends News {
 //			String tableHtml = tableElmt.outerHtml();
 //			logger.debug(tableHtml);
 		doc = Jsoup.parse(sb.toString());
-		fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_" + gubun
+		fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_" + gubun
 				+ "_List_.html";
 		logger.debug("fileName :" + fileName);
 		FileUtil.fileWrite(fileName, doc.html());

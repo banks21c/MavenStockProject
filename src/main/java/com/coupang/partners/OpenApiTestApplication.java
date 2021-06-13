@@ -3,15 +3,10 @@
  */
 package com.coupang.partners;
 
+import java.io.IOException;
+
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.impl.client.HttpClientBuilder;
-
-import java.io.IOException;
 
 public final class OpenApiTestApplication {
     private final static String REQUEST_METHOD = "POST";

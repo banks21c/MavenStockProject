@@ -22,7 +22,7 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class NewsStyleM extends News {
+public class NewsStyleM extends News implements NewsInterface {
 
 	private static Logger logger = LoggerFactory.getLogger(NewsStyleM.class);
 
@@ -56,11 +56,11 @@ public class NewsStyleM extends News {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 
 		System.out.println("url:" + url);
@@ -104,9 +104,7 @@ public class NewsStyleM extends News {
 			textBodyDoc.select(".lmbox1").attr("style", "font-size:10pt;color:gray;");
 			String strContent = textBodyDoc.html();
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
 
 			String copyright = content.select(".copyright").outerHtml();
 
@@ -132,16 +130,16 @@ public class NewsStyleM extends News {
 			sb1.append("</html>\r\n");
 			// System.out.println(sb1.toString());
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 

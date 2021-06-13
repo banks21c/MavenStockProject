@@ -47,8 +47,9 @@ import html.parsing.stock.util.StockUtil;
  */
 public class NewsReadAndMakeLinkFortune500ComV2 extends javax.swing.JFrame {
 
+	public final static String USER_HOME = System.getProperty("user.home");
     private static org.slf4j.Logger logger = LoggerFactory.getLogger(NewsReadAndMakeLinkFortune500ComV2.class);
-    final static String userHome = System.getProperty("user.home");
+    
     URI uri = null;
 
     /**
@@ -327,7 +328,7 @@ public class NewsReadAndMakeLinkFortune500ComV2 extends javax.swing.JFrame {
         sb1.append("</html>\r\n");
 
         String fileName = "";
-        fileName = userHome + File.separator + "documents" + File.separator + strYMD + "_fortune.com.html";
+        fileName = USER_HOME + File.separator + "documents" + File.separator + strYMD + "_fortune.com.html";
         FileUtil.fileWrite(fileName, sb1.toString());
 
     }//GEN-LAST:event_jButton1MouseClicked
@@ -474,16 +475,11 @@ public class NewsReadAndMakeLinkFortune500ComV2 extends javax.swing.JFrame {
         }
         System.out.println("newsCompany3:" + newsCompany);
 
-        StringBuilder sb = new StringBuilder();
-        if (newsCompany.equals("BUSAN")) {
-            sb = WwwBusanCom.createHTMLFile(strUrl);
-        } else if (newsCompany.equals("WwwHanitvCom")) {
-            sb = WwwHanitvCom.createHTMLFile(strUrl);
-        }
         if (newsCompany.equals("")) {
             return;
         }
 
+        StringBuilder sb = new StringBuilder();
         Class<?> c;
         try {
             c = Class.forName("html.parsing.stock.news." + newsCompany);

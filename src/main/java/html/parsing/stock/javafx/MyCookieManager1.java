@@ -5,12 +5,17 @@
  */
 package html.parsing.stock.javafx;
 
-import com.sun.webkit.network.CookieManager;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.CookieHandler;
 import java.net.URI;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import com.sun.webkit.network.CookieManager;
 
 public class MyCookieManager1 extends CookieHandler {
     private final CookieManager cookieManager = new CookieManager();

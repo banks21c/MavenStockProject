@@ -104,6 +104,7 @@ import javafx.stage.Stage;
 
 public class Step1_StockMarketPriceNaverLinkShareTab1 extends Application {
 
+	private final static String COUPANG_PARTNERS_NOTICE = "<div>※ 쿠팡 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있습니다.</div>";
 	final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(Step1_StockMarketPriceNaverLinkShareTab1.class);
 
@@ -2126,7 +2127,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab1 extends Application {
 		String bestcategoriesUrl = BESTCATEGORIES_URL + categoryId + "?limit=" + limit;
 		String data = getData("카테고리별 베스트상품", bestcategoriesUrl, categoryNm, strParamJson);
 		sb.append(data);
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		strNaverBlogCategoryName = "카테고리별 베스트 상품";
 		strNaverBlogCategoryNo = getCategoryNo(strNaverBlogCategoryName);
@@ -2165,7 +2166,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab1 extends Application {
 				}
 			}
 		}
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "카테고리별 베스트상품";
 		strNaverBlogCategoryName = "카테고리별 베스트 상품";
@@ -2184,10 +2185,10 @@ public class Step1_StockMarketPriceNaverLinkShareTab1 extends Application {
 		System.out.println("strParamJson:" + strParamJson);
 		String data = getData("골드박스 상품", GOLDBOX_URL, "", strParamJson);
 		sb.append(data);
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "WOW 와우회원 전용 매일 오전 7시 골드박스 1일특가";
-		strNaverBlogCategoryName = "골드박스";
+		strNaverBlogCategoryName = "골드박스 상품";
 		strNaverBlogCategoryNo = getCategoryNo(strNaverBlogCategoryName);
 		return naverBlogLinkShare(sb, strNaverBlogCategoryNo, shareTitle, "");
 	}
@@ -2203,7 +2204,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab1 extends Application {
 		System.out.println("strParamJson:" + strParamJson);
 		String data = getData("쿠팡PL상품", COUPANG_PL_URL, "", strParamJson);
 		sb.append(data);
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "쿠팡 PL 상품 TOP" + limit;
 		strNaverBlogCategoryName = "PL 상품";
@@ -2261,7 +2262,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab1 extends Application {
 				}
 			}
 		}
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "쿠팡 PL 브랜드별 상품 TOP" + limit;
 		strNaverBlogCategoryName = "PL 브랜드별 상품";
@@ -2288,7 +2289,7 @@ public class Step1_StockMarketPriceNaverLinkShareTab1 extends Application {
 		System.out.println("server_url:" + strSearchUrl);
 		String data = getData("상품검색", strSearchUrl, "", strParamJson);
 		sb.append(data);
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + keyword;
 		strNaverBlogCategoryName = "추천 상품";

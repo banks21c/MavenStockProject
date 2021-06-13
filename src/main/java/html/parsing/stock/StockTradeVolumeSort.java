@@ -17,7 +17,8 @@ import org.slf4j.LoggerFactory;
 
 public class StockTradeVolumeSort {
 
-    final static String userHome = System.getProperty("user.home");
+    
+	public final static String USER_HOME = System.getProperty("user.home");
     private static Logger logger = LoggerFactory.getLogger(StockTradeVolumeSort.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -58,7 +59,7 @@ public class StockTradeVolumeSort {
             doc = Jsoup.connect(url).get();
 
             // System.out.println(doc.html());
-            FileWriter fw = new FileWriter(userHome + "\\documents\\new_" + div + ".html", false);
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\new_" + div + ".html", false);
 
             String html = doc.select(".type_2").outerHtml();
             html = html.replaceAll(

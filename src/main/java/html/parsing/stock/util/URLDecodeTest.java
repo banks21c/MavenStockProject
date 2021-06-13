@@ -32,7 +32,7 @@ public class URLDecodeTest {
 	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREAN);
 	static String strDefaultDate = sdf.format(new Date());
 
-	static final String userHome = System.getProperty("user.home");
+	static final String USER_HOME = System.getProperty("user.home");
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
 	static String strYMD = "";

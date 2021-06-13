@@ -1,8 +1,5 @@
 package html.parsing.stock.focus;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,14 +31,17 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.NameAscCompare;
 import html.parsing.stock.util.DataSort.Weeks52NewHighPriceVsCurPriceDownRatioAscCompare;
 import html.parsing.stock.util.DataSort.Weeks52NewLowPriceVsCurPriceUpRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
 
 public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 
-	final static String userHome = System.getProperty("user.home");
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = null;
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -223,7 +223,7 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 
 	public void readFile(String marketGubun, String fileName) {
 
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
@@ -607,7 +607,7 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 		// millisecond
 		String SSS = new SimpleDateFormat("SSS").format(new Date());
 
-		String fileName = userHome + "\\documents\\" + strYmdDashBracket + "_" + strHms + "." + SSS + "_" + stockGubun
+		String fileName = USER_HOME + "\\documents\\" + strYmdDashBracket + "_" + strHms + "." + SSS + "_" + stockGubun
 				+ fileNameSuffix + ".html";
 		logger.debug("fileName==>" + fileName);
 		FileUtil.fileWrite(fileName, sb1.toString());
@@ -718,7 +718,7 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 		// millisecond
 		String SSS = new SimpleDateFormat("SSS").format(new Date());
 
-		String fileName = userHome + "\\documents\\" + strYmdDashBracket + "_" + strHms + "." + SSS
+		String fileName = USER_HOME + "\\documents\\" + strYmdDashBracket + "_" + strHms + "." + SSS
 				+ "_코스피,코스닥 신고,신저가.html";
 		logger.debug("fileName==>" + fileName);
 		FileUtil.fileWrite(fileName, sb1.toString());
@@ -733,7 +733,7 @@ public class Weeks52NewLowHighPriceVsCurPrice extends Thread {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 			String strDate = sdf.format(new Date());
 
-			FileWriter fw = new FileWriter(userHome + "\\documents\\NewsTest." + strDate + ".html");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\NewsTest." + strDate + ".html");
 			StringBuilder sb1 = new StringBuilder();
 
 			for (StockVO vo : allStockList) {

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package html.parsing.stock.util;
 
 import java.io.BufferedReader;
@@ -19,10 +14,6 @@ import org.jsoup.nodes.Document;
 
 import html.parsing.stock.model.StockVO;
 
-/**
- *
- * @author parsing-25
- */
 public class StockExtractExceptWord {
 
 	public static boolean dupCheck(List<String> exceptWordList, String stockName, String strNews) {
@@ -32,9 +23,8 @@ public class StockExtractExceptWord {
 			strLineArray = strLine.split(":");
 			String compareStockName = strLineArray[0];
 			String exceptWord = strLineArray[1];
-			System.out.println(
-					"stockName:" + stockName + " compareSName:" + compareStockName + " exceptWord:" + exceptWord);
 			if (stockName.equals(compareStockName) && strNews.contains(exceptWord)) {
+				System.out.println( "stockName:" + stockName + " compareStockName:" + compareStockName + " exceptWord:" + exceptWord);
 				isExceptWord = true;
 				System.out.println(
 						"기사에 예외어가 있는가?" + (stockName.equals(compareStockName) && strNews.contains(exceptWord)));

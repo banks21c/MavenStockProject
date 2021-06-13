@@ -1,6 +1,5 @@
 package html.parsing.stock;
 
-import html.parsing.stock.util.StockUtil;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -22,11 +21,12 @@ import org.slf4j.LoggerFactory;
 import html.parsing.stock.news.News;
 import html.parsing.stock.news.NewsReader;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.StockUtil;
 
 public class JavaCodeGeeksCom extends javax.swing.JFrame {
 
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(JavaCodeGeeksCom.class);
-	final static String userHome = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -189,11 +189,11 @@ public class JavaCodeGeeksCom extends javax.swing.JFrame {
 		}
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 
 		News gurl = new News();
 		gurl.getURL(url);
@@ -277,21 +277,21 @@ public class JavaCodeGeeksCom extends javax.swing.JFrame {
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			System.out.println("fileDir:" + userHome + File.separator + "documents" + File.separator + host);
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			System.out.println("fileDir:" + USER_HOME + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			System.out.println("fileName1:" + userHome + File.separator + "documents" + File.separator + strFileNameDate
-					+ "_" + strTitleForFileName + ".html");
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			System.out.println("fileName1:" + USER_HOME + File.separator + "documents" + File.separator
+					+ strFileNameDate + "_" + strTitleForFileName + ".html");
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			System.out.println("fileName2:" + userHome + File.separator + "documents" + File.separator + strFileNameDate
-					+ "_" + strTitleForFileName + ".html");
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			System.out.println("fileName2:" + USER_HOME + File.separator + "documents" + File.separator
+					+ strFileNameDate + "_" + strTitleForFileName + ".html");
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 

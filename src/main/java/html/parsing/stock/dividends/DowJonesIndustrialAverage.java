@@ -28,17 +28,18 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.util.DataSort.DividendRateDescCompare;
 import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.news.News;
+import html.parsing.stock.news.NewsInterface;
+import html.parsing.stock.util.DataSort.DividendRateDescCompare;
 import html.parsing.stock.util.FileUtil;
 import io.restassured.response.Response;
 
-public class DowJonesIndustrialAverage extends News {
+public class DowJonesIndustrialAverage extends News implements NewsInterface {
 
 //public static final String SERVER_URI = "https://www.nyse.com/listings_directory/stock";
 	public static final String SERVER_URI = "https://www.nyse.com/api/quotes/filter";
@@ -52,7 +53,7 @@ public class DowJonesIndustrialAverage extends News {
 	String dowJones = "https://ko.wikipedia.org/wiki/%EB%8B%A4%EC%9A%B0_%EC%A1%B4%EC%8A%A4_%EC%82%B0%EC%97%85%ED%8F%89%EA%B7%A0%EC%A7%80%EC%88%98";
 
 	private static final Logger logger = LoggerFactory.getLogger(DowJonesIndustrialAverage.class);
-	final static String userHome = System.getProperty("user.home");
+	
 	static String strCurrentDate = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.ss.SSS", Locale.KOREAN).format(new Date());
 	String fileName = "";
 
@@ -184,7 +185,7 @@ public class DowJonesIndustrialAverage extends News {
 ////			String tableHtml = tableElmt.outerHtml();
 ////			logger.debug(tableHtml);
 //			doc = Jsoup.parse(sb.toString());
-//			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_" + gubun + "_List_.html";
+//			fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_" + gubun + "_List_.html";
 //			logger.debug("fileName :" + fileName);
 //			FileUtil.fileWrite(fileName, doc.html());
 //		} catch (IOException ex) {
@@ -302,7 +303,7 @@ public class DowJonesIndustrialAverage extends News {
 //			String tableHtml = tableElmt.outerHtml();
 //			logger.debug(tableHtml);
 		doc = Jsoup.parse(sb.toString());
-		fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_" + gubun
+		fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_" + gubun
 				+ "_List_.html";
 		logger.debug("fileName :" + fileName);
 		FileUtil.fileWrite(fileName, doc.html());
@@ -488,7 +489,7 @@ public class DowJonesIndustrialAverage extends News {
 				if (remainCount == 0) {
 					thousandCount++;
 					sb.append("</table>\r\n");
-					fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
+					fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
 							+ (thousandCount * maxResultsPerPage) + ".html";
 					logger.debug("fileName :" + fileName);
 
@@ -498,7 +499,7 @@ public class DowJonesIndustrialAverage extends News {
 			}
 			// 1000개로 몇개 쓰고 남은 것은 여기에서 파일로 저장한다.
 			sb.append("</table>\r\n");
-			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
 					+ remainCount + ".html";
 			FileUtil.fileWrite(fileName, sb.toString());
 			logger.debug("downloadTest1 finished");
@@ -689,7 +690,7 @@ public class DowJonesIndustrialAverage extends News {
 				if (remainCount == 0) {
 					thousandCount++;
 					sb.append("</table>\r\n");
-					fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
+					fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
 							+ (thousandCount * 1000) + ".html";
 					FileUtil.fileWrite(fileName, sb.toString());
 					sb = getNewStringBufferWithHeader();
@@ -698,7 +699,7 @@ public class DowJonesIndustrialAverage extends News {
 			}
 			// 1000개로 몇개 쓰고 남은 것은 여기에서 파일로 저장한다.
 			sb.append("</table>\r\n");
-			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE" + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE" + "_"
 					+ "List" + ".html";
 			FileUtil.fileWrite(fileName, sb.toString());
 			logger.debug("downloadTest1 finished");
@@ -902,7 +903,7 @@ public class DowJonesIndustrialAverage extends News {
 				if (remainCount == 0) {
 					thousandCount++;
 					sb.append("</table>\r\n");
-					fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
+					fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
 							+ (thousandCount * maxResultsPerPage) + ".html";
 					logger.debug("fileName :" + fileName);
 
@@ -912,7 +913,7 @@ public class DowJonesIndustrialAverage extends News {
 			}
 			// 1000개로 몇개 쓰고 남은 것은 여기에서 파일로 저장한다.
 			sb.append("</table>\r\n");
-			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_"
 					+ remainCount + ".html";
 			FileUtil.fileWrite(fileName, sb.toString());
 			logger.debug("downloadTest1 finished");

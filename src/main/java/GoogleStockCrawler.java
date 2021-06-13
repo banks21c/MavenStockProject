@@ -1,6 +1,5 @@
 
 
-import html.parsing.stock.news.*;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -12,9 +11,11 @@ import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.news.News;
+import html.parsing.stock.news.NewsInterface;
 import html.parsing.stock.util.FileUtil;
 
-public class GoogleStockCrawler extends News {
+public class GoogleStockCrawler extends News implements NewsInterface {
 
     private static Logger logger = LoggerFactory.getLogger(GoogleStockCrawler.class);
     private char[] alphabets = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
@@ -55,8 +56,10 @@ public class GoogleStockCrawler extends News {
 
             for (int i = 0; i < alphabets.length; i++) {
                 char alphabet = alphabets[i];
-                String url = "https://www.google.com/search?q=NYSE:+" + alphabet;
-                doc = Jsoup.connect(url).get();
+                System.out.println("alphabet:"+alphabet);
+                String strUrl = "https://www.google.com/search?q=NYSE:+" + alphabet;
+                System.out.println("strUrl:"+strUrl);
+                doc = Jsoup.connect(strUrl).get();
                 doc.select("script").remove();
                 doc.select("iframe").remove();
                 doc.select("gb_5e").remove();
@@ -69,13 +72,13 @@ public class GoogleStockCrawler extends News {
             doc.select("body").html(sb1.toString());
             logger.debug("doc:" + doc.html());
 
-            File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+            File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
             String fileName = "";
 
-            fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+            fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
                     + strTitleForFileName + ".html";
             FileUtil.fileWrite(fileName, doc.html());
 

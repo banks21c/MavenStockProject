@@ -3,11 +3,12 @@
  */
 package html.parsing.stock.util;
 
-import html.parsing.stock.model.StockVO;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+
+import html.parsing.stock.model.StockVO;
 
 /**
  * @author banks

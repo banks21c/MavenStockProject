@@ -6,13 +6,12 @@ import java.util.Locale;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class JSoupTest_TipranksCom_Download {
 
-	final static String userHome = System.getProperty("user.home");
+	
 	private static Logger logger = LoggerFactory.getLogger(JSoupTest_TipranksCom_Download.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());

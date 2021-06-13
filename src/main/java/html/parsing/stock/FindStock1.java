@@ -1,8 +1,5 @@
 package html.parsing.stock;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,9 +9,13 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
+
 public class FindStock1 {
 
-    final static String userHome = System.getProperty("user.home");
+    
     private static final Logger logger = LoggerFactory.getLogger(FindStock1.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());

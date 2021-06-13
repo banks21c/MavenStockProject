@@ -25,9 +25,9 @@ import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.ImageUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class WwwPharmnewsCom extends News {
+public class WwwPharmnewsCom extends News implements NewsInterface {
 
-	final static String userHome = System.getProperty("user.home");
+	
 	private static Logger logger = LoggerFactory.getLogger(WwwPharmnewsCom.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -62,11 +62,11 @@ public class WwwPharmnewsCom extends News {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		logger.debug("url:" + url);
 		getURL(url);
 
@@ -169,9 +169,7 @@ public class WwwPharmnewsCom extends News {
 			strContent = strContent.replaceAll("</figcaption>", "<br>");
 			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
@@ -197,14 +195,14 @@ public class WwwPharmnewsCom extends News {
 			sb1.append("</html>\r\n");
 			logger.debug("[sb.toString:" + sb1.toString() + "]");
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
 			String fileName = "";
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			logger.debug("fileName:" + fileName);
 			FileUtil.fileWrite(fileName, sb1.toString());

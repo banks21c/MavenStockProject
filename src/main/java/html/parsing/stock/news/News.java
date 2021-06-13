@@ -13,13 +13,15 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.GlobalVariables;
 
-public class News {
+public class News implements NewsInterface {
 	private static Logger logger = LoggerFactory.getLogger(News.class);
 
 	private static String kospiFileName = GlobalVariables.kospiFileName;
@@ -36,7 +38,7 @@ public class News {
 	public static String protocolHost;
 
 	public static String file;
-	public final static String userHome = System.getProperty("user.home");
+	public final static String USER_HOME = System.getProperty("user.home");
 
 	public String getKospiFileName() {
 		return kospiFileName;
@@ -189,4 +191,42 @@ public class News {
 	public static void main(String args[]) {
 		getURL("http://www.yonhapnews.co.kr/economy/2013/04/07/0318000000AKR20130407057100002.HTML");
 	}
+	
+	public StringBuilder createHTMLFile(String strUrl, String strMyComment) {
+
+		StringBuilder sb1 = new StringBuilder();
+		Document doc;
+		try {
+			doc = Jsoup.connect(strUrl).get();
+			sb1 = createHTMLFileCommon(doc, strUrl, strMyComment);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			logger.debug("추출완료");
+		}
+		return sb1;
+	}
+
+	public StringBuilder createHTMLFileFromWebView(String strUrl, String strContent, String strMyComment) {
+
+		StringBuilder sb1 = new StringBuilder();
+		Document doc;
+		try {
+			doc = Jsoup.parse(strContent);
+			sb1 = createHTMLFileCommon(doc, strUrl, strMyComment);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			logger.debug("추출완료");
+		}
+		return sb1;
+	}
+
+	@Override
+	public StringBuilder createHTMLFileCommon(Document doc, String strUrl, String strMyComment) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

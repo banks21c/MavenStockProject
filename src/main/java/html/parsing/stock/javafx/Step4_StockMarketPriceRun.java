@@ -1,8 +1,8 @@
 package html.parsing.stock.javafx;
 
-import html.parsing.stock.focus.StockWeeks52NewLowHighPriceTodayOneFileV2;
 import html.parsing.stock.focus.StockPlusMinusDivide100;
 import html.parsing.stock.focus.StockUnique_ReadTxtFile_ThreadCall;
+import html.parsing.stock.focus.StockWeeks52NewLowHighPriceTodayOneFileV2;
 
 public class Step4_StockMarketPriceRun{
 

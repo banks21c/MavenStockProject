@@ -25,7 +25,7 @@ import html.parsing.stock.news.News;
 public class URLFileDownloadUsingJsoupFrame extends javax.swing.JFrame {
 
     private static Logger logger = LoggerFactory.getLogger(URLFileDownloadUsingJsoupFrame.class);
-    final static String userHome = System.getProperty("user.home");
+    
 
     /**
      * Creates new form NewJFrame1

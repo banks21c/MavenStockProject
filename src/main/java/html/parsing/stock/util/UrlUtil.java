@@ -25,7 +25,6 @@ public class UrlUtil {
 	public static String protocolHost;
 
 	public static String file;
-	public final static String userHome = System.getProperty("user.home");
 
 	public String getFile() {
 		return file;

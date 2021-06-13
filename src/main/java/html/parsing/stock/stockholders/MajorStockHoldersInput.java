@@ -1,8 +1,5 @@
 package html.parsing.stock.stockholders;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -25,16 +22,18 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.MajorStockHolderVO;
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.RetainAmountDescCompare;
 import html.parsing.stock.util.DataSort.RetainRatioDescCompare;
-import html.parsing.stock.model.MajorStockHolderVO;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
 
 public class MajorStockHoldersInput {
 
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static final Logger logger = LoggerFactory.getLogger(MajorStockHoldersInput.class);
-
-	final static String userHome = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -53,12 +52,12 @@ public class MajorStockHoldersInput {
 		majorStockHolders = JOptionPane.showInputDialog("대주주명을 입력해주세요.");
 
 		// 대웅제약 069620
-		kospiStockList = readOne("069620","대웅제약");
-		System.out.println("kospiStockList:"+kospiStockList);
+		kospiStockList = readOne("069620", "대웅제약");
+		System.out.println("kospiStockList:" + kospiStockList);
 		writeFile(kospiStockList, "코스피");
 		// 삼성전자 005930
-		kospiStockList = readOne("005930","삼성전자");
-		System.out.println("kospiStockList:"+kospiStockList);
+		kospiStockList = readOne("005930", "삼성전자");
+		System.out.println("kospiStockList:" + kospiStockList);
 		writeFile(kospiStockList, "코스피");
 	}
 
@@ -96,7 +95,7 @@ public class MajorStockHoldersInput {
 
 	}
 
-	public static List<StockVO> readOne(String stockCode,String stockName) {
+	public static List<StockVO> readOne(String stockCode, String stockName) {
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
 		int cnt = 1;
@@ -168,7 +167,7 @@ public class MajorStockHoldersInput {
 			iCurPrice = Integer.parseInt(curPriceWithoutComma);
 			stock.setCurPrice(curPriceWithComma);
 			stock.setiCurPrice(iCurPrice);
-			
+
 			Elements no_exday = doc.select(".no_exday");
 			Element new_totalinfo = null;
 			if (no_exday.size() > 0) {
@@ -306,7 +305,8 @@ public class MajorStockHoldersInput {
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("<html lang='ko'>\r\n");
 		sb1.append("<head>\r\n");
-		//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+		// sb1.append("<meta http-equiv=\"Content-Type\"
+		// content=\"text/html;charset=utf-8\">\r\n");
 		sb1.append("<style>\r\n");
 		sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 		sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
@@ -319,14 +319,12 @@ public class MajorStockHoldersInput {
 		sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>No.</td>\r\n");
 		sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>종목명</td>\r\n");
 		if (majorStockHolders.indexOf("국민연금") == -1) {
-			sb1.append(
-				"<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
+			sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>주요주주</td>\r\n");
 		}
 		sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>보유주식수</td>\r\n");
 		sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>보유율</td>\r\n");
 		sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>현재가</td>\r\n");
-		sb1.append(
-			"<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>총금액(백만)</td>\r\n");
+		sb1.append("<td style='background:#669900;color:#ffffff;color:#ffffff;text-align:center;'>총금액(백만)</td>\r\n");
 		sb1.append("</tr>\r\n");
 		int cnt = 1;
 		for (StockVO svo : list) {
@@ -336,8 +334,8 @@ public class MajorStockHoldersInput {
 				sb1.append("<tr>\r\n");
 				String url = "http://finance.naver.com/item/main.nhn?code=" + svo.getStockCode();
 				sb1.append("<td rowspan=" + listSize + ">" + cnt++ + "</td>\r\n");
-				sb1.append(
-					"<td rowspan=" + listSize + "><a href='" + url + "' target='_new'>" + svo.getStockName() + "</a></td>\r\n");
+				sb1.append("<td rowspan=" + listSize + "><a href='" + url + "' target='_new'>" + svo.getStockName()
+						+ "</a></td>\r\n");
 
 				for (int i = 0; i < listSize; i++) {
 					if (i > 0) {
@@ -358,7 +356,7 @@ public class MajorStockHoldersInput {
 		}
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
-		String fileName = userHome + "\\documents\\" + strDate + "_" + title + ".html";
+		String fileName = USER_HOME + "\\documents\\" + strDate + "_" + title + ".html";
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}
 

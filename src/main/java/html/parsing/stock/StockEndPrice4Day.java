@@ -1,6 +1,5 @@
 package html.parsing.stock;
 
-import html.parsing.stock.util.StockUtil;
 import java.io.IOException;
 import java.util.Map;
 
@@ -12,6 +11,8 @@ import org.jsoup.select.Elements;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.util.StockUtil;
 
 public class StockEndPrice4Day {
 

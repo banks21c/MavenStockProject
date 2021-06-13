@@ -1,12 +1,13 @@
 package html.parsing.stock.quartz2x.example2;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
-import org.quartz.CronTrigger;
 import static org.quartz.JobBuilder.newJob;
+import static org.quartz.TriggerBuilder.newTrigger;
+
+import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
-import static org.quartz.TriggerBuilder.newTrigger;
 import org.quartz.impl.StdSchedulerFactory;
 
 public class CronTriggerExample {

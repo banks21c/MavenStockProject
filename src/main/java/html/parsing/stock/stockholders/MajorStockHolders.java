@@ -1,7 +1,5 @@
 package html.parsing.stock.stockholders;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,9 +22,13 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
+import html.parsing.stock.util.GlobalVariables;
+
 public class MajorStockHolders {
 
-    final static String userHome = System.getProperty("user.home");
+    
+	public final static String USER_HOME = System.getProperty("user.home");
     private static Logger logger = LoggerFactory.getLogger(MajorStockHolders.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -86,7 +88,7 @@ public class MajorStockHolders {
     public static List<StockVO> getAllStockInfo(String kospidaq, String fileName) {
         List<StockVO> stocks = new ArrayList<StockVO>();
 
-        File f = new File(userHome + "\\documents\\" + fileName);
+        File f = new File(USER_HOME + "\\documents\\" + fileName);
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f),"UTF8"));
 
@@ -213,12 +215,12 @@ public class MajorStockHolders {
     }
 
     public void writeFile(List<StockVO> list, String fileName, String title) {
-        File f = new File(userHome + "\\documents\\" + fileName);
+        File f = new File(USER_HOME + "\\documents\\" + fileName);
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
             String strDate = sdf.format(new Date());
 
-            FileWriter fw = new FileWriter(userHome + "\\documents\\" + strDate + "_" + title + ".html");
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strDate + "_" + title + ".html");
             StringBuilder sb1 = new StringBuilder();
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");

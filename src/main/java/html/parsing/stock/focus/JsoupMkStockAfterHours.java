@@ -1,8 +1,6 @@
 package html.parsing.stock.focus;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,27 +11,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import html.parsing.stock.model.StockVO;
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.util.NaverUtil;
 
 /**
  * 유튜브에서 네이버로 공유할때

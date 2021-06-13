@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.CookieHandler;
-import java.net.CookiePolicy;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -51,8 +50,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -66,7 +63,7 @@ import javafx.stage.Stage;
 
 public class Step1_StockMarketPriceNaverLinkShare extends Application {
 
-	final static String userHome = System.getProperty("user.home");
+	
 	private static Logger logger = LoggerFactory.getLogger(Step1_StockMarketPriceNaverLinkShare.class);
 
 	List<StockVO> kospiUniqueStockList = new ArrayList<>();
@@ -610,7 +607,7 @@ public class Step1_StockMarketPriceNaverLinkShare extends Application {
 //		String jsonObject = JSONObject.toJSONString(stockMap);
 		String jsonObject = stockMap.toString();
 		String fileName = "";
-//		fileName = userHome + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
+//		fileName = USER_HOME + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
 		fileName = market_en + "_list.txt";
 		FileUtil.fileWrite(fileName, stockCodeNameSb.toString());
 		JOptionPane.showMessageDialog(null, "주식 목록을 추출하였습니다.");

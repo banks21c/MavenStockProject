@@ -67,8 +67,9 @@ import html.parsing.stock.util.DataSort.StockNameLengthDescCompare;
  */
 public class StockUtil {
 
+	public final static String USER_HOME = System.getProperty("user.home");
 	private final static String TOTAL_INFO_URL = "http://finance.naver.com/item/main.nhn?code=";
-	final static String userHome = System.getProperty("user.home");
+
 	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.SSS", Locale.KOREAN).format(new Date());
 	private static final Logger logger = LoggerFactory.getLogger(StockUtil.class);
 
@@ -134,6 +135,12 @@ public class StockUtil {
 			sb.append(s.charAt(i));
 			sb.append("&nbsp;");
 		}
+		return sb.toString();
+	}
+
+	public static String boldString(String s) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<b>").append(s).append("</b>");
 		return sb.toString();
 	}
 
@@ -528,7 +535,7 @@ public class StockUtil {
 	}
 
 	public static String makeStockLinkStringByTxtFile(String textBodyHtml) {
-
+		logger.debug("makeStockLinkStringByTxtFile method started");
 		String kospiFileName = GlobalVariables.KOSPI_LIST_TXT;
 		String kosdaqFileName = GlobalVariables.KOSDAQ_LIST_TXT;
 		List<StockVO> stockList = new ArrayList<>();
@@ -538,11 +545,27 @@ public class StockUtil {
 		stockList.addAll(kospiStockList);
 		stockList.addAll(kosdaqStockList);
 		Collections.sort(stockList, new StockNameLengthDescCompare());
+		for (int i = 0; i < stockList.size(); i++) {
+			StockVO svo = stockList.get(i);
+			if (svo.getStockName().equals("CJ")) {
+				System.out.println(i + ":" + svo.getStockName());
+				System.out.println(i + ":" + svo.getStockNameLength());
+			}
+			if (svo.getStockName().equals("CJ대한통운")) {
+				System.out.println(i + ":" + svo.getStockName());
+				System.out.println(i + ":" + svo.getStockNameLength());
+			}
+		}
 		if (stockList.size() <= 0) {
 			logger.debug("추출한 종목이 없습니다.");
 			return textBodyHtml;
 		}
-		return StockUtil.stockLinkString(textBodyHtml, stockList);
+
+		String strContent = StockUtil.stockLinkString(textBodyHtml, stockList);
+		Document contentDoc = Jsoup.parse(strContent);
+		contentDoc.select("#myCommentDiv").remove();
+		logger.debug("makeStockLinkStringByTxtFile method finished");
+		return contentDoc.select("body").html();
 	}
 
 	public static String makeStockLinkStringByExcel(String textBodyHtml) {
@@ -608,227 +631,188 @@ public class StockUtil {
 		return exceptWordList;
 	}
 
-	public static String stockTitleLinkString(String strNews, List<StockVO> stockList) {
+	public static String createStockLinkString(String strContent, List<StockVO> stockList) {
 		logger.debug("stockLinkString.....................");
-		strNews = strNews.replaceAll("&amp;", "&");
+		strContent = strContent.replaceAll("&amp;", "&");
 		// logger.debug("strNews:[" + strNews + "]");
 		// logger.debug("stockList.size():[" + stockList.size() + "]");
 		List<String> exceptWordList = exceptWordList();
 
-		Document doc = null;
 		List<StockVO> newsStockList = new ArrayList<StockVO>();
+		Document doc = null;
+		doc = Jsoup.parse(strContent);
+		Elements imgs = doc.select("img");
 		for (int i = 0; i < stockList.size(); i++) {
 			StockVO stock = stockList.get(i);
 			String stockCode = stock.getStockCode();
 			String stockName = stock.getStockName();
 
-			doc = Jsoup.parse(strNews);
-			if (strNews.contains("현대차") && stockName.equals("현대자동차")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대차",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
-			} else if (strNews.contains("현대자동차") && stockName.equals("현대자동차")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대자동차", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString("현대자동차") + "</a></strong>");
-			} else if (strNews.contains("현대자동차") && stockName.equals("현대차")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대자동차", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString("현대자동차") + "</a></strong>");
-			} else if (strNews.contains("현대차") && stockName.equals("현대차")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대차",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
-			} else if (strNews.contains("POSCO") && stockName.equals("포스코")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("POSCO", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString("POSCO") + "</a></strong>");
-			} else if (strNews.contains("POSCO") && stockName.equals("POSCO")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("POSCO", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString("POSCO") + "</a></strong>");
-			} else if (strNews.contains("포스코") && stockName.equals("POSCO")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("포스코",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
-			} else if (strNews.contains("포스코") && stockName.equals("포스코")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("포스코",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
-			} else if (strNews.contains(stockName)) {
-				int count = StringUtils.countMatches(strNews, stockName);
+			if (stockName.equals("현대차")) {
+				if (strContent.contains("현대자동차")) {
+					newsStockList.add(stock);
+					strContent = strContent.replaceAll("현대자동차",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대자동차") + "</a>");
+				}
+				if (strContent.contains("현대차")) {
+					if (!strContent.contains(nbspString("현대자동차"))) {
+						newsStockList.add(stock);
+					}
+					strContent = strContent.replaceAll("현대차",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a>");
+				}
+
+			} else if (stockName.equals("기아차")) {
+				if (strContent.contains("기아자동차")) {
+					newsStockList.add(stock);
+					strContent = strContent.replaceAll("기아자동차",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("기아자동차") + "</a>");
+				}
+				if (strContent.contains("기아차")) {
+					if (!strContent.contains(nbspString("기아자동차"))) {
+						newsStockList.add(stock);
+					}
+					strContent = strContent.replaceAll("기아차",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("기아차") + "</a>");
+				}
+			} else if (stockName.equals("POSCO")) {
+				if (strContent.contains("포스코")) {
+					newsStockList.add(stock);
+					strContent = strContent.replaceAll("포스코",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("포스코") + "</a>");
+				}
+				if (strContent.contains("POSCO")) {
+					if (!strContent.contains(nbspString("포스코"))) {
+						newsStockList.add(stock);
+					}
+					strContent = strContent.replaceAll("POSCO",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("POSCO") + "</a>");
+				}
+			} else if (stockName.equals("NAVER")) {
+				if (strContent.contains("네이버")) {
+					newsStockList.add(stock);
+					strContent = strContent.replaceAll("네이버",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("네이버") + "</a>");
+				}
+				if (strContent.contains("NAVER")) {
+					if (!strContent.contains(nbspString("네이버"))) {
+						newsStockList.add(stock);
+					}
+					strContent = strContent.replaceAll("NAVER",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("NAVER") + "</a>");
+				}
+			} else if (strContent.contains(stockName)) {
+				int count = StringUtils.countMatches(strContent, stockName);
 				logger.debug(stockName + " 갯수:" + count);
-				Elements imgs = doc.select("img");
 				if (imgs.size() > 0) {
 					String src = imgs.attr("src");
 					if (src.contains(stockName)) {
 						continue;
 					}
 				}
-				if (StockExtractExceptWord.dupCheck(exceptWordList, stockName, strNews)) {
+				if (StockExtractExceptWord.dupCheck(exceptWordList, stockName, strContent)) {
 					logger.debug("예외어 발견.....");
-					break;
+					continue;
 				}
 				newsStockList.add(stock);
 				// logger.debug("stock link : " + stockCode + ":" + stockName);
-				strNews = strNews.replaceAll(stockName, "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString(stockName) + "</a></strong>");
+				strContent = strContent.replaceAll(stockName,
+						"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString(stockName) + "</a>");
 
 			}
 
 		}
-		strNews = strNews.replaceAll("&nbsp;", "");
+		strContent = strContent.replaceAll("&nbsp;", "");
 		logger.debug("stockLinkString end.....................");
-		return strNews;
+		return strContent;
 	}
 
-	public static String myCommentStockLinkString(String strMyComment, List<StockVO> stockList) {
-		logger.debug("stockLinkString.....................");
-		strMyComment = strMyComment.replaceAll("&amp;", "&");
+	public static String stockLinkString(String strContent, List<StockVO> stockList) {
+		logger.debug("stockLinkString...strContent[" + strContent + "]");
+		strContent = strContent.replaceAll("&amp;", "&");
 		// logger.debug("strNews:[" + strNews + "]");
 		// logger.debug("stockList.size():[" + stockList.size() + "]");
 		List<String> exceptWordList = exceptWordList();
 
-		Document doc = null;
 		List<StockVO> newsStockList = new ArrayList<StockVO>();
+		Document doc = null;
+		doc = Jsoup.parse(strContent);
+		Elements imgs = doc.select("img");
 		for (int i = 0; i < stockList.size(); i++) {
 			StockVO stock = stockList.get(i);
 			String stockCode = stock.getStockCode();
 			String stockName = stock.getStockName();
 
-			doc = Jsoup.parse(strMyComment);
+			if (stockName.equals("현대차")) {
+				if (strContent.contains("현대자동차")) {
+					newsStockList.add(stock);
+					strContent = strContent.replaceAll("현대자동차",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대자동차") + "</a>");
+				}
+				if (strContent.contains("현대차")) {
+					if (!strContent.contains(nbspString("현대자동차"))) {
+						newsStockList.add(stock);
+					}
+					strContent = strContent.replaceAll("현대차",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a>");
+				}
 
-			if (strMyComment.contains("현대차") && stockName.equals("현대자동차")) {
-				newsStockList.add(stock);
-				strMyComment = strMyComment.replaceAll("현대차",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
-			} else if (strMyComment.contains("현대자동차") && stockName.equals("현대자동차")) {
-				newsStockList.add(stock);
-				strMyComment = strMyComment.replaceAll("현대자동차", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString("현대자동차") + "</a></strong>");
-			} else if (strMyComment.contains("현대자동차") && stockName.equals("현대차")) {
-				newsStockList.add(stock);
-				strMyComment = strMyComment.replaceAll("현대자동차", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString("현대자동차") + "</a></strong>");
-			} else if (strMyComment.contains("현대차") && stockName.equals("현대차")) {
-				newsStockList.add(stock);
-				strMyComment = strMyComment.replaceAll("현대차",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
-			} else if (strMyComment.contains("POSCO") && stockName.equals("포스코")) {
-				newsStockList.add(stock);
-				strMyComment = strMyComment.replaceAll("POSCO", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString("POSCO") + "</a></strong>");
-			} else if (strMyComment.contains("POSCO") && stockName.equals("POSCO")) {
-				newsStockList.add(stock);
-				strMyComment = strMyComment.replaceAll("POSCO", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString("POSCO") + "</a></strong>");
-			} else if (strMyComment.contains("포스코") && stockName.equals("POSCO")) {
-				newsStockList.add(stock);
-				strMyComment = strMyComment.replaceAll("포스코",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
-			} else if (strMyComment.contains("포스코") && stockName.equals("포스코")) {
-				newsStockList.add(stock);
-				strMyComment = strMyComment.replaceAll("포스코",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
-			} else if (strMyComment.contains(stockName)) {
-				int count = StringUtils.countMatches(strMyComment, stockName);
+			} else if (stockName.equals("기아차")) {
+				if (strContent.contains("기아자동차")) {
+					newsStockList.add(stock);
+					strContent = strContent.replaceAll("기아자동차",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("기아자동차") + "</a>");
+				}
+				if (strContent.contains("기아차")) {
+					if (!strContent.contains(nbspString("기아자동차"))) {
+						newsStockList.add(stock);
+					}
+					strContent = strContent.replaceAll("기아차",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("기아차") + "</a>");
+				}
+			} else if (stockName.equals("POSCO")) {
+				if (strContent.contains("포스코")) {
+					newsStockList.add(stock);
+					strContent = strContent.replaceAll("포스코",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("포스코") + "</a>");
+				}
+				if (strContent.contains("POSCO")) {
+					if (!strContent.contains(nbspString("포스코"))) {
+						newsStockList.add(stock);
+					}
+					strContent = strContent.replaceAll("POSCO",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("POSCO") + "</a>");
+				}
+			} else if (stockName.equals("NAVER")) {
+				if (strContent.contains("네이버")) {
+					newsStockList.add(stock);
+					strContent = strContent.replaceAll("네이버",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("네이버") + "</a>");
+				}
+				if (strContent.contains("NAVER")) {
+					if (!strContent.contains(nbspString("네이버"))) {
+						newsStockList.add(stock);
+					}
+					strContent = strContent.replaceAll("NAVER",
+							"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("NAVER") + "</a>");
+				}
+			} else if (strContent.contains(stockName)) {
+				int count = StringUtils.countMatches(strContent, stockName);
 				logger.debug(stockName + " 갯수:" + count);
-				Elements imgs = doc.select("img");
 				if (imgs.size() > 0) {
 					String src = imgs.attr("src");
 					if (src.contains(stockName)) {
 						continue;
 					}
 				}
-				if (StockExtractExceptWord.dupCheck(exceptWordList, stockName, strMyComment)) {
+				if (StockExtractExceptWord.dupCheck(exceptWordList, stockName, strContent)) {
 					logger.debug("예외어 발생.....");
 					continue;
 				}
+
 				newsStockList.add(stock);
 				// logger.debug("stock link : " + stockCode + ":" + stockName);
-				strMyComment = strMyComment.replaceAll(stockName, "<strong><a href='" + TOTAL_INFO_URL + stockCode
-						+ "'>" + nbspString(stockName) + "</a></strong>");
-
-			}
-		}
-
-		logger.debug("newsStockList:" + newsStockList);
-		logger.debug("newsStockList.size:" + newsStockList.size());
-		strMyComment = strMyComment.replaceAll("&nbsp;", "");
-
-		logger.debug("stockLinkString end.....................");
-		return strMyComment;
-	}
-
-	public static String stockLinkString(String strNews, List<StockVO> stockList) {
-		logger.debug("stockLinkString.....................");
-		strNews = strNews.replaceAll("&amp;", "&");
-		// logger.debug("strNews:[" + strNews + "]");
-		// logger.debug("stockList.size():[" + stockList.size() + "]");
-		List<String> exceptWordList = exceptWordList();
-
-		Document doc = null;
-		List<StockVO> newsStockList = new ArrayList<StockVO>();
-		for (int i = 0; i < stockList.size(); i++) {
-			StockVO stock = stockList.get(i);
-			String stockCode = stock.getStockCode();
-			String stockName = stock.getStockName();
-			if (stockName.equals("씨젠")) {
-				logger.debug("뉴스가 씨젠을 포함하고 있는가?" + strNews.contains("씨젠") + "");
-			}
-
-			doc = Jsoup.parse(strNews);
-
-			if (strNews.contains("현대차") && stockName.equals("현대자동차")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대차",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
-			} else if (strNews.contains("현대자동차") && stockName.equals("현대자동차")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대자동차", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString("현대자동차") + "</a></strong>");
-			} else if (strNews.contains("현대자동차") && stockName.equals("현대차")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대자동차", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString("현대자동차") + "</a></strong>");
-			} else if (strNews.contains("현대차") && stockName.equals("현대차")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("현대차",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("현대차") + "</a></strong>");
-			} else if (strNews.contains("POSCO") && stockName.equals("포스코")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("POSCO", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString("POSCO") + "</a></strong>");
-			} else if (strNews.contains("POSCO") && stockName.equals("POSCO")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("POSCO", "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString("POSCO") + "</a></strong>");
-			} else if (strNews.contains("포스코") && stockName.equals("POSCO")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("포스코",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
-			} else if (strNews.contains("포스코") && stockName.equals("포스코")) {
-				newsStockList.add(stock);
-				strNews = strNews.replaceAll("포스코",
-						"<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString("포스코") + "</a></strong>");
-			} else if (strNews.contains(stockName)) {
-				int count = StringUtils.countMatches(strNews, stockName);
-				logger.debug(stockName + " 갯수:" + count);
-				Elements imgs = doc.select("img");
-				if (imgs.size() > 0) {
-					String src = imgs.attr("src");
-					if (src.contains(stockName)) {
-						continue;
-					}
-				}
-				if (StockExtractExceptWord.dupCheck(exceptWordList, stockName, strNews)) {
-					logger.debug("예외어 발생.....");
-					continue;
-				}
-				newsStockList.add(stock);
-				// logger.debug("stock link : " + stockCode + ":" + stockName);
-				strNews = strNews.replaceAll(stockName, "<strong><a href='" + TOTAL_INFO_URL + stockCode + "'>"
-						+ nbspString(stockName) + "</a></strong>");
+				strContent = strContent.replaceAll(stockName,
+						"<a href='" + TOTAL_INFO_URL + stockCode + "'>" + nbspString(stockName) + "</a>");
 
 			}
 		}
@@ -841,9 +825,9 @@ public class StockUtil {
 //		StringBuilder newsStockChart = drawNewsStockChart(newsStockList2);
 //		newsStockTable.append(newsStockChart);
 
-		strNews = strNews.replaceAll("&nbsp;", "");
+		strContent = strContent.replaceAll("&nbsp;", "");
 		logger.debug("stockLinkString end.....................");
-		return strNews + "<br>" + newsStockTable.toString();
+		return strContent + "<br>" + newsStockTable.toString();
 	}
 
 	/**
@@ -1559,7 +1543,7 @@ public class StockUtil {
 //        }
 
 		logger.debug("stockList start.....................");
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
@@ -1879,22 +1863,22 @@ public class StockUtil {
 	}
 
 	/**
-	 * 뉴스 하단에 주식 종목 정보를 테이블로 보여준다.
-	 * 18시 이후부터 다음날 08시까지는 기관,외인,개인매매 추가
-	 * 18시 이후부터 다음날 08시까지는 시간외단일가 추가
+	 * 뉴스 하단에 주식 종목 정보를 테이블로 보여준다. 18시 이후부터 다음날 08시까지는 기관,외인,개인매매 추가 18시 이후부터 다음날
+	 * 08시까지는 시간외단일가 추가
+	 * 
 	 * @param stockList
 	 * @return
 	 */
 	public static StringBuilder createNewsStockTable(List<StockVO> stockList) {
-		
-		int iHour = Integer.parseInt(new SimpleDateFormat("HH").format(new Date()));
-		if (iHour >= 18 || iHour < 8) {
-			//기관,외인,개인매매
+
+		int iHourMinute = Integer.parseInt(new SimpleDateFormat("HHmm").format(new Date()));
+		if (iHourMinute >= 1830 || iHourMinute < 800) {
+			// 기관,외인,개인매매
 			stockList = NaverStockTradingVolume.getStockTradingVolumeList(stockList);
-			//시간외단일가
+			// 시간외단일가
 			stockList = JsoupMkStockAfterHours.getAfterHoursStockTradeInfoList(stockList);
-		}		
-		
+		}
+
 		StringBuilder sb1 = new StringBuilder();
 		if (stockList != null && stockList.size() > 0) {
 			sb1.append("<table width='741'>\r\n");
@@ -1908,7 +1892,7 @@ public class StockUtil {
 			sb1.append(
 					"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
 
-			if (iHour >= 18 || iHour < 8) {
+			if (iHourMinute >= 1830 || iHourMinute < 800) {
 				// 2020.12.13 추가
 				sb1.append(
 						"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외국인매매</td>\r\n");
@@ -1973,7 +1957,7 @@ public class StockUtil {
 					sb1.append("<td style='text-align:right'>")
 							.append(StringUtils.defaultIfEmpty(svo.getTradingAmount(), "")).append("</td>\r\n");
 
-					if (iHour >= 18 || iHour < 8) {
+					if (iHourMinute >= 1830 || iHourMinute < 800) {
 						// 2020.12.13 추가
 						DecimalFormat formatter = new DecimalFormat("#,##0");
 						int iForeignTradingVolume = svo.getiForeignTradingVolume();
@@ -1983,36 +1967,44 @@ public class StockUtil {
 						String strForeignTradingVolume = formatter.format(iForeignTradingVolume);
 						String strOrganTradingVolume = formatter.format(iOrganTradingVolume);
 						String strIndividualTradingVolume = formatter.format(iIndividualTradingVolume);
-						
+
 						// 외국인 매매
 						if (iForeignTradingVolume < 0) {
-							sb1.append("<td style='text-align:right;color:blue'>" + strForeignTradingVolume + "</td>\r\n");
+							sb1.append(
+									"<td style='text-align:right;color:blue'>" + strForeignTradingVolume + "</td>\r\n");
 						} else if (iForeignTradingVolume > 0) {
 							if (iOrganTradingVolume > 0) {
-								sb1.append("<td style='text-align:right;color:red;background-color:yellow;'>" + strForeignTradingVolume + "</td>\r\n");
-							}else {
-								sb1.append("<td style='text-align:right;color:red'>" + strForeignTradingVolume + "</td>\r\n");
+								sb1.append("<td style='text-align:right;color:red;background-color:yellow;'>"
+										+ strForeignTradingVolume + "</td>\r\n");
+							} else {
+								sb1.append("<td style='text-align:right;color:red'>" + strForeignTradingVolume
+										+ "</td>\r\n");
 							}
 						} else {
 							sb1.append("<td style='text-align:right'>0</td>\r\n");
 						}
 						// 기관 매매
 						if (iOrganTradingVolume < 0) {
-							sb1.append("<td style='text-align:right;color:blue'>" + strOrganTradingVolume + "</td>\r\n");
+							sb1.append(
+									"<td style='text-align:right;color:blue'>" + strOrganTradingVolume + "</td>\r\n");
 						} else if (iOrganTradingVolume > 0) {
 							if (iForeignTradingVolume > 0) {
-								sb1.append("<td style='text-align:right;color:red;background-color:yellow;'>" + strOrganTradingVolume + "</td>\r\n");
-							}else {
-								sb1.append("<td style='text-align:right;color:red'>" + strOrganTradingVolume + "</td>\r\n");
+								sb1.append("<td style='text-align:right;color:red;background-color:yellow;'>"
+										+ strOrganTradingVolume + "</td>\r\n");
+							} else {
+								sb1.append("<td style='text-align:right;color:red'>" + strOrganTradingVolume
+										+ "</td>\r\n");
 							}
 						} else {
 							sb1.append("<td style='text-align:right'>0</td>\r\n");
 						}
 						// 개인 매매
 						if (iIndividualTradingVolume < 0) {
-							sb1.append("<td style='text-align:right;color:blue'>" + strIndividualTradingVolume + "</td>\r\n");
+							sb1.append("<td style='text-align:right;color:blue'>" + strIndividualTradingVolume
+									+ "</td>\r\n");
 						} else if (iIndividualTradingVolume > 0) {
-							sb1.append("<td style='text-align:right;color:red'>" + strIndividualTradingVolume + "</td>\r\n");
+							sb1.append("<td style='text-align:right;color:red'>" + strIndividualTradingVolume
+									+ "</td>\r\n");
 						} else {
 							sb1.append("<td style='text-align:right'>0</td>\r\n");
 						}
@@ -2027,8 +2019,8 @@ public class StockUtil {
 						} else if (strAfterHoursSign.equals("-")) {
 							strAfterHoursPriceColor = "blue";
 						}
-						sb1.append("<td style='text-align:right;color:" + strAfterHoursPriceColor + ";background-color:"+strAfterHoursPriceBgColor+"'>" + strAfterHoursPrice
-								+ "</td>\r\n");						
+						sb1.append("<td style='text-align:right;color:" + strAfterHoursPriceColor + ";background-color:"
+								+ strAfterHoursPriceBgColor + "'>" + strAfterHoursPrice + "</td>\r\n");
 					} else {
 						sb1.append("<td style='border-bottom:1px solid gray;background-color:white;'>\r\n");
 //						sb1.append("	<a href='https://ssl.pstatic.net/imgfinance/chart/item/area/day/"+s.getStockCode()+".png'><img src='https://ssl.pstatic.net/imgfinance/chart/item/area/day/"+s.getStockCode()+".png' width='350px'></a><br/>\r\n");
@@ -2122,7 +2114,8 @@ public class StockUtil {
 		sb1.append("<span style='font:12px bold;border:1px solid #afaefe'>My Comment</span>\r\n");
 		sb1.append("<br>\r\n");
 		sb1.append("<div style='color: rgb(0, 0, 0);font-size:15px;font-weight:bold;font-style:italic;'>")
-				.append(strComment).append("</div>\r\n");
+				.append(strComment).append("\r\n");
+		sb1.append("</div>\r\n");
 		sb1.append("</div>\r\n");
 		return sb1.toString();
 	}
@@ -3467,7 +3460,7 @@ public class StockUtil {
 	public static List<StockVO> getAllStockInfo(String kospidaq, String fileName) {
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 

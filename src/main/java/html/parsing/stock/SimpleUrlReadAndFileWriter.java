@@ -15,9 +15,8 @@ import html.parsing.stock.util.FileUtil;
 
 public class SimpleUrlReadAndFileWriter {
 
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static final Logger logger = LoggerFactory.getLogger(SimpleUrlReadAndFileWriter.class);
-
-	final static String userHome = System.getProperty("user.home");
 
 	@Test
 	public void urlRead() {
@@ -35,14 +34,14 @@ public class SimpleUrlReadAndFileWriter {
 		try {
 			Document doc = Jsoup.connect(url).get();
 			String title = doc.select("#post-area .post-top .htitle .pcol1").text();
-			logger.debug("title:"+title);
+			logger.debug("title:" + title);
 			String html = doc.html();
-			logger.debug("html:"+html);
+			logger.debug("html:" + html);
 
 			SimpleDateFormat sdf = new SimpleDateFormat("[yyyy-MM-dd] HH.mm.ss.SSS", Locale.KOREAN);
 			String strDate = sdf.format(new Date());
-			String fileName = userHome + "\\documents\\[" + strDate + "]_" + title + ".html";
-			logger.debug("fileName:"+fileName);
+			String fileName = USER_HOME + "\\documents\\[" + strDate + "]_" + title + ".html";
+			logger.debug("fileName:" + fileName);
 			FileUtil.fileWrite(fileName, html);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

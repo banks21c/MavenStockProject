@@ -28,7 +28,7 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class NocutNews extends News {
+public class NocutNews extends News implements NewsInterface {
 
 	private static Logger logger = LoggerFactory.getLogger(NocutNews.class);
 
@@ -64,11 +64,11 @@ public class NocutNews extends News {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		System.out.println("url:" + url);
 		getURL(url);
 
@@ -86,7 +86,7 @@ public class NocutNews extends News {
 			strFileNameDate = StockUtil.getTitleForFileName(strTitleForFileName);
 			System.out.println("strTitleForFileName:" + strTitleForFileName);
 
-			String fileName2 = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
+			String fileName2 = USER_HOME + File.separator + "documents" + File.separator + strYMD + ".html";
 			System.out.println("fileName2:" + fileName2);
 			Writer bw = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
@@ -138,15 +138,15 @@ public class NocutNews extends News {
 			content = content.replaceAll("figcaption", "div");
 			content = StockUtil.makeStockLinkStringByExcel(content);
 
-			Elements copyRightElements = doc.select(".news_copyright");
-			Element copyRightElement = null;
-			String copyRight = "";
-			if (copyRightElements.size() <= 0) {
-				copyRightElements = doc.select("#newsView .copy");
+			Elements copyrightElements = doc.select(".news_copyright");
+			Element copyrightElement = null;
+			String copyright = "";
+			if (copyrightElements.size() <= 0) {
+				copyrightElements = doc.select("#newsView .copy");
 			}
-			copyRightElement = copyRightElements.first();
-			if (copyRightElement != null) {
-				copyRight = copyRightElement.text();
+			copyrightElement = copyrightElements.first();
+			if (copyrightElement != null) {
+				copyright = copyrightElement.text();
 			}
 
 			sb1.append("<html lang='ko'>\r\n");
@@ -162,21 +162,21 @@ public class NocutNews extends News {
 			sb1.append("<span style='font-size:12px'>" + author + "</span><br>\n");
 			sb1.append("<span style='font-size:12px'>" + strDate + "</span><br><br>\n");
 			sb1.append(content + "<br><br>\n");
-			sb1.append(copyRight + "<br><br>\n");
+			sb1.append(copyright + "<br><br>\n");
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + host + File.separator
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + host + File.separator
 					+ strFileNameDate + "_" + strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 			;

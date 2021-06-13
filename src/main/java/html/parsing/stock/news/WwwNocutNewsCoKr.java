@@ -24,7 +24,7 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class WwwNocutNewsCoKr extends News {
+public class WwwNocutNewsCoKr extends News implements NewsInterface {
 
 	private static Logger logger = LoggerFactory.getLogger(WwwNocutNewsCoKr.class);
 
@@ -60,11 +60,11 @@ public class WwwNocutNewsCoKr extends News {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 
 		StringBuilder sb1 = new StringBuilder();
@@ -166,19 +166,17 @@ public class WwwNocutNewsCoKr extends News {
 			strContent = strContent.replaceAll("figure", "div");
 			strContent = strContent.replaceAll("figcaption", "div");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
 
-			Elements copyRightElements = doc.select(".news_copyright");
-			Element copyRightElement = null;
-			String copyRight = "";
-			if (copyRightElements.size() <= 0) {
-				copyRightElements = doc.select("#newsView .copy");
+			Elements copyrightElements = doc.select(".news_copyright");
+			Element copyrightElement = null;
+			String copyright = "";
+			if (copyrightElements.size() <= 0) {
+				copyrightElements = doc.select("#newsView .copy");
 			}
-			copyRightElement = copyRightElements.first();
-			if (copyRightElement != null) {
-				copyRight = copyRightElement.text();
+			copyrightElement = copyrightElements.first();
+			if (copyrightElement != null) {
+				copyright = copyrightElement.text();
 			}
 
 			sb1.append("<html lang='ko'>\r\n");
@@ -201,22 +199,22 @@ public class WwwNocutNewsCoKr extends News {
 			sb1.append("<span style='font-size:12px'>").append(writer).append("</span><br><br>\n");
 			sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
 			sb1.append(strContent).append("<br><br>\n");
-			sb1.append(copyRight).append("<br><br>\n");
+			sb1.append(copyright).append("<br><br>\n");
 			System.out.println("sb.toString:" + sb1.toString());
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 

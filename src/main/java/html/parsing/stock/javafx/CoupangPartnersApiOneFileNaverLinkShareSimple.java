@@ -6,6 +6,10 @@
 package html.parsing.stock.javafx;
 
 import java.awt.Desktop;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowListener;
+import java.awt.event.WindowStateListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -35,6 +39,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.http.HttpHost;
@@ -49,18 +54,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.slf4j.LoggerFactory;
 
 import com.coupang.partners.HmacGenerator;
 
 import html.parsing.stock.util.NaverUtil;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
-import java.util.List;
-import java.util.Map;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -70,6 +67,7 @@ public class CoupangPartnersApiOneFileNaverLinkShareSimple extends javax.swing.J
 	WindowFocusListener,
 	WindowStateListener {
 
+	private final static String COUPANG_PARTNERS_NOTICE = "<div>※ 쿠팡 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있습니다.</div>";
 	private static final long serialVersionUID = 1341726937516862047L;
 	final static String USER_HOME = System.getProperty("user.home");
 	private static final String ALGORITHM = "HmacSHA256";
@@ -1011,7 +1009,7 @@ public class CoupangPartnersApiOneFileNaverLinkShareSimple extends javax.swing.J
 		bestcategoriesUrl = BESTCATEGORIES_URL + categoryId + "?limit=" + limit;
 		String data = getData("카테고리별 베스트상품", bestcategoriesUrl, categoryNm, strParamJson);
 		sb.append(data);
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String strBlogCategoryName = "카테고리별 베스트 상품";
 		naverBlogLinkShare(sb, strBlogCategoryName, shareTitle);
@@ -1052,7 +1050,7 @@ public class CoupangPartnersApiOneFileNaverLinkShareSimple extends javax.swing.J
 				}
 			}
 		}
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "카테고리별 베스트상품";
 		String strBlogCategoryName = "카테고리별 베스트 상품";
@@ -1072,10 +1070,10 @@ public class CoupangPartnersApiOneFileNaverLinkShareSimple extends javax.swing.J
 		System.out.println("strParamJson:" + strParamJson);
 		String data = getData("골드박스 상품", GOLDBOX_URL, "", strParamJson);
 		sb.append(data);
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "WOW 와우회원 전용 매일 오전 7시 골드박스 1일특가";
-		String strBlogCategoryName = "골드박스";
+		String strBlogCategoryName = "골드박스 상품";
 		naverBlogLinkShare(sb, strBlogCategoryName, shareTitle);
 
 		return true;
@@ -1092,7 +1090,7 @@ public class CoupangPartnersApiOneFileNaverLinkShareSimple extends javax.swing.J
 		System.out.println("strParamJson:" + strParamJson);
 		String data = getData("쿠팡PL상품", COUPANG_PL_URL, "", strParamJson);
 		sb.append(data);
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "쿠팡 PL 상품 TOP" + limit;
 		String strBlogCategoryName = "PL 상품";
@@ -1151,7 +1149,7 @@ public class CoupangPartnersApiOneFileNaverLinkShareSimple extends javax.swing.J
 				}
 			}
 		}
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "쿠팡 PL 브랜드별 상품 TOP" + limit;
 		String strBlogCategoryName = "PL 브랜드별 상품";
@@ -1179,7 +1177,7 @@ public class CoupangPartnersApiOneFileNaverLinkShareSimple extends javax.swing.J
 		System.out.println("server_url:" + SEARCH_URL);
 		String data = getData("상품검색", SEARCH_URL, "", strParamJson);
 		sb.append(data);
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "상품검색";
 		String strBlogCategoryName = "추천 상품";

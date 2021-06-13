@@ -11,8 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.news.News;
+import html.parsing.stock.news.NewsInterface;
 
-public class URLEncodeDecodeTest extends News {
+public class URLEncodeDecodeTest extends News implements NewsInterface {
 
 //	String strEncodedSample = "https://ko.wikipedia.org/wiki/다우_존스_산업평균지수";
 //	String strEncodedSample = "https://ko.wikipedia.org/wiki/%EB%8B%A4%EC%9A%B0_%EC%A1%B4%EC%8A%A4_%EC%82%B0%EC%97%85%ED%8F%89%EA%B7%A0%EC%A7%80%EC%88%98";

@@ -1,14 +1,6 @@
 package html.parsing.stock;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,16 +22,20 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.ResultVO;
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.ForeignTradingVolumeAscCompare;
 import html.parsing.stock.util.DataSort.ForeignTradingVolumeDescCompare;
 import html.parsing.stock.util.DataSort.OrganTradingVolumeAscCompare;
 import html.parsing.stock.util.DataSort.OrganTradingVolumeDescCompare;
-import html.parsing.stock.model.ResultVO;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
 
 public class AllStockForeignOrganNew20191231 {
 
-	final static String userHome = System.getProperty("user.home");
+	
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrganNew20191231.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -649,7 +645,7 @@ public class AllStockForeignOrganNew20191231 {
 		}
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
-		String fileName = userHome + "\\Downloads\\" + strDate + "_" + title + ".html";
+		String fileName = USER_HOME + "\\Downloads\\" + strDate + "_" + title + ".html";
 		logger.debug("fileName :" + fileName);
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}
@@ -734,7 +730,7 @@ public class AllStockForeignOrganNew20191231 {
 		}
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
-		String fileName = userHome + "\\Downloads\\" + strDate + "_" + title + ".html";
+		String fileName = USER_HOME + "\\Downloads\\" + strDate + "_" + title + ".html";
 		logger.debug("fileName :" + fileName);
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}

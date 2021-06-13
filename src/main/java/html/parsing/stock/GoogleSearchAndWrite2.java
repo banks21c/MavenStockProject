@@ -39,8 +39,8 @@ public class GoogleSearchAndWrite2 {
 //        InputStream strm = url.openStream();
 		System.out.println("path:" + curUrl.getPath());
 
-		String userHome = System.getProperty("user.home");
-		System.out.println("userDir:" + userHome);
+		String USER_HOME = System.getProperty("user.home");
+		System.out.println("userDir:" + USER_HOME);
 
 		File currentDirFile = new File(".");
 		String absolutePath = currentDirFile.getAbsolutePath();
@@ -62,7 +62,7 @@ public class GoogleSearchAndWrite2 {
 				targetFileName = targetFileName + "(" + searchWord + ").html";
 			}
 
-			String targetUrl = userHome + File.separator + "Documents" + File.separator + targetFileName;
+			String targetUrl = USER_HOME + File.separator + "Documents" + File.separator + targetFileName;
 			System.out.println("targetUrl:" + targetUrl);
 			URL url = new URL(strSourceUrl);
 

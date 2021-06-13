@@ -34,7 +34,7 @@ import html.parsing.stock.util.StockUtil;
 
 public class StockNewsInput {
 
-	final static String userHome = System.getProperty("user.home");
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(StockNewsInput.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -82,7 +82,6 @@ public class StockNewsInput {
 
 	StockNewsInput(int i) {
 
-		
 		strDate = JOptionPane.showInputDialog("날짜를 입력해 주세요(YYYY.MM.DD)", strDefaultDate);
 		if (strDate.equals("")) {
 			strDate = strDefaultDate;
@@ -121,7 +120,7 @@ public class StockNewsInput {
 	}
 
 	public void readFile(String kospidaq, String fileName) {
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
@@ -285,10 +284,10 @@ public class StockNewsInput {
 	}
 
 	public void writeNewsFile(List<StockVO> searchList) {
-		// File f = new File(userHome + "\\documents\\" + fileName);
+		// File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			FileWriter fw = new FileWriter(
-					userHome + "\\documents\\" + strDate + "_오늘의_" + strStockCodeOrName + "_관련_뉴스.html");
+					USER_HOME + "\\documents\\" + strDate + "_오늘의_" + strStockCodeOrName + "_관련_뉴스.html");
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");

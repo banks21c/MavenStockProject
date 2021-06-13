@@ -5,7 +5,6 @@
  */
 package test.calendar;
 
-import html.parsing.stock.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

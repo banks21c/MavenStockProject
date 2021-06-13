@@ -187,11 +187,11 @@ public class NewsMoneyToday extends javax.swing.JFrame {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		News gurl = new News();
 		gurl.getURL(url);
 		String protocol = gurl.getProtocol();
@@ -251,9 +251,7 @@ public class NewsMoneyToday extends javax.swing.JFrame {
 			String strContent = textBodyDoc.html();
 			System.out.println("strContent:" + strContent);
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
 
 			String copyright = article.select(".copyright").outerHtml();
 

@@ -1,14 +1,9 @@
 package html.parsing.stock;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.model.StockVO;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,13 +20,15 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.ForeignHaveAmountDescCompare;
 import html.parsing.stock.util.DataSort.ForeignHaveRatioDescCompare;
+import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.StockUtil;
 
 public class AllStockForeignRetainRatio {
 
-	final static String userHome = System.getProperty("user.home");
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(AllStockForeignRetainRatio.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -63,7 +60,6 @@ public class AllStockForeignRetainRatio {
 
 	AllStockForeignRetainRatio(int i) {
 
-		
 		String kospiFileName = GlobalVariables.kospiFileName;
 		String kosdaqFileName = GlobalVariables.kosdaqFileName;
 
@@ -164,7 +160,7 @@ public class AllStockForeignRetainRatio {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -174,7 +170,7 @@ public class AllStockForeignRetainRatio {
 					String varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
@@ -222,7 +218,7 @@ public class AllStockForeignRetainRatio {
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 			// 투자자별 매매동향 - 외국인 보유주수, 보유율
@@ -231,7 +227,7 @@ public class AllStockForeignRetainRatio {
 
 			String foreignHaveVolume = doc.select("table.type2").get(1).select("tr").get(3).select("td").get(7).text();
 			String foreignHaveRatio = doc.select("table.type2").get(1).select("tr").get(3).select("td").get(8).text()
-				.replace("%", "");
+					.replace("%", "");
 
 			System.out.println("foreignHaveVolume:" + foreignHaveVolume);
 			System.out.println("foreignHaveRatio:" + foreignHaveRatio);
@@ -262,16 +258,17 @@ public class AllStockForeignRetainRatio {
 	}
 
 	public void writeFile(List<StockVO> list, String fileName, String title, String gubun) {
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 			String strDate = sdf.format(new Date());
 
-			FileWriter fw = new FileWriter(userHome + "\\documents\\" + strDate + "_" + title + ".html");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strDate + "_" + title + ".html");
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("<style>\r\n");
 			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 			sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
@@ -291,12 +288,16 @@ public class AllStockForeignRetainRatio {
 			// style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락률</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유주수</td>\r\n");
 			if (gubun.equals("ratio")) {
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유율</td>\r\n");
+				sb1.append(
+						"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유율</td>\r\n");
 			} else if (gubun.equals("amount")) {
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유금액(백만)</td>\r\n");
+				sb1.append(
+						"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유금액(백만)</td>\r\n");
 			} else if (gubun.equals("all")) {
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유율</td>\r\n");
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유금액(백만)</td>\r\n");
+				sb1.append(
+						"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유율</td>\r\n");
+				sb1.append(
+						"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유금액(백만)</td>\r\n");
 			}
 			sb1.append("</tr>\r\n");
 
@@ -333,6 +334,7 @@ public class AllStockForeignRetainRatio {
 
 		}
 	}
+
 	public static List<StockVO> getAllStockInfo(List<StockVO> stockList) {
 		List<StockVO> svoList = new ArrayList<>();
 		int cnt = 0;
@@ -342,7 +344,7 @@ public class AllStockForeignRetainRatio {
 			String stockName = svo.getStockName();
 			System.out.println("_______________________________________");
 			System.out.println(cnt + "." + stockCode + "\t" + stockName);
-			System.out.println("_______________________________________");			
+			System.out.println("_______________________________________");
 			StockVO vo = StockUtil.getStockInfo(cnt, stockCode, stockName);
 			if (vo != null) {
 				svoList.add(vo);

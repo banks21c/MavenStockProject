@@ -30,13 +30,14 @@ import org.slf4j.LoggerFactory;
 import html.parsing.stock.model.StockNewsVO;
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.news.News;
+import html.parsing.stock.news.NewsInterface;
 import html.parsing.stock.util.DataSort.StockNameLengthDescCompare;
 import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.StockUtil;
 
-public class StockUpjongInput extends News {
+public class StockUpjongInput extends News implements NewsInterface {
 
-    final static String userHome = System.getProperty("user.home");
+    
     private static Logger logger = LoggerFactory.getLogger(StockUpjongInput.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -127,7 +128,7 @@ public class StockUpjongInput extends News {
     }
 
     public void readFile(String kospidaq, String fileName) {
-        File f = new File(userHome + "\\documents\\" + fileName);
+        File f = new File(USER_HOME + "\\documents\\" + fileName);
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f),"UTF8"));
 
@@ -309,7 +310,7 @@ public class StockUpjongInput extends News {
     public void writeFile(String strThemeName, String themeMarketPrice) {
         try {
             FileWriter fw = new FileWriter(
-                    userHome + "\\documents\\" + strDate + "_업종[" + strThemeName + "]_관련_뉴스.html");
+                    USER_HOME + "\\documents\\" + strDate + "_업종[" + strThemeName + "]_관련_뉴스.html");
             StringBuilder sb1 = new StringBuilder();
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");

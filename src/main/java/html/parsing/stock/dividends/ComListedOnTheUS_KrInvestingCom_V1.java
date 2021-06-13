@@ -25,17 +25,18 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.util.DataSort.DividendRateDescCompare;
 import html.parsing.stock.JsoupChangeAhrefElementsAttribute;
 import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.news.News;
+import html.parsing.stock.news.NewsInterface;
+import html.parsing.stock.util.DataSort.DividendRateDescCompare;
 import html.parsing.stock.util.FileUtil;
 import io.restassured.response.Response;
 
-public class ComListedOnTheUS_KrInvestingCom_V1 extends News {
+public class ComListedOnTheUS_KrInvestingCom_V1 extends News implements NewsInterface {
 
 //public static final String SERVER_URI = "https://www.nyse.com/listings_directory/stock";
 	public static final String SERVER_URI = "https://www.nyse.com/api/quotes/filter";
@@ -49,7 +50,7 @@ public class ComListedOnTheUS_KrInvestingCom_V1 extends News {
 	String dowJones = "https://kr.investing.com/equities/StocksFilter?noconstruct=1&smlID=595&sid=&tabletype=price&index_id=169";
 
 	private static final Logger logger = LoggerFactory.getLogger(CompaniesListedOnTheNYSE_V3.class);
-	final static String userHome = System.getProperty("user.home");
+	
 	static String strCurrentDate = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.ss.SSS", Locale.KOREAN).format(new Date());
 	String fileName = "";
 
@@ -164,7 +165,7 @@ public class ComListedOnTheUS_KrInvestingCom_V1 extends News {
 //			String tableHtml = tableElmt.outerHtml();
 //			logger.debug(tableHtml);
 			doc = Jsoup.parse(sb.toString());
-			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_" + gubun + "_List_.html";
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_" + gubun + "_List_.html";
 			logger.debug("fileName :" + fileName);
 			FileUtil.fileWrite(fileName, doc.html());
 		} catch (IOException ex) {
@@ -347,7 +348,7 @@ public class ComListedOnTheUS_KrInvestingCom_V1 extends News {
 				if (remainCount == 0) {
 					thousandCount++;
 					sb.append("</table>\r\n");
-					fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + (thousandCount * maxResultsPerPage) + ".html";
+					fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + (thousandCount * maxResultsPerPage) + ".html";
 					logger.debug("fileName :" + fileName);
 
 					FileUtil.fileWrite(fileName, sb.toString());
@@ -356,7 +357,7 @@ public class ComListedOnTheUS_KrInvestingCom_V1 extends News {
 			}
 			//1000개로 몇개 쓰고 남은 것은 여기에서 파일로 저장한다.
 			sb.append("</table>\r\n");
-			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + remainCount + ".html";
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + remainCount + ".html";
 			FileUtil.fileWrite(fileName, sb.toString());
 			logger.debug("downloadTest1 finished");
 
@@ -538,7 +539,7 @@ public class ComListedOnTheUS_KrInvestingCom_V1 extends News {
 				if (remainCount == 0) {
 					thousandCount++;
 					sb.append("</table>\r\n");
-					fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + (thousandCount * 1000) + ".html";
+					fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + (thousandCount * 1000) + ".html";
 					FileUtil.fileWrite(fileName, sb.toString());
 					sb = getNewStringBufferWithHeader();
 				}
@@ -546,7 +547,7 @@ public class ComListedOnTheUS_KrInvestingCom_V1 extends News {
 			}
 			//1000개로 몇개 쓰고 남은 것은 여기에서 파일로 저장한다.
 			sb.append("</table>\r\n");
-			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE" + "_" + "List" + ".html";
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE" + "_" + "List" + ".html";
 			FileUtil.fileWrite(fileName, sb.toString());
 			logger.debug("downloadTest1 finished");
 
@@ -744,7 +745,7 @@ public class ComListedOnTheUS_KrInvestingCom_V1 extends News {
 				if (remainCount == 0) {
 					thousandCount++;
 					sb.append("</table>\r\n");
-					fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + (thousandCount * maxResultsPerPage) + ".html";
+					fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + (thousandCount * maxResultsPerPage) + ".html";
 					logger.debug("fileName :" + fileName);
 
 					FileUtil.fileWrite(fileName, sb.toString());
@@ -753,7 +754,7 @@ public class ComListedOnTheUS_KrInvestingCom_V1 extends News {
 			}
 			//1000개로 몇개 쓰고 남은 것은 여기에서 파일로 저장한다.
 			sb.append("</table>\r\n");
-			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + remainCount + ".html";
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE_List_" + remainCount + ".html";
 			FileUtil.fileWrite(fileName, sb.toString());
 			logger.debug("downloadTest1 finished");
 

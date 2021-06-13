@@ -22,7 +22,8 @@ import org.jsoup.select.Elements;
  */
 public class MakeDaumKospiKosdaqList {
 
-    final static String userHome = System.getProperty("user.home");
+    
+	public final static String USER_HOME = System.getProperty("user.home");
     final static String[] fundNames = {"GIANT", "KTOP", "PIONEER", "마이다스", "마이티",
         "파워", "흥국 S&P", "ARIRANG", "KBSTAR",
         "KINDEX", "KODEX", "KOSEF", "QV", "SMART", "TIGER", "TREX", "TRUE",
@@ -108,7 +109,7 @@ public class MakeDaumKospiKosdaqList {
             doc = Jsoup.connect(url).get();
             // System.out.println(doc.html());
 
-            FileWriter fw = new FileWriter(userHome + "\\documents\\new_" + div + woosun + boat + ".html", false);
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\new_" + div + woosun + boat + ".html", false);
 
             Elements edds = doc.select(".txt a");
             System.out.println("edds.size:" + edds.size());

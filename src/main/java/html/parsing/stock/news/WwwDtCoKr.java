@@ -21,7 +21,7 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class WwwDtCoKr extends News {
+public class WwwDtCoKr extends News implements NewsInterface {
 
 	private static Logger logger = LoggerFactory.getLogger(WwwDtCoKr.class);
 
@@ -57,11 +57,11 @@ public class WwwDtCoKr extends News {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 		System.out.println("url:" + url);
 		System.out.println("createHTMLFile protocol:" + protocol);
@@ -141,11 +141,9 @@ public class WwwDtCoKr extends News {
 			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
 			// System.out.println("strContent:[" + strContent + "]strContent");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
 
-			String copyRight = "";
+			String copyright = "";
 
 			sb1.append("<!doctype html>\r\n");
 			sb1.append("<html lang='ko'>\r\n");
@@ -167,22 +165,22 @@ public class WwwDtCoKr extends News {
 			// sb1.append("<span
 			// style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
 			sb1.append(strContent).append("<br><br>\n");
-			sb1.append(copyRight).append("<br><br>\n");
+			sb1.append(copyright).append("<br><br>\n");
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 			System.out.println("sb.toString:[" + sb1.toString() + "]");
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 

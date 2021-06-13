@@ -1,14 +1,15 @@
 package com.coupang.partners;
 
-import org.apache.commons.codec.binary.Hex;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Hex;
 
 public final class HmacGenerator {
     private static final String ALGORITHM = "HmacSHA256";

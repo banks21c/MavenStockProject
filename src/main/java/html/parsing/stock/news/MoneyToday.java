@@ -1,6 +1,5 @@
 package html.parsing.stock.news;
 
-import html.parsing.stock.util.StockUtil;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
@@ -16,6 +15,7 @@ import org.slf4j.LoggerFactory;
  * and open the template in the editor.
  */
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.StockUtil;
 
 /**
  *
@@ -23,8 +23,9 @@ import html.parsing.stock.util.FileUtil;
  */
 public class MoneyToday extends javax.swing.JFrame {
 
+	public final static String USER_HOME = System.getProperty("user.home");
     private static Logger logger = LoggerFactory.getLogger(MoneyToday.class);
-    final static String userHome = System.getProperty("user.home");
+    
 
     /**
      * Creates new form NewJFrame1
@@ -164,14 +165,14 @@ public class MoneyToday extends javax.swing.JFrame {
             sb1.append("</body>\r\n");
             sb1.append("</html>\r\n");
             // System.out.println(sb1.toString());
-            File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+            File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-            String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+            String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
             FileUtil.fileWrite(fileName, sb1.toString());
 
-            fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+            fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
             FileUtil.fileWrite(fileName, sb1.toString());
 
         } catch (Exception e) {

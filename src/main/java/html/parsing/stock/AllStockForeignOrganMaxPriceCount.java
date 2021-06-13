@@ -1,14 +1,8 @@
 package html.parsing.stock;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.model.StockVO;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,12 +18,15 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.MaxPriceCountDescCompare;
+import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.StockUtil;
 
 public class AllStockForeignOrganMaxPriceCount extends Thread {
 
-	final static String userHome = System.getProperty("user.home");
+	
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrganMaxPriceCount.class);
 	int flag = 0;
 	String kospiFileName = GlobalVariables.kospiFileName;
@@ -278,7 +275,7 @@ public class AllStockForeignOrganMaxPriceCount extends Thread {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 			String strDate = sdf.format(new Date());
 
-			FileWriter fw = new FileWriter(userHome + "\\documents\\" + strDate + "_" + title + ".html");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strDate + "_" + title + ".html");
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");

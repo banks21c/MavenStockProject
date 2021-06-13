@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
@@ -33,7 +34,6 @@ import ij.ImageStack;
 import ij.io.Opener;
 import ij.process.ImageProcessor;
 import ij.process.StackProcessor;
-import java.net.MalformedURLException;
 
 /**
  *

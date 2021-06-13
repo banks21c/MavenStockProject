@@ -4,18 +4,15 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
@@ -30,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.NaverUtil;
 import html.parsing.stock.util.StockUtil;
 
@@ -131,8 +127,8 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 		addToAllStockList();
 		Collections.sort(uniqueStockList, new VaryRatioDescCompare());
 //		writeFile(uniqueStockList, "코스닥");
-		int iHour = Integer.parseInt(new SimpleDateFormat("HH").format(new Date()));
-		if (iHour >= 18 || iHour < 8) {
+		int iHourMinute = Integer.parseInt(new SimpleDateFormat("HHmm").format(new Date()));
+		if (iHourMinute >= 1830 || iHourMinute < 800) {
 			// 기관,외인,개인매매
 			uniqueStockList = NaverStockTradingVolume.getStockTradingVolumeList(uniqueStockList);
 			// 시간외단일가
@@ -213,8 +209,8 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 		addToAllStockList();
 		logger.debug("uniqueStockList.size:" + uniqueStockList.size());
 		Collections.sort(uniqueStockList, new VaryRatioDescCompare());
-		int iHour = Integer.parseInt(new SimpleDateFormat("HH").format(new Date()));
-		if (iHour >= 18 || iHour < 8) {
+		int iHourMinute = Integer.parseInt(new SimpleDateFormat("HHmm").format(new Date()));
+		if (iHourMinute >= 1830 || iHourMinute < 800) {
 			// 기관,외인,개인매매
 			uniqueStockList = NaverStockTradingVolume.getStockTradingVolumeList(uniqueStockList);
 			// 시간외단일가
@@ -549,8 +545,8 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 			sb1.append(
 					"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
 
-			int iHour = Integer.parseInt(new SimpleDateFormat("HH").format(new Date()));
-			if (iHour >= 18 || iHour < 8) {
+			int iHourMinute = Integer.parseInt(new SimpleDateFormat("HHmm").format(new Date()));
+			if (iHourMinute >= 1830 || iHourMinute < 800) {
 				// 2020.12.13 추가
 				sb1.append(
 						"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외국인매매</td>\r\n");
@@ -620,7 +616,7 @@ public class StockUnique_ReadTxtFile_Thread extends Thread {
 					sb1.append("<td style='text-align:right'>" + svo.getTradingVolume() + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>" + svo.getTradingAmount() + "</td>\r\n");
 
-					if (iHour >= 18 || iHour < 8) {
+					if (iHourMinute >= 1830 || iHourMinute < 800) {
 						// 외국인 매매
 						if (iForeignTradingVolume < 0) {
 							sb1.append(

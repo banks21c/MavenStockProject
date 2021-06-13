@@ -4,16 +4,15 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import org.jsoup.Connection;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class JSoupTest1 {
 
-	final static String userHome = System.getProperty("user.home");
+	
 	private static Logger logger = LoggerFactory.getLogger(JSoupTest1.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -53,8 +52,9 @@ public class JSoupTest1 {
 //			Connection.Response res = Jsoup.connect(url).timeout(10 * 1000).execute();
 			Connection.Response res = Jsoup.connect(url).ignoreContentType(true)
 				.timeout(3000)
-				.header("Origin", "https://m.stock.naver.com/")
-				.header("Referer", "https://m.stock.naver.com/")
+//				.header("Origin", "https://finance.daum.net/")
+				//Referer는 필수
+				.header("Referer", "https://finance.daum.net/")
 				.header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
 //				.header("Content-Type", "application/x-www-form-urlencoded")
 //				.header("Content-Type", "text/*")

@@ -20,8 +20,9 @@ import html.parsing.stock.util.StockUtil;
 
 public class WebCrawler20191230 extends javax.swing.JFrame {
 
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(WebCrawler20191230.class);
-	final static String userHome = System.getProperty("user.home");
+	
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -186,11 +187,11 @@ public class WebCrawler20191230 extends javax.swing.JFrame {
 		}
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		News gurl = new News();
 		gurl.getURL(url);
 		String protocol = gurl.getProtocol();
@@ -234,16 +235,14 @@ public class WebCrawler20191230 extends javax.swing.JFrame {
 
 			strContent = temp.toString();
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
 
 			sb1.append(strContent);
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strTitle + "_" + strYMD
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strTitle + "_" + strYMD
 					+ ".html";
 			logger.debug("fileName2:" + fileName);
 			FileUtil.fileWrite(fileName, sb1.toString());

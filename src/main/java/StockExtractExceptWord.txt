@@ -2,6 +2,7 @@
 CS:CSA
 CS:크레디트스위스(CS)
 CS:CSSC
+CS:CSI
 CS:CSIS
 CS:CSR
 CS:CSV
@@ -33,6 +34,7 @@ GV:CGV
 KD:CKD
 KD:KDB
 KD:KDX
+KT:KTB
 KT:KTX
 KT:KTown
 LF:DLF
@@ -51,6 +53,7 @@ SG:SGI
 SG:SSG
 SG:ESG
 SK:ASK
+SK:SKU
 SK:SKY
 SK:MMSK
 SK:GSK
@@ -269,7 +272,11 @@ SK:GSK
 전방:전방위
 전방:전방추돌
 전방:전방 추돌
+제테마:국제테마
+조비:제조비용
 지코:도지코인
+진도:마진도
+진도:승진도
 진도:청사진도
 진도:취재진도
 진도:티슈진도

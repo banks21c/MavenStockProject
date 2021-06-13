@@ -2,6 +2,8 @@ package html.parsing.stock.util;
 
 import java.io.UnsupportedEncodingException;
 
+import org.apache.commons.codec.binary.Base64OutputStream;
+
 /**
  * Utilities for encoding and decoding the Base64 representation of
  * binary data.  See RFCs <a

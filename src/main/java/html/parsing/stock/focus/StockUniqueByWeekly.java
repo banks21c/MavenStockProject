@@ -36,9 +36,10 @@ import html.parsing.stock.util.StockUtil;
 
 public class StockUniqueByWeekly {
 
-    final static String userHome = System.getProperty("user.home");
+    
     private static Logger logger1 = null;
     private static java.util.logging.Logger logger2 = null;
+	public final static String USER_HOME = System.getProperty("user.home");
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
     int iYear = Integer.parseInt(strYear);
@@ -355,7 +356,7 @@ public class StockUniqueByWeekly {
 
     public void readFile(String kospidaq, String fileName) {
 
-        File f = new File(userHome + "\\documents\\" + fileName);
+        File f = new File(USER_HOME + "\\documents\\" + fileName);
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f),"UTF8"));
 
@@ -672,11 +673,11 @@ public class StockUniqueByWeekly {
         return stock;
     }
 
-    public void writeFile(List<StockVO> list, String fileName, String title) {
+    public void writeFile(List<StockVO> stockList, String fileName, String title) {
         String monday = sdfday.format(inputDateMondayDate);
         String friday = sdfday.format(inputDateFridayDate);
         try {
-            FileWriter fw = new FileWriter(userHome + "\\documents\\" + monday + " ~ " + friday + " " + strHms + "_"
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + monday + " ~ " + friday + " " + strHms + "_"
                     + title.replaceAll(" ", "_") + ".html");
             StringBuilder sb1 = new StringBuilder();
             sb1.append("<html lang='ko'>\r\n");
@@ -701,7 +702,7 @@ public class StockUniqueByWeekly {
             sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
             sb1.append("</tr>\r\n");
 
-            for (StockVO s : list) {
+            for (StockVO s : stockList) {
                 if (s != null) {
                     sb1.append("<tr>\r\n");
                     String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
@@ -737,7 +738,7 @@ public class StockUniqueByWeekly {
             sb1.append("</table>\r\n");
             sb1.append("<br><br>\r\n");
 
-            for (StockVO s : list) {
+            for (StockVO s : stockList) {
                 if (s != null) {
                     Document classAnalysisDoc = Jsoup.connect(
                             "http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + s.getStockCode())
@@ -756,9 +757,9 @@ public class StockUniqueByWeekly {
             }
 
 			// 뉴스 첨부
-			StringBuilder newsAddedStockList = StockUtil.getNews(list);
+			StringBuilder newsAddedStockList = StockUtil.getNews(stockList);
 			// 증권명에 증권링크 생성
-			StringBuilder stockTableAdded = StockUtil.stockLinkString(newsAddedStockList, list);
+			StringBuilder stockTableAdded = StockUtil.stockLinkString(newsAddedStockList, stockList);
 			sb1.append(stockTableAdded.toString());
 			
             sb1.append("</body>\r\n");
@@ -783,7 +784,7 @@ public class StockUniqueByWeekly {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
             String strDate = sdf.format(new Date());
 
-            FileWriter fw = new FileWriter(userHome + "\\documents\\NewsTest." + strDate + ".html");
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\NewsTest." + strDate + ".html");
             StringBuilder sb1 = new StringBuilder();
 
             for (StockVO vo : allStockList) {

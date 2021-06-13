@@ -1,8 +1,5 @@
 package html.parsing.stock.stockholders;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -28,15 +25,17 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.util.DataSort.RetainAmountDescCompare;
 import html.parsing.stock.model.MajorStockHolderVO;
+import html.parsing.stock.model.StockVO;
+import html.parsing.stock.util.DataSort.RetainAmountDescCompare;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
 
 public class MajorStockHoldersInputDayPriceVsCurPrice {
 
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static final Logger logger = LoggerFactory.getLogger(MajorStockHoldersInputDayPriceVsCurPrice.class);
-
-	final static String userHome = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -777,7 +776,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		}
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
-		String fileName = userHome + "\\documents\\" + strDate + "_" + title + ".html";
+		String fileName = USER_HOME + "\\documents\\" + strDate + "_" + title + ".html";
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}
 
@@ -928,7 +927,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		sb1.append(assetMgmtCoSb.toString());
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
-		String fileName = userHome + "\\documents\\" + strDate + "_" + title + ".html";
+		String fileName = USER_HOME + "\\documents\\" + strDate + "_" + title + ".html";
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}
 
@@ -1102,7 +1101,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
 
-		String fileName = userHome + "\\documents\\" + strDate + "_코스피,코스닥_"
+		String fileName = USER_HOME + "\\documents\\" + strDate + "_코스피,코스닥_"
 				+ StringUtils.leftPad(String.valueOf(count), 2, "0") + "." + majorStockHolder + "_보유종목(보유금액순).html";
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}
@@ -1281,7 +1280,8 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			sb1.append("</html>\r\n");
 
 			String strDate = sdf.format(new Date());
-			String fileName = userHome + "\\documents\\" + strDate + "_" + strKospiKosdaqKey + "_주요주주 보유종목(보유금액순).html";
+			String fileName = USER_HOME + "\\documents\\" + strDate + "_" + strKospiKosdaqKey
+					+ "_주요주주 보유종목(보유금액순).html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 		}
 
@@ -1504,7 +1504,7 @@ public class MajorStockHoldersInputDayPriceVsCurPrice {
 			sb1.append("</html>\r\n");
 
 			String strDate = sdf.format(new Date());
-			String fileName = userHome + "\\documents\\" + strDate + "_" + strKospiKosdaqKey + "_" + companyType
+			String fileName = USER_HOME + "\\documents\\" + strDate + "_" + strKospiKosdaqKey + "_" + companyType
 					+ "_보유종목(보유금액순).html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 		}

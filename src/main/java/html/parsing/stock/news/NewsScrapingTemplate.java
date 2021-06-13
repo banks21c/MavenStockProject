@@ -18,8 +18,9 @@ import html.parsing.stock.util.StockUtil;
  */
 public class NewsScrapingTemplate extends javax.swing.JFrame {
 
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(NewsScrapingTemplate.class);
-	final static String userHome = System.getProperty("user.home");
+	
 
 	/**
 	 * Creates new form NewJFrame1
@@ -111,11 +112,11 @@ public class NewsScrapingTemplate extends javax.swing.JFrame {
 		}
 	}// GEN-LAST:event_urlTfKeyReleased
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 
 		News gurl = new News();
 		gurl.getURL(url);
@@ -144,9 +145,7 @@ public class NewsScrapingTemplate extends javax.swing.JFrame {
 
 			String strContent = printable.html();
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
@@ -166,16 +165,16 @@ public class NewsScrapingTemplate extends javax.swing.JFrame {
 			sb1.append("</html>\r\n");
 			System.out.println(sb1.toString());
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 

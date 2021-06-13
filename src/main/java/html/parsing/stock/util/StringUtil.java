@@ -3,7 +3,6 @@ package html.parsing.stock.util;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.text.StringCharacterIterator;
 import java.util.Calendar;
 import java.util.Date;
 

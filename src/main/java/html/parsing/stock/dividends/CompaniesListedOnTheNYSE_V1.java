@@ -1,14 +1,19 @@
 package html.parsing.stock.dividends;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
+import static io.restassured.RestAssured.given;
 
-import html.parsing.stock.util.FileUtil;
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -19,17 +24,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
+
+import html.parsing.stock.util.FileUtil;
 import io.restassured.response.Response;
-import static io.restassured.RestAssured.given;
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 public class CompaniesListedOnTheNYSE_V1 {
 
@@ -37,7 +38,8 @@ public class CompaniesListedOnTheNYSE_V1 {
 	public static final String SERVER_URI = "https://www.nyse.com/api/quotes/filter";
 
 	private static final Logger logger = LoggerFactory.getLogger(CompaniesListedOnTheNYSE_V1.class);
-	final static String userHome = System.getProperty("user.home");
+	public final static String USER_HOME = System.getProperty("user.home");
+	
 	static String strCurrentDate = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.ss.SSS", Locale.KOREAN).format(new Date());
 
 	public static void main(String args[]) throws InterruptedException, IOException, Exception {
@@ -126,7 +128,7 @@ public class CompaniesListedOnTheNYSE_V1 {
 				sb.append("</tr>\r\n");
 			}
 			sb.append("</table>\r\n");
-			fileName = userHome + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE" + "_" + "List" + ".html";
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strCurrentDate + "_NYSE" + "_" + "List" + ".html";
 			FileUtil.fileWrite(fileName, sb.toString());
 			logger.debug("downloadTest1 finished");
 

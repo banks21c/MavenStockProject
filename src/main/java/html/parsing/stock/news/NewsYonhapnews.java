@@ -25,9 +25,10 @@ import html.parsing.stock.util.StockUtil;
 
 public class NewsYonhapnews extends javax.swing.JFrame {
 
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = LoggerFactory.getLogger(NewsYonhapnews.class);
-	final static String userHome = System.getProperty("user.home");
+	
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -186,11 +187,11 @@ public class NewsYonhapnews extends javax.swing.JFrame {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		News gurl = new News();
 		gurl.getURL(url);
 		String protocol = gurl.getProtocol();
@@ -229,9 +230,7 @@ public class NewsYonhapnews extends javax.swing.JFrame {
 			}
 			System.out.println("strContent:" + strContent);
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
 
 			// String copyright = content.select(".adrs .cprgt").outerHtml();
 			// content.select(".adrs").remove();
@@ -260,17 +259,17 @@ public class NewsYonhapnews extends javax.swing.JFrame {
 			sb1.append("</html>\r\n");
 			System.out.println(sb1.toString());
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			FileWriter fw = new FileWriter(userHome + File.separator + "documents" + File.separator + strDateForFileName
+			FileWriter fw = new FileWriter(USER_HOME + File.separator + "documents" + File.separator + strDateForFileName
 					+ "_" + strTitleForFileName + ".html");
 			fw.write(sb1.toString());
 			fw.close();
 
-			fw = new FileWriter(userHome + File.separator + "documents" + File.separator + strDateForFileName + "_"
+			fw = new FileWriter(USER_HOME + File.separator + "documents" + File.separator + strDateForFileName + "_"
 					+ strTitleForFileName + ".html");
 			fw.write(sb1.toString());
 			fw.close();

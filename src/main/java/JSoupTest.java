@@ -13,7 +13,8 @@ import org.slf4j.LoggerFactory;
 
 public class JSoupTest {
 
-    final static String userHome = System.getProperty("user.home");
+    
+	public final static String USER_HOME = System.getProperty("user.home");
     private static Logger logger = LoggerFactory.getLogger(JSoupTest.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -43,7 +44,7 @@ public class JSoupTest {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
             String strDate = sdf.format(new Date());
 
-            FileWriter fw = new FileWriter(userHome + "\\documents\\NewsTest." + strDate + ".html");
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\NewsTest." + strDate + ".html");
             StringBuilder sb1 = new StringBuilder();
 
             // 종합정보

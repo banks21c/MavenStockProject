@@ -53,19 +53,17 @@ public class WwwChosunCom extends News implements NewsInterface {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String strUrl, String strMyComment) {
-		logger.debug("url:" + strUrl);
-		getURL(strUrl);
+	public StringBuilder createHTMLFile(String strUrl, String strMyComment) {
 
 		StringBuilder sb1 = new StringBuilder();
 		Document doc;
 		try {
 			doc = Jsoup.connect(strUrl).get();
-			sb1 = createHTMLFile(doc, strUrl, strMyComment);
+			sb1 = createHTMLFileCommon(doc, strUrl, strMyComment);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -75,13 +73,13 @@ public class WwwChosunCom extends News implements NewsInterface {
 		return sb1;
 	}
 
-	public static StringBuilder createHTMLFileFromWebView(String strUrl, String strHtml, String strMyComment) {
+	public StringBuilder createHTMLFileFromWebView(String strUrl, String strHtml, String strMyComment) {
 
 		StringBuilder sb1 = new StringBuilder();
 		Document doc;
 		try {
 			doc = Jsoup.parse(strHtml);
-			sb1 = createHTMLFile(doc, strUrl, strMyComment);
+			sb1 = createHTMLFileCommon(doc, strUrl, strMyComment);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,7 +89,9 @@ public class WwwChosunCom extends News implements NewsInterface {
 		return sb1;
 	}
 
-	public static StringBuilder createHTMLFile(Document doc, String strUrl, String strMyComment) {
+	public StringBuilder createHTMLFileCommon(Document doc, String strUrl, String strMyComment) {
+		getURL(strUrl);
+		
 		StringBuilder sb1 = new StringBuilder();
 		String strTitleForFileName = "";
 		String strFileNameDate = "";
@@ -182,19 +182,17 @@ public class WwwChosunCom extends News implements NewsInterface {
 		sb1.append("</html>\r\n");
 		logger.debug(sb1.toString());
 
-		File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+		File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
-
-		String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
-				+ strTitleForFileName + ".html";
-		FileUtil.fileWrite(fileName, sb1.toString());
-
-		fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+		
+		String fileName;
+		fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 				+ strTitleForFileName + ".html";
 		FileUtil.fileWrite(fileName, sb1.toString());
 		return sb1;
 
 	}
+
 }

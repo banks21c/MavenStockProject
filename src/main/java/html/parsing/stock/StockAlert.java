@@ -31,7 +31,7 @@ import html.parsing.stock.util.StockUtil;
 
 public class StockAlert {
 
-	final static String userHome = System.getProperty("user.home");
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = null;
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -88,7 +88,7 @@ public class StockAlert {
 	}
 
 	StockAlert(int i) {
-		
+
 		logger = LoggerFactory.getLogger(this.getClass());
 
 		File log4jfile = new File("log4j.properties");
@@ -115,7 +115,7 @@ public class StockAlert {
 
 	public void readFile(String kospidaq, String fileName) {
 
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
@@ -296,7 +296,7 @@ public class StockAlert {
 		logger.debug("strYMD:" + strYMD);
 		logger.debug("title:" + title);
 		try {
-			FileWriter fw = new FileWriter(userHome + "\\documents\\" + strYMD + "_" + title + ".html");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strYMD + "_" + title + ".html");
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
@@ -404,7 +404,7 @@ public class StockAlert {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 			String strDate = sdf.format(new Date());
 
-			FileWriter fw = new FileWriter(userHome + "\\documents\\NewsTest." + strDate + ".html");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\NewsTest." + strDate + ".html");
 			StringBuilder sb1 = new StringBuilder();
 
 			for (StockVO vo : allStockList) {

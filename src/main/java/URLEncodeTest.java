@@ -1,6 +1,5 @@
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,8 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.news.News;
+import html.parsing.stock.news.NewsInterface;
 
-public class URLEncodeTest extends News {
+public class URLEncodeTest extends News implements NewsInterface {
 
 //	String strUrl = "https://www.youtube.com/watch?v=J6zD3h_I3Lc&feature=share";
 //	String strUrl = "https%3A%2F%2Fwww.asiae.co.kr%2Farticle%2Fnationaldefense-diplomacy%2F2020062421382026021";

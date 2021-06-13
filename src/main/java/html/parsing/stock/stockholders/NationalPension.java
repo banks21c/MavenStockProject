@@ -1,8 +1,5 @@
 package html.parsing.stock.stockholders;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -24,15 +21,17 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.util.DataSort.ChosenDayVsCurPriceUpDownRatioDescCompare;
 import html.parsing.stock.model.MajorStockHolderVO;
+import html.parsing.stock.model.StockVO;
+import html.parsing.stock.util.DataSort.ChosenDayVsCurPriceUpDownRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
 
 public class NationalPension {
 
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static final Logger logger = LoggerFactory.getLogger(NationalPension.class);
-
-	final static String userHome = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -426,12 +425,10 @@ public class NationalPension {
 						majorStockHolderVO.setChosenDayVsCurDayGapAmount(chosenDayVsCurDayGapAmount);
 
 						long lChosenDayVsCurDayGapAmountByMillion = lChosenDayVsCurDayGapAmount / 1000000;
-						String chosenDayVsCurDayGapAmountByMillion = df
-								.format(lChosenDayVsCurDayGapAmountByMillion);
+						String chosenDayVsCurDayGapAmountByMillion = df.format(lChosenDayVsCurDayGapAmountByMillion);
 						majorStockHolderVO
 								.setlChosenDayVsCurDayGapAmountByMillion(lChosenDayVsCurDayGapAmountByMillion);
-						majorStockHolderVO
-								.setChosenDayVsCurDayGapAmountByMillion(chosenDayVsCurDayGapAmountByMillion);
+						majorStockHolderVO.setChosenDayVsCurDayGapAmountByMillion(chosenDayVsCurDayGapAmountByMillion);
 						logger.debug("majorStockHolderVO :" + majorStockHolderVO);
 
 						stock.getMajorStockHolderList().add(majorStockHolderVO);
@@ -510,20 +507,24 @@ public class NationalPension {
 		sb1.append("<tr>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가(원)</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일가(원)</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比<br/>등락율</td>\r\n");
+		sb1.append(
+				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가(원)</td>\r\n");
+		sb1.append(
+				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일가(원)</td>\r\n");
+		sb1.append(
+				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比<br/>등락율</td>\r\n");
 		if (!inputWordIsSameAsMajorStockHolders) {
-			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>주요주주</td>\r\n");
+			sb1.append(
+					"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>주요주주</td>\r\n");
 		}
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유주식수</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유율</td>\r\n");
-		sb1.append(
-				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재총금액(" + moneyUnit + ")</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 <br/>총금액(" + moneyUnit
-				+ ")</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比 <br/>총액차(" + moneyUnit
-				+ ")</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재총금액("
+				+ moneyUnit + ")</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 <br/>총금액("
+				+ moneyUnit + ")</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比 <br/>총액차("
+				+ moneyUnit + ")</td>\r\n");
 		sb1.append("</tr>\r\n");
 
 		int cnt = 1;
@@ -574,8 +575,7 @@ public class NationalPension {
 					sb1.append("<td style='text-align:right'>"
 							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlRetainAmount()) + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>"
-							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayRetainAmount())
-							+ "</td>\r\n");
+							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayRetainAmount()) + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>"
 							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayVsCurDayGapAmount())
 							+ "</td>\r\n");
@@ -589,7 +589,7 @@ public class NationalPension {
 
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
-		String fileName = userHome + "\\documents\\" + strDate + "_" + title + ".html";
+		String fileName = USER_HOME + "\\documents\\" + strDate + "_" + title + ".html";
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}
 

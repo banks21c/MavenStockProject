@@ -26,9 +26,10 @@ import html.parsing.stock.util.StockUtil;
 
 public class MSedailyCom extends javax.swing.JFrame {
 
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = null;
-	final static String userHome = System.getProperty("user.home");
+	
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -188,11 +189,11 @@ public class MSedailyCom extends javax.swing.JFrame {
 		}
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		// 메소드를 직접 호출할 경우, logger가 null이라서 새로 호출해줘야 한다.
 		logger = LoggerFactory.getLogger(MSedailyCom.class);
 		logger.debug("url:" + url);
@@ -279,16 +280,16 @@ public class MSedailyCom extends javax.swing.JFrame {
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 

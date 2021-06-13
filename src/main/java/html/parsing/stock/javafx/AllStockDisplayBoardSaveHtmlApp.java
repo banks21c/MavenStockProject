@@ -25,8 +25,9 @@ import javafx.stage.Stage;
 
 public class AllStockDisplayBoardSaveHtmlApp extends Application {
 
-	final static String userHome = System.getProperty("user.home");
+	
 	private static Logger logger = LoggerFactory.getLogger(AllStockDisplayBoardSaveHtmlApp.class);
+	public final static String USER_HOME = System.getProperty("user.home");
 
 	WebEngine webengine = null;
 
@@ -97,7 +98,7 @@ public class AllStockDisplayBoardSaveHtmlApp extends Application {
 				}
 			}
 
-			String fileName = userHome + "\\documents\\" + strYmdhms + "_" + title + ".html";
+			String fileName = USER_HOME + "\\documents\\" + strYmdhms + "_" + title + ".html";
 
 			FileUtil.fileWrite(fileName, doc.html());
 		} catch (IOException e) {

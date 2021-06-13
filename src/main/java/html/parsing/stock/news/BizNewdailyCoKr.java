@@ -23,7 +23,7 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class BizNewdailyCoKr extends News {
+public class BizNewdailyCoKr extends News implements NewsInterface {
 
 	private static Logger logger = LoggerFactory.getLogger(BizNewdailyCoKr.class);
 
@@ -60,11 +60,11 @@ public class BizNewdailyCoKr extends News {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		System.out.println("url:" + url);
 		getURL(url);
 
@@ -137,15 +137,15 @@ public class BizNewdailyCoKr extends News {
 			article.removeAttr("class");
 			article.attr("style", "width:741px");
 
-			Element copyRightElement = article.select(".nd-by-line").first();
-			String copyRight = "";
-			if (copyRightElement != null) {
-				copyRight = copyRightElement.outerHtml();
+			Element copyrightElement = article.select(".nd-by-line").first();
+			String copyright = "";
+			if (copyrightElement != null) {
+				copyright = copyrightElement.outerHtml();
 			}
-			System.out.println("copyRight:" + copyRight);
+			System.out.println("copyright:" + copyright);
 			article.select(".nd-by-line").first().remove();
 
-			article.add(copyRightElement);
+			article.add(copyrightElement);
 
 			// System.out.println("imageArea:"+article.select(".image-area"));
 			String strContent = article.html().replaceAll("640px", "741px");
@@ -155,9 +155,7 @@ public class BizNewdailyCoKr extends News {
 			strContent = strContent.replaceAll("figcaption", "div");
 
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
@@ -179,16 +177,16 @@ public class BizNewdailyCoKr extends News {
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 

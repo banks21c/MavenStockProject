@@ -1,8 +1,5 @@
 package html.parsing.stock.focus;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,7 +13,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
 
@@ -28,13 +24,17 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.ChosenDayEndPriceVsCurPriceUpDownRatioRatioAscCompare;
 import html.parsing.stock.util.DataSort.ChosenDayEndPriceVsCurPriceUpDownRatioRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
 
 public class StockPlusMinusDivideEx2 extends Thread {
 
-	final static String userHome = System.getProperty("user.home");
+	
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(StockPlusMinusDivideEx2.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -219,7 +219,7 @@ public class StockPlusMinusDivideEx2 extends Thread {
 	public List<StockVO> getAllStockInfo(String kospidaq, String fileName) {
 		List<StockVO> stocks = new ArrayList<StockVO>();
 
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
@@ -431,7 +431,7 @@ public class StockPlusMinusDivideEx2 extends Thread {
 		sb1.append(sb.toString());
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
-		String fileName = userHome + "\\documents\\" + strYmdDashBracket + " " + strHms + "_" + title;
+		String fileName = USER_HOME + "\\documents\\" + strYmdDashBracket + " " + strHms + "_" + title;
 		if (iExtractCount != -1) {
 			fileName += iExtractCount;
 		}
@@ -670,7 +670,7 @@ public class StockPlusMinusDivideEx2 extends Thread {
 
 			System.out.println(sb1.toString());
 
-			String fileName = userHome + "\\documents\\NewsTest." + strDate + ".html";
+			String fileName = USER_HOME + "\\documents\\NewsTest." + strDate + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 		} catch (Exception e) {
 			e.printStackTrace();

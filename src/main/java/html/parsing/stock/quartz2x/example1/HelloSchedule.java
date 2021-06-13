@@ -1,13 +1,15 @@
 package html.parsing.stock.quartz2x.example1;
 
-import java.util.Date;
 import static org.quartz.DateBuilder.evenMinuteDate;
 import static org.quartz.JobBuilder.newJob;
+import static org.quartz.TriggerBuilder.newTrigger;
+
+import java.util.Date;
+
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.Trigger;
-import static org.quartz.TriggerBuilder.newTrigger;
 import org.quartz.impl.StdSchedulerFactory;
 
 public class HelloSchedule {

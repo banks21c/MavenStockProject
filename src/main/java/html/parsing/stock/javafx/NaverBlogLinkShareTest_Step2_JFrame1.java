@@ -2,6 +2,7 @@ package html.parsing.stock.javafx;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +25,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.NaverUtil;
-import java.net.URLEncoder;
 
 /**
  * 유튜브에서 네이버로 공유할때 공유하기 화면

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class NewsFinanceNaverCom extends News {
+public class NewsFinanceNaverCom extends News implements NewsInterface {
 
 	private static Logger logger = LoggerFactory.getLogger(NewsFinanceNaverCom.class);
 
@@ -52,11 +52,11 @@ public class NewsFinanceNaverCom extends News {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 
 		StringBuilder sb1 = new StringBuilder();
@@ -140,12 +140,6 @@ public class NewsFinanceNaverCom extends News {
 			String articleHtml = article.outerHtml();
 			System.out.println("articleHtml:[" + articleHtml + "]articleHtml");
 
-			int indexOfCopyright = articleHtml.indexOf("ⓒ");
-			String copyright = "";
-			if (indexOfCopyright > 0) {
-				copyright = articleHtml.substring(indexOfCopyright);
-			}
-			System.out.println("copyright:" + copyright);
 
 			String strContent = articleHtml.replaceAll("640px", "741px");
 			strContent = strContent.replaceAll("<br> <br>", "\n<br>\n<br>");
@@ -155,23 +149,26 @@ public class NewsFinanceNaverCom extends News {
 			// strContent = strContent.replaceAll("</figcaption>", "<br>");
 			strContent = strContent.replaceAll("<em>이미지 크게보기</em>", "");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
+			int indexOfCopyright = articleHtml.indexOf("ⓒ");
+			String copyright = "";
+			if (indexOfCopyright > 0) {
+				copyright = articleHtml.substring(indexOfCopyright);
+			}
+			System.out.println("copyright:" + copyright);
 
-			Elements copyRightElements = doc.select(".news_copyright");
-			Element copyRightElement = null;
-			String copyRight = "";
-			if (copyRightElements.size() > 0) {
-				copyRightElement = copyRightElements.first();
-				if (copyRightElement != null) {
-					copyright = copyRightElement.text();
+			Elements copyrightElements = doc.select(".news_copyright");
+			Element copyrightElement = null;
+			if (copyrightElements.size() > 0) {
+				copyrightElement = copyrightElements.first();
+				if (copyrightElement != null) {
+					copyright = copyrightElement.text();
 				}
 			} else {
-				copyRightElements = doc.select("#newsView .copy");
-				copyRightElement = copyRightElements.first();
-				if (copyRightElement != null) {
-					copyRight = copyRightElement.text();
+				copyrightElements = doc.select("#newsView .copy");
+				copyrightElement = copyrightElements.first();
+				if (copyrightElement != null) {
+					copyright = copyrightElement.text();
 				}
 			}
 
@@ -193,22 +190,19 @@ public class NewsFinanceNaverCom extends News {
 			sb1.append("<span style='font-size:12px'>" + writer + "</span><br>\n");
 			sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
 			sb1.append(strContent).append("<br><br>\n");
-			sb1.append(copyRight + "<br><br>\n");
+			sb1.append(copyright + "<br><br>\n");
 			System.out.println("sb.toString:" + sb1.toString());
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
-					+ strTitleForFileName + ".html";
-			FileUtil.fileWrite(fileName, sb1.toString());
-
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			String fileName = "";
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 

@@ -48,6 +48,7 @@ public class CoupangUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(CoupangUtil.class);
 
+	private final static String COUPANG_PARTNERS_NOTICE = "<div>※ 쿠팡 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있습니다.</div>";
 	private final static String REQUEST_METHOD_GET = "GET";
 	private final static String DOMAIN = "https://api-gateway.coupang.com";
 	private final static String API_PATH = "/v2/providers/affiliate_open_api/apis/openapi/v1";
@@ -89,7 +90,7 @@ public class CoupangUtil {
 		logger.debug("server_url:" + strSearchUrl);
 		String data = getData("상품검색", strSearchUrl, "", strParamJson, strAccessKey, strSecretKey);
 		contentSb.append(data);
-		contentSb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		contentSb.append(COUPANG_PARTNERS_NOTICE);
 
 		String strShareTitle = "[쿠팡 제품 추천] " + keyword;
 		String strNaverBlogCategoryName = "추천 상품";

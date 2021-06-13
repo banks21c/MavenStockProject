@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import html.parsing.stock.util.FileUtil;
 import javafx.application.Application;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker.State;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
@@ -35,8 +34,9 @@ import javafx.stage.Stage;
 
 public class AfterHoursKosdaqFinanceDaumNetApp extends Application {
 
-	final static String userHome = System.getProperty("user.home");
+	
 	private static Logger logger = LoggerFactory.getLogger(AfterHoursKosdaqFinanceDaumNetApp.class);
+	public final static String USER_HOME = System.getProperty("user.home");
 
 	final static String daumKospiAfterHoursUrl = "https://finance.daum.net/domestic/after_hours?market=KOSPI";
 	final static String daumKosdaqAfterHoursUrl = "https://finance.daum.net/domestic/after_hours?market=KOSDAQ";
@@ -210,7 +210,7 @@ public class AfterHoursKosdaqFinanceDaumNetApp extends Application {
 				}
 			}
 
-			String fileName = userHome + "\\documents\\" + strYmdhms + "_" + title + ".html";
+			String fileName = USER_HOME + "\\documents\\" + strYmdhms + "_" + title + ".html";
 			String tableHtml = Jsoup.parse(table.outerHtml()).html();
 			FileUtil.fileWrite(fileName, tableHtml);
 		} catch (IOException e) {

@@ -19,7 +19,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -32,13 +31,13 @@ import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.coupang.partners.CoupangApiConstants;
 import com.coupang.partners.HmacGenerator;
 
 import html.parsing.stock.util.NaverUtil;
 
 public class ShareCoupangPrdtThread extends Thread {
 
+	private final static String COUPANG_PARTNERS_NOTICE = "<div>※ 쿠팡 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있습니다.</div>";
 	private static Logger logger = LoggerFactory.getLogger(ShareCoupangPrdtThread.class);
 
 	DecimalFormat df = new DecimalFormat("#,##0");
@@ -221,7 +220,7 @@ public class ShareCoupangPrdtThread extends Thread {
 		System.out.println("server_url:" + strSearchUrl);
 		String data = getData("상품검색", strSearchUrl, "", strParamJson);
 		sb.append(data);
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 //		String shareTitle = strYmdBlacket + " " + keyword;
 		String shareTitle = "[쿠팡 추천 상품] " + keyword;

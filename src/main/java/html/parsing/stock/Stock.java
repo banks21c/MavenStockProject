@@ -1,10 +1,11 @@
 package html.parsing.stock;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.model.StockVO;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import html.parsing.stock.model.StockVO;
+import html.parsing.stock.util.GlobalVariables;
 
 public class Stock {
 

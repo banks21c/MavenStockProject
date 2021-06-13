@@ -1,11 +1,19 @@
 package html.parsing.stock.javafx;
 
-import html.parsing.stock.util.FileUtil;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.util.FileUtil;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -14,17 +22,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class AfterHoursKospiFinanceDaumNetApp extends Application {
 
-	final static String userHome = System.getProperty("user.home");
+	
 	private static Logger logger = LoggerFactory.getLogger(AfterHoursKospiFinanceDaumNetApp.class);
+	public final static String USER_HOME = System.getProperty("user.home");
 
 	WebEngine webengine = null;
 
@@ -96,7 +99,7 @@ public class AfterHoursKospiFinanceDaumNetApp extends Application {
 				}
 			}
 
-			String fileName = userHome + "\\documents\\" + strYmdhms + "_" + title + ".html";
+			String fileName = USER_HOME + "\\documents\\" + strYmdhms + "_" + title + ".html";
 			String tableHtml = Jsoup.parse(table.outerHtml()).html();
 			FileUtil.fileWrite(fileName, tableHtml);
 		} catch (IOException e) {

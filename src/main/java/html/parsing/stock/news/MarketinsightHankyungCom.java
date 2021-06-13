@@ -22,7 +22,7 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class MarketinsightHankyungCom extends News {
+public class MarketinsightHankyungCom extends News implements NewsInterface {
 
 	private static Logger logger = null;
 
@@ -61,11 +61,11 @@ public class MarketinsightHankyungCom extends News {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		getURL(url);
 		System.out.println("url:" + url);
 		System.out.println("createHTMLFile protocol:" + protocol);
@@ -139,13 +139,13 @@ public class MarketinsightHankyungCom extends News {
 			String strContent = article.html();
 			strContent = StockUtil.makeStockLinkStringByKrx(strContent);
 
-			Elements copyRightElements = doc.select(".con_newsView .copy");
-			Element copyRightElement = null;
-			String copyRight = "";
-			if (copyRightElements.size() > 0) {
-				copyRightElement = copyRightElements.first();
-				if (copyRightElement != null) {
-					copyRight = copyRightElement.text();
+			Elements copyrightElements = doc.select(".con_newsView .copy");
+			Element copyrightElement = null;
+			String copyright = "";
+			if (copyrightElements.size() > 0) {
+				copyrightElement = copyrightElements.first();
+				if (copyrightElement != null) {
+					copyright = copyrightElement.text();
 				}
 			}
 
@@ -168,18 +168,18 @@ public class MarketinsightHankyungCom extends News {
 			sb1.append("<span style='font-size:12px'>").append(writer).append("</span><br><br>\n");
 			sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
 			sb1.append(strContent).append("<br><br>\n");
-			sb1.append(copyRight).append("<br><br>\n");
+			sb1.append(copyright).append("<br><br>\n");
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 			System.out.println("sb.toString:[" + sb1.toString() + "]");
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 			String fileName = "";
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 

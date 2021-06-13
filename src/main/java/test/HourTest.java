@@ -15,8 +15,8 @@ public class HourTest {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int iHour = Integer.parseInt(new SimpleDateFormat("HH").format(new Date()));
-		System.out.println("iHour :"+iHour);
+		int iHourMinute = Integer.parseInt(new SimpleDateFormat("HHmm").format(new Date()));
+		System.out.println("iHourMinute :"+iHourMinute);
 
 		System.out.println(Math.random());
 		

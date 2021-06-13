@@ -35,8 +35,9 @@ import html.parsing.stock.util.StockUtil;
 
 public class NewsTomatoCom2 extends javax.swing.JFrame {
 
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(NewsTomatoCom2.class);
-	final static String userHome = System.getProperty("user.home");
+	
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -194,11 +195,11 @@ public class NewsTomatoCom2 extends javax.swing.JFrame {
 		}
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 
 		News gurl = new News();
 		gurl.getURL(url);
@@ -230,7 +231,7 @@ public class NewsTomatoCom2 extends javax.swing.JFrame {
 			doc.select("#ctl00_ContentPlaceHolder1_WebNewsView_hyHTS").remove();
 			doc.select("#ctl00_ContentPlaceHolder1_WebNewsView_NewsReporterSns").remove();
 
-			String fileName2 = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
+			String fileName2 = USER_HOME + File.separator + "documents" + File.separator + strYMD + ".html";
 			System.out.println("fileName2:" + fileName2);
 			Writer bw = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(fileName2, true), StandardCharsets.UTF_8));
@@ -313,9 +314,7 @@ public class NewsTomatoCom2 extends javax.swing.JFrame {
 			strContent = strContent.replaceAll("<div>[\r\n]*[ ]*&nbsp;[\r\n]*[ ]*</div>", "<br/>");
 			System.out.println("strContent:[" + strContent + "]");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
 
 			String copyright = doc.select(".desc").html();
 
@@ -341,21 +340,21 @@ public class NewsTomatoCom2 extends javax.swing.JFrame {
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			System.out.println("fileDir:" + userHome + File.separator + "documents" + File.separator + host);
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			System.out.println("fileDir:" + USER_HOME + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			System.out.println("fileName1:" + userHome + File.separator + "documents" + File.separator + strFileNameDate
+			System.out.println("fileName1:" + USER_HOME + File.separator + "documents" + File.separator + strFileNameDate
 					+ "_" + strTitleForFileName + ".html");
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			System.out.println("fileName2:" + userHome + File.separator + "documents" + File.separator + strFileNameDate
+			System.out.println("fileName2:" + USER_HOME + File.separator + "documents" + File.separator + strFileNameDate
 					+ "_" + strTitleForFileName + ".html");
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 

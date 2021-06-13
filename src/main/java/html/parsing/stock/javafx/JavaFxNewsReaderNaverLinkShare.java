@@ -62,7 +62,7 @@ import javafx.stage.Stage;
 
 public class JavaFxNewsReaderNaverLinkShare extends Application {
 
-	final static String userHome = System.getProperty("user.home");
+	
 	private static Logger logger = LoggerFactory.getLogger(JavaFxNewsReaderNaverLinkShare.class);
 
 	List<StockVO> kospiUniqueStockList = new ArrayList<>();
@@ -573,7 +573,7 @@ public class JavaFxNewsReaderNaverLinkShare extends Application {
 //		String jsonObject = JSONObject.toJSONString(stockMap);
 		String jsonObject = stockMap.toString();
 		String fileName = "";
-//		fileName = userHome + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
+//		fileName = USER_HOME + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
 		fileName = market_en + "_list.txt";
 		FileUtil.fileWrite(fileName, stockCodeNameSb.toString());
 		JOptionPane.showMessageDialog(null, "주식 목록을 추출하였습니다.");

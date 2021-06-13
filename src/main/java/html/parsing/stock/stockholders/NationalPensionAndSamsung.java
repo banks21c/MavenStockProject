@@ -1,8 +1,5 @@
 package html.parsing.stock.stockholders;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -25,23 +22,26 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import html.parsing.stock.util.DataSort.RetainAmountDescCompare;
-import html.parsing.stock.util.DataSort.ChosenDayVsCurPriceUpDownRatioDescCompare;
 import html.parsing.stock.model.MajorStockHolderVO;
+import html.parsing.stock.model.StockVO;
+import html.parsing.stock.util.DataSort.ChosenDayVsCurPriceUpDownRatioDescCompare;
+import html.parsing.stock.util.DataSort.RetainAmountDescCompare;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
 
 public class NationalPensionAndSamsung {
 
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static String SAMSUNG_CORP_STOCK_NM[] = { "멀티캠퍼스", "삼성카드", "삼성바이오로직스", "삼성전자", "삼성SDI", "삼성물산", "삼성전기",
 			"삼성에스디에스", "삼성화재", "삼성생명", "호텔신라", "삼성증권", "삼성중공업", "에스원", "삼성엔지니어링", "제일기획", "이마트", "신세계", "신세계인터내셔날",
-			"신세계 I&C", "신세계푸드","신세계건설","광주신세계","CJ ENM","CJ프레시웨이","CJ대한통운 ","CJ","CJ씨푸드","CJ CGV","CJ제일제당" };
+			"신세계 I&C", "신세계푸드", "신세계건설", "광주신세계", "CJ ENM", "CJ프레시웨이", "CJ대한통운 ", "CJ", "CJ씨푸드", "CJ CGV", "CJ제일제당" };
 	private static String SAMSUNG_CORP_STOCK_CD[] = { "067280", "029780", "207940", "005930", "006400", "028260",
 			"009150", "018260", "000810", "032830", "008770", "016360", "010140", "012750", "028050", "030000",
-			"139480", "004170", "031430", "035510", "031440","034300","037710","035760","051500","000120","001040","011150","079160","097950" };
+			"139480", "004170", "031430", "035510", "031440", "034300", "037710", "035760", "051500", "000120",
+			"001040", "011150", "079160", "097950" };
 
 	private static final Logger logger = LoggerFactory.getLogger(NationalPensionAndSamsung.class);
-
-	final static String userHome = System.getProperty("user.home");
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -150,7 +150,7 @@ public class NationalPensionAndSamsung {
 
 		Collections.sort(kospiStockList, new ChosenDayVsCurPriceUpDownRatioDescCompare());
 		writeFile(kospiStockList, "코스피 " + majorStockHolders + "(삼성계열) 투자현황");
-		
+
 		// 프로그램 실행 종료 시간
 		long end = System.currentTimeMillis();
 		long timeElapsed = end - start;
@@ -478,12 +478,10 @@ public class NationalPensionAndSamsung {
 						majorStockHolderVO.setChosenDayVsCurDayGapAmount(chosenDayVsCurDayGapAmount);
 
 						long lChosenDayVsCurDayGapAmountByMillion = lChosenDayVsCurDayGapAmount / 1000000;
-						String chosenDayVsCurDayGapAmountByMillion = df
-								.format(lChosenDayVsCurDayGapAmountByMillion);
+						String chosenDayVsCurDayGapAmountByMillion = df.format(lChosenDayVsCurDayGapAmountByMillion);
 						majorStockHolderVO
 								.setlChosenDayVsCurDayGapAmountByMillion(lChosenDayVsCurDayGapAmountByMillion);
-						majorStockHolderVO
-								.setChosenDayVsCurDayGapAmountByMillion(chosenDayVsCurDayGapAmountByMillion);
+						majorStockHolderVO.setChosenDayVsCurDayGapAmountByMillion(chosenDayVsCurDayGapAmountByMillion);
 						logger.debug("majorStockHolderVO :" + majorStockHolderVO);
 
 						stock.getMajorStockHolderList().add(majorStockHolderVO);
@@ -562,20 +560,24 @@ public class NationalPensionAndSamsung {
 		sb1.append("<tr>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가(원)</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일가(원)</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比<br/>등락율</td>\r\n");
+		sb1.append(
+				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가(원)</td>\r\n");
+		sb1.append(
+				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일가(원)</td>\r\n");
+		sb1.append(
+				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比<br/>등락율</td>\r\n");
 		if (!inputWordIsSameAsMajorStockHolders) {
-			sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>주요주주</td>\r\n");
+			sb1.append(
+					"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>주요주주</td>\r\n");
 		}
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유주식수</td>\r\n");
 		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>보유율</td>\r\n");
-		sb1.append(
-				"	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재총금액(" + moneyUnit + ")</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 <br/>총금액(" + moneyUnit
-				+ ")</td>\r\n");
-		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比 <br/>총액차(" + moneyUnit
-				+ ")</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재총금액("
+				+ moneyUnit + ")</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 <br/>총금액("
+				+ moneyUnit + ")</td>\r\n");
+		sb1.append("	<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기준일 比 <br/>총액차("
+				+ moneyUnit + ")</td>\r\n");
 		sb1.append("</tr>\r\n");
 
 		int cnt = 1;
@@ -622,8 +624,7 @@ public class NationalPensionAndSamsung {
 					sb1.append("<td style='text-align:right'>"
 							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlRetainAmount()) + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>"
-							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayRetainAmount())
-							+ "</td>\r\n");
+							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayRetainAmount()) + "</td>\r\n");
 					sb1.append("<td style='text-align:right'>"
 							+ StockUtil.moneyUnitSplit(moneyUnit, holderVO.getlChosenDayVsCurDayGapAmount())
 							+ "</td>\r\n");
@@ -637,7 +638,7 @@ public class NationalPensionAndSamsung {
 
 		sb1.append("</body>\r\n");
 		sb1.append("</html>\r\n");
-		String fileName = userHome + "\\documents\\" + strDate + "_" + title + ".html";
+		String fileName = USER_HOME + "\\documents\\" + strDate + "_" + title + ".html";
 		FileUtil.fileWrite(fileName, sb1.toString());
 	}
 

@@ -27,7 +27,8 @@ import html.parsing.stock.util.GlobalVariables;
 
 public class HTMLParserExample2 {
 
-    final static String userHome = System.getProperty("user.home");
+    
+	public final static String USER_HOME = System.getProperty("user.home");
     final static String[] fundNames = {"ARIRANG", "KBSTAR", "KINDEX", "KODEX",
         "KOSEF", "QV", "SMART", "TIGER", "TREX", "TRUE", "able", "대우", "동양"};
 
@@ -74,7 +75,7 @@ public class HTMLParserExample2 {
 
             System.out.println(doc.html());
 
-            FileWriter fw = new FileWriter(userHome + "\\documents\\new_" + tabName + ".html", false);
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\new_" + tabName + ".html", false);
 
             Elements edds = doc.getElementsByTag("a");
             Iterator<Element> it = edds.iterator();
@@ -136,7 +137,7 @@ public class HTMLParserExample2 {
 
             System.out.println(doc.html());
 
-            FileWriter fw = new FileWriter(userHome + "\\documents\\new_" + tabName + ".html", false);
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\new_" + tabName + ".html", false);
 
             Elements edds = doc.getElementsByTag("a");
             Iterator<Element> it = edds.iterator();
@@ -190,7 +191,7 @@ public class HTMLParserExample2 {
             doc = Jsoup.connect(url).get();
             System.out.println(doc.html());
 
-            FileWriter fw = new FileWriter(userHome + "\\documents\\new_" + div + ".html", false);
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\new_" + div + ".html", false);
 
             Elements edds = doc.select(".st2");
             Iterator<Element> it = edds.iterator();
@@ -244,14 +245,14 @@ public class HTMLParserExample2 {
     }
 
     public void readFile(String kospidaq, String fileName) {
-        File f = new File(userHome + "\\documents\\" + fileName);
+        File f = new File(USER_HOME + "\\documents\\" + fileName);
         try {
             //FileReader reader = new FileReader(f);
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f),"UTF8"));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
             String strDate = sdf.format(new Date());
 
-            FileWriter fw = new FileWriter(userHome + "\\documents\\" + strDate + "_" + f.getName());
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strDate + "_" + f.getName());
             String read = null;
             StringBuffer sb1 = new StringBuffer();
             sb1.append("<html>\r\n");

@@ -5,8 +5,6 @@
  */
 package html.parsing.stock.model;
 
-import html.parsing.stock.*;
-
 /**
  *
  * @author banks

@@ -1,11 +1,5 @@
 package html.parsing.stock.focus;
 
-import html.parsing.stock.model.StockVO;
-import html.parsing.stock.util.DataSort;
-import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.NaverUtil;
-import html.parsing.stock.util.StockUtil;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,7 +18,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
 import javax.swing.JOptionPane;
+
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -33,11 +29,19 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
+import html.parsing.stock.util.DataSort;
+import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.NaverUtil;
+import html.parsing.stock.util.StockUtil;
+
 /**
  * 유튜브에서 네이버로 공유할때 공유하기 화면
  */
 public class StockWeeks52NewLowHighPriceTodayOneFileJFrameV2 extends javax.swing.JFrame implements Runnable {
 
+	private static final long serialVersionUID = 2567301629445234988L;
 	final static String USER_HOME = System.getProperty("user.home");
 	private Logger logger = LoggerFactory.getLogger(StockWeeks52NewLowHighPriceTodayOneFileJFrameV2.class);
 

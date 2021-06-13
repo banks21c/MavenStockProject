@@ -18,13 +18,13 @@ public class FileReadAndWrite {
     }
 
     public void readFile(String fileName) {
-        String userHome = System.getProperty("user.home");
-        File f = new File(userHome + "\\documents\\" + fileName);
+        String USER_HOME = System.getProperty("user.home");
+        File f = new File(USER_HOME + "\\documents\\" + fileName);
         try {
             //FileReader reader = new FileReader(f);
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f),"UTF8"));
 
-            FileWriter fw = new FileWriter(userHome + "\\documents\\new_" + f.getName());
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\new_" + f.getName());
             String read = null;
             StringBuffer sb1 = new StringBuffer();
             while ((read = reader.readLine()) != null) {

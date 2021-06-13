@@ -30,7 +30,7 @@ import html.parsing.stock.util.GlobalVariables;
 
 public class StockThemeAll {
 
-	final static String userHome = System.getProperty("user.home");
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(StockThemeAll.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -72,13 +72,10 @@ public class StockThemeAll {
 
 	StockThemeAll() {
 
-
-
 		// 코스피
 		readFile("코스피", kospiFileName);
 		// 코스닥
 		readFile("코스닥", kosdaqFileName);
-
 
 		Collections.sort(allStockList, new StockNameLengthDescCompare());
 
@@ -87,7 +84,6 @@ public class StockThemeAll {
 
 	StockThemeAll(int i) {
 
-		
 		strDate = strDefaultDate;
 		String year = strDate.substring(0, 4);
 		String month = strDate.substring(5, 7);
@@ -104,7 +100,6 @@ public class StockThemeAll {
 		// 코스닥
 		readFile("코스닥", kosdaqFileName);
 
-
 		Collections.sort(allStockList, new StockNameLengthDescCompare());
 
 		writeThemeMarketPrice();
@@ -117,7 +112,7 @@ public class StockThemeAll {
 	}
 
 	private void readFile(String kospidaq, String fileName) {
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
@@ -199,7 +194,7 @@ public class StockThemeAll {
 		if (strThemeCode != null) {
 			try {
 				doc = Jsoup.connect("http://finance.naver.com/sise/sise_group_detail.nhn?type=theme&no=" + strThemeCode)
-					.get();
+						.get();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -304,11 +299,12 @@ public class StockThemeAll {
 
 	public void writeFile(String themeMarketPrice) {
 		try {
-			FileWriter fw = new FileWriter(userHome + "\\documents\\" + strDate + "_테마주_시세_보기.html");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strDate + "_테마주_시세_보기.html");
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("<style>\r\n");
 			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 			sb1.append("    th {border:1px solid #aaaaaa;background:#00c73c;}\r\n");

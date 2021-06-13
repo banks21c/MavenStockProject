@@ -20,8 +20,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class FinanceNaverComWorldUsingJsoup {
-	final static String userHome = System.getProperty("user.home");
-	String writeUrl = userHome + "\\documents\\해외증시.html";
+	
+	public final static String USER_HOME = System.getProperty("user.home");
+	String writeUrl = USER_HOME + "\\documents\\해외증시.html";
 
 	FinanceNaverComWorldUsingJsoup() {
 		// urlOpenConnection();

@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 
@@ -22,14 +21,14 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class WwwInews24Com extends News {
+public class WwwInews24Com extends News implements NewsInterface {
 
 	Logger logger = null;
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
 	DecimalFormat df = new DecimalFormat("###.##");
 
-	static final String userHome = System.getProperty("user.home");
+	static final String USER_HOME = System.getProperty("user.home");
 	// String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E ",
 	// Locale.KOREAN).format(new Date());
 	static String strYMD = "";
@@ -57,11 +56,11 @@ public class WwwInews24Com extends News {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String strUrl) {
+	public StringBuilder createHTMLFile(String strUrl) {
 		return createHTMLFile(strUrl, "");
 	}
 
-	public static StringBuilder createHTMLFile(String strUrl, String strMyComment) {
+	public StringBuilder createHTMLFile(String strUrl, String strMyComment) {
 
 		getURL(strUrl);
 		System.out.println("url:" + strUrl);
@@ -141,11 +140,9 @@ public class WwwInews24Com extends News {
 			strContent = strContent.replaceAll("figure", "div");
 			strContent = strContent.replaceAll("figcaption", "div");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
-			// Elements copyRightElement = doc.select(".txt_copyright");
-			// String copyRight = copyRightElement.text();
+			
+			// Elements copyrightElement = doc.select(".txt_copyright");
+			// String copyright = copyrightElement.text();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
 			// sb1.append("<meta http-equiv=\"Content-Type\"
@@ -163,21 +160,21 @@ public class WwwInews24Com extends News {
 			sb1.append("<span style='font-size:12px'>").append(strWriter).append("</span><br>\n");
 			sb1.append("<span style='font-size:12px'>").append(strDate).append("</span><br><br>\n");
 			sb1.append(strContent).append("\n");
-			// sb1.append(copyRight);
+			// sb1.append(copyright);
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			strFileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			strFileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 				+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(strFileName, sb1.toString());
 
-			strFileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			strFileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 				+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(strFileName, sb1.toString());
 

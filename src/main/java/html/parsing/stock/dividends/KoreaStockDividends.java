@@ -19,11 +19,11 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.DividendRateDescCompare;
+import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
-import html.parsing.stock.util.FileUtil;
 
 public class KoreaStockDividends extends Thread {
 
@@ -120,7 +120,7 @@ public class KoreaStockDividends extends Thread {
 		List<StockVO> kospiAllStockDividendsInfoList = new ArrayList<StockVO>();
 		List<StockVO> kosdaqAllStockDividendsInfoList = new ArrayList<StockVO>();
 		try {
-			kospiAllStockList = StockUtil.getAllStockListFromExcel(kospiFileName);
+			kospiAllStockList = StockUtil.readStockCodeNameList("kospi");
 			logger.debug("kospiAllStockList.size1 :" + kospiAllStockList.size());
 		} catch (Exception e) {
 			kospiAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("stockMkt");
@@ -137,7 +137,7 @@ public class KoreaStockDividends extends Thread {
 		// 코스닥
 		List<StockVO> kosdaqAllStockList = new ArrayList<StockVO>();
 		try {
-			kosdaqAllStockList = StockUtil.getAllStockListFromExcel(kosdaqFileName);
+			kosdaqAllStockList = StockUtil.readStockCodeNameList("kosdaq");
 			logger.debug("kosdaqAllStockList.size1 :" + kosdaqAllStockList.size());
 		} catch (Exception e) {
 			kosdaqAllStockList = StockUtil.getStockCodeNameListFromKindKrxCoKr("kosdaqMkt");
@@ -220,8 +220,8 @@ public class KoreaStockDividends extends Thread {
 					float fDividendRate = 0;
 					if(!indexValue.equals("")) {
 						fDividendRate = Float.parseFloat(indexValue);
-						svo.setfDividendRate(fDividendRate);
 					}
+					svo.setfDividendRate(fDividendRate);
 					svo.setDividends(indexValue);
 				}
 			}

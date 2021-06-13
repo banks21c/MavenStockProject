@@ -1,14 +1,9 @@
 package html.parsing.stock;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.model.StockVO;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,13 +20,15 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.ForeignStraitBuyCountDescCompare;
 import html.parsing.stock.util.DataSort.OrganStraitBuyCountDescCompare;
+import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.StockUtil;
 
 public class AllStockForeignOrganSellCount {
 
-	final static String userHome = System.getProperty("user.home");
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(AllStockForeignOrganSellCount.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -150,7 +147,7 @@ public class AllStockForeignOrganSellCount {
 					curPrice = txts[1];
 					stock.setCurPrice(curPrice);
 					stock.setiCurPrice(
-						Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
+							Integer.parseInt(StringUtils.defaultIfEmpty(stock.getCurPrice(), "0").replaceAll(",", "")));
 					iCurPrice = stock.getiCurPrice();
 
 					// 특수문자
@@ -160,7 +157,7 @@ public class AllStockForeignOrganSellCount {
 					String varyPrice = txts[4];
 					stock.setVaryPrice(varyPrice);
 					stock.setiVaryPrice(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getVaryPrice(), "0").replaceAll(",", "")));
 					iVaryPrice = stock.getiVaryPrice();
 
 					// +- 부호
@@ -208,7 +205,7 @@ public class AllStockForeignOrganSellCount {
 				if (text.startsWith("거래대금") || text.startsWith("거래금액")) {
 					stock.setTradingAmount(text.split(" ")[1].substring(0, text.split(" ")[1].indexOf("백만")));
 					stock.setlTradingAmount(Integer
-						.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
+							.parseInt(StringUtils.defaultIfEmpty(stock.getTradingAmount().replaceAll(",", ""), "0")));
 				}
 			}
 
@@ -422,16 +419,17 @@ public class AllStockForeignOrganSellCount {
 	}
 
 	public void writeFile(List<StockVO> list, String fileName, String title, boolean isForeign) {
-		File f = new File(userHome + "\\documents\\" + fileName);
+		File f = new File(USER_HOME + "\\documents\\" + fileName);
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
 			String strDate = sdf.format(new Date());
 
-			FileWriter fw = new FileWriter(userHome + "\\documents\\" + strDate + "_" + title + ".html");
+			FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strDate + "_" + title + ".html");
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
-			//sb1.append("<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\r\n");
+			// sb1.append("<meta http-equiv=\"Content-Type\"
+			// content=\"text/html;charset=utf-8\">\r\n");
 			sb1.append("<style>\r\n");
 			sb1.append("    table {border:1px solid #aaaaaa;}\r\n");
 			sb1.append("    td {border:1px solid #aaaaaa;}\r\n");
@@ -441,26 +439,37 @@ public class AllStockForeignOrganSellCount {
 			sb1.append("\t<font size=5>" + strYMD + title + "</font>");
 			sb1.append("<table>\r\n");
 			sb1.append("<tr>\r\n");
-			sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
-			sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
-			sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
-			sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
-			sb1.append("<td colspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>연속매도일수</td>\r\n");
-			sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관거래량</td>\r\n");
 			sb1.append(
-				"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관거래금액<br>(만원)</td>\r\n");
-			sb1.append("<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인거래량</td>\r\n");
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>No.</td>\r\n");
 			sb1.append(
-				"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인거래금액<br>(만원)</td>\r\n");
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
+			sb1.append(
+					"<td colspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>연속매도일수</td>\r\n");
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관거래량</td>\r\n");
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관거래금액<br>(만원)</td>\r\n");
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인거래량</td>\r\n");
+			sb1.append(
+					"<td rowspan='2' style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인거래금액<br>(만원)</td>\r\n");
 			sb1.append("</tr>");
 
 			sb1.append("<tr>");
 			if (isForeign) {
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인</td>\r\n");
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관</td>\r\n");
+				sb1.append(
+						"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인</td>\r\n");
+				sb1.append(
+						"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관</td>\r\n");
 			} else {
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관</td>\r\n");
-				sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인</td>\r\n");
+				sb1.append(
+						"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관</td>\r\n");
+				sb1.append(
+						"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외인</td>\r\n");
 			}
 			sb1.append("</tr>");
 
@@ -476,13 +485,13 @@ public class AllStockForeignOrganSellCount {
 					String specialLetter = StringUtils.defaultIfEmpty(s.getSpecialLetter(), "");
 					String varyPrice = s.getVaryPrice();
 					if (specialLetter.startsWith("↑") || specialLetter.startsWith("▲")
-						|| specialLetter.startsWith("+")) {
+							|| specialLetter.startsWith("+")) {
 						sb1.append("<td style='text-align:right'><font color='red'>" + specialLetter + " " + varyPrice
-							+ "</font></td>\r\n");
+								+ "</font></td>\r\n");
 					} else if (specialLetter.startsWith("↓") || specialLetter.startsWith("▼")
-						|| specialLetter.startsWith("-")) {
+							|| specialLetter.startsWith("-")) {
 						sb1.append("<td style='text-align:right'><font color='blue'>" + specialLetter + " " + varyPrice
-							+ "</font></td>\r\n");
+								+ "</font></td>\r\n");
 					} else {
 						sb1.append("<td style='text-align:right'>0</td>\r\n");
 					}

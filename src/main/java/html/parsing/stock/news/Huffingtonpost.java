@@ -23,8 +23,9 @@ import org.slf4j.LoggerFactory;
  */
 public class Huffingtonpost extends javax.swing.JFrame {
 
+	public final static String USER_HOME = System.getProperty("user.home");
     private static Logger logger = LoggerFactory.getLogger(Huffingtonpost.class);
-    final static String userHome = System.getProperty("user.home");
+    
 
     /**
      * Creates new form NewJFrame1
@@ -121,7 +122,7 @@ public class Huffingtonpost extends javax.swing.JFrame {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
             String strDate = sdf.format(new Date());
 
-            FileWriter fw = new FileWriter(userHome + "\\documents\\huffingtonpost.co.kr_" + strDate + ".html");
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\huffingtonpost.co.kr_" + strDate + ".html");
             StringBuilder sb1 = new StringBuilder();
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");

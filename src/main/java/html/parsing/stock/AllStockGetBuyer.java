@@ -21,7 +21,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.util.NaverUtil;
 
 /**
  * 유튜브에서 네이버로 공유할때

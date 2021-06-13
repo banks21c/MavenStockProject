@@ -24,7 +24,7 @@ import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.StockUtil;
 
-public class MNewsPimCom extends News {
+public class MNewsPimCom extends News implements NewsInterface {
 
 	private static Logger logger = LoggerFactory.getLogger(MNewsPimCom.class);
 
@@ -60,11 +60,11 @@ public class MNewsPimCom extends News {
 		createHTMLFile(url);
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		System.out.println("url:" + url);
 		URL url1 = getURL(url);
 
@@ -123,18 +123,16 @@ public class MNewsPimCom extends News {
 			strContent = strContent.replaceAll("<figcaption>", "<div>");
 			strContent = strContent.replaceAll("</figcaption>", "</div>");
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
 
-			Element copyRightElement = doc.select(".viewfooter p").first().child(0);
-			System.out.println("copyRightElement:" + copyRightElement);
-			String copyRight = copyRightElement.toString();
-			System.out.println("copyRight1:" + copyRight);
-			copyRight = copyRight.replace("</저작권자(c)>", "");
-			copyRight = copyRight.replaceAll("<", "");
-			copyRight = copyRight.replaceAll(">", "");
-			System.out.println("copyRight2:" + copyRight);
+			Element copyrightElement = doc.select(".viewfooter p").first().child(0);
+			System.out.println("copyrightElement:" + copyrightElement);
+			String copyright = copyrightElement.toString();
+			System.out.println("copyright1:" + copyright);
+			copyright = copyright.replace("</저작권자(c)>", "");
+			copyright = copyright.replaceAll("<", "");
+			copyright = copyright.replaceAll(">", "");
+			System.out.println("copyright2:" + copyright);
 
 			sb1.append("<html lang='ko'>\r\n");
 			sb1.append("<head>\r\n");
@@ -152,21 +150,21 @@ public class MNewsPimCom extends News {
 			sb1.append("<span style='font-size:12px'>" + writer + "</span><br>\n");
 			sb1.append("<span style='font-size:12px'>" + strDate + "</span><br><br>\n");
 			sb1.append(strContent + "\n");
-			sb1.append(copyRight);
+			sb1.append(copyright);
 			sb1.append("</div>\r\n");
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 

@@ -1,8 +1,5 @@
 package html.parsing.stock.focus;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,8 +23,11 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
+import html.parsing.stock.util.StockUtil;
 
 public class StockUnique_ReadTxtFile extends Thread {
 
@@ -497,7 +497,7 @@ public class StockUnique_ReadTxtFile extends Thread {
 		return stock;
 	}
 
-	public void writeFile(List<StockVO> list, String title) {
+	public void writeFile(List<StockVO> stockList, String title) {
 		try {
 			StringBuilder sb1 = new StringBuilder();
 			sb1.append("<html lang='ko'>\r\n");
@@ -523,11 +523,11 @@ public class StockUnique_ReadTxtFile extends Thread {
 					"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
 			sb1.append("</tr>\r\n");
 
-			if (list.size() == 0) {
+			if (stockList.size() == 0) {
 				sb1.append("<tr><td colspan='7' style='text-align:center;'>데이터가 없습니다.</td></tr>\r\n");
 			}
 
-			for (StockVO s : list) {
+			for (StockVO s : stockList) {
 				if (s != null) {
 					sb1.append("<tr>\r\n");
 					String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
@@ -588,9 +588,9 @@ public class StockUnique_ReadTxtFile extends Thread {
 			 * }
 			 */
 			// 뉴스 첨부
-			StringBuilder newsAddedStockList = StockUtil.getNews(list);
+			StringBuilder newsAddedStockList = StockUtil.getNews(stockList);
 			// 증권명에 증권링크 생성
-			StringBuilder stockTableAdded = StockUtil.stockLinkString(newsAddedStockList, list);
+			StringBuilder stockTableAdded = StockUtil.stockLinkString(newsAddedStockList, stockList);
 			sb1.append(stockTableAdded.toString());
 			
 			sb1.append("</body>\r\n");

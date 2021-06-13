@@ -16,11 +16,6 @@
 
 package html.parsing.stock.util;
 
-import java.io.*;
-import java.sql.*;
-import java.util.*;
-import java.text.*;
-
 public class CheckUtil {
 
 	// ########################################################################

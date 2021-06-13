@@ -27,8 +27,9 @@ import html.parsing.stock.util.StockUtil;
 
 public class WwwMkCoKrPremium extends javax.swing.JFrame {
 
+	public final static String USER_HOME = System.getProperty("user.home");
 	private static Logger logger = LoggerFactory.getLogger(WwwMkCoKrPremium.class);
-	final static String userHome = System.getProperty("user.home");
+	
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
@@ -187,11 +188,11 @@ public class WwwMkCoKrPremium extends javax.swing.JFrame {
 		}
 	}
 
-	public static StringBuilder createHTMLFile(String url) {
+	public StringBuilder createHTMLFile(String url) {
 		return createHTMLFile(url, "");
 	}
 
-	public static StringBuilder createHTMLFile(String url, String strMyComment) {
+	public StringBuilder createHTMLFile(String url, String strMyComment) {
 		News gurl = new News();
 		gurl.getURL(url);
 		String protocol = gurl.getProtocol();
@@ -267,9 +268,7 @@ public class WwwMkCoKrPremium extends javax.swing.JFrame {
 			String strContent = doc.select("#Content .left_content .art_txt").html();
 			logger.debug("strContent:" + strContent);
 			strContent = StockUtil.makeStockLinkStringByTxtFile(StockUtil.getMyCommentBox(strMyComment) + strContent);
-			Document contentDoc = Jsoup.parse(strContent);
-			contentDoc.select("#myCommentDiv").remove();
-			strContent = contentDoc.select("body").html();
+			
 
 			String copyright = "";
 
@@ -295,24 +294,24 @@ public class WwwMkCoKrPremium extends javax.swing.JFrame {
 			sb1.append("</body>\r\n");
 			sb1.append("</html>\r\n");
 
-			logger.debug("fileDir:" + userHome + File.separator + "documents" + File.separator + host);
-			File dir = new File(userHome + File.separator + "documents" + File.separator + host);
+			logger.debug("fileDir:" + USER_HOME + File.separator + "documents" + File.separator + host);
+			File dir = new File(USER_HOME + File.separator + "documents" + File.separator + host);
 			if (!dir.exists()) {
 				dir.mkdirs();
 			}
 
-//			logger.debug("fileName2:" + userHome + File.separator + "documents" + File.separator + strYMD + ".html");
-//			String fileName = userHome + File.separator + "documents" + File.separator + strYMD + ".html";
+//			logger.debug("fileName2:" + USER_HOME + File.separator + "documents" + File.separator + strYMD + ".html");
+//			String fileName = USER_HOME + File.separator + "documents" + File.separator + strYMD + ".html";
 //			FileUtil.fileWrite(fileName, doc.html());
 
-			logger.debug("fileName1:" + userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			logger.debug("fileName1:" + USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html");
-			String fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_"
+			String fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_"
 					+ strTitleForFileName + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());
 
-//			logger.debug("fileName2:" + userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html");
-//			fileName = userHome + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
+//			logger.debug("fileName2:" + USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html");
+//			fileName = USER_HOME + File.separator + "documents" + File.separator + strFileNameDate + "_" + strTitleForFileName + ".html";
 //			FileUtil.fileWrite(fileName, sb1.toString());
 
 		} catch (IOException e) {

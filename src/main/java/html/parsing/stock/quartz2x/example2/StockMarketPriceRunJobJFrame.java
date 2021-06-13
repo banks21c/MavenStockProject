@@ -1,8 +1,5 @@
 package html.parsing.stock.quartz2x.example2;
 
-import html.parsing.stock.focus.StockPlusMinusDivide100;
-import html.parsing.stock.focus.StockUnique_ReadTxtFile_ThreadCall;
-import html.parsing.stock.focus.StockWeeks52NewLowHighPriceTodayOneFile;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.TriggerBuilder.newTrigger;
@@ -15,6 +12,10 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
+
+import html.parsing.stock.focus.StockPlusMinusDivide100;
+import html.parsing.stock.focus.StockUnique_ReadTxtFile_ThreadCall;
+import html.parsing.stock.focus.StockWeeks52NewLowHighPriceTodayOneFile;
 
 /**
  * 유튜브에서 네이버로 공유할때 공유하기 화면

@@ -1,12 +1,24 @@
 package html.parsing.stock.javafx;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.CookieHandler;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,12 +28,23 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.logging.Level;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JOptionPane;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
+import org.apache.log4j.PropertyConfigurator;
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -40,20 +63,6 @@ import html.parsing.stock.model.StockVO;
 import html.parsing.stock.news.NewsPublisher;
 import html.parsing.stock.util.FileUtil;
 import html.parsing.stock.util.NaverUtil;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.security.GeneralSecurityException;
-import java.text.DecimalFormat;
-import java.util.Properties;
-import java.util.TimeZone;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker.State;
@@ -77,19 +86,10 @@ import javafx.scene.text.Text;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import org.apache.commons.codec.binary.Hex;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
-import org.apache.log4j.PropertyConfigurator;
-import org.joda.time.DateTime;
 
 public class CoupangPartnersApiNaverLinkShare extends Application {
 
-	final static String userHome = System.getProperty("user.home");
+	
 	private static Logger logger = LoggerFactory.getLogger(CoupangPartnersApiNaverLinkShare.class);
 
 	List<StockVO> kospiUniqueStockList = new ArrayList<>();
@@ -266,6 +266,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 	// 성공
 	private final static String REQUEST_JSON = "{\"coupangUrls\": [\"https://www.coupang.com/np/coupangglobal\"]}";
 
+	private final static String COUPANG_PARTNERS_NOTICE = "<div>※ 쿠팡 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있습니다.</div>";
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -937,7 +938,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 //		String jsonObject = JSONObject.toJSONString(stockMap);
 		String jsonObject = stockMap.toString();
 		String fileName = "";
-//		fileName = userHome + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
+//		fileName = USER_HOME + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
 		fileName = market_en + "_list.txt";
 		FileUtil.fileWrite(fileName, stockCodeNameSb.toString());
 		JOptionPane.showMessageDialog(null, "주식 목록을 추출하였습니다.");
@@ -1361,7 +1362,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 		bestcategoriesUrl = BESTCATEGORIES_URL + categoryId + "?limit=" + limit;
 		String data = getData("카테고리별 베스트상품", bestcategoriesUrl, categoryNm, strParamJson);
 		sb.append(data);
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String strBlogCategoryName = "카테고리별 베스트 상품";
 		naverBlogLinkShare(sb, strBlogCategoryName, shareTitle);
@@ -1402,7 +1403,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 				}
 			}
 		}
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "카테고리별 베스트상품";
 		String strBlogCategoryName = "카테고리별 베스트 상품";
@@ -1422,10 +1423,10 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 		System.out.println("strParamJson:" + strParamJson);
 		String data = getData("골드박스 상품", GOLDBOX_URL, "", strParamJson);
 		sb.append(data);
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "WOW 와우회원 전용 매일 오전 7시 골드박스 1일특가";
-		String strBlogCategoryName = "골드박스";
+		String strBlogCategoryName = "골드박스 상품";
 		naverBlogLinkShare(sb, strBlogCategoryName, shareTitle);
 
 		return true;
@@ -1442,7 +1443,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 		System.out.println("strParamJson:" + strParamJson);
 		String data = getData("쿠팡PL상품", COUPANG_PL_URL, "", strParamJson);
 		sb.append(data);
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "쿠팡 PL 상품 TOP" + limit;
 		String strBlogCategoryName = "PL 상품";
@@ -1501,7 +1502,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 				}
 			}
 		}
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "쿠팡 PL 브랜드별 상품 TOP" + limit;
 		String strBlogCategoryName = "PL 브랜드별 상품";
@@ -1529,7 +1530,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 		System.out.println("server_url:" + SEARCH_URL);
 		String data = getData("상품검색", SEARCH_URL, "", strParamJson);
 		sb.append(data);
-		sb.append("<div>※ 파트너스 활동을 통해 일정액의 수수료를 제공받을 수 있음</div>");
+		sb.append(COUPANG_PARTNERS_NOTICE);
 
 		String shareTitle = strYmdBlacket + " " + "상품검색";
 		String strBlogCategoryName = "추천 상품";
@@ -1704,7 +1705,7 @@ public class CoupangPartnersApiNaverLinkShare extends Application {
 						try {
 							Thread.sleep(1000);
 						} catch (InterruptedException ex) {
-							java.util.logging.Logger.getLogger(CoupangPartnersApiOneFileNaverLinkShareSimple.class.getName()).log(Level.SEVERE, null, ex);
+							java.util.logging.Logger.getLogger(CoupangPartnersApiNaverLinkShare.class.getName()).log(Level.SEVERE, null, ex);
 						}
 					}
 					sb.append("</ul>");

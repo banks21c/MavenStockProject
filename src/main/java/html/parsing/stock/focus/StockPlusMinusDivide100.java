@@ -1,8 +1,5 @@
 package html.parsing.stock.focus;
 
-import html.parsing.stock.util.GlobalVariables;
-import html.parsing.stock.util.StockUtil;
-import html.parsing.stock.model.StockVO;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,13 +24,16 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.StockNameAscCompare;
 import html.parsing.stock.util.DataSort.TradingAmountDescCompare;
 import html.parsing.stock.util.DataSort.TradingVolumeDescCompare;
 import html.parsing.stock.util.DataSort.VaryRatioAscCompare;
 import html.parsing.stock.util.DataSort.VaryRatioDescCompare;
 import html.parsing.stock.util.FileUtil;
+import html.parsing.stock.util.GlobalVariables;
 import html.parsing.stock.util.NaverUtil;
+import html.parsing.stock.util.StockUtil;
 
 public class StockPlusMinusDivide100 extends Thread {
 
@@ -43,8 +43,6 @@ public class StockPlusMinusDivide100 extends Thread {
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
 	int iYear = Integer.parseInt(strYear);
-
-	static String strYMD = new SimpleDateFormat("yyyy년 M월 d일 E HH.mm.SSS", Locale.KOREAN).format(new Date());
 
 	DecimalFormat df = new DecimalFormat("###.##");
 
@@ -119,8 +117,8 @@ public class StockPlusMinusDivide100 extends Thread {
 
 		long endTime = System.currentTimeMillis();
 		String elapsedTimeSecond = (endTime - startTime) / 1000 % 60 + "초";
-		System.out.println("call time :" + elapsedTimeSecond);
-		System.out.println("main method call finished.");
+		logger.debug("call time :" + elapsedTimeSecond);
+		logger.debug("main method call finished.");
 	}
 
 	StockPlusMinusDivide100() {
@@ -189,8 +187,8 @@ public class StockPlusMinusDivide100 extends Thread {
 
 		stockList = getAllStockInfo(stockList, marketType);
 		logger.debug("stockList.size :" + stockList.size());
-		int iHour = Integer.parseInt(new SimpleDateFormat("HH").format(new Date()));
-		if (iHour >= 18 || iHour < 8) {
+		int iHourMinute = Integer.parseInt(new SimpleDateFormat("HHmm").format(new Date()));
+		if (iHourMinute >= 1830 || iHourMinute < 900) {
 			//기관,외인,개인매매
 			stockList = NaverStockTradingVolume.getStockTradingVolumeList(stockList);
 			//시간외단일가
@@ -282,10 +280,10 @@ public class StockPlusMinusDivide100 extends Thread {
 			String read = null;
 			int cnt = 1;
 			while ((read = reader.readLine()) != null) {
-				System.out.println(cnt + "." + read);
+				logger.debug(cnt + "." + read);
 				strStockCode = read.split("\t")[0];
 				strStockName = read.split("\t")[1];
-				System.out.println(strStockCode + "\t" + strStockName);
+				logger.debug(strStockCode + "\t" + strStockName);
 
 				if (strStockCode.length() != 6) {
 					continue;
@@ -344,15 +342,15 @@ public class StockPlusMinusDivide100 extends Thread {
 			for (int i = 0; i < edds.size(); i++) {
 				Element dd = edds.get(i);
 				String text = dd.text();
-				// System.out.println("text:" + text);
+				// logger.debug("text:" + text);
 				if (text.startsWith("종목명")) {
 					String strStockName = text.substring(4);
-					// System.out.println("strStockName:" + strStockName);
+					// logger.debug("strStockName:" + strStockName);
 					stock.setStockName(strStockName);
 				}
 
 				if (text.startsWith("현재가")) {
-					// System.out.println("data1:" + dd.text());
+					// logger.debug("data1:" + dd.text());
 					text = text.replaceAll("플러스", "+");
 					text = text.replaceAll("마이너스", "-");
 					text = text.replaceAll("상승", "▲");
@@ -379,7 +377,7 @@ public class StockPlusMinusDivide100 extends Thread {
 					// +- 부호
 					sign = txts[5];
 					stock.setSign(sign);
-					// System.out.println("txts.length:" + txts.length);
+					// logger.debug("txts.length:" + txts.length);
 					if (txts.length == 7) {
 						stock.setVaryRatio(txts[5] + txts[6]);
 					} else if (txts.length == 8) {
@@ -387,7 +385,7 @@ public class StockPlusMinusDivide100 extends Thread {
 					}
 					varyRatio = stock.getVaryRatio();
 					stock.setfVaryRatio(Float.parseFloat(varyRatio.replaceAll("%", "")));
-					// System.out.println("상승률:" + stock.getVaryRatio());
+					// logger.debug("상승률:" + stock.getVaryRatio());
 				}
 
 				if (text.startsWith("전일가")) {
@@ -444,18 +442,18 @@ public class StockPlusMinusDivide100 extends Thread {
 			} else {
 				kospiSteadyCount++;
 			}
-//            System.out.println("date:" + date);
-			System.out.println("specialLetter:" + specialLetter);
-			System.out.println("sign:" + sign);
-			System.out.println("curPrice:" + curPrice);
-			System.out.println("varyPrice:" + varyPrice);
-//            System.out.println("beforePrice:" + beforePrice);
-			System.out.println("varyRatio:" + varyRatio);
-//            System.out.println("startPrice:" + startPrice);
-//            System.out.println("highPrice:" + highPrice);
-//            System.out.println("lowPrice:" + lowPrice);
-//            System.out.println("TradingVolume:" + tradingVolume);
-//            System.out.println("tradingAmount:" + tradingAmount);
+//            logger.debug("date:" + date);
+			logger.debug("specialLetter:" + specialLetter);
+			logger.debug("sign:" + sign);
+			logger.debug("curPrice:" + curPrice);
+			logger.debug("varyPrice:" + varyPrice);
+//            logger.debug("beforePrice:" + beforePrice);
+			logger.debug("varyRatio:" + varyRatio);
+//            logger.debug("startPrice:" + startPrice);
+//            logger.debug("highPrice:" + highPrice);
+//            logger.debug("lowPrice:" + lowPrice);
+//            logger.debug("TradingVolume:" + tradingVolume);
+//            logger.debug("tradingAmount:" + tradingAmount);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -507,7 +505,7 @@ public class StockPlusMinusDivide100 extends Thread {
 		logger.debug(fileName + " write finished");
 	}
 
-	public StringBuilder getStockInfoHtml(List<StockVO> list, String marketType, String descGubun) {
+	public StringBuilder getStockInfoHtml(List<StockVO> stockList, String marketType, String descGubun) {
 		StringBuilder sb1 = new StringBuilder();
 		if (iExtractCount > 0) {
 			sb1.append("\t<h2>").append(marketType).append(" ").append(descGubun).append("TOP ").append(iExtractCount)
@@ -520,29 +518,12 @@ public class StockPlusMinusDivide100 extends Thread {
 		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>종목명</td>\r\n");
 		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>현재가</td>\r\n");
 		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>전일대비</td>\r\n");
-		// if(gubun.equals("상승율")){
-		// sb1.append("<td
-		// style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>상승율</td>\r\n");
-		// }else if(gubun.equals("하락율")){
-		// sb1.append("<td
-		// style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>하락율</td>\r\n");
-		// }else if(gubun.equals("거래량")){
-		// sb1.append("<td
-		// style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락율</td>\r\n");
-		// sb1.append("<td
-		// style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래량</td>\r\n");
-		// }else if(gubun.equals("거래대금")){
-		// sb1.append("<td
-		// style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락율</td>\r\n");
-		// sb1.append("<td
-		// style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
-		// }
 		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>등락율</td>\r\n");
 		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래량</td>\r\n");
 		sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>거래대금(백만)</td>\r\n");
 
-		int iHour = Integer.parseInt(new SimpleDateFormat("HH").format(new Date()));
-		if (iHour >= 18 || iHour < 8) {
+		int iHourMinute = Integer.parseInt(new SimpleDateFormat("HHmm").format(new Date()));
+		if (iHourMinute >= 1830 || iHourMinute < 800) {
 			// 2020.12.13 추가
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>외국인매매</td>\r\n");
 			sb1.append("<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>기관매매</td>\r\n");
@@ -552,8 +533,9 @@ public class StockPlusMinusDivide100 extends Thread {
 					"<td style='background:#669900;color:#ffffff;text-align:center;font-size:12px;'>시간외단일가</td>\r\n");
 		}
 		sb1.append("</tr>\r\n");
+
 		int cnt = 1;
-		for (StockVO svo : list) {
+		for (StockVO svo : stockList) {
 			String specialLetter = StringUtils.defaultIfEmpty(svo.getSpecialLetter(), "");
 			logger.debug(descGubun + " specialLetter+++>" + specialLetter);
 			if (descGubun.equals("상승율")) {
@@ -592,7 +574,8 @@ public class StockPlusMinusDivide100 extends Thread {
 
 			String url = TOTAL_INFO_URL + svo.getStockCode();
 			sb1.append("<td>" + cnt + "</td>\r\n");
-			sb1.append("<td><a href='" + url + "' target='_sub'>" + svo.getStockName() + "</a></td>\r\n");
+			String ellipsisStyle = "style='white-space: nowrap;width: 50px;overflow: hidden;text-overflow: ellipsis;'";
+			sb1.append("<td "+ellipsisStyle+"><a href='" + url + "' target='_sub'>" + svo.getStockName() + "</a></td>\r\n");
 
 			String varyPrice = svo.getVaryPrice();
 
@@ -616,50 +599,6 @@ public class StockPlusMinusDivide100 extends Thread {
 				sb1.append("<td style='text-align:right'>0</td>\r\n");
 			}
 
-			// if(gubun.equals("ALL")){
-			// String varyRatio =
-			// StringUtils.defaultIfEmpty(s.getVaryRatio(), "");
-			// if (varyRatio.startsWith("+")) {
-			// sb1.append("<td style='text-align:right'><font
-			// color='red'>" + varyRatio + "</font></td>\r\n");
-			// } else if (varyRatio.startsWith("-")) {
-			// sb1.append("<td style='text-align:right'><font
-			// color='blue'>" + varyRatio + "</font></td>\r\n");
-			// } else {
-			// sb1.append(
-			// "<td style='text-align:right'><font color='black'>" +
-			// varyRatio + "</font></td>\r\n");
-			// }
-			// sb1.append("<td style='text-align:right'>" +
-			// StringUtils.defaultIfEmpty(s.getTradingVolume(),"") +
-			// "</td>\r\n");
-			// sb1.append("<td style='text-align:right'>" +
-			// StringUtils.defaultIfEmpty(s.getTradingAmount(),"") +
-			// "</td>\r\n");
-			// }else if(gubun.equals("상승율")||gubun.equals("하락율")){
-			// String varyRatio =
-			// StringUtils.defaultIfEmpty(s.getVaryRatio(), "");
-			// if (varyRatio.startsWith("+")) {
-			// sb1.append("<td style='text-align:right'><font
-			// color='red'>" + varyRatio + "</font></td>\r\n");
-			// } else if (varyRatio.startsWith("-")) {
-			// sb1.append("<td style='text-align:right'><font
-			// color='blue'>" + varyRatio + "</font></td>\r\n");
-			// } else {
-			// sb1.append(
-			// "<td style='text-align:right'><font color='black'>" +
-			// varyRatio + "</font></td>\r\n");
-			// }
-			// }else if(gubun.equals("거래량")){
-			// sb1.append("<td style='text-align:right'>" +
-			// StringUtils.defaultIfEmpty(s.getTradingVolume(),"") +
-			// "</td>\r\n");
-			// }else if(gubun.equals("거래대금")){
-			// sb1.append("<td style='text-align:right'>" +
-			// StringUtils.defaultIfEmpty(s.getTradingAmount(),"") +
-			// "</td>\r\n");
-			// }
-
 			String varyRatio = StringUtils.defaultIfEmpty(svo.getVaryRatio(), "");
 			if (varyRatio.startsWith("+")) {
 				sb1.append("<td style='text-align:right'><font color='red'>" + varyRatio + "</font></td>\r\n");
@@ -673,7 +612,7 @@ public class StockPlusMinusDivide100 extends Thread {
 			sb1.append("<td style='text-align:right'>" + StringUtils.defaultIfEmpty(svo.getTradingAmount(), "")
 					+ "</td>\r\n");
 
-			if (iHour >= 18 || iHour < 8) {
+			if (iHourMinute >= 1830 || iHourMinute < 800) {
 				// 외국인 매매
 				if (iForeignTradingVolume < 0) {
 					sb1.append("<td style='text-align:right;color:blue'>" + strForeignTradingVolume + "</td>\r\n");
@@ -744,11 +683,11 @@ public class StockPlusMinusDivide100 extends Thread {
 				strStockCode = vo.getStockCode();
 				strStockName = vo.getStockName();
 
-				System.out.println(cnt + "." + strStockCode + "." + strStockName);
+				logger.debug(cnt + "." + strStockCode + "." + strStockName);
 
 				// 종합정보
 				// http://finance.naver.com/item/news.nhn?code=246690
-				System.out.println("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
+				logger.debug("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=");
 
 				Document doc = Jsoup
 						.connect("http://finance.naver.com/item/news_news.nhn?code=" + strStockCode + "&page=").get();
@@ -770,10 +709,10 @@ public class StockPlusMinusDivide100 extends Thread {
 					Element source = tr.getElementsByTag("td").get(2);
 					Element dayTime = tr.getElementsByTag("span").first();
 
-					System.out.println("title:" + a1.html());
-					System.out.println("href:" + a1.attr("href"));
-					System.out.println("source:" + source.html());
-					System.out.println("dayTime:" + dayTime.html());
+					logger.debug("title:" + a1.html());
+					logger.debug("href:" + a1.attr("href"));
+					logger.debug("source:" + source.html());
+					logger.debug("dayTime:" + dayTime.html());
 
 					String strTitle = a1.html();
 					String strLink = a1.attr("href");
@@ -798,7 +737,7 @@ public class StockPlusMinusDivide100 extends Thread {
 							link_news_elements.remove();
 						}
 						Elements naver_splugin = doc.select(".naver-splugin");
-						System.out.println("naver_splugin:" + naver_splugin);
+						logger.debug("naver_splugin:" + naver_splugin);
 						if (naver_splugin != null) {
 							naver_splugin.remove();
 						}
@@ -812,12 +751,12 @@ public class StockPlusMinusDivide100 extends Thread {
 						sb1.append(strView);
 						sb1.append("<br><br>\n");
 
-						System.out.println("view:" + view);
+						logger.debug("view:" + view);
 					}
 				}
 			}
 
-			System.out.println(sb1.toString());
+			logger.debug(sb1.toString());
 
 			String fileName = USER_HOME + "\\documents\\NewsTest." + strDate + ".html";
 			FileUtil.fileWrite(fileName, sb1.toString());

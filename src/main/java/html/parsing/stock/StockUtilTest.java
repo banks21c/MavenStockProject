@@ -3,7 +3,6 @@
  */
 package html.parsing.stock;
 
-import html.parsing.stock.util.StockUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +14,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import html.parsing.stock.util.StockUtil;
 
 /**
  * @author user
@@ -151,7 +152,7 @@ public class StockUtilTest {
 
 	/**
 	 * Test method for
-	 * {@link html.parsing.stock.StockUtil#nbspString(java.lang.String)}.
+	 * {@link html.parsing.stock.StockUtil#boldString(java.lang.String)}.
 	 */
 	@Test
 	public void testNbspString() {
@@ -304,10 +305,10 @@ public class StockUtilTest {
 
 	/**
 	 * Test method for
-	 * {@link html.parsing.stock.StockUtil#stockTitleLinkString(java.lang.String, java.util.List)}.
+	 * {@link html.parsing.stock.StockUtil#createStockLinkString(java.lang.String, java.util.List)}.
 	 */
 	@Test
-	public void testStockTitleLinkString() {
+	public void testcreateStockLinkString() {
 		// fail("Not yet implemented");
 	}
 

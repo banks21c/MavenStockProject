@@ -15,10 +15,11 @@ import html.parsing.stock.JsoupChangeImageElementsAttribute;
 import html.parsing.stock.JsoupChangeLinkHrefElementsAttribute;
 import html.parsing.stock.JsoupChangeScriptSrcElementsAttribute;
 import html.parsing.stock.news.News;
+import html.parsing.stock.news.NewsInterface;
 
-public class Nasdaq100FromMarketsBusinessinsiderCom extends News {
+public class Nasdaq100FromMarketsBusinessinsiderCom extends News implements NewsInterface {
 
-	final static String userHome = System.getProperty("user.home");
+	
 	private static Logger logger = LoggerFactory.getLogger(Nasdaq100FromMarketsBusinessinsiderCom.class);
 
 	String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -81,7 +82,7 @@ public class Nasdaq100FromMarketsBusinessinsiderCom extends News {
 			sb1.append(table.outerHtml());
 
 			FileWriter fw = new FileWriter(
-					userHome + "\\documents\\" + this.getClass().getSimpleName() + "_" + strDate + ".html");
+					USER_HOME + "\\documents\\" + this.getClass().getSimpleName() + "_" + strDate + ".html");
 			fw.write(sb1.toString());
 			fw.close();
 			System.out.println("file write finished...");

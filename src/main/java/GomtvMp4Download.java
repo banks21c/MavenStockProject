@@ -9,6 +9,9 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +26,8 @@ public class GomtvMp4Download {
 	public GomtvMp4Download() {
 		String strUrl = "https://pip-gomtv-xcdn-c.pip.cjenm.com/smc/gomtv/multi/eng/C01_118356/2f636a656e6d2f434c49502f45412f423132303135353532342f423132303135353532345f455049303132315f30345f7433342e6d7034/0-0-0/content.mp4?solexpire=1592506156&solpathlen=148&soltoken=3907fa572b2fcbb1749752e886356b74&soltokenrule=c29sZXhwaXJlfHNvbHBhdGhsZW58c29sdXVpZA==&soluriver=2&soluuid=b2652e4b-a8fa-4f2c-935b-35655c97cb59&itemtypeid=34";
 		try {
-			postRequest(strUrl);
+//			postRequest(strUrl);
+			postRequest2(strUrl);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -79,6 +83,56 @@ public class GomtvMp4Download {
 			// ... do something with unsuccessful response
 		}
 	}
+
+
+	public void postRequest2(String strUrl) throws IOException {
+		Connection.Response res = Jsoup.connect(strUrl).ignoreContentType(true)
+				.timeout(3000)
+				.header("Origin", "https://pip-gomtv-xcdn-c.pip.cjenm.com/")
+				.header("Referer", "https://pip-gomtv-xcdn-c.pip.cjenm.com/")
+				.header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+				.header("Content-Type", "application/x-www-form-urlencoded")
+//				.header("Content-Type", "text/*")
+//				.header("Content-Type", "application/xml")
+//				.header("Content-Type", "text/*, application/xml")
+//				.header("Content-Type", "application/xhtml+xml")
+//				.header("Content-Type", "text/*, application/xml")
+//				.header("Content-Type", "text/*, application/xhtml+xml")
+//				.header("Mime-Type", "application/json;charset=UTF-8")
+				.header("Accept-Encoding", "gzip, deflate, br")
+				.header("Accept-Language", "ko-KR,ko;q=0.8,en-US;q=0.6,en;q=0.4")
+				.method(Connection.Method.GET)
+				.execute();
+			String contentType = res.contentType();
+			System.out.println(contentType);
+
+			String body = res.body();
+			System.out.println(body);
+
+
+		if (res.statusCode() == HttpURLConnection.HTTP_OK) {
+			// 파일 출력 스트림 생성
+//			try (InputStream is = httpURLConnection.getInputStream()) {
+//				// 파일 출력 스트림 생성
+//				String strFileName = USER_HOME + File.separator + "documents" + File.separator + strYmdhms + "_" + getFileNameFromUrl(strUrl) + ".html";
+//				
+//				FileOutputStream outputStream = new FileOutputStream(strFileName);
+//				
+//				// 파일 내용을 담을 버퍼(?) 선언
+//				byte[] readBuffer = new byte[1024];
+//				while (is.read(readBuffer, 0, readBuffer.length) != -1) {
+//					//버퍼 크기만큼 읽을 때마다 출력 스트림에 써준다.
+//					outputStream.write(readBuffer);
+//				}
+//				outputStream.flush();
+//				outputStream.close();
+//			}
+
+		} else {
+			// ... do something with unsuccessful response
+		}
+	}
+
 
 	public static void main(String[] args) {
 		new GomtvMp4Download();

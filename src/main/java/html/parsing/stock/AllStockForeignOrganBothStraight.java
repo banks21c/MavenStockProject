@@ -1,6 +1,5 @@
 package html.parsing.stock;
 
-import html.parsing.stock.model.StockVO;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -20,6 +19,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import html.parsing.stock.model.StockVO;
 import html.parsing.stock.util.DataSort.ForeignOrganTradingAmountAscCompare;
 import html.parsing.stock.util.DataSort.ForeignOrganTradingAmountDescCompare;
 import html.parsing.stock.util.DataSort.ForeignOrganTradingVolumeAscCompare;

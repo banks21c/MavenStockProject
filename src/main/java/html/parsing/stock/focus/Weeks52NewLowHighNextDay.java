@@ -32,7 +32,7 @@ import html.parsing.stock.util.StockUtil;
 
 public class Weeks52NewLowHighNextDay {
 
-    final static String userHome = System.getProperty("user.home");
+	public final static String USER_HOME = System.getProperty("user.home");
     private static Logger logger1 = null;
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -136,7 +136,7 @@ public class Weeks52NewLowHighNextDay {
 
     public void readFile(String kospidaq, String fileName) {
 
-        File f = new File(userHome + "\\documents\\" + fileName);
+        File f = new File(USER_HOME + "\\documents\\" + fileName);
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f),"UTF8"));
 
@@ -350,9 +350,9 @@ public class Weeks52NewLowHighNextDay {
         return stock;
     }
 
-    public void writeFile(List<StockVO> list, String fileName, String title, String gubun) {
+    public void writeFile(List<StockVO> stockList, String fileName, String title, String gubun) {
         try {
-            FileWriter fw = new FileWriter(userHome + "\\documents\\" + strYmdDashBracket + "_" + title + ".html");
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strYmdDashBracket + "_" + title + ".html");
             StringBuilder sb1 = new StringBuilder();
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
@@ -381,7 +381,7 @@ public class Weeks52NewLowHighNextDay {
             sb1.append("</tr>\r\n");
 
             int cnt = 1;
-            for (StockVO s : list) {
+            for (StockVO s : stockList) {
                 if (s != null) {
                     sb1.append("<tr>\r\n");
                     String url = "http://finance.naver.com/item/main.nhn?code=" + s.getStockCode();
@@ -435,7 +435,7 @@ public class Weeks52NewLowHighNextDay {
             sb1.append("</table>\r\n");
             sb1.append("<br><br>\r\n");
 
-            for (StockVO s : list) {
+            for (StockVO s : stockList) {
                 if (s != null) {
                     Document classAnalysisDoc = Jsoup.connect(
                             "http://companyinfo.stock.naver.com/v1/company/c1010001.aspx?cmp_cd=" + s.getStockCode())
@@ -454,9 +454,9 @@ public class Weeks52NewLowHighNextDay {
             }
 
 			// 뉴스 첨부
-			StringBuilder newsAddedStockList = StockUtil.getNews(list);
+			StringBuilder newsAddedStockList = StockUtil.getNews(stockList);
 			// 증권명에 증권링크 생성
-			StringBuilder stockTableAdded = StockUtil.stockLinkString(newsAddedStockList, list);
+			StringBuilder stockTableAdded = StockUtil.stockLinkString(newsAddedStockList, stockList);
 			sb1.append(stockTableAdded.toString());
 			
             sb1.append("</body>\r\n");
@@ -481,7 +481,7 @@ public class Weeks52NewLowHighNextDay {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH.mm.ss.SSS", Locale.KOREAN);
             String strDate = sdf.format(new Date());
 
-            FileWriter fw = new FileWriter(userHome + "\\documents\\NewsTest." + strDate + ".html");
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\NewsTest." + strDate + ".html");
             StringBuilder sb1 = new StringBuilder();
 
             for (StockVO vo : allStockList) {

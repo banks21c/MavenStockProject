@@ -3,13 +3,10 @@ package html.parsing.stock.javafx;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.sql.Blob;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import javax.sql.rowset.serial.SerialBlob;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +21,6 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import html.parsing.stock.util.FileUtil;
-import html.parsing.stock.util.NaverUtil;
 
 /**
  * 유튜브에서 네이버로 공유할때

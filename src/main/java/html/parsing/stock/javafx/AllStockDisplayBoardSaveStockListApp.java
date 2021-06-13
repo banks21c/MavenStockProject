@@ -40,7 +40,7 @@ import javafx.stage.Stage;
 
 public class AllStockDisplayBoardSaveStockListApp extends Application {
 
-	final static String userHome = System.getProperty("user.home");
+	
 	private static Logger logger = LoggerFactory.getLogger(AllStockDisplayBoardSaveStockListApp.class);
 
 	List<StockVO> kospiUniqueStockList = new ArrayList<>();
@@ -231,7 +231,7 @@ public class AllStockDisplayBoardSaveStockListApp extends Application {
 		//jsonObject=map
 		String jsonObject = JSONObject.toJSONString(stockMap);
 		String fileName = "";
-//		fileName = userHome + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
+//		fileName = USER_HOME + "\\documents\\" + strYmdhms + "_" + market_en + "_list.txt";
 		fileName = market_en + "_list.txt";
 		FileUtil.fileWrite(fileName, stockCodeNameSb.toString());
 		JOptionPane.showMessageDialog(null, "주식 목록을 추출하였습니다.");

@@ -20,7 +20,8 @@ import org.slf4j.LoggerFactory;
 
 public class HankyorehNewsToday {
 
-    final static String userHome = System.getProperty("user.home");
+    
+	public final static String USER_HOME = System.getProperty("user.home");
     private static Logger logger = LoggerFactory.getLogger(HankyorehNewsToday.class);
 
     String strYear = new SimpleDateFormat("yyyy", Locale.KOREAN).format(new Date());
@@ -76,10 +77,10 @@ public class HankyorehNewsToday {
         System.out.println("url:" + url);
         System.out.println("strDate:" + strDate);
         System.out.println("title:" + title);
-        System.out.println(userHome + "\\documents\\" + strDate + "_" + title + ".html");
+        System.out.println(USER_HOME + "\\documents\\" + strDate + "_" + title + ".html");
 
         try {
-            FileWriter fw = new FileWriter(userHome + "\\documents\\" + strDate + "_" + title + ".html");
+            FileWriter fw = new FileWriter(USER_HOME + "\\documents\\" + strDate + "_" + title + ".html");
             StringBuilder sb1 = new StringBuilder();
             sb1.append("<html lang='ko'>\r\n");
             sb1.append("<head>\r\n");
