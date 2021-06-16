@@ -28,6 +28,8 @@ public class JacksonMapExample1 {
             //Map<String, String> map = mapper.readValue(json, new TypeReference<Map<String, String>>() {});
 
             System.out.println(map);
+            String strJson = new ObjectMapper().writeValueAsString(map);
+            System.out.println(strJson);
 
         } catch (IOException e) {
             e.printStackTrace();
